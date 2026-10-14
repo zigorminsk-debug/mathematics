@@ -30,11 +30,6 @@ jobs:
         with:
           node-version: '20'
 
-      # Отметка времени сборки = время коммита: банк собирается воспроизводимо,
-      # и проверка «копии не разъехались» не зависит от момента запуска CI.
-      - name: Reproducible build stamp (commit time)
-        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
-
       - name: Verify every task with exact arithmetic
         run: python3 tools/build_content.py
 
@@ -86,6 +81,7 @@ jobs:
         with:
           python-version: '3.11'
 
+      # Отметка времени сборки EXE = время коммита: сборки воспроизводимы.
       - name: Reproducible build stamp (commit time)
         run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
 
