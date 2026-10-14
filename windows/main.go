@@ -45,11 +45,11 @@ var buildStamp = "dev"
 var appVersion = embeddedVersion()
 
 const (
-	appName    = "Репетитор ЦТ: Математика"
-	appRepo    = "https://github.com/zigorminsk-debug/mathematics"
-	developer  = "Захаревич Игорь (Zakharevich Igor)"
-	devEmail   = "ziv@csl.by"
-	devPhone   = "+3753371412"
+	appName   = "Репетитор ЦТ: Математика"
+	appRepo   = "https://github.com/zigorminsk-debug/mathematics"
+	developer = "Захаревич Игорь (Zakharevich Igor)"
+	devEmail  = "ziv@csl.by"
+	devPhone  = "+3753371412"
 )
 
 // server holds everything the HTTP handlers need.
@@ -210,8 +210,14 @@ func (s *server) overlayVersion() string {
 	}
 	// Legacy Android-style/manual packs sometimes had no version.json.
 	if data, ok := s.store.ReadContent("bank"); ok {
-		var bank struct { Meta struct { Version string `json:"contentVersion"` } `json:"meta"` }
-		if json.Unmarshal(data, &bank) == nil { return bank.Meta.Version }
+		var bank struct {
+			Meta struct {
+				Version string `json:"contentVersion"`
+			} `json:"meta"`
+		}
+		if json.Unmarshal(data, &bank) == nil {
+			return bank.Meta.Version
+		}
 	}
 	return ""
 }
@@ -224,7 +230,9 @@ func (s *server) overlayCurrent() bool {
 
 // contentVersion is the newest of the embedded and downloaded banks.
 func (s *server) contentVersion() string {
-	if version := s.overlayVersion(); version != "" && s.overlayCurrent() { return version }
+	if version := s.overlayVersion(); version != "" && s.overlayCurrent() {
+		return version
+	}
 	return embeddedVersion()
 }
 

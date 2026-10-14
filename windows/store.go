@@ -25,10 +25,10 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
-	"strconv"
-	"sync"
 	"sort"
+	"strconv"
+	"strings"
+	"sync"
 	"time"
 )
 
@@ -43,10 +43,10 @@ const maxBlobBytes = 32 << 20
 
 // Store owns the data directory of the application.
 type Store struct {
-	root string
-	http *http.Client
+	root      string
+	http      *http.Client
 	contentMu sync.RWMutex
-	updateMu sync.Mutex
+	updateMu  sync.Mutex
 }
 
 // NewStore prepares (and creates if needed) the data directory under base.
@@ -66,7 +66,9 @@ func NewStore(base string) (*Store, error) {
 	backup := filepath.Join(root, "content.previous")
 	if _, err := os.Stat(content); errors.Is(err, os.ErrNotExist) {
 		if _, err := os.Stat(backup); err == nil {
-			if err := os.Rename(backup, content); err != nil { return nil, err }
+			if err := os.Rename(backup, content); err != nil {
+				return nil, err
+			}
 		}
 	}
 	return &Store{root: root, http: &http.Client{Timeout: 45 * time.Second}}, nil
@@ -224,8 +226,12 @@ func compareContentVersions(left, right string) int {
 		if i < len(b) {
 			y = b[i]
 		}
-		if x < y { return -1 }
-		if x > y { return 1 }
+		if x < y {
+			return -1
+		}
+		if x > y {
+			return 1
+		}
 	}
 	return 0
 }
@@ -257,13 +263,17 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 		return UpdateResult{Status: "uptodate", Version: current, Message: "already up to date"}
 	}
 	stage, err := os.MkdirTemp(s.root, "content-update-")
-	if err != nil { return UpdateResult{Status: "error", Version: current, Message: err.Error()} }
+	if err != nil {
+		return UpdateResult{Status: "error", Version: current, Message: err.Error()}
+	}
 	defer os.RemoveAll(stage)
 
 	var total int64
 	installed := 0
 	names := make([]string, 0, len(manifest.Files))
-	for name := range manifest.Files { names = append(names, name) }
+	for name := range manifest.Files {
+		names = append(names, name)
+	}
 	sort.Strings(names)
 	for _, name := range names {
 		meta := manifest.Files[name]
@@ -312,15 +322,23 @@ func (s *Store) installContentPack(stage string) error {
 	s.contentMu.Lock()
 	defer s.contentMu.Unlock()
 	backup := filepath.Join(s.root, "content.previous")
-	if err := os.RemoveAll(backup); err != nil { return err }
+	if err := os.RemoveAll(backup); err != nil {
+		return err
+	}
 	_, err := os.Stat(s.ContentDir())
 	hadPrevious := err == nil
-	if err != nil && !errors.Is(err, os.ErrNotExist) { return err }
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
 	if hadPrevious {
-		if err := os.Rename(s.ContentDir(), backup); err != nil { return err }
+		if err := os.Rename(s.ContentDir(), backup); err != nil {
+			return err
+		}
 	}
 	if err := os.Rename(stage, s.ContentDir()); err != nil {
-		if hadPrevious { _ = os.Rename(backup, s.ContentDir()) }
+		if hadPrevious {
+			_ = os.Rename(backup, s.ContentDir())
+		}
 		return err
 	}
 	_ = os.RemoveAll(backup)

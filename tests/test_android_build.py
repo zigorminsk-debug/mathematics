@@ -23,7 +23,8 @@ class ApkVersionTests(unittest.TestCase):
                 update.version_code(bad)
 
     def test_badging(self):
-        actual = update.parse_badging("package: name='by.ziv.ctmaths' versionCode='261003' versionName='2026.10.3'\nother: value")
+        actual = update.parse_badging("package: name='by.ziv.ctmaths' versionCode='261003' versionName='2026.10.3' compileSdkVersion='34' compileSdkVersionCodename='14'\nother: value")
+        self.assertEqual(update.PACKAGE, actual["name"])
         update.validate(actual, "2026.10.3", dict(name=update.PACKAGE, versionCode=2, versionName="2026.10.2"))
         for previous in (dict(name="by.ziv.ctmaths.debug", versionCode=1),
                          dict(name=update.PACKAGE, versionCode=261003),

@@ -29,7 +29,7 @@ def version_code(version: str) -> int:
 
 def parse_badging(text: str) -> dict:
     line = next((line for line in text.splitlines() if line.startswith("package: ")), "")
-    values = dict(re.findall(r"(name|versionCode|versionName)='([^']*)'", line))
+    values = dict(re.findall(r"(?:^|\s)(name|versionCode|versionName)='([^']*)'", line))
     if not all(key in values for key in ("name", "versionCode", "versionName")):
         raise ValueError("aapt2 returned no APK package/version metadata")
     values["versionCode"] = int(values["versionCode"])

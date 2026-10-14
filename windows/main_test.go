@@ -372,70 +372,95 @@ func TestContentVersionFallsBackToEmbedded(t *testing.T) {
 }
 
 func TestNumericContentVersions(t *testing.T) {
-    cases := []struct { left, right string; want int }{
-        {"2026.10.3", "2026.9.99", 1},
-        {"2026.10.2", "2026.10.3", -1},
-        {"2026.10", "2026.10.0", 0},
-        {"2027.1.0", "2026.12.99", 1},
-    }
-    for _, item := range cases {
-        if got := compareContentVersions(item.left, item.right); got != item.want {
-            t.Fatalf("compare(%q,%q) = %d, want %d", item.left, item.right, got, item.want)
-        }
-    }
+	cases := []struct {
+		left, right string
+		want        int
+	}{
+		{"2026.10.3", "2026.9.99", 1},
+		{"2026.10.2", "2026.10.3", -1},
+		{"2026.10", "2026.10.0", 0},
+		{"2027.1.0", "2026.12.99", 1},
+	}
+	for _, item := range cases {
+		if got := compareContentVersions(item.left, item.right); got != item.want {
+			t.Fatalf("compare(%q,%q) = %d, want %d", item.left, item.right, got, item.want)
+		}
+	}
 }
 
 func TestUpdateFeedCannotDowngradeNewBuild(t *testing.T) {
-    store := newTestStore(t)
-    bank := []byte(`{"meta":{"contentVersion":"2026.10.1"},"tasks":[]}`)
-    feed := feedServer(t, "2026.10.1", bank)
-    defer feed.Close()
-    got := store.CheckUpdates(feed.URL, "2026.10.3")
-    if got.Status != "uptodate" || got.Version != "2026.10.3" {
-        t.Fatalf("downgrade was accepted: %+v", got)
-    }
-    if _, ok := store.ReadContent("bank"); ok { t.Fatal("an older bank was installed") }
+	store := newTestStore(t)
+	bank := []byte(`{"meta":{"contentVersion":"2026.10.1"},"tasks":[]}`)
+	feed := feedServer(t, "2026.10.1", bank)
+	defer feed.Close()
+	got := store.CheckUpdates(feed.URL, "2026.10.3")
+	if got.Status != "uptodate" || got.Version != "2026.10.3" {
+		t.Fatalf("downgrade was accepted: %+v", got)
+	}
+	if _, ok := store.ReadContent("bank"); ok {
+		t.Fatal("an older bank was installed")
+	}
 }
 
 func TestBrokenPackLeavesPreviousContentAndProgressIntact(t *testing.T) {
-    store := newTestStore(t)
-    old := []byte(`{"old":true}`)
-    for _, name := range []string{"bank", "topics", "version"} {
-        if err := store.WriteContent(name, old); err != nil { t.Fatal(err) }
-    }
-    progress := []byte(`{"tasksDone":17}`)
-    if err := store.WriteBlob("progress", progress); err != nil { t.Fatal(err) }
-    fresh := []byte(`{"tasks":[]}`)
-    digest := sha256.Sum256(fresh)
-    feed := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        if r.URL.Path == "/version.json" {
-            json.NewEncoder(w).Encode(map[string]any{
-                "contentVersion":"2027.1.0",
-                "files":map[string]any{
-                    "bank.json":map[string]any{"sha256":hex.EncodeToString(digest[:])},
-                    "topics.json":map[string]any{"sha256":strings.Repeat("0",64)},
-                },
-            })
-        } else { w.Write(fresh) }
-    }))
-    defer feed.Close()
-    if got := store.CheckUpdates(feed.URL,"2026.10.3"); got.Status != "error" {
-        t.Fatalf("bad checksum accepted: %+v",got)
-    }
-    for _, name := range []string{"bank", "topics", "version"} {
-        if got, ok := store.ReadContent(name); !ok || !bytes.Equal(got, old) { t.Fatalf("%s changed on failed update",name) }
-    }
-    if got, _ := store.ReadBlob("progress"); !bytes.Equal(got,progress) { t.Fatal("progress changed on update") }
+	store := newTestStore(t)
+	old := []byte(`{"old":true}`)
+	for _, name := range []string{"bank", "topics", "version"} {
+		if err := store.WriteContent(name, old); err != nil {
+			t.Fatal(err)
+		}
+	}
+	progress := []byte(`{"tasksDone":17}`)
+	if err := store.WriteBlob("progress", progress); err != nil {
+		t.Fatal(err)
+	}
+	fresh := []byte(`{"tasks":[]}`)
+	digest := sha256.Sum256(fresh)
+	feed := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/version.json" {
+			json.NewEncoder(w).Encode(map[string]any{
+				"contentVersion": "2027.1.0",
+				"files": map[string]any{
+					"bank.json":   map[string]any{"sha256": hex.EncodeToString(digest[:])},
+					"topics.json": map[string]any{"sha256": strings.Repeat("0", 64)},
+				},
+			})
+		} else {
+			w.Write(fresh)
+		}
+	}))
+	defer feed.Close()
+	if got := store.CheckUpdates(feed.URL, "2026.10.3"); got.Status != "error" {
+		t.Fatalf("bad checksum accepted: %+v", got)
+	}
+	for _, name := range []string{"bank", "topics", "version"} {
+		if got, ok := store.ReadContent(name); !ok || !bytes.Equal(got, old) {
+			t.Fatalf("%s changed on failed update", name)
+		}
+	}
+	if got, _ := store.ReadBlob("progress"); !bytes.Equal(got, progress) {
+		t.Fatal("progress changed on update")
+	}
 }
 
 func TestRecoverContentBackup(t *testing.T) {
-    base := t.TempDir()
-    store, err := NewStore(base)
-    if err != nil { t.Fatal(err) }
-    old := []byte(`{"old":true}`)
-    if err := store.WriteContent("bank", old); err != nil { t.Fatal(err) }
-    if err := os.Rename(store.ContentDir(), filepath.Join(store.Root(), "content.previous")); err != nil { t.Fatal(err) }
-    recovered, err := NewStore(base)
-    if err != nil { t.Fatal(err) }
-    if got, ok := recovered.ReadContent("bank"); !ok || !bytes.Equal(got, old) { t.Fatal("pack not recovered") }
+	base := t.TempDir()
+	store, err := NewStore(base)
+	if err != nil {
+		t.Fatal(err)
+	}
+	old := []byte(`{"old":true}`)
+	if err := store.WriteContent("bank", old); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Rename(store.ContentDir(), filepath.Join(store.Root(), "content.previous")); err != nil {
+		t.Fatal(err)
+	}
+	recovered, err := NewStore(base)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, ok := recovered.ReadContent("bank"); !ok || !bytes.Equal(got, old) {
+		t.Fatal("pack not recovered")
+	}
 }
