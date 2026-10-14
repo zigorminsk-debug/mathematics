@@ -126,12 +126,12 @@
    "bytes": 36224
   },
   "topics.json": {
-   "sha256": "5b3fd2f6e9c0119ad5252c505ce57e7ed4310044a6f6fc299314946d53893b9c",
-   "bytes": 155412
+   "sha256": "23872d4ddd07f22ffb725e248d6f3f529b57e6968b34879cbad581dbf1b46f2a",
+   "bytes": 601844
   },
   "ui_strings.json": {
-   "sha256": "aece3fef9e4367493e8f8ee7282f296a2e52896868016f99f791e64128b39260",
-   "bytes": 20573
+   "sha256": "79a8506dc5223890c5e8aa142e1f9474ce8bea04749b132de3b1400963749739",
+   "bytes": 21828
   }
  },
  "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"

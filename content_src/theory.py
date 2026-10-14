@@ -831,4 +831,11 @@ FORMULA_LESSONS = {
 
 
 def payload() -> dict:
-    return {key: {"id": key, **entry} for key, entry in LESSONS.items()}
+    from intuition import payload as everyday_payload
+    from diagrams import LESSON_FIGURES
+    everyday = everyday_payload()
+    if set(everyday) != set(LESSONS) or set(LESSON_FIGURES) - set(LESSONS):
+        raise ValueError("everyday/diagram links must match the lesson catalogue")
+    return {key: {"id": key, **entry, "everyday": everyday[key],
+                  "figures": list(LESSON_FIGURES.get(key, []))}
+            for key, entry in LESSONS.items()}

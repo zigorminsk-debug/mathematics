@@ -437,7 +437,16 @@
     previous.nodes.forEach(function (node) { sheet.appendChild(node); });
     sheet.scrollTop = previous.scrollTop;
     modalRefresh = previous.refresh;
-    if (previous.lang !== I.lang && modalRefresh) { modalRefresh(true); return; }
+    if (previous.lang !== I.lang && modalRefresh) {
+      var focusKey = previous.focus && previous.focus.getAttribute('data-focus-key');
+      modalRefresh(true);
+      sheet.scrollTop = previous.scrollTop;
+      if (focusKey) {
+        var replacement = $$('[data-focus-key]', sheet).filter(function (node) { return node.getAttribute('data-focus-key') === focusKey; })[0];
+        if (replacement) replacement.focus();
+      }
+      return;
+    }
     if (previous.focus && previous.focus.isConnected) previous.focus.focus();
   };
   UI.closeModal = function () {
@@ -590,12 +599,147 @@
     return card;
   };
 
+  /** Build a figure only from finite coordinates and a fixed SVG allowlist.
+   * Downloaded content can never supply markup, event attributes, URLs or CSS.
+   * Validate the entire drawing before creating it: one bad last node rejects
+   * the whole SVG. Captions remain readable even if a future pack is malformed.
+   */
+  UI.diagramSvg = function (figure) {
+    var namespace = 'http://www.w3.org/2000/svg';
+    var fields = { line: ['x1', 'y1', 'x2', 'y2'], circle: ['cx', 'cy', 'r'],
+      ellipse: ['cx', 'cy', 'rx', 'ry'], rect: ['x', 'y', 'width', 'height'],
+      polyline: ['points'], polygon: ['points'], text: ['x', 'y', 'text', 'anchor'] };
+    var roles = ['axis', 'grid', 'primary', 'secondary', 'helper', 'region', 'point', 'openpoint', 'text'];
+    if (!figure || figure.width !== 420 || figure.height !== 280 || !Array.isArray(figure.drawing) ||
+        !figure.drawing.length || figure.drawing.length > 250) return null;
+    var bilingual = function (value) {
+      return value && ['ru', 'en'].every(function (lang) { return typeof value[lang] === 'string' && value[lang].trim(); });
+    };
+    var numeric = function (key, value) {
+      var bound = key.charAt(0) === 'y' || ['cy', 'ry', 'height'].indexOf(key) >= 0 ? 280 : 420;
+      return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= bound &&
+        (['r', 'rx', 'ry', 'width', 'height'].indexOf(key) < 0 || value > 0);
+    };
+    if (!bilingual(figure.title) || !bilingual(figure.caption)) return null;
+    var valid = figure.drawing.every(function (item) {
+      var allowed = item && typeof item.kind === 'string' && Object.prototype.hasOwnProperty.call(fields, item.kind) ? fields[item.kind] : null;
+      if (!allowed || roles.indexOf(item.role) < 0 || typeof item.filled !== 'boolean' ||
+          Object.keys(item).some(function (key) { return ['kind', 'role', 'filled'].concat(allowed).indexOf(key) < 0; })) return false;
+      return allowed.every(function (key) {
+        var value = item[key];
+        if (key === 'points') return Array.isArray(value) && value.length >= (item.kind === 'polygon' ? 3 : 2) &&
+          value.length <= 500 && value.every(function (point) {
+            return Array.isArray(point) && point.length === 2 && numeric('x', point[0]) && numeric('y', point[1]);
+          });
+        if (key === 'text') return bilingual(value);
+        if (key === 'anchor') return ['start', 'middle', 'end'].indexOf(value) >= 0;
+        return numeric(key, value);
+      });
+    });
+    if (!valid) return null;
+    var svg = doc.createElementNS(namespace, 'svg');
+    svg.setAttribute('viewBox', '0 0 420 280');
+    svg.setAttribute('class', 'diagram-svg');
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', I.pick(figure.title) + '. ' + I.pick(figure.caption));
+    svg.setAttribute('data-figure', figure.id);
+    var title = doc.createElementNS(namespace, 'title');
+    title.textContent = I.pick(figure.title);
+    var desc = doc.createElementNS(namespace, 'desc');
+    desc.textContent = I.pick(figure.caption);
+    svg.appendChild(title); svg.appendChild(desc);
+    figure.drawing.forEach(function (item) {
+      var node = doc.createElementNS(namespace, item.kind);
+      node.setAttribute('class', 'diagram-' + item.role + (item.filled ? ' diagram-filled' : ''));
+      fields[item.kind].forEach(function (key) {
+        if (key === 'text') node.textContent = I.pick(item.text);
+        else if (key === 'anchor') node.setAttribute('text-anchor', item.anchor);
+        else if (key === 'points') node.setAttribute('points', item.points.map(function (point) { return point.join(','); }).join(' '));
+        else node.setAttribute(key, String(item[key]));
+      });
+      if (item.kind !== 'text') node.setAttribute('vector-effect', 'non-scaling-stroke');
+      svg.appendChild(node);
+    });
+    return svg;
+  };
+
+  UI.diagramLegend = function (figure) {
+    var legend = el('div', { class: 'diagram-legend' });
+    (Array.isArray(figure.legend) ? figure.legend : []).forEach(function (item) {
+      if (!item || ['primary', 'secondary', 'helper', 'axis', 'region', 'point'].indexOf(item.role) < 0) return;
+      var label = el('span', { class: 'diagram-legend-item' });
+      label.appendChild(el('span', { class: 'diagram-key diagram-' + item.role, 'aria-hidden': 'true' }));
+      label.appendChild(el('span', { text: I.pick(item.text) }));
+      legend.appendChild(label);
+    });
+    return legend;
+  };
+
+  /** Nested viewer: touch/keyboard zoom, internal panning, same one-level Back. */
+  UI.openDiagram = function (figure) {
+    var state = { scale: 1, x: 0, y: 0 };
+    var render = function (keepHistory) {
+      var wrap = el('div', { class: 'diagram-viewer', 'data-figure': figure.id });
+      var controls = el('div', { class: 'diagram-controls' });
+      var smaller = el('button', { class: 'btn diagram-zoom-out', type: 'button', text: '−', 'aria-label': t('theory_zoom_out') });
+      var larger = el('button', { class: 'btn diagram-zoom-in', type: 'button', text: '+', 'aria-label': t('theory_zoom_in') });
+      var fit = el('button', { class: 'btn diagram-zoom-reset', type: 'button', text: t('theory_zoom_reset') });
+      var status = el('span', { class: 'diagram-zoom-status', 'aria-live': 'polite' });
+      [smaller, larger, fit, status].forEach(function (node) { controls.appendChild(node); });
+      var viewport = el('div', { class: 'diagram-viewport', tabindex: '0', 'aria-label': t('theory_pan_hint') });
+      var svg = UI.diagramSvg(figure);
+      if (svg) viewport.appendChild(svg);
+      else viewport.appendChild(el('p', { text: t('theory_visual_unavailable') }));
+      var update = function () {
+        if (svg) svg.style.width = (state.scale * 100) + '%';
+        status.textContent = t('theory_zoom_fmt', Math.round(state.scale * 100) + '%');
+        smaller.disabled = state.scale <= 1;
+        larger.disabled = state.scale >= 3;
+      };
+      smaller.addEventListener('click', function () { state.scale = Math.max(1, state.scale - .5); update(); });
+      larger.addEventListener('click', function () { state.scale = Math.min(3, state.scale + .5); update(); });
+      fit.addEventListener('click', function () {
+        state.scale = 1; state.x = state.y = 0; viewport.scrollLeft = viewport.scrollTop = 0; update();
+      });
+      viewport.addEventListener('scroll', function () { state.x = viewport.scrollLeft; state.y = viewport.scrollTop; });
+      update();
+      wrap.appendChild(controls); wrap.appendChild(viewport);
+      wrap.appendChild(UI.diagramLegend(figure));
+      wrap.appendChild(el('p', { class: 'diagram-caption', text: I.pick(figure.caption) }));
+      wrap.appendChild(el('p', { class: 'muted small', text: t('theory_pan_hint') }));
+      var footer = el('div', { class: 'theory-footer' });
+      var back = el('button', { class: 'btn', type: 'button', text: t('prev') });
+      back.addEventListener('click', UI.backModal); footer.appendChild(back);
+      UI.modal(I.pick(figure.title), wrap, { tall: true, wide: true, push: !keepHistory,
+        keepHistory: !!keepHistory, language: true, refresh: render, footer: footer });
+      viewport.scrollLeft = state.x; viewport.scrollTop = state.y;
+    };
+    render(false);
+  };
+
+  UI.diagramCard = function (figure, lessonId) {
+    var block = el('figure', { class: 'theory-figure', 'data-figure': figure.id });
+    block.appendChild(el('h4', { text: I.pick(figure.title) }));
+    var svg = UI.diagramSvg(figure);
+    block.appendChild(svg || el('p', { text: t('theory_visual_unavailable') }));
+    block.appendChild(UI.diagramLegend(figure));
+    block.appendChild(el('figcaption', { class: 'diagram-caption', text: I.pick(figure.caption) }));
+    if (svg) {
+      var enlarge = el('button', { class: 'btn diagram-enlarge', type: 'button', text: t('theory_enlarge'),
+        'aria-haspopup': 'dialog', 'data-focus-key': 'figure-' + lessonId + '-' + figure.id });
+      enlarge.addEventListener('click', function () { enlarge.focus(); UI.openDiagram(figure); });
+      block.appendChild(enlarge);
+    }
+    return block;
+  };
+
   /** Definitions, conditions of rules/theorems, and worked examples. */
   UI.openTheory = function (lessonIds, options) {
     options = options || {};
     var lessons = lessonIds.map(function (id) { return C.lessonById(id); }).filter(Boolean);
     if (!lessons.length) return;
     var render = function (keepHistory) {
+      var savedScroll = keepHistory ? $('.sheet', $('#modal')).scrollTop : 0;
       var wrap = el('div', { class: 'theory-content' });
       if (options.formula) {
         wrap.appendChild(el('div', { class: 'banner info theory-formula', text: options.formula.formula }));
@@ -603,6 +747,12 @@
       lessons.forEach(function (lesson) {
         var article = el('article', { class: 'theory-lesson', 'data-lesson': lesson.id });
         if (lessons.length > 1 || options.title) article.appendChild(el('h3', { text: I.pick(lesson.title) }));
+        if (lesson.everyday) {
+          var everyday = el('section', { class: 'theory-everyday' });
+          everyday.appendChild(el('h3', { text: t('theory_everyday') }));
+          (I.pick(lesson.everyday) || []).forEach(function (line) { everyday.appendChild(el('p', { text: line })); });
+          article.appendChild(everyday);
+        }
         [['definitions', 'theory_definitions'], ['rules', 'theory_rules']].forEach(function (section) {
           var block = el('section', { class: 'theory-' + section[0] });
           block.appendChild(el('h3', { text: t(section[1]) }));
@@ -611,6 +761,13 @@
           block.appendChild(list);
           article.appendChild(block);
         });
+        var figures = (lesson.figures || []).map(function (id) { return C.figureById(id); }).filter(Boolean);
+        if (figures.length) {
+          var visuals = el('section', { class: 'theory-visuals' });
+          visuals.appendChild(el('h3', { text: t('theory_visuals') }));
+          figures.forEach(function (figure) { visuals.appendChild(UI.diagramCard(figure, lesson.id)); });
+          article.appendChild(visuals);
+        }
         (lesson.examples || []).forEach(function (example) {
           var block = el('section', { class: 'theory-example' });
           block.appendChild(el('h3', { text: t('theory_examples') }));
@@ -629,6 +786,7 @@
       UI.modal(I.pick(options.title || lessons[0].title), wrap, { tall: true,
         push: !keepHistory, keepHistory: !!keepHistory, language: true,
         refresh: render, footer: footer });
+      if (keepHistory) $('.sheet', $('#modal')).scrollTop = savedScroll;
     };
     render(false);
   };

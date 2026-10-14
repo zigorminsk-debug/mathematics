@@ -115,18 +115,32 @@ def build_topics() -> dict:
     from kit import TOPICS, TOPIC_ORDER, TOOLS
     counts: dict[str, int] = {}
     by_year: dict[str, int] = {}
-    lessons = build_theory()
+    figures = build_diagrams()
+    lessons = build_theory(figures)
     study = build_study(TOPIC_ORDER, lessons)
     return {"topics": TOPICS, "order": TOPIC_ORDER, "tools": TOOLS,
-            "counts": counts, "byYear": by_year, "study": study, "lessons": lessons}
+            "counts": counts, "byYear": by_year, "study": study, "lessons": lessons, "figures": figures}
 
 
-def build_theory() -> dict:
+def build_diagrams() -> dict:
+    mod = load("diagrams")
+    if mod is None:
+        raise SystemExit("content_src/diagrams.py is missing")
+    try:
+        figures = mod.validate(mod.payload())
+    except (TypeError, ValueError, KeyError) as error:
+        raise SystemExit("invalid mathematical diagram: " + str(error)) from error
+    print(f"  · diagrams: {len(figures)} bilingual offline figures verified")
+    return figures
+
+
+def build_theory(figures=None) -> dict:
     """Fail closed on incomplete definitions, theorems or worked examples."""
     mod = load("theory")
     if mod is None:
         raise SystemExit("content_src/theory.py is missing")
     lessons = mod.payload()
+    figures = build_diagrams() if figures is None else figures
     if not lessons:
         raise SystemExit("the theory catalogue is empty")
 
@@ -144,10 +158,16 @@ def build_theory() -> dict:
         if len(value["ru"]) != len(value["en"]):
             raise SystemExit(f"{where} has different numbers of RU/EN paragraphs")
 
+    used_figures = set()
     for key, entry in lessons.items():
         if not re.fullmatch(r"[a-z][a-z0-9-]*", key) or entry.get("id") != key:
             raise SystemExit(f"invalid theory lesson id: {key}")
         bilingual_text(entry.get("title"), f"lesson {key} title")
+        bilingual_lines(entry.get("everyday"), f"lesson {key} everyday explanation", minimum=2)
+        refs = entry.get("figures")
+        if not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in figures for ref in refs) or len(refs) != len(set(refs)):
+            raise SystemExit(f"lesson {key} has missing/duplicate diagram links")
+        used_figures.update(refs)
         for field in ("definitions", "rules"):
             bilingual_lines(entry.get(field), f"lesson {key} {field}")
         if not isinstance(entry.get("examples"), list) or not entry["examples"]:
@@ -155,7 +175,9 @@ def build_theory() -> dict:
         for example in entry["examples"]:
             bilingual_text(example.get("statement"), f"lesson {key} example")
             bilingual_lines(example.get("steps"), f"lesson {key} solution", minimum=2)
-    print(f"  · theory: {len(lessons)} bilingual lessons verified")
+    if set(figures) - used_figures:
+        raise SystemExit("unreachable mathematical figures: " + ", ".join(sorted(set(figures)-used_figures)))
+    print(f"  · theory: {len(lessons)} bilingual lessons + everyday explanations verified")
     return lessons
 
 

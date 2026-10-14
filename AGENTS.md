@@ -60,7 +60,11 @@ actual source is Git; the actual publication state is GitHub Actions/Releases.
 6. Wrong practice/analogous answers open relevant study; exam remediation happens
    after finishing. Revision points, formula groups and rows must open offline
    definitions/rules/theorems/examples. Back/language changes preserve session,
-   answer, search, scroll and focus. Study currently has 56 lessons/18 topics.
+   answer, search, scroll and focus. Study has 56 lessons/18 topics; every lesson
+   includes bilingual everyday explanations, with 52 offline SVG figures in 51
+   lessons. Keep `intuition.py`/`diagrams.py` typed primitives, captions, units and
+   math checks; no raw SVG/HTML/eval/external images. Zoom/pan/Back/language must
+   not alter answers/progress and must preserve parent scroll/focus.
 7. Preserve atomic/checksummed content updates and protection against older
    downloaded banks hiding newer built-in content. Settings/statistics must survive.
 8. Do not publish from a PR/fork or bypass any failed/skipped build/check job.

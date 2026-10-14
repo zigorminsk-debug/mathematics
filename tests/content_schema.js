@@ -99,12 +99,33 @@ const bilingualLines = (value, where, minimum = 1) => {
 Object.entries(lessons).forEach(([id, lesson]) => {
   if (id !== lesson.id || !/^[a-z][a-z0-9-]*$/.test(id)) fail(`invalid theory lesson id "${id}"`);
   if (!lesson.title || !lesson.title.ru || !lesson.title.en) fail(`lesson "${id}" has no bilingual title`);
+  bilingualLines(lesson.everyday, `lesson "${id}" everyday explanations`, 2);
+  if (!Array.isArray(lesson.figures) || new Set(lesson.figures).size !== lesson.figures.length) fail(`lesson "${id}" has invalid figure links`);
+  (lesson.figures || []).forEach((figure) => { if (!(topics.figures || {})[figure]) fail(`lesson "${id}" links to missing figure "${figure}"`); });
   bilingualLines(lesson.definitions, `lesson "${id}" definitions`);
   bilingualLines(lesson.rules, `lesson "${id}" theorems/rules`);
   if (!Array.isArray(lesson.examples) || !lesson.examples.length) fail(`lesson "${id}" has no example`);
   (lesson.examples || []).forEach((example) => {
     if (!example.statement || !example.statement.ru || !example.statement.en) fail(`lesson "${id}" has no example statement`);
     bilingualLines(example.steps, `lesson "${id}" worked example`, 2);
+  });
+});
+
+const figures = topics.figures || {};
+const usedFigures = new Set(Object.values(lessons).flatMap((lesson) => lesson.figures || []));
+if (Object.keys(figures).length < 50) fail('offline mathematical figure catalogue is incomplete');
+Object.entries(figures).forEach(([id, figure]) => {
+  if (id !== figure.id || !/^[a-z][a-z0-9-]*$/.test(id)) fail(`invalid figure id "${id}"`);
+  if (!usedFigures.has(id)) fail(`unreachable diagram "${id}"`);
+  if (!figure.title || !figure.title.ru || !figure.title.en || !figure.caption || !figure.caption.ru || !figure.caption.en) fail(`diagram "${id}" is not bilingual`);
+  if (figure.width !== 420 || figure.height !== 280 || !Array.isArray(figure.drawing) || !figure.drawing.length) fail(`diagram "${id}" is not drawable`);
+  (figure.drawing || []).forEach((node) => {
+    const allowed = { line: ['x1','y1','x2','y2'], circle: ['cx','cy','r'], ellipse: ['cx','cy','rx','ry'],
+      rect: ['x','y','width','height'], polyline: ['points'], polygon: ['points'], text: ['x','y','text','anchor'] };
+    if (!Object.hasOwn(allowed, node.kind)) { fail(`diagram "${id}" contains unsafe primitive`); return; }
+    if (Object.keys(node).some((key) => !['kind','role','filled',...allowed[node.kind]].includes(key))) fail(`diagram "${id}" contains unsafe attributes`);
+    if (node.kind === 'text' && (!node.text || !node.text.ru || !node.text.en)) fail(`diagram "${id}" has untranslated labels`);
+    if (node.points && node.points.some((point) => !Array.isArray(point) || point.length !== 2 || point.some((value) => typeof value !== 'number' || !Number.isFinite(value)))) fail(`diagram "${id}" has invalid coordinates`);
   });
 });
 
@@ -198,6 +219,6 @@ if (failures) {
   process.exit(1);
 }
 console.log(`✓ content schema: ${bank.tasks.length} exam tasks, ${analogous.tasks.length} analogous, ` +
-  `${Object.keys(ui).length} interface strings, ${Object.keys(lessons).length} detailed lessons, ` +
+  `${Object.keys(ui).length} interface strings, ${Object.keys(lessons).length} everyday/detailed lessons, ${Object.keys(figures).length} offline figures, ` +
   `${Object.keys(mistakes.errors).length} error diagnoses, ` +
   `${usedKeys.size} strings referenced by the UI`);

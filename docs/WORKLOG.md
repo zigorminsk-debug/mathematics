@@ -214,6 +214,95 @@ an actual release; real publication must be verified separately after push.
   уже работает для текущей ветки; старый main унаследует её после слияния PR.
   Следующему агенту начинать с актуальной опубликованной истории и API state.
 
+## 2026-10-14 — бытовые объяснения, графики и геометрические примеры
+
+**Запрос:** добавить бытовые пояснения к математическим определениям для
+лучшего восприятия и графики/геометрические примеры там, где нужны.
+
+**Проверенная исходная точка:** `fdb850db6de03dc14759bf2eb2da807cb81a6878`,
+публичный **v2026.10.6/code261006**, Release id **412441044**, опубликован
+`2026-10-14T07:23:11Z`. Push CI **38527665625** и PR CI **38527671605** SUCCESS;
+13 assets/digests подтверждены в прошлой задаче. Это закрывает «ожидаемую .6»
+предыдущего снимка. Source floor по-прежнему **2026.10.5**, branch та же, PR #4 OPEN.
+
+**Реализовано:**
+
+- `content_src/intuition.py`: **56** двуязычных бытовых объяснений, по **2 абзаца
+  RU/EN** на материал. Покупки/бюджет, пицца, ковёр, лестница, упаковка, карта,
+  часы, спидометр. Связь с формальными обозначениями и пределы модели: единицы,
+  ОДЗ, равновероятность/возврат, постоянные скорости, локальность касательной.
+  Формальные определения, условия теорем и worked examples сохранены.
+- `content_src/diagrams.py`: **52** детерминированные локальные vector figures
+  для **51** урока. Параболы/корни/неравенства, domain/shift/прямая/гипербола,
+  discrete прогрессии, sin/cos/unit circle/радианы, exponent/logarithm,
+  производная/касательная/экстремумы, планиметрия/подобие/окружность,
+  призма/цилиндр/пирамида/конус/шар/куб/проекция, векторы, выборы/вероятность/часы.
+- Только typed primitives `line/polyline/polygon/circle/ellipse/rect/text`,
+  finite coordinates, fixed roles, translated captions/labels. Никаких raw SVG,
+  scripts/foreignObject/URLs/path/eval. Графики считаются известными Python
+  функциями; ветви гиперболы не соединены через 0; последовательности — точки.
+  Metric plane figures используют один масштаб, solids — помеченная перспектива.
+- `theory.payload`, `build_content`: lessons.everyday + refs и один catalogue
+  `topics.figures`, без новых feed files/native endpoints. Gates против пустых/
+  непереведённых пояснений, неизвестных/duplicate refs, unreachable figures,
+  опасных/неполных примитивов, NaN/Infinity/negative/out-of-bounds координат.
+- `core.js` загружает figures; `app.js` создаёт SVG через createElementNS +
+  textContent, валидирует весь рисунок до создания DOM, отвергает в том числе
+  `constructor`/`__proto__` kinds. Caption остаётся при отказе SVG.
+- Карточки «Просто и на примере из жизни» и «Наглядно». Nested viewer с **100–300%**,
+  zoom/fit controls, internal touch/keyboard pan. Back возвращает exact DOM,
+  scroll/focus; язык сохраняет scale и переводит подписи/родитель. Progress,
+  исходный ответ и formula search не меняются. Light/dark CSS, native 44px controls.
+- **188** UI strings вместо 179; все copies/Android string resources regenerated.
+  README, CONTENT, ARCHITECTURE и AGENTS обновлены. В CONTENT также исправлена
+  устаревшая ручная release-инструкция: trusted push теперь автоматический.
+
+**Локальные реальные проверки, до финального push:**
+
+```text
+build_content / sync / --check: SUCCESS — 732 tasks, 30 vectors, 56 объяснений, 52 figures
+JS syntax / answer parity / content schema: SUCCESS
+Python discovery: SUCCESS — 59 tests (42 прежних + 17 новых)
+native syntax: SUCCESS — 12 Go/Kotlin/DSL files
+ui_smoke / native_smoke / theory_smoke: SUCCESS
+  108 revision points, 28 sections, 232 formulas RU/EN
+  104 diagram zooms (52 × 2 языка), three-level Back, scale/scroll/focus/search/answers
+  no network calls; malicious late SVG nodes rejected, labels rendered as text
+git diff --check: SUCCESS
+```
+
+`test_diagrams.py`: независимо проверены каждая plotted coordinate/function,
+нет перемычки hyperbola/asymptote, trig projections/arcs/angles, actual 3–4–5
+scale, median/altitude/bisector, circle central/inscribed angle and tangent,
+подобие, объёмы/surface/diagonal, vectors/dot/midpoint/3D orthogonal projection,
+проценты/probability/комбинаторика/modular cycle и endpoint conventions.
+
+**Реальный Chromium browser (не физический Android install):**
+
+- Preview перезапущен на `0.0.0.0:8080`, source floor .5; только memory demo data.
+- `LD_LIBRARY_PATH=/tmp/al2023/lib node scratch/visual-browser.cjs` — SUCCESS.
+  393×851, DPR1.8, mobile/touch; все **52 схемы на RU и EN**, actual SVG glyph
+  getBBox: **0** обрезаний и **0** пересечений подписей. Touch zoom/pan, language
+  with scale сохранением, light/dark, fontScale1.3, focus trap, Escape/Back.
+- Screens geometry/parabola/trig/cone/dark/everyday просмотрены; scratch screenshots
+  и gallery — только QA, не app assets/Git deliverables.
+- При первых browser harness прогонах fractions не была formula row (только
+  study point), а после fallback оставался study route: тест исправлен на реальные
+  доступные пути; это не поломка приложения. Найденные наложения подписей
+  hyperbola/часов устранены и повторный RU/EN bbox scan чистый. Label OP = 1
+  перенесён, чтобы не путать радиус с проекцией; 3D sketch согласован с affine basis.
+- Первый новый UI assert сравнивал progress до проверки аналогичного задания с
+  progress после неё. Fixture исправлен на snapshot прямо перед zoom; реальный
+  просмотр схем не меняет статистику. Полный повтор test suite зелёный.
+
+**Публикация на момент этого pre-push снимка:** ещё не выполнена/не заявлена.
+Ожидается **2026.10.7/code261007**, auto allocation от stable .6 без ручного bump
+source floor. После push дождаться actual Go/Kotlin/APK/previous-signature/code
+и publisher, сверить 13 assets/digests/tag/SHA по API readable audit. Не считать
+прошлые green CI .6 доказательством новых native builds. Итог этого push будет
+самодокументирован в immutable Release audit; не делать bot commit-loop.
+Physical phone update остаётся непроверенным; не удалять установленное приложение.
+
 ## Как добавлять следующую запись (любой агент)
 
 1. UTC timestamp и при необходимости MSK; исходные branch/SHA/VERSION floor,

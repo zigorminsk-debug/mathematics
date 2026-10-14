@@ -596,7 +596,7 @@
   var C = CT.content = {
     bank: [], analogous: [], formulas: [], mistakes: { errors: {}, checklist: [] },
     topics: {}, order: [], counts: {}, byYear: {}, tools: {}, meta: {}, vectors: [],
-    study: {}, lessons: {},
+    study: {}, lessons: {}, figures: {},
     loaded: false,
 
     load: function () {
@@ -614,6 +614,7 @@
         self.byYear = topics.byYear || {};
         self.study = topics.study || {};
         self.lessons = topics.lessons || {};
+        self.figures = topics.figures || {};
         self.formulas = (data[3] && data[3].groups) || [];
         I.strings = (data[4] && data[4].strings) || {};
         self.mistakes = data[5] || { errors: {}, checklist: [] };
@@ -651,6 +652,7 @@
     /** Конспект темы («что изучить»), который открывается при неверном ответе. */
     studyFor: function (topic) { return this.study[topic] || null; },
     lessonById: function (id) { return this.lessons[id] || null; },
+    figureById: function (id) { return this.figures[id] || null; },
 
     /** Detailed explanations for a formula section, in its authoring order. */
     lessonsForGroup: function (group) {

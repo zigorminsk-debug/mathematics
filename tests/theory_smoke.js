@@ -45,12 +45,54 @@ const click = (node) => { assert(node, 'the expected clickable element exists');
 const open = () => doc.getElementById('modal').classList.contains('open');
 const close = () => click(doc.querySelector('.modal-close'));
 const route = async (hash) => { window.location.hash = hash; await sleep(); };
+const visualCoverage = new Set();
 
 function checkLesson(id, lang) {
   const lesson = window.CT.content.lessonById(id);
   const article = doc.querySelector('.theory-lesson[data-lesson="' + id + '"]');
   assert(open(), 'a theory dialog is open');
   assert(article, 'the correct lesson is opened: ' + id);
+  assert(article.querySelector('.theory-everyday'), 'everyday explanation is rendered');
+  assert(article.textContent.includes(lesson.everyday[lang][0]), 'everyday explanation uses the selected language');
+  assert(article.textContent.includes(lesson.everyday[lang][1]), 'the bridge to the formal rule is present');
+  const cards = Array.from(article.querySelectorAll('.theory-figure'));
+  assert.equal(cards.length, lesson.figures.length, 'each linked figure is rendered');
+  cards.forEach((card, index) => {
+    const figure = window.CT.content.figureById(lesson.figures[index]);
+    const svg = card.querySelector('svg');
+    assert(svg, 'a real vector figure is present');
+    assert.equal(svg.namespaceURI, 'http://www.w3.org/2000/svg');
+    assert.equal(svg.getAttribute('viewBox'), '0 0 420 280');
+    assert.equal(svg.getAttribute('role'), 'img');
+    assert(svg.getAttribute('aria-label').includes(figure.caption[lang]));
+    assert.equal(svg.querySelector('title').textContent, figure.title[lang]);
+    assert.equal(svg.querySelector('desc').textContent, figure.caption[lang]);
+    assert.equal(card.querySelector('figcaption').textContent, figure.caption[lang]);
+    assert(!svg.querySelector('script, image, foreignObject, use, a'), 'no executable or external SVG');
+    const key = lang + ':' + figure.id;
+    if (visualCoverage.has(key)) return;
+    visualCoverage.add(key);
+    const parent = doc.querySelector('.sheet');
+    const button = card.querySelector('.diagram-enlarge');
+    parent.scrollTop = 117;
+    click(button);
+    assert(doc.querySelector('.diagram-viewer'), 'diagram opens in a nested viewer');
+    const expanded = doc.querySelector('.diagram-viewport svg');
+    assert.equal(expanded.getAttribute('data-figure'), figure.id);
+    const larger = doc.querySelector('.diagram-zoom-in');
+    for (let i = 0; i < 5; i++) click(larger);
+    assert.equal(expanded.style.width, '300%');
+    assert(larger.disabled, 'zoom is bounded');
+    click(doc.querySelector('.diagram-zoom-out'));
+    assert.equal(expanded.style.width, '250%');
+    click(doc.querySelector('.diagram-zoom-reset'));
+    assert.equal(expanded.style.width, '100%');
+    assert.equal(window.CT.onAndroidBack(), null);
+    assert.equal(doc.querySelector('.theory-lesson[data-lesson="' + id + '"]'), article,
+      'one-level Back restores the exact original article/figure DOM');
+    assert.equal(parent.scrollTop, 117, 'parent reading position is preserved');
+    assert.equal(doc.activeElement, button, 'focus returns to the enlarge control');
+  });
   assert(article.querySelector('.theory-definitions'), 'definitions are rendered');
   assert(article.querySelector('.theory-rules'), 'rules and theorems are rendered');
   assert(article.querySelector('.theory-example'), 'a worked example is rendered');
@@ -197,10 +239,70 @@ function checkLesson(id, lang) {
   assert(!open());
   assert.equal(window.location.hash, '#/run');
   assert.equal(JSON.stringify(CT.store.session), savedRun);
+  // Three levels: task -> formula search -> lesson -> zoom. Language changes
+  // translate diagram labels/captions, retaining zoom and parent reading state.
+  await route('#/run');
+  const zoomProgress = JSON.stringify(CT.store.progress);
+  CT.tools.sheet(CT.runner.current());
+  let threeSearch = doc.querySelector('.sheet input[type="search"]');
+  threeSearch.value = 'Виета';
+  threeSearch.dispatchEvent(new window.Event('input', { bubbles: true }));
+  click(doc.querySelector('.sheet .formula-link'));
+  const parentLesson = doc.querySelector('.sheet');
+  parentLesson.scrollTop = 211;
+  const originalFigureButton = doc.querySelector('.diagram-enlarge');
+  click(originalFigureButton);
+  click(doc.querySelector('.diagram-zoom-in'));
+  assert.equal(doc.querySelector('.diagram-viewport svg').style.width, '150%');
+  const beforeLang = CT.i18n.lang;
+  click(doc.querySelector('.modal-lang'));
+  const afterLang = CT.i18n.lang;
+  assert.notEqual(beforeLang, afterLang);
+  assert.equal(doc.querySelector('.diagram-viewport svg').style.width, '150%', 'zoom survives language change');
+  assert(doc.querySelector('.diagram-caption').textContent.includes(CT.content.figureById('parabola-roots').caption[afterLang]));
+  CT.onAndroidBack();
+  assert(doc.querySelector('.theory-everyday').textContent.includes(CT.content.lessonById('quadratic').everyday[afterLang][0]));
+  assert.equal(doc.querySelector('.sheet').scrollTop, 211, 'translated parent retains its reading position');
+  assert(doc.activeElement.classList.contains('diagram-enlarge'), 'translated Back restores focus');
+  CT.onAndroidBack();
+  assert.equal(doc.querySelector('.sheet input[type="search"]').value, 'Виета');
+  CT.onAndroidBack();
+  assert(!open());
+  assert.equal(JSON.stringify(CT.store.session), savedRun);
+  assert.equal(JSON.stringify(CT.store.progress), zoomProgress);
+
+  // Downloaded SVG data is untrusted: invalid late nodes reject the whole
+  // drawing; plain caption/definition text remains available. No partial SVG.
+  CT.i18n.setLang('ru'); CT.store.settings.lang = 'ru';
+  await route('#/study/numbers');
+  const originalFigure = CT.content.figures['fraction-bar'];
+  for (const bad of [
+    { kind: 'script', role: 'text', filled: false },
+    { kind: '__proto__', role: 'text', filled: false },
+    { kind: 'constructor', role: 'text', filled: false },
+    { kind: 'line', role: 'primary', filled: false, x1: 0, y1: 0, x2: 1, y2: 1, onclick: 'alert(1)' },
+    { kind: 'line', role: 'primary', filled: false, x1: NaN, y1: 0, x2: 1, y2: 1 },
+  ]) {
+    CT.content.figures['fraction-bar'] = { ...originalFigure, drawing: [...originalFigure.drawing, bad] };
+    click(doc.querySelector('.study-point-link[data-lesson="fractions"]'));
+    assert(!doc.querySelector('.theory-figure svg'), 'no partially built unsafe figure');
+    assert(doc.querySelector('.theory-figure figcaption').textContent.includes(originalFigure.caption.ru));
+    close();
+  }
+  const escaped = JSON.parse(JSON.stringify(originalFigure));
+  escaped.drawing.push({ kind: 'text', role: 'text', filled: false, x: 15, y: 15,
+    anchor: 'start', text: { ru: '<img src=x onerror=alert(1)>', en: '<img src=x onerror=alert(1)>' } });
+  CT.content.figures['fraction-bar'] = escaped;
+  click(doc.querySelector('.study-point-link[data-lesson="fractions"]'));
+  assert(doc.querySelector('.theory-figure svg').textContent.includes('<img src=x onerror=alert(1)>'));
+  assert(!doc.querySelector('.theory-figure img'), 'SVG labels are text, never markup');
+  close();
+  CT.content.figures['fraction-bar'] = originalFigure;
+  assert.equal(visualCoverage.size, 104, 'all 52 diagrams enlarged in both languages');
   assert.equal(networkCalls, 0, 'studying definitions/theorems is entirely offline');
   assert.deepEqual(errors, [], 'no JavaScript or DOM errors');
   process.stdout.write(`✓ theory journeys: ${points} points, ${groups} sections, ${formulas} formulas (RU/EN), ` +
-    'offline content, nested Back, language, answers/searches preserved\n');
+    '56 everyday explanations, 104 figure zooms, offline SVG safety, nested Back, language, answers/searches preserved\n');
   dom.window.close();
 })().catch((error) => {
   process.stderr.write('✗ theory journey failed: ' + error.stack + '\n');

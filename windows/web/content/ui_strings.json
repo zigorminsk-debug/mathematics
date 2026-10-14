@@ -540,6 +540,42 @@
    "ru": "Правила и теоремы",
    "en": "Rules and theorems"
   },
+  "theory_everyday": {
+   "ru": "Просто и на примере из жизни",
+   "en": "In everyday terms"
+  },
+  "theory_visuals": {
+   "ru": "Наглядно: графики и схемы",
+   "en": "See it: graphs and diagrams"
+  },
+  "theory_enlarge": {
+   "ru": "Рассмотреть крупнее",
+   "en": "Enlarge diagram"
+  },
+  "theory_visual_unavailable": {
+   "ru": "Схема недоступна; пояснение приведено ниже.",
+   "en": "Diagram unavailable; read the explanation below."
+  },
+  "theory_zoom_in": {
+   "ru": "Увеличить схему",
+   "en": "Zoom in"
+  },
+  "theory_zoom_out": {
+   "ru": "Уменьшить схему",
+   "en": "Zoom out"
+  },
+  "theory_zoom_reset": {
+   "ru": "Вписать в окно",
+   "en": "Fit to window"
+  },
+  "theory_zoom_fmt": {
+   "ru": "Масштаб: %s",
+   "en": "Zoom: %s"
+  },
+  "theory_pan_hint": {
+   "ru": "Увеличенную схему можно прокручивать пальцем или полосами прокрутки. Назад вернёт к материалу без потери ответа.",
+   "en": "Pan an enlarged diagram by touch or scrollbars. Back returns to the lesson without losing your answer."
+  },
   "theory_examples": {
    "ru": "Пример применения",
    "en": "Worked example"
