@@ -1,5 +1,5 @@
 {
- "contentVersion": "2026.10.4",
+ "contentVersion": "2026.10.5",
  "schema": 1,
  "years": [
   2021,
@@ -106,7 +106,7 @@
  "examMinutes": 180,
  "files": {
   "analogous.json": {
-   "sha256": "cf459e22e9356c2599de66412b61082610416478d17e2cf303ad26443c12db06",
+   "sha256": "1fcd2e9ecd7e278e4119f954e64187a83cf4f76c36607005ca37e0f6d83b06c6",
    "bytes": 558415
   },
   "answer_vectors.json": {
@@ -114,7 +114,7 @@
    "bytes": 3136
   },
   "bank.json": {
-   "sha256": "d53f98e87b562a6fea4ae0b270ce7adfb16e7e4d384b1659e26c9c1436c4bc69",
+   "sha256": "b3ebc3ddd429c2a710baad0b5fd7a6d8b3038779c49e8d76092bdcd7204747e9",
    "bytes": 246094
   },
   "formulas.json": {
@@ -130,7 +130,7 @@
    "bytes": 155412
   },
   "ui_strings.json": {
-   "sha256": "e24b7f1f5882ffc93fee139e4f9b7110a96f5f0b3f9cddd2bb509abd50f02e85",
+   "sha256": "aece3fef9e4367493e8f8ee7282f296a2e52896868016f99f791e64128b39260",
    "bytes": 20573
   }
  },

@@ -1,23 +1,85 @@
 name: CI
 
-# Автосборка запускается автоматически после каждого изменения (push) и для
-# каждого pull request: проверяются задания, интерфейс и собираются ОБА
-# приложения — APK для Android и EXE для Windows.
-#
-# Ошибки продублированы аннотациями GitHub (::error::): причина падения видна
-# прямо на странице запуска, без вычитывания полного лога.
+# Every repository push builds, verifies, and automatically publishes the
+# release APK, both Windows EXEs and the content feed. PR/fork runs only test.
+# queue:max preserves up to 100 pending runs; ordinary single-slot concurrency
+# would silently cancel intermediate pushes. A shared lock covers planning
+# through publication. Reusable Release calls use a DIFFERENT child lock.
 on:
   push:
     branches: ['**']
   pull_request:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish after all checks (false = test only)'
+        type: boolean
+        default: true
+      tag:
+        description: 'Optional exact tag; leave empty for automatic version'
+        type: string
+        default: ''
+  workflow_call:
+    inputs:
+      publish:
+        type: boolean
+        default: false
+      tag:
+        type: string
+        default: ''
+      release_request:
+        description: 'The Release caller already owns the publication lock'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+
+defaults:
+  run:
+    shell: bash  # explicit bash enables -e -o pipefail, including go vet | sed
 
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ inputs.release_request && format('ci-release-child-{0}', github.run_id) || (github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && github.ref_type == 'branch') && 'ctmaths-release-pipeline' || format('ci-{0}-{1}', github.repository, github.ref) }}
+  queue: max
+  cancel-in-progress: false
 
 jobs:
+  prepare:
+    name: Resolve effective build version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.plan.outputs.version }}
+      source_version: ${{ steps.plan.outputs.source_version }}
+      publish: ${{ steps.plan.outputs.publish }}
+      already_published: ${{ steps.plan.outputs.already_published }}
+      previous_tag: ${{ steps.plan.outputs.previous_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Allocate a unique increasing version; PR builds stay unpublished
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_TAG: ${{ inputs.tag }}
+          ALLOW_PUBLICATION: ${{ github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && (github.ref_type == 'branch' || (inputs.release_request && startsWith(github.ref, 'refs/tags/v'))) && (github.event_name == 'push' || inputs.publish == true) }}
+        run: |
+          if [ "$ALLOW_PUBLICATION" = "true" ]; then
+            python3 tools/release_plan.py --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
+              --tag "$REQUESTED_TAG" --output "$GITHUB_OUTPUT"
+          else
+            python3 tools/release_plan.py --local --output "$GITHUB_OUTPUT"
+          fi
+
   content:
+    needs: prepare
+    env:
+      BUILD_VERSION: ${{ needs.prepare.outputs.version }}
     name: Content & web (verify, parity, assets)
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +101,19 @@ jobs:
             echo "::error::копии интерфейса/банка устарели — запустите python3 tools/build_content.py && python3 tools/sync_assets.py"
             exit 1
           fi
+          if ! git diff --exit-code -- android/app/src/main/assets android/app/src/main/res windows/web; then
+            echo "::error::generated source-version assets are not committed; regenerate and sync before pushing"
+            exit 1
+          fi
+
+      - name: Apply the effective version to the verified content
+        run: |
+          python3 tools/release_plan.py --apply-version "$BUILD_VERSION"
+          python3 tools/build_content.py
+          python3 tools/sync_assets.py
+
+      - name: Install test and syntax dependencies
+        run: python3 -m pip install --quiet -r requirements-dev.txt
 
       - name: JavaScript syntax check
         run: |
@@ -56,7 +131,6 @@ jobs:
 
       - name: Syntax gate (Go, Kotlin, Kotlin DSL)
         run: |
-          python3 -m pip install --quiet tree-sitter tree-sitter-go tree-sitter-kotlin
           python3 tools/check_syntax.py --require
 
       - name: Interface journeys in jsdom (UI + Android bridge)
@@ -71,8 +145,12 @@ jobs:
         with:
           name: content-bank
           path: dist/content/
+          if-no-files-found: error
 
   windows:
+    needs: prepare
+    env:
+      BUILD_VERSION: ${{ needs.prepare.outputs.version }}
     name: Windows app (Go)
     runs-on: ubuntu-latest
     steps:
@@ -86,6 +164,9 @@ jobs:
           python-version: '3.11'
 
       # Отметка времени сборки EXE = время коммита: сборки воспроизводимы.
+      - name: Apply the same effective version used by the content job
+        run: python3 tools/release_plan.py --apply-version "$BUILD_VERSION"
+
       - name: Reproducible build stamp (commit time)
         run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
 
@@ -127,8 +208,13 @@ jobs:
         with:
           name: windows-exe
           path: dist/*.exe
+          if-no-files-found: error
 
   android:
+    needs: prepare
+    env:
+      BUILD_VERSION: ${{ needs.prepare.outputs.version }}
+      PREVIOUS_TAG: ${{ needs.prepare.outputs.previous_tag }}
     name: Android app (APK)
     runs-on: ubuntu-latest
     steps:
@@ -147,6 +233,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Apply the same effective version used by the content job
+        run: python3 tools/release_plan.py --apply-version "$BUILD_VERSION"
 
       - name: Reproducible build stamp (commit time)
         run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
@@ -204,6 +293,18 @@ jobs:
             --apk app/build/outputs/apk/release/app-release.apk \
             --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2"
 
+      - name: Verify signature and increasing code against the previous published APK
+        if: ${{ needs.prepare.outputs.publish == 'true' && needs.prepare.outputs.already_published != 'true' && env.PREVIOUS_TAG != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "$PREVIOUS_TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern app-release.apk --dir previous-release
+          python3 tools/check_signature.py --require --apk previous-release/app-release.apk \
+            --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
+          python3 tools/check_apk_update.py --apk android/app/build/outputs/apk/release/app-release.apk \
+            --previous previous-release/app-release.apk --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2"
+
       - uses: actions/upload-artifact@v4
         with:
           name: android-release-apk
@@ -215,3 +316,15 @@ jobs:
           name: android-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+  publish:
+    name: Publish verified builds automatically
+    needs: [prepare, content, windows, android]
+    if: ${{ success() && github.repository == 'zigorminsk-debug/mathematics' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && needs.prepare.outputs.publish == 'true' && needs.prepare.outputs.already_published != 'true' }}
+    permissions:
+      contents: write
+      actions: read
+    uses: ./.github/workflows/publish.yml
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      source_version: ${{ needs.prepare.outputs.source_version }}

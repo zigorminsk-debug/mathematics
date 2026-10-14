@@ -35,6 +35,9 @@ Thumbs.db
 # dist/content — то, что собирает tools/build_content.py; в репозиторий попадают
 # копии для приложений (windows/web/content, android .../assets/webapp/content).
 dist/
+/release/
+/staging/
+/previous-release/
 
 # ---- Node (необязательные инструменты разработки, jsdom для тестов интерфейса) ----
 node_modules

@@ -5,7 +5,7 @@
 **Разработчик / Developer:** Захаревич Игорь (Zakharevich Igor) — [ziv@csl.by](mailto:ziv@csl.by) — [+3753371412](tel:+3753371412) — [WhatsApp](https://wa.me/3753371412)
 
 [![CI](https://github.com/zigorminsk-debug/mathematics/actions/workflows/ci.yml/badge.svg)](https://github.com/zigorminsk-debug/mathematics/actions/workflows/ci.yml)
-[![Release](https://github.com/zigorminsk-debug/mathematics/actions/workflows/release.yml/badge.svg)](https://github.com/zigorminsk-debug/mathematics/actions/workflows/release.yml)
+[Последняя автоматическая публикация](https://github.com/zigorminsk-debug/mathematics/releases/latest) · [Инструкции агентам](AGENTS.md) · [Журнал действий](docs/WORKLOG.md)
 
 ---
 
@@ -23,7 +23,7 @@
 | Наполнение базы новыми заданиями | `tools/build_content.py` проверяет и публикует банк, приложения обновляют его **поверх установленного** из `releases/latest/download` (манифест со SHA-256), прогресс не теряется |
 | Подпись постоянным ключом | `android/keystore/ctmaths-release.p12` — постоянный ключ: каждый новый APK устанавливается поверх предыдущего без удаления и без потери статистики |
 | Windows на Go с GUI и HTML | `windows/` — Go (только стандартная библиотека), HTML/CSS/JS интерфейс встроен в EXE через `go:embed`, окно открывается в режиме приложения (Edge/Chrome `--app`) |
-| Автосборка на GitHub Actions | `.github/workflows/ci.yml` — сборка APK и EXE после каждого изменения; `release.yml` — публикация подписанного APK, EXE и обновляемого банка заданий |
+| Автосборка и автопубликация | Каждый push запускает полный CI; после успеха **автоматически публикуются APK, оба Windows EXE и банк**. Номер версии повышается автоматически; PR/fork не публикуют. В Release входят журнал `release-info.json` и контрольные суммы |
 | Контакты кликабельны | Экраны «О программе» и подвал: `mailto:`, `tel:`, WhatsApp, ссылка на исходный код (на Android открываются системными приложениями) |
 | Переключение языка | Русский ⇄ English одной кнопкой в шапке: 179 строк интерфейса, условия, варианты, подсказки, разборы и отчёт — на двух языках (заодно технический английский) |
 | Оформление | Светлая/тёмная тема (по системе или вручную) и три размера шрифта заданий — для работы при ярком свете и вечером |
@@ -36,7 +36,8 @@
 2. **Android** — скачайте `app-release.apk` и установите (разрешите установку из этого
    источника). Каждое следующее обновление ставится **поверх** без удаления приложения и
    без потери статистики: APK подписан постоянным ключом проекта, пакет один и тот же
-   (`by.ziv.ctmaths`), а `versionCode` растёт вместе с файлом `VERSION` (CI сверяет
+   (`by.ziv.ctmaths`), а `versionCode` растёт с автоматически выделенной версией
+   (`VERSION` задаёт исходный минимум; CI сверяет
    подпись с эталоном и пакет/версию собранного APK). Ставить нужно именно
    `app-release.apk`: в релиз он теперь входит один. Debug-сборка
    (`by.ziv.ctmaths.debug`) — отдельное приложение и устанавливается рядом с релизом.
@@ -80,12 +81,14 @@ powershell -ExecutionPolicy Bypass -File windows\build.ps1 -Arch arm64
 ### Контент и проверки
 
 ```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt  # test/YAML + native syntax tools
 python3 tools/build_content.py     # проверить все ответы точной арифметикой и собрать банк
 python3 tools/sync_assets.py       # разложить интерфейс и банк по приложениям (--check в CI)
-python3 tools/check_syntax.py      # синтаксис Go и Kotlin (tree-sitter; --require в CI)
+.venv/bin/python tools/check_syntax.py --require  # синтаксис Go и Kotlin (tree-sitter; --require в CI)
 node tests/answer_parity.js        # паритет проверки ответов (Python ↔ JS) и статистики
 node tests/content_schema.js       # структура банка, тем для изучения и манифеста периодов
-python3 -m unittest discover -s tests -p 'test_*.py'  # проверки APK и целостности учебных материалов
+.venv/bin/python -m unittest discover -s tests -p 'test_*.py'  # APK, учебные материалы, release policy/workflow gates
 # необязательно: сквозные тесты интерфейса в jsdom
 npm install --no-save jsdom
 node tests/ui_smoke.js             # прогон интерфейса: вариант → разбор → закрепление → статистика
@@ -100,7 +103,8 @@ content_src/       исходники заданий (Python): kit.py (моде�
                    (годы ЦТ), task_bank_2021…2026.py, templates.py, templates_extra.py,
                    formulas.py, ui_strings.py, mistakes.py, study.py и theory.py (конспекты и теория)
 tools/             build_content.py (проверка + сборка банка), sync_assets.py (единый интерфейс),
-                   check_syntax.py (синтаксис Go/Kotlin)
+                   check_syntax.py (синтаксис Go/Kotlin), release_plan.py (автоверсия),
+                   publish_release.py (checked artifacts → verified draft → latest)
 dist/content/      собранный банк (генерируется, в git не хранится): bank.json, analogous.json,
                    formulas.json, ui_strings.json, mistakes.json, topics.json,
                    answer_vectors.json и version.json — манифест с SHA-256, периодами
@@ -112,8 +116,10 @@ android/           приложение Android (Gradle, Kotlin), src/main/asset
 windows/           приложение Windows на Go (main.go, store.go), go:embed web/
 tests/             answer_parity.js (проверка ответов и статистики), content_schema.js,
                    ui_smoke.js, native_smoke.js и theory_smoke.js (интерфейс в jsdom), test_theory.py
-docs/              ARCHITECTURE.md, CONTENT.md, RELEASE.md
-.github/workflows/ ci.yml (автосборка), release.yml (релиз + обновляемый банк)
+AGENTS.md          правила и handoff для любого следующего агента
+docs/              ARCHITECTURE.md, CONTENT.md, RELEASE.md, WORKLOG.md
+.github/workflows/ ci.yml (полная проверка + автопубликация), publish.yml (same-run artifacts),
+                   release.yml (tag/manual recovery с теми же полными gates)
 ```
 
 ## Как это работает
@@ -126,7 +132,8 @@ docs/              ARCHITECTURE.md, CONTENT.md, RELEASE.md
 6. **Годы ЦТ** описаны одним списком в `content_src/periods.py`: состав частей, время на вариант и подписи попадают в `version.json`, поэтому новый год добавляется одной записью, а не правками в интерфейсе.
 
 Подробности — в [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), как добавлять задания — в
-[docs/CONTENT.md](docs/CONTENT.md), как выпускать обновления — в [docs/RELEASE.md](docs/RELEASE.md).
+[docs/CONTENT.md](docs/CONTENT.md), как работают автоматические выпуски — в [docs/RELEASE.md](docs/RELEASE.md).
+Для продолжения работы агентом — [AGENTS.md](AGENTS.md) и [docs/WORKLOG.md](docs/WORKLOG.md).
 
 ## Дисклеймер
 
@@ -165,4 +172,8 @@ offline web interface** running inside an Android WebView and inside a Go/Window
 
 Tests: `node tests/answer_parity.js`, `node tests/content_schema.js`, and the jsdom journeys
 `node tests/ui_smoke.js` / `node tests/native_smoke.js`.
-Build: `cd android && gradle assembleRelease` · `windows/build.ps1` · CI does both automatically.
+Build: `cd android && gradle assembleRelease` · `windows/build.ps1`.
+Every trusted repository push automatically publishes the checked release APK, both EXEs
+and content after all gates pass. Effective versions increase without manual VERSION bumps;
+PR/fork builds never publish. Each release includes an immutable machine-readable audit
+(`release-info.json`) and checksums; see `AGENTS.md` and `docs/WORKLOG.md` for agent handoff.
