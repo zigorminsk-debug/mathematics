@@ -30,6 +30,8 @@ PR (включая PR из самого репозитория) и fork выпо
   вызывают **тот же полный CI**, а не укороченную отдельную сборку.
 - Только job публикации имеет `contents: write`; проверочные jobs и планировщик —
   `contents: read`. Для проверки результата jobs publisher имеет `actions: read`.
+  Runner закреплён на `ubuntu-24.04`, не `ubuntu-latest`: проверенная среда не
+  сменится автоматически на Ubuntu 26 (migration warning на 2026-10-19).
   У tag/manual wrapper есть write ceiling для nested reusable publisher.
 
 Publisher дополнительно через API сверяет repository, SHA/run/event/ref и
@@ -204,6 +206,9 @@ annotations; полный лог/бинарные redirects в Arena могут 
   если номер ещё выше stable; новый SHA получит свободный более высокий номер.
   Если rerun permission в Arena отсутствует, исправляющий push автоматически
   запускает CI; старый draft остаётся непубличным, latest не ломается.
+- **Ancestry error в shallow checkout:** сначала `git rev-parse --is-shallow-repository`;
+  если `true`, `git fetch --unshallow origin`, затем повторить plan. Такой локальный
+  false negative уже был обнаружен/устранён; CI checkout использует fetch-depth 0.
 - **Старый branch не содержит latest source:** интегрировать историю в разрешённую
   рабочую ветку; не повышать номер поверх старого кода и не менять тег.
 - **403 при manual dispatch / git/gh auth:** reconnect GitHub в Arena с нужными

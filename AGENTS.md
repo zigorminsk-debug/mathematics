@@ -120,6 +120,12 @@ recent public release; integrate that history on the allowed working branch.
 - Artifact/APK/full-log redirects and binary tool downloads may be blocked by
   sandbox egress; GitHub-hosted runners and user-browser download links work.
   Local Go/JDK/Gradle were unavailable. Do not silently label native tests local.
+- An Arena checkout may be shallow. If a known published ancestor appears
+  unrelated, first `git rev-parse --is-shallow-repository`; when true, run
+  `git fetch --unshallow origin`, then retry ancestry/plan. Do not merge an
+  actually related tag or weaken the gate just because local history is incomplete.
+- Runners are pinned to `ubuntu-24.04`; CI reported `ubuntu-latest` migrating
+  to Ubuntu 26 on 2026-10-19. Upgrade intentionally only with native verification.
 - `actionlint-py` locally could not fetch its binary; actionlint v1.7.12 also
   predates the documented Actions `queue` key. Workflow contracts/YAML parsing
   are tested here, and the real GitHub run is the authoritative validation.

@@ -147,6 +147,73 @@ an actual release; real publication must be verified separately after push.
 Следующая запись фиксирует фактический результат. Для live state
 выполнить команды из `AGENTS.md` и прочитать release audit через API body.
 
+## 2026-10-14 07:12 UTC / 10:12 MSK — первая настоящая автопубликация подтверждена
+
+**Commit/push и устранённый false negative:**
+
+1. Изменения закоммичены **`142e3d0308fe318a00026004aadd4060a390aaa2`**,
+   `ci: автоматически публиковать проверенные сборки и вести журнал` (26 files).
+2. Первый pre-push `python3 tools/release_plan.py --repo ...` остановил цепочку
+   **до push**: ancestry v2026.10.2 (`280bf7d23bd8a5158c8b0f1903799077076eae14`)
+   казалась отсутствующей. `git log --graph` показал `(grafted)` у base `22547d6`.
+   Причина — **shallow local checkout**, не разошедшиеся ветки.
+3. `git rev-parse --is-shallow-repository` → `true`;
+   **`git fetch --unshallow origin`**; `git merge-base --is-ancestor v2026.10.2 HEAD`
+   → SUCCESS. Никакие ветки не переключались/не создавались; ненужный merge
+   не выполнялся, ancestry gate не ослаблялся. Plan → effective `.5`, previous `.2`.
+4. `git push origin arena/d7e34c80-mathematics` → SUCCESS. Автоматически стартовали
+   push CI **[38526230618](https://github.com/zigorminsk-debug/mathematics/actions/runs/38526230618)**
+   и PR CI **[38526235621](https://github.com/zigorminsk-debug/mathematics/actions/runs/38526235621)**.
+   `gh run watch ... --exit-status` для обоих завершился **0**.
+
+**Реальные CI / Release результаты:**
+
+- Оба CI — **SUCCESS** на `142e3d0`. Prepare, content, Windows и Android зелёные.
+  Push Android: Kotlin tests, обе APK сборки, подпись, actual package/name/code,
+  **previous stable APK signature + строго выросший code** — SUCCESS.
+  Windows: actual `go vet`, `go test`, amd64 + arm64 builds — SUCCESS.
+- Push publisher — **SUCCESS**, same-run artifacts. PR publisher — **SKIPPED**,
+  что дополнительно подтверждено Jobs API; PR не создал второй Release.
+- **[v2026.10.5](https://github.com/zigorminsk-debug/mathematics/releases/tag/v2026.10.5)**,
+  release ID **412430555**, `published_at = 2026-10-14T07:08:54Z`,
+  `draft=false`, `prerelease=false`, latest. Git ref тега точно
+  `142e3d0308fe318a00026004aadd4060a390aaa2`.
+- API-readable audit: source floor **2026.10.5**, effective/content/APK name
+  **2026.10.5**, APK code **261005**, run **38526230618**, previous stable **v2026.10.2**;
+  все 3 записанных job conclusions — SUCCESS, permanent certificate unchanged.
+- Подтверждены **все 13 assets**, debug отсутствует. Каждый из 11 payload
+  server digests/bytes совпал с audit. Из API body независимо восстановлены
+  `release-info.json` и `SHA256SUMS.txt`: их длины и SHA-256 также совпали с
+  двумя оставшимися server assets. Бинарные скачивания sandbox не требовались.
+- Actual APK size **5,108,409 bytes**, SHA-256
+  `6a8857ade7ccab5f097275637df3eaf468e3bb4280d0330b463311628b381730`;
+  EXE amd64 **7,379,968**, arm64 **6,999,552** bytes. Прогресс на телефоне
+  не удалять; установка на самом устройстве здесь по-прежнему не проверена.
+- Реальный read-only повтор `python3 tools/release_plan.py --repo ...` на том же
+  clean SHA → `.5`, **`already_published=true`**, готовый release URL. Это проверка
+  реальной идемпотентности планировщика, **не** ручной Actions rerun (dispatch
+  permissions всё ещё не предоставлены/не обходились).
+
+**Финализация журналов / следующий автоматический push этого снимка:**
+
+- Добавлены эти фактические SHA/run/release/check результаты, shallow recovery
+  в AGENTS/runbook. В ветке остаётся source floor **2026.10.5**, он **не повышается**.
+- CI предупредил о переходе `ubuntu-latest` на Ubuntu 26 с **2026-10-19**.
+  Все build/publisher runners закреплены на **`ubuntu-24.04`** для предсказуемости;
+  stdlib-only Go cache выключен (без go.sum он давал только warning).
+- Node20 actions forced to Node24 warnings были **неблокирующими**. Массовое
+  обновление major versions Actions не выполнялось; текущие native builds прошли.
+- Перед следующим push повторно **SUCCESS**: 42 Python/workflow tests, native
+  syntax (12 файлов), 732 task checks/30 vectors, sync, JS/schema/parity,
+  UI/native/theory journeys и diff gate. Его ожидаемый effective номер —
+  **2026.10.6/code261006** без изменения VERSION floor: это реальная проверка
+  автоматического роста. **Ещё не объявлять этот номер опубликованным** по данному
+  снимку: окончательные SHA/run/статус этой отправки автоматически запишутся в
+  Release audit/API body, если все проверки и publisher пройдут.
+- PR #4 остаётся OPEN, `main` не сливался/не менялся напрямую. Автопубликация
+  уже работает для текущей ветки; старый main унаследует её после слияния PR.
+  Следующему агенту начинать с актуальной опубликованной истории и API state.
+
 ## Как добавлять следующую запись (любой агент)
 
 1. UTC timestamp и при необходимости MSK; исходные branch/SHA/VERSION floor,

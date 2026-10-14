@@ -299,6 +299,10 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertEqual("max", self.ci["concurrency"]["queue"])
         self.assertEqual("false", self.ci["concurrency"]["cancel-in-progress"])
         self.assertEqual("bash", self.ci["defaults"]["run"]["shell"])
+        for job in self.ci["jobs"].values():
+            if "runs-on" in job:
+                self.assertEqual("ubuntu-24.04", job["runs-on"])
+        self.assertEqual("ubuntu-24.04", self.publisher["jobs"]["publish"]["runs-on"])
         self.assertIn("ctmaths-release-pipeline", self.ci["concurrency"]["group"])
         self.assertEqual("ctmaths-release-pipeline", self.recovery["concurrency"]["group"])
         self.assertEqual("max", self.recovery["concurrency"]["queue"])

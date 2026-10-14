@@ -48,7 +48,7 @@ concurrency:
 jobs:
   prepare:
     name: Resolve effective build version
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.plan.outputs.version }}
       source_version: ${{ steps.plan.outputs.source_version }}
@@ -81,7 +81,7 @@ jobs:
     env:
       BUILD_VERSION: ${{ needs.prepare.outputs.version }}
     name: Content & web (verify, parity, assets)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -152,12 +152,13 @@ jobs:
     env:
       BUILD_VERSION: ${{ needs.prepare.outputs.version }}
     name: Windows app (Go)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false  # stdlib-only app has no go.sum/module cache to restore
 
       - uses: actions/setup-python@v5
         with:
@@ -216,7 +217,7 @@ jobs:
       BUILD_VERSION: ${{ needs.prepare.outputs.version }}
       PREVIOUS_TAG: ${{ needs.prepare.outputs.previous_tag }}
     name: Android app (APK)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v5
