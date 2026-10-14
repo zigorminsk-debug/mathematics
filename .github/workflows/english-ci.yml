@@ -164,7 +164,13 @@ jobs:
       - name: Content schema, periods and interface strings
         run: node english/tests/content_schema.js
 
+      # Общий набор тестов описывает машинерию физики и проверяет изоляцию
+      # предметов сам (tests/test_subject_profiles.py запускает профили в
+      # отдельных процессах). Поэтому запускаем его без предметного CT_SUBJECT,
+      # иначе тесты физики увидят английский профиль.
       - name: Repository tests (shared gates — subject profiles, publishing, icons)
+        env:
+          CT_SUBJECT: ''
         run: python3 -m unittest discover -s tests -p 'test_*.py'
 
       - name: Syntax gate (Go, Kotlin, Kotlin DSL)

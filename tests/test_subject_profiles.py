@@ -21,6 +21,9 @@ import subprocess
 import sys
 import unittest
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+import subject  # noqa: E402  (активный профиль: CT_SUBJECT)
+
 ROOT = Path(__file__).resolve().parents[1]
 
 FIELDS = """
@@ -65,6 +68,22 @@ def profile(name: str = "") -> dict:
 
 
 class Profiles(unittest.TestCase):
+
+    def test_the_shared_suite_is_physics_scoped(self):
+        """Общий набор тестов (`tests/`) описывает машинерию физики.
+
+        Английские проверки живут в `english/tests/`, а изоляция предметов —
+        здесь же, в отдельном процессе. Если запустить этот файл с
+        `CT_SUBJECT=english`, тесты физики увидят чужой профиль и упадут
+        загадочными assert'ами; поэтому падаем сразу и понятно.
+        """
+        self.assertEqual(
+            subject.PROFILE_NAME, "physics",
+            "общий tests/ рассчитан на профиль physics: запускайте его без "
+            "CT_SUBJECT (например, `env -u CT_SUBJECT python3 -m unittest "
+            "discover -s tests -p 'test_*.py'`), а английские проверки — "
+            "`python3 english/tests/...` и CI-задание «CI (English)»")
+
 
     def test_default_profile_is_still_physics(self):
         """Историческое поведение: без CT_SUBJECT инструменты работают с физикой."""
