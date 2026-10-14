@@ -163,7 +163,6 @@ func (s *Store) WriteReport(kind string, html []byte) (string, error) {
 // contentManifest mirrors dist/content/version.json published with a release.
 type contentManifest struct {
 	ContentVersion string `json:"contentVersion"`
-	Built          string `json:"built"`
 	BaseURL        string `json:"baseUrl"`
 	Files          map[string]struct {
 		SHA256 string `json:"sha256"`

@@ -45,9 +45,6 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Reproducible build stamp (commit time)
-        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
-
       - name: Build and verify the content bank
         run: |
           python3 tools/build_content.py
