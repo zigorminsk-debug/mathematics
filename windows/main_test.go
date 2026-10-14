@@ -268,17 +268,37 @@ func TestStaticServingAndContentOverlay(t *testing.T) {
 		t.Fatalf("embedded bank not served (code %d)", recorder.Code)
 	}
 
-	overlay := []byte(`{"meta":{"contentVersion":"2099.1"},"tasks":[]}`)
+	overlay := []byte(`{"meta":{"contentVersion":"2099.1"},"tasks":[{"id":"overlay-task"}]}`)
 	if err := store.WriteContent("bank", overlay); err != nil {
 		t.Fatalf("WriteContent: %v", err)
 	}
+	if err := store.WriteContent("version", []byte(`{"contentVersion":"2099.1","files":{}}`)); err != nil {
+		t.Fatalf("WriteContent(version): %v", err)
+	}
 	recorder = httptest.NewRecorder()
 	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/content/bank.json", nil))
-	if !strings.Contains(recorder.Body.String(), "2099.1") {
+	if !strings.Contains(recorder.Body.String(), "overlay-task") {
 		t.Fatalf("overlay not served: %s", recorder.Body)
 	}
 	if srv.contentVersion() != "2099.1" {
 		t.Fatalf("contentVersion = %q", srv.contentVersion())
+	}
+}
+
+// TestCheckUpdatesInstallsTheManifest checks that a downloaded update also stores
+// the manifest, because that is where the installed content version comes from.
+func TestCheckUpdatesInstallsTheManifest(t *testing.T) {
+	store := newTestStore(t)
+	bank := []byte(`{"meta":{"contentVersion":"2026.10.9"},"tasks":[]}`)
+	feed := feedServer(t, "2026.10.9", bank)
+	defer feed.Close()
+
+	if result := store.CheckUpdates(feed.URL, "2026.10.1"); result.Status != "updated" {
+		t.Fatalf("status = %q (%s)", result.Status, result.Message)
+	}
+	manifest, ok := store.ReadContent("version")
+	if !ok || !strings.Contains(string(manifest), "2026.10.9") {
+		t.Fatalf("manifest not installed: %s (%v)", manifest, ok)
 	}
 }
 

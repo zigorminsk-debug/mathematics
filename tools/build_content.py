@@ -180,15 +180,16 @@ def main() -> int:
         print("nothing to build — authoring modules are missing", file=sys.stderr)
         return 1
 
+    # Отметки времени в самом банке нет: файлы заданий обязаны собираться
+    # байт в байт одинаково (иначе проверка «копии не разъехались» зависела бы от
+    # момента запуска).  Время сборки живёт только в манифесте version.json и
+    # берётся из SOURCE_DATE_EPOCH — так делает CI (время коммита).
+    built = datetime.fromtimestamp(
+        int(os.environ.get("SOURCE_DATE_EPOCH", time.time())), timezone.utc
+    ).strftime("%Y-%m-%dT%H:%M:%SZ")
     meta = {
         "contentVersion": CONTENT_VERSION_FILE.read_text(encoding="utf-8").strip()
         if CONTENT_VERSION_FILE.exists() else "1.0.0",
-        # Момент сборки.  SOURCE_DATE_EPOCH делает сборку воспроизводимой —
-        # именно так поступает CI (берёт время коммита), иначе отметка времени
-        # каждый раз делала бы скопированный манифест «устаревшим».
-        "built": datetime.fromtimestamp(
-            int(os.environ.get("SOURCE_DATE_EPOCH", time.time())), timezone.utc
-        ).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "schema": 1,
         "years": sorted({t["year"] for t in bank if t["year"]}),
         "counts": {
@@ -243,6 +244,7 @@ def main() -> int:
 
     version = {
         **meta,
+        "built": built,
         **periods.payload(),
         "files": {p.name: {"sha256": sha256(p), "bytes": p.stat().st_size}
                   for p in sorted(DIST.glob("*.json")) if p.name != "version.json"},

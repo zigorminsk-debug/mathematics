@@ -230,6 +230,11 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 		total += int64(len(data))
 		installed++
 	}
+	// сам манифест тоже кладём в оверлей: из него приложение узнаёт установленную
+	// версию банка (в списке files его нет — он описывает остальные файлы)
+	if err := s.WriteContent("version", manifestData); err != nil {
+		return UpdateResult{Status: "error", Version: current, Message: "version.json: " + err.Error()}
+	}
 	return UpdateResult{
 		Status: "updated", Version: manifest.ContentVersion, Previous: current,
 		Files: installed, NewTasks: manifest.Counts.Bank + manifest.Counts.Analogous,
