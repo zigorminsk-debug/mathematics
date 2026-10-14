@@ -324,6 +324,38 @@
    "ru": "Ваш ответ: %s",
    "en": "Your answer: %s"
   },
+  "your_answer_label": {
+   "ru": "Ваш ответ",
+   "en": "Your answer"
+  },
+  "correct_answer_label": {
+   "ru": "Правильный ответ",
+   "en": "Correct answer"
+  },
+  "points_label": {
+   "ru": "Баллы (черновая шкала)",
+   "en": "Points (rough scale)"
+  },
+  "time_spent_label": {
+   "ru": "Затрачено времени",
+   "en": "Time spent"
+  },
+  "grade_label": {
+   "ru": "Оценка",
+   "en": "Grade"
+  },
+  "avg_time_label": {
+   "ru": "В среднем на задание",
+   "en": "Average per task"
+  },
+  "task_grid_title": {
+   "ru": "Перейти к заданию",
+   "en": "Jump to a task"
+  },
+  "insert_symbols": {
+   "ru": "Вставить знаки √ π ²",
+   "en": "Insert symbols √ π ²"
+  },
   "no_answer": {
    "ru": "Ответ не дан",
    "en": "Not answered"
@@ -787,7 +819,7 @@
  },
  "meta": {
   "contentVersion": "2026.10.1",
-  "built": "2026-10-14T00:57:07Z",
+  "built": "2026-10-14T00:57:30Z",
   "schema": 1,
   "years": [
    2021,

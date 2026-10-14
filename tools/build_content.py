@@ -28,6 +28,7 @@ import hashlib
 import importlib
 import json
 import os
+import re
 import shutil
 import sys
 from datetime import datetime, timezone
@@ -122,7 +123,14 @@ def android_strings_xml(strings: dict, lang: str) -> str:
         s = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         s = s.replace("'", "\\'").replace('"', '\\"').replace("\n", "\\n")
         if fmt:
-            s = s.replace("%s", "%1$s")
+            counter = 0
+
+            def number_argument(_match):
+                nonlocal counter
+                counter += 1
+                return "%%%d$s" % counter
+
+            s = re.sub(r"%s", number_argument, s)
         else:
             s = s.replace("%", "%%")
         return s

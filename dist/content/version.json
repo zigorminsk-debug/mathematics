@@ -1,6 +1,6 @@
 {
  "contentVersion": "2026.10.1",
- "built": "2026-10-14T00:57:07Z",
+ "built": "2026-10-14T00:57:30Z",
  "schema": 1,
  "years": [
   2021,
@@ -21,7 +21,7 @@
  "repo": "https://github.com/zigorminsk-debug/mathematics",
  "files": {
   "analogous.json": {
-   "sha256": "ae863ce591ac2a491b47bc03aca0fabcdc6e7804532e1f8cae16872cdf428df2",
+   "sha256": "e44d138bf7b23269a4c5790675ec85d077184d08aa4f0bffc070494c9576420b",
    "bytes": 199573
   },
   "answer_vectors.json": {
@@ -29,7 +29,7 @@
    "bytes": 1571
   },
   "bank.json": {
-   "sha256": "4995c2ba5f328e9ca1af7f6b11792eada1efb985c4b02541f630528a3e13d451",
+   "sha256": "e7ccb026b3341c8e02ff5d6fbfda74f42fc434f17fe262f522cf7e50c8ab98db",
    "bytes": 203502
   },
   "formulas.json": {
@@ -45,8 +45,8 @@
    "bytes": 2967
   },
   "ui_strings.json": {
-   "sha256": "53f40314cd744a2ce442d49e3f5c75cd21550b8dd4fd27bff81e3d319e5cbaa5",
-   "bytes": 22715
+   "sha256": "607fd2468c64fac4e5787b1aa4e47f1112b2f0b97cca172c48b5166745830e4c",
+   "bytes": 23491
   }
  },
  "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"

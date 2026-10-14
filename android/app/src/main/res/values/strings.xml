@@ -12,13 +12,14 @@
     <string name="answer_correct">Correct! Well done.</string>
     <string name="answer_incorrect">Not yet. Study the solution and try again.</string>
     <string name="answer_placeholder">Answer</string>
-    <string name="answered_fmt">Answered: %1$s of %1$s</string>
+    <string name="answered_fmt">Answered: %1$s of %2$s</string>
     <string name="app_name">CT Maths Tutor</string>
     <string name="app_tagline">Maths trainer for the CT exam (Belarus)</string>
     <string name="author_name">Zakharevich Igor</string>
     <string name="auto_advance">Advance to the next task automatically</string>
     <string name="auto_update">Update content automatically</string>
     <string name="avg_time_fmt">Average per task: %1$s</string>
+    <string name="avg_time_label">Average per task</string>
     <string name="back">Back</string>
     <string name="back_to_tests">Back to the tests</string>
     <string name="best_streak_fmt">Best streak: %1$s</string>
@@ -45,6 +46,7 @@
     <string name="continue_test">Continue the test</string>
     <string name="correct">Correct</string>
     <string name="correct_answer_fmt">Correct answer: %1$s</string>
+    <string name="correct_answer_label">Correct answer</string>
     <string name="correct_solution">Correct solution</string>
     <string name="daily_goal">Daily goal</string>
     <string name="daily_goal_fmt">Daily goal: %1$s tasks</string>
@@ -73,6 +75,7 @@
     <string name="grade_fmt">Grade: %1$s</string>
     <string name="grade_good">Good</string>
     <string name="grade_high">Excellent</string>
+    <string name="grade_label">Grade</string>
     <string name="grade_low">Needs revision</string>
     <string name="grade_mid">Satisfactory</string>
     <string name="graph_error">Could not plot the function</string>
@@ -85,6 +88,7 @@
     <string name="how_it_works_text">1. Take a variant in the CT format.\n2. The app checks your answers and analyses every mistake.\n3. Each mistake is followed by a similar task with a full solution.\n4. Statistics show your progress by topic and by year.\n5. The task bank is updated in place without losing your progress.</string>
     <string name="in_progress">Unfinished test</string>
     <string name="incorrect">Incorrect</string>
+    <string name="insert_symbols">Insert symbols √ π ²</string>
     <string name="keep_screen_on">Keep the screen on during a test</string>
     <string name="keyboard_help">Useful symbols for answers: √, π, /, −, ²</string>
     <string name="lang_en">English</string>
@@ -119,6 +123,7 @@
     <string name="pause">Pause</string>
     <string name="percent_fmt">Score: %1$s%%</string>
     <string name="points_fmt">Points (rough scale): %1$s</string>
+    <string name="points_label">Points (rough scale)</string>
     <string name="previous">Previous</string>
     <string name="progress">Progress</string>
     <string name="recommended_topics">Recommended topics</string>
@@ -129,7 +134,7 @@
     <string name="resume">Resume</string>
     <string name="retry">Try again</string>
     <string name="review_mistakes">Review mistakes</string>
-    <string name="score_fmt">Correct answers: %1$s of %1$s</string>
+    <string name="score_fmt">Correct answers: %1$s of %2$s</string>
     <string name="scratch_placeholder">Work here step by step — notes are kept.</string>
     <string name="search">Search</string>
     <string name="send_feedback">Contact the developer</string>
@@ -148,7 +153,8 @@
     <string name="strong_topics">Strong topics</string>
     <string name="submit_confirm">Finish the test and check the answers?</string>
     <string name="submit_test">Finish the test</string>
-    <string name="task_counter_fmt">Task %1$s of %1$s</string>
+    <string name="task_counter_fmt">Task %1$s of %2$s</string>
+    <string name="task_grid_title">Jump to a task</string>
     <string name="tasks_solved">Tasks solved</string>
     <string name="test_year_fmt">Variant %1$s</string>
     <string name="tests_subtitle">30 tasks: 18 multiple-choice (A) and 12 short-answer (B)</string>
@@ -160,6 +166,7 @@
     <string name="theme_system">System default</string>
     <string name="time_left_fmt">Time left: %1$s</string>
     <string name="time_spent_fmt">Time spent: %1$s</string>
+    <string name="time_spent_label">Time spent</string>
     <string name="timer">Timer</string>
     <string name="tool_calculator">Calculator</string>
     <string name="tool_formula_sheet">Formula sheet</string>
@@ -168,11 +175,11 @@
     <string name="tool_scratchpad">Scratchpad</string>
     <string name="tools_available">Available tools</string>
     <string name="tools_title">Tools</string>
-    <string name="topic_progress_fmt">%1$s: %1$s%% (%1$s of %1$s)</string>
+    <string name="topic_progress_fmt">%1$s: %2$s%% (%3$s of %4$s)</string>
     <string name="train_mode">Practice mode</string>
     <string name="train_subtitle">Hints, solutions and tools are available at once</string>
     <string name="unanswered_warning_fmt">Tasks left unanswered: %1$s</string>
-    <string name="update_available_fmt">A new content version is available: %1$s (%1$s new tasks)</string>
+    <string name="update_available_fmt">A new content version is available: %1$s (%2$s new tasks)</string>
     <string name="update_checking">Checking for updates…</string>
     <string name="update_failed">Could not update the content. Check your internet connection.</string>
     <string name="update_installed_fmt">Content updated: version %1$s</string>
@@ -197,4 +204,5 @@
     <string name="win_title">CT Maths Tutor — Windows</string>
     <string name="yes">Yes</string>
     <string name="your_answer_fmt">Your answer: %1$s</string>
+    <string name="your_answer_label">Your answer</string>
 </resources>

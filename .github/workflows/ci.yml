@@ -1,0 +1,137 @@
+name: CI
+
+# Автосборка запускается автоматически после каждого изменения (push) и для
+# каждого pull request: проверяются задания, интерфейс и собираются ОБА
+# приложения — APK для Android и EXE для Windows.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  content:
+    name: Content & web (verify, parity, assets)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verify every task with exact arithmetic
+        run: python3 tools/build_content.py
+
+      - name: Ensure the committed assets match the sources
+        run: python3 tools/sync_assets.py --check
+
+      - name: JavaScript syntax check
+        run: |
+          node --check webapp/core.js
+          node --check webapp/app.js
+
+      - name: Answer-checker parity (Python ↔ JS ↔ Kotlin vectors)
+        run: node tests/answer_parity.js
+
+      - name: Upload the content bank
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-bank
+          path: dist/content/
+
+  windows:
+    name: Windows app (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Sync the shared interface into windows/web
+        run: |
+          python3 tools/build_content.py
+          python3 tools/sync_assets.py
+
+      - name: go vet
+        working-directory: windows
+        run: go vet ./...
+
+      - name: go test
+        working-directory: windows
+        run: go test ./... -v
+
+      - name: Build (windows/amd64)
+        working-directory: windows
+        run: |
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath \
+            -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u +%Y%m%d%H%M)" \
+            -o ../dist/CTMathsTutor-amd64.exe .
+
+      - name: Build (windows/arm64)
+        working-directory: windows
+        run: |
+          CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -trimpath \
+            -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u +%Y%m%d%H%M)" \
+            -o ../dist/CTMathsTutor-arm64.exe .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: dist/*.exe
+
+  android:
+    name: Android app (APK)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Regenerate the shared interface and content
+        run: |
+          python3 tools/build_content.py
+          python3 tools/sync_assets.py
+
+      - name: Unit tests (answer checker parity, Kotlin)
+        working-directory: android
+        run: gradle --no-daemon testDebugUnitTest
+
+      - name: Assemble debug APK
+        working-directory: android
+        run: gradle --no-daemon assembleDebug
+
+      - name: Assemble signed release APK (constant key, updates install over)
+        working-directory: android
+        run: gradle --no-daemon assembleRelease
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: |
+            android/app/build/outputs/apk/debug/*.apk
+            android/app/build/outputs/apk/release/*.apk

@@ -96,9 +96,9 @@
     const correct = correctAnswerText(task);
     const isCorrect = A.check(userAnswer, task);
     node.appendChild(h(`<div class="analysis-row ${isCorrect ? 'good' : 'bad'}">
-        <div><span class="label">${esc(t('your_answer_fmt', ' '))}</span>
+        <div><span class="label">${esc(t('your_answer_label'))}</span>
              <strong>${esc(userAnswer || t('no_answer'))}</strong></div>
-        <div><span class="label">${esc(t('correct_answer_fmt', ' '))}</span>
+        <div><span class="label">${esc(t('correct_answer_label'))}</span>
              <strong>${esc(correct)}</strong></div>
       </div>`));
 
@@ -536,7 +536,7 @@
       cell.addEventListener('click', () => { run.index = i; S.saveSession(); closeModal(); render(); });
       body.appendChild(cell);
     });
-    sheet(t('tasks_solved'), body, null);
+    sheet(t('task_grid_title'), body, null);
   }
 
   function showHint(task) {
@@ -618,9 +618,9 @@
       <p class="muted">${esc(attempt.title)} · ${esc(U.fmtDate(attempt.finishedAt))}</p>`));
     root.appendChild(h(`<div class="grid cards">
         ${statCard(t('results_title'), rate(share) + '%')}
-        ${statCard(t('points_fmt', ' ').trim() || 'Баллы', String(correct))}
-        ${statCard(t('time_spent_fmt', ' ').trim(), U.fmtDuration(attempt.timeMs))}
-        ${statCard(t('grade_fmt', ' ').trim(), grade)}
+        ${statCard(t('points_label'), String(correct))}
+        ${statCard(t('time_spent_label'), U.fmtDuration(attempt.timeMs))}
+        ${statCard(t('grade_label'), grade)}
       </div>`));
     root.appendChild(h(`<div class="card"><h3>${esc(t('by_topic'))}</h3>
         <canvas id="topic-chart"></canvas></div>`));
@@ -713,7 +713,7 @@
         ${statCard(t('tests_taken'), String(totals.tests))}
         ${statCard(t('tasks_solved'), String(totals.solved))}
         ${statCard(t('accuracy'), totals.solved ? rate(totals.rate) + '%' : '—')}
-        ${statCard(t('avg_time_fmt', ' ').trim(), U.fmtDuration(totals.avgTaskMs))}
+        ${statCard(t('avg_time_label'), U.fmtDuration(totals.avgTaskMs))}
       </div>`));
     root.appendChild(h(`<div class="card">
         <div class="rowline"><span>${esc(t('daily_goal_fmt', S.progress.goal || 20))}</span>
@@ -968,7 +968,7 @@
     area.addEventListener('input', () => { S.settings.scratch = area.value; S.saveSettings(); });
     const clear = el('button', { class: 'btn ghost small', text: t('clear') });
     clear.addEventListener('click', () => { area.value = ''; S.settings.scratch = ''; S.saveSettings(); });
-    const insert = el('button', { class: 'btn ghost small', text: t('insert_task') === 'insert_task' ? '√ π' : t('insert_task') });
+    const insert = el('button', { class: 'btn ghost small', text: t('insert_symbols') });
     insert.addEventListener('click', () => { area.value += ' √ π ² '; });
     wrap.appendChild(h(`<p class="muted small">${esc(t('scratch_placeholder'))}</p>`));
     wrap.appendChild(area);
