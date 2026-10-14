@@ -110,6 +110,7 @@ CT_SUBJECT=english .venv/bin/python tools/check_syntax.py --require
 content_src/ webapp/ android/ windows/   физика (корневые каталоги)
   android/keystore/                      постоянный ключ физики
 english/                                 английский тренажёр целиком
+  README.md                              вход для человека: возможности, формат, идентичность, сборка
   content_src/                           авторские задания, правила, уроки, политика ответов
   tools/{build_content.py,make_icon.py}  сборка банка и иконки (облако «EN»)
   webapp/ windows/ android/ dist/ tests/ интерфейс, Go-хост, Kotlin-приложение, тесты
