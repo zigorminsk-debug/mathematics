@@ -34,7 +34,11 @@ SUBJECT_ROOT = subject.SUBJECT_ROOT
 CONTENT_FILES = set(subject.CONTENT_FILES)
 INSTALLERS = subject.installers()
 RELEASE_FILES = CONTENT_FILES | INSTALLERS | {"version.json", "release-info.json", "SHA256SUMS.txt"}
-BUILD_JOBS = ("Content & web (verify, parity, assets)", "Windows app (Go)", "Android app (APK)")
+#: Имена заданий CI, которые обязаны быть зелёными до публикации. Публикатор
+#: сверяет их с фактическими job'ами запуска, поэтому у каждого предмета свои
+#: (английский контент-джоб называется иначе и живёт в english-ci.yml).
+BUILD_JOBS = tuple(getattr(subject, "BUILD_JOBS", (
+    "Content & web (verify, parity, assets)", "Windows app (Go)", "Android app (APK)")))
 
 
 def canonical(version: str) -> str:

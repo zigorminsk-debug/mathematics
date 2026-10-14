@@ -47,6 +47,7 @@ print(json.dumps({
     'content': sorted(s.CONTENT_FILES),
     'reference': s.REFERENCE_FILE,
     'installers': sorted(s.installers()),
+    'build_jobs': list(s.BUILD_JOBS),
 }, ensure_ascii=False))
 """
 
@@ -143,3 +144,31 @@ class Profiles(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BuildJobNames(unittest.TestCase):
+    """Имена заданий CI у предмета и в workflow совпадают.
+
+    Публикатор останавливает релиз, если задание из профиля не найдено среди
+    успешных job'ов запуска (``tools/publish_release.py``). Опечатка в имени —
+    это упавшая публикация после успешной сборки, поэтому сверяем здесь.
+    """
+
+    WORKFLOWS = {"physics": "ci.yml", "english": "english-ci.yml"}
+
+    def test_every_expected_job_exists_in_the_subject_workflow(self):
+        for name, workflow in self.WORKFLOWS.items():
+            with self.subTest(subject=name):
+                data = profile(name)
+                text = (ROOT / ".github" / "workflows" / workflow).read_text(encoding="utf-8")
+                for job in data["build_jobs"]:
+                    self.assertIn(f"name: {job}", text,
+                                  f"{workflow}: нет задания «{job}» из профиля {name}")
+                self.assertNotIn("name: Publish", "\n".join(data["build_jobs"]))
+
+    def test_subjects_do_not_share_job_names_by_accident(self):
+        physics, english = profile("physics"), profile("english")
+        # у английского контент-джоб назван иначе, иначе профиль не отличить
+        self.assertNotEqual(physics["build_jobs"][0], english["build_jobs"][0])
+        for name in ("physics", "english"):
+            self.assertGreaterEqual(len(profile(name)["build_jobs"]), 3)

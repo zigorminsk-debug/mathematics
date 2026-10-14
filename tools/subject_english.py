@@ -56,6 +56,11 @@ EXPECTED_CERT = "android/keystore/expected-cert-sha256.txt"
 #: Канал обновления контента: только теги этой семьи, никогда глобальный latest.
 RELEASES_PAGE = 100
 
+#: Имена заданий английского CI: публикатор сверяет их с фактическим запуском,
+#: иначе релиз мог бы уйти без проверенного контента (см. tools/publish_release.py).
+BUILD_JOBS = ("English content & web (verify, parity, assets)",
+              "Windows app (Go)", "Android app (APK)")
+
 #: Имя файла APK в релизе. Внутренняя сборка Gradle остаётся app-release.apk,
 #: а переименование делает publish-шаг CI, чтобы имя в релизе было ровно одно.
 APK_ASSET = "engtutor.apk"

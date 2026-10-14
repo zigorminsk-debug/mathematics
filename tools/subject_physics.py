@@ -44,6 +44,11 @@ KEYSTORE = "android/keystore/ctphysics-release.p12"
 KEYSTORE_ENV = "CTPHYSICS_KEYSTORE_FILE"
 EXPECTED_CERT = "android/keystore/expected-cert-sha256.txt"
 
+#: Имена заданий physics-CI (`ci.yml`): публикатор сверяет их с
+#: фактическим запуском (см. tools/publish_release.py).
+BUILD_JOBS = ("Content & web (verify, parity, assets)",
+              "Windows app (Go)", "Android app (APK)")
+
 #: Канал обновления контента: только теги этой семьи, никогда глобальный latest.
 RELEASES_PAGE = 100
 
