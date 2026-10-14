@@ -78,7 +78,11 @@ def main() -> int:
         if previous:
             print(f"✓ versionCode increased from {previous['versionCode']}")
     except (OSError, ValueError, subprocess.SubprocessError) as error:
-        print(f"✗ APK update compatibility: {error}", file=sys.stderr)
+        # CI exposes this annotation even when the full runner log is inaccessible.
+        message = f"APK update compatibility: {error}"
+        if isinstance(error, subprocess.CalledProcessError):
+            message += ": " + ((error.stderr or "") + (error.stdout or "")).strip()[:1000]
+        print("::error::" + message.replace("\n", " "), file=sys.stderr)
         return 1
     return 0
 
