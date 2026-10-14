@@ -17,9 +17,9 @@ SHA-256: B2:BD:B4:D1:26:B8:88:C7:D8:AF:50:80:F6:7E:CF:E1:E4:3F:EB:F2:8E:5D:1A:E6
 CI сверяет собранный APK с `expected-cert-sha256.txt`
 (`python3 tools/check_signature.py`) и падает, если подпись изменилась.
 
-**Перед публикацией в Google Play** (или если ключ нужно сменить) положите свой
-`.p12` рядом, обновите `keystore.properties` и `expected-cert-sha256.txt` **или**
-задайте секреты репозитория `ANDROID_KEYSTORE_FILE`, `ANDROID_KEYSTORE_PASSWORD`,
-`ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD` — `android/app/build.gradle.kts` предпочтёт
-переменные окружения. В таком случае файл ключа храните в секретах (base64), а не
-в репозитории.
+**Не меняйте этот ключ у уже распространяемых APK без корректной миграции
+подписи** — иначе Android не сможет обновить приложение поверх. Для нового
+приложения до первой публикации в Google Play используйте собственный приватный
+ключ и храните его в секретах, а не в репозитории. Параметры сборки:
+`ANDROID_KEYSTORE_FILE`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`,
+`ANDROID_KEY_PASSWORD` (см. `docs/RELEASE.md`).

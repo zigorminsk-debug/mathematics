@@ -14,6 +14,7 @@ import android.webkit.JavascriptInterface
 import android.widget.Toast
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -22,6 +23,7 @@ import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.Executors
 
 /**
  * ``window.CTNative`` — the native side of the shared web interface.
@@ -38,10 +40,20 @@ import java.util.Locale
  * (see windows/main.go), which is what allows one single web application to run
  * on both platforms.
  */
-class NativeBridge(private val activity: Activity) {
+class NativeBridge(
+    private val activity: Activity,
+    private val evaluateJavascript: (String) -> Unit
+) {
 
     private val dataDir = File(activity.filesDir, "data").apply { mkdirs() }
-    private val contentDir = File(activity.filesDir, "content").apply { mkdirs() }
+    private val contentBackup = File(activity.filesDir, "content.previous")
+    private val contentDir = File(activity.filesDir, "content").apply {
+        // Recover if the process stopped between the two directory renames.
+        if (!exists() && contentBackup.exists()) contentBackup.renameTo(this)
+        mkdirs()
+    }
+    private val contentLock = Any()
+    private val updateExecutor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
     private val keyPattern = Regex("^[a-zA-Z0-9_-]{1,32}$")
 
@@ -73,7 +85,7 @@ class NativeBridge(private val activity: Activity) {
         }
         val content = JSONObject().apply {
             put("version", installedContentVersion())
-            put("overlay", File(contentDir, "version.json").exists())
+            put("overlay", File(contentDir, "bank.json").exists() && overlayIsCurrent())
         }
         return JSONObject().apply {
             put("app", app)
@@ -96,19 +108,24 @@ class NativeBridge(private val activity: Activity) {
         }
     }
 
-    /** Content of a bank: a downloaded pack wins over the embedded asset. */
+    /**
+     * Content of a bank: a downloaded pack wins over the embedded asset only
+     * when it is not older than the pack inside the APK. Otherwise a bank
+     * downloaded by a previous installation would shadow a newer APK forever
+     * (the new variant would never appear after an in-place update).
+     */
     @JavascriptInterface
-    fun getContent(name: String): String? {
-        if (!keyPattern.matches(name)) return null
+    fun getContent(name: String): String? = synchronized(contentLock) {
+        if (!keyPattern.matches(name)) return@synchronized null
         val overlay = File(contentDir, "$name.json")
-        if (overlay.exists()) {
-            return try {
-                overlay.readText()
-            } catch (error: IOException) {
-                null
+        if (overlay.exists() && overlayIsCurrent()) {
+            try {
+                return@synchronized overlay.readText()
+            } catch (ignored: IOException) {
+                // Fall back to the embedded file rather than returning null.
             }
         }
-        return try {
+        try {
             activity.assets.open("webapp/content/$name.json").bufferedReader().use { it.readText() }
         } catch (error: IOException) {
             null
@@ -122,40 +139,87 @@ class NativeBridge(private val activity: Activity) {
      * feed, verifies every SHA-256 and installs it over the embedded bank.  The
      * student's progress is never touched.
      */
+    /** Asynchronous bridge: an offline check must not block the WebView UI. */
+    @JavascriptInterface
+    fun checkUpdatesAsync(baseUrl: String, currentVersion: String, requestId: String) {
+        if (!keyPattern.matches(requestId)) return
+        updateExecutor.execute {
+            val response = checkUpdates(baseUrl, currentVersion)
+            mainHandler.post {
+                if (!activity.isFinishing && !activity.isDestroyed) {
+                    // quote both arguments; response is data, never executable JS
+                    evaluateJavascript("window.CT && window.CT.bridge.onUpdateResult(" +
+                        JSONObject.quote(requestId) + "," + JSONObject.quote(response) + ");")
+                }
+            }
+        }
+    }
+
+    @Synchronized
     @JavascriptInterface
     fun checkUpdates(baseUrl: String, currentVersion: String): String {
         val base = baseUrl.ifBlank { DEFAULT_UPDATE_BASE }.trimEnd('/')
-        val current = currentVersion.ifBlank { installedContentVersion() }
+        val installedVersion = installedContentVersion()
+        val current = if (ContentVersions.compare(currentVersion, installedVersion) > 0) {
+            currentVersion
+        } else installedVersion
+        var staged: File? = null
         return try {
+            if (!base.startsWith("https://")) throw IllegalArgumentException("update feed must use HTTPS")
             val manifest = httpGet("$base/version.json")
-            val manifestJson = JSONObject(manifest)
+            val manifestJson = JSONObject(manifest.toString(Charsets.UTF_8))
             val version = manifestJson.optString("contentVersion")
-            if (version.isBlank()) {
-                return result("error", current, 0, "manifest has no contentVersion")
+            if (!ContentVersions.isValid(version)) {
+                return result("error", current, 0, "manifest has no valid contentVersion")
             }
-            if (current.isNotBlank() && version == current) {
+            // A new APK can be ahead of releases/latest; never downgrade its bank.
+            if (ContentVersions.compare(version, current) <= 0) {
                 return result("uptodate", current, 0, "content is up to date")
             }
-            val files = manifestJson.optJSONObject("files") ?: JSONObject()
-            var installed = 0
+            val files = manifestJson.optJSONObject("files")
+                ?: return result("error", current, 0, "manifest has no files")
+            if (!files.has("bank.json")) return result("error", current, 0, "manifest has no bank")
+            val pack = File.createTempFile("content-update-", "", activity.filesDir)
+            staged = pack
+            if (!pack.delete() || !pack.mkdir()) throw IOException("cannot create staging directory")
             val names = files.keys()
+            var count = 0
             while (names.hasNext()) {
                 val fileName = names.next()
-                val meta = files.optJSONObject(fileName) ?: continue
-                val body = httpGet("$base/$fileName")
-                val expected = meta.optString("sha256")
-                if (expected.isNotBlank() && sha256(body.toByteArray()) != expected.lowercase(Locale.ROOT)) {
-                    return result("error", current, installed, "checksum mismatch for $fileName")
-                }
                 val stem = fileName.removeSuffix(".json")
-                File(contentDir, "$stem.json").writeText(body)
-                installed++
+                if (!fileName.endsWith(".json") || fileName == "version.json" || !keyPattern.matches(stem)) {
+                    throw IllegalArgumentException("invalid content file name")
+                }
+                val meta = files.optJSONObject(fileName) ?: throw IllegalArgumentException("file has no metadata")
+                val expected = meta.optString("sha256").lowercase(Locale.ROOT)
+                if (!expected.matches(Regex("[0-9a-f]{64}"))) throw IllegalArgumentException("missing checksum")
+                val body = httpGet("$base/$fileName")
+                if (sha256(body) != expected || (meta.has("bytes") && meta.optLong("bytes") != body.size.toLong())) {
+                    return result("error", current, 0, "checksum or size mismatch for $fileName")
+                }
+                JSONObject(body.toString(Charsets.UTF_8)) // reject a truncated/invalid bank
+                File(pack, fileName).writeBytes(body)
+                count++
             }
-            result("ok", version, installed, "installed $installed content files")
+            File(pack, "version.json").writeBytes(manifest)
+            // Commit only the fully verified pack. Neither network failures nor a
+            // bad last checksum may leave a mixture of old and new content.
+            synchronized(contentLock) {
+                if (contentBackup.exists() && !contentBackup.deleteRecursively()) throw IOException("cannot clear backup")
+                if (!contentDir.renameTo(contentBackup)) throw IOException("cannot back up content")
+                if (!pack.renameTo(contentDir)) {
+                    contentBackup.renameTo(contentDir)
+                    throw IOException("cannot install content")
+                }
+                contentBackup.deleteRecursively()
+            }
+            result("updated", version, count, "installed $count content files")
         } catch (error: IOException) {
             result("offline", current, 0, error.message ?: "network unavailable")
         } catch (error: Exception) {
             result("error", current, 0, error.message ?: "unexpected error")
+        } finally {
+            staged?.deleteRecursively()
         }
     }
 
@@ -174,7 +238,7 @@ class NativeBridge(private val activity: Activity) {
         }.toString()
     }
 
-    private fun httpGet(url: String): String {
+    private fun httpGet(url: String): ByteArray {
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
             connectTimeout = 15000
@@ -186,7 +250,17 @@ class NativeBridge(private val activity: Activity) {
             if (connection.responseCode !in 200..299) {
                 throw IOException("HTTP ${connection.responseCode} for $url")
             }
-            return connection.inputStream.bufferedReader().use { it.readText() }
+            return connection.inputStream.use { input ->
+                val bytes = ByteArrayOutputStream()
+                val buffer = ByteArray(8192)
+                while (true) {
+                    val length = input.read(buffer)
+                    if (length < 0) break
+                    if (bytes.size() + length > 32 * 1024 * 1024) throw IOException("content file too large")
+                    bytes.write(buffer, 0, length)
+                }
+                bytes.toByteArray()
+            }
         } finally {
             connection.disconnect()
         }
@@ -298,7 +372,7 @@ class NativeBridge(private val activity: Activity) {
         }
     }
 
-    fun shutdown() = Unit
+    fun shutdown() { updateExecutor.shutdownNow() }
 
     /* ------------------------------------------------------------ private */
 
@@ -314,20 +388,49 @@ class NativeBridge(private val activity: Activity) {
     }
 
     private fun installedContentVersion(): String {
-        val overlay = File(contentDir, "version.json")
-        if (overlay.exists()) {
+        if (overlayIsCurrent()) {
+            overlayContentVersion()?.let { return it }
+        }
+        return embeddedContentVersion() ?: "unknown"
+    }
+
+    /** Скачанный пакет не старше встроенного в APK (или его версию не узнать). */
+    private fun overlayIsCurrent(): Boolean {
+        val overlay = overlayContentVersion() ?: return true
+        val embedded = embeddedContentVersion() ?: return true
+        return ContentVersions.compare(overlay, embedded) >= 0
+    }
+
+    private fun overlayContentVersion(): String? {
+        val manifest = File(contentDir, "version.json")
+        if (manifest.exists()) {
             try {
-                return JSONObject(overlay.readText()).optString("contentVersion")
+                val version = JSONObject(manifest.readText()).optString("contentVersion")
+                if (ContentVersions.isValid(version)) return version
             } catch (ignored: Exception) {
-                // fall through to the embedded version
+                // fall through to the bank metadata
             }
         }
+        val bank = File(contentDir, "bank.json")
+        if (bank.exists()) {
+            try {
+                val version = JSONObject(bank.readText()).optJSONObject("meta")
+                    ?.optString("contentVersion").orEmpty()
+                if (ContentVersions.isValid(version)) return version
+            } catch (ignored: Exception) {
+                // version unknown — the caller keeps the overlay
+            }
+        }
+        return null
+    }
+
+    private fun embeddedContentVersion(): String? {
         return try {
             val text = activity.assets.open("webapp/content/version.json")
                 .bufferedReader().use { it.readText() }
-            JSONObject(text).optString("contentVersion")
+            JSONObject(text).optString("contentVersion").takeIf { it.isNotBlank() }
         } catch (error: Exception) {
-            "unknown"
+            null
         }
     }
 

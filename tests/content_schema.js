@@ -53,7 +53,8 @@ const ids = new Set();
 });
 
 const years = new Set(bank.tasks.map((t) => t.year).filter(Boolean));
-if (years.size < 5) fail(`expected five exam years, found ${[...years].join(', ')}`);
+if (years.size < 6) fail(`expected six exam years (2021–2026), found ${[...years].join(', ')}`);
+if (!years.has(2026)) fail('the 2026 variant is missing from the bank');
 bank.tasks.forEach((task) => {
   if (!['A', 'B'].includes(task.part)) fail(`${task.id}: unknown part ${task.part}`);
 });
@@ -61,6 +62,17 @@ bank.tasks.forEach((task) => {
 const topics = read('topics');
 if (!topics.topics || !Object.keys(topics.topics).length) fail('topics.json has no topics');
 if (!topics.counts || !Object.keys(topics.counts).length) fail('topics.json has no per-topic counts');
+
+/* Тема для изучения: при неверном ответе приложение открывает тему задания,
+ * поэтому у каждой темы обязаны быть конспект и существующие разделы формул. */
+if (!topics.study || !Object.keys(topics.study).length) fail('topics.json has no study notes');
+(topics.order || Object.keys(topics.topics || {})).forEach((topic) => {
+  const entry = (topics.study || {})[topic];
+  if (!entry) { fail(`topic "${topic}" has no study notes to open on a wrong answer`); return; }
+  if (!Array.isArray(entry.ru) || entry.ru.length < 2) fail(`study notes for "${topic}" are too short (ru)`);
+  if (!Array.isArray(entry.en) || entry.en.length < 2) fail(`study notes for "${topic}" are too short (en)`);
+  if (!Array.isArray(entry.formulas) || !entry.formulas.length) fail(`study notes for "${topic}" name no formula group`);
+});
 const unknownTopics = new Set();
 bank.tasks.concat(analogous.tasks).forEach((task) => {
   if (!topics.topics[task.topic]) unknownTopics.add(task.topic);
@@ -69,6 +81,12 @@ if (unknownTopics.size) fail('tasks reference unknown topics: ' + [...unknownTop
 
 const formulas = read('formulas');
 if (!Array.isArray(formulas.groups) || formulas.groups.length < 5) fail('formulas.json is too small');
+const formulaGroupIds = new Set(formulas.groups.map((group) => group.id));
+Object.keys(topics.study || {}).forEach((topic) => {
+  (topics.study[topic].formulas || []).forEach((id) => {
+    if (!formulaGroupIds.has(id)) fail(`study notes for "${topic}" reference the missing formula group "${id}"`);
+  });
+});
 formulas.groups.forEach((group) => {
   if (!group.items || !group.items.length) fail(`formula group ${group.id} is empty`);
   group.items.forEach((item) => {

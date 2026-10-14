@@ -304,6 +304,19 @@ pre { white-space: pre-wrap; word-break: break-word; }
 .formula-name { font-size: .84rem; color: var(--muted); }
 .formula-body { font-size: .98rem; font-variant-numeric: tabular-nums; }
 
+/* --------------------------------------------------------- study topic --- */
+.study-topic {
+  margin-top: 12px; padding: 12px;
+  border: 1px solid var(--primary); border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.study-topic h4 { margin: 0 0 6px; color: var(--primary); }
+.study-topic h5 { margin: 10px 0 4px; }
+.study-points { margin: 4px 0 0; padding-left: 20px; display: grid; gap: 4px; }
+.study-formulas { margin-top: 6px; }
+.formula-group-title { font-weight: 700; color: var(--primary); margin-top: 6px; }
+.study-example .task-text { margin-top: 0; }
+
 /* ---------------------------------------------------------------- tools --- */
 .calc-display { width: 100%; }
 .calc-result { font-size: 1.2rem; font-weight: 700; min-height: 28px; margin: 8px 0; }

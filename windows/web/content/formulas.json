@@ -701,6 +701,160 @@
    ]
   },
   {
+   "id": "inequalities",
+   "ru": "Неравенства и метод интервалов",
+   "en": "Inequalities and the interval method",
+   "items": [
+    {
+     "name": {
+      "ru": "Смена знака",
+      "en": "Sign change"
+     },
+     "formula": "при умножении или делении на отрицательное число знак неравенства меняется на противоположный"
+    },
+    {
+     "name": {
+      "ru": "Метод интервалов",
+      "en": "Interval method"
+     },
+     "formula": "корни на числовую прямую → знак на каждом интервале → ответ с учётом строгости"
+    },
+    {
+     "name": {
+      "ru": "Квадратное неравенство",
+      "en": "Quadratic inequality"
+     },
+     "formula": "ax² + bx + c ⋛ 0: знак трёхчлена совпадает со знаком a вне корней и противоположен между корнями"
+    },
+    {
+     "name": {
+      "ru": "Модуль: |x| < a",
+      "en": "Absolute value: |x| < a"
+     },
+     "formula": "|x| < a ⇔ −a < x < a (при a > 0)"
+    },
+    {
+     "name": {
+      "ru": "Модуль: |x| > a",
+      "en": "Absolute value: |x| > a"
+     },
+     "formula": "|x| > a ⇔ x < −a или x > a (при a > 0)"
+    },
+    {
+     "name": {
+      "ru": "Дробное неравенство",
+      "en": "Fractional inequality"
+     },
+     "formula": "знак дроби = знак произведения числителя и знаменателя; нули знаменателя всегда выколоты"
+    }
+   ]
+  },
+  {
+   "id": "functions",
+   "ru": "Функции и графики",
+   "en": "Functions and graphs",
+   "items": [
+    {
+     "name": {
+      "ru": "Область определения",
+      "en": "Domain"
+     },
+     "formula": "знаменатель ≠ 0; под корнем чётной степени ≥ 0; под логарифмом > 0"
+    },
+    {
+     "name": {
+      "ru": "Область значений",
+      "en": "Range"
+     },
+     "formula": "−1 ≤ sin x ≤ 1 и −1 ≤ cos x ≤ 1; у a·f(x) + b границы умножаются на a и сдвигаются на b"
+    },
+    {
+     "name": {
+      "ru": "Чётность",
+      "en": "Parity"
+     },
+     "formula": "чётная: f(−x) = f(x) (график симметричен оси Oy); нечётная: f(−x) = −f(x)"
+    },
+    {
+     "name": {
+      "ru": "Сдвиг графика",
+      "en": "Shifting a graph"
+     },
+     "formula": "y = f(x − a) — вправо на a; y = f(x) + b — вверх на b"
+    },
+    {
+     "name": {
+      "ru": "Растяжение графика",
+      "en": "Stretching a graph"
+     },
+     "formula": "y = k·f(x) — растяжение от оси Ox в k раз; y = f(kx) — сжатие к оси Oy в k раз"
+    },
+    {
+     "name": {
+      "ru": "Линейная функция",
+      "en": "Linear function"
+     },
+     "formula": "y = kx + b: k — угловой коэффициент, b — точка пересечения с осью Oy"
+    },
+    {
+     "name": {
+      "ru": "Обратная пропорциональность",
+      "en": "Inverse proportion"
+     },
+     "formula": "y = k/x — гипербола, x ≠ 0"
+    }
+   ]
+  },
+  {
+   "id": "vectors",
+   "ru": "Векторы и координаты",
+   "en": "Vectors and coordinates",
+   "items": [
+    {
+     "name": {
+      "ru": "Координаты вектора",
+      "en": "Vector coordinates"
+     },
+     "formula": "AB→ = (x₂ − x₁; y₂ − y₁)"
+    },
+    {
+     "name": {
+      "ru": "Длина вектора",
+      "en": "Length of a vector"
+     },
+     "formula": "|a| = √(x² + y²)"
+    },
+    {
+     "name": {
+      "ru": "Скалярное произведение",
+      "en": "Dot product"
+     },
+     "formula": "a·b = x₁x₂ + y₁y₂ = |a|·|b|·cos φ"
+    },
+    {
+     "name": {
+      "ru": "Перпендикулярность",
+      "en": "Perpendicularity"
+     },
+     "formula": "a ⊥ b ⇔ x₁x₂ + y₁y₂ = 0"
+    },
+    {
+     "name": {
+      "ru": "Середина отрезка",
+      "en": "Midpoint"
+     },
+     "formula": "M((x₁ + x₂)/2; (y₁ + y₂)/2)"
+    },
+    {
+     "name": {
+      "ru": "Расстояние между точками",
+      "en": "Distance between points"
+     },
+     "formula": "d = √((x₂ − x₁)² + (y₂ − y₁)²)"
+    }
+   ]
+  },
+  {
    "id": "numbers",
    "ru": "Числа и делимость",
    "en": "Numbers and divisibility",
@@ -758,7 +912,7 @@
   }
  ],
  "counts": {
-  "groups": 11,
-  "items": 97
+  "groups": 14,
+  "items": 116
  }
 }

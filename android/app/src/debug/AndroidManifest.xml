@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+    <!-- Make the separate debug app unmistakable in the launcher. -->
+    <application android:label="@string/app_debug_name" tools:replace="android:label" />
+</manifest>

@@ -39,6 +39,8 @@ PERIODS: list[dict] = [
      "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2024", "en": "Variant 2024"}},
     {"year": 2025, "module": "task_bank_2025", "parts": {"A": 18, "B": 12},
      "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2025", "en": "Variant 2025"}},
+    {"year": 2026, "module": "task_bank_2026", "parts": {"A": 18, "B": 12},
+     "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2026", "en": "Variant 2026"}},
 ]
 
 

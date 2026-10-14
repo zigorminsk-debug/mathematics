@@ -163,6 +163,16 @@
     },
     checkUpdates: function (baseUrl, current) {
       var self = this;
+      if (this.native && this.native.checkUpdatesAsync) {
+        // Native network IO runs on an executor, never on the WebView thread.
+        return new Promise(function (resolve, reject) {
+          var id = 'update-' + U.uid();
+          self._updates = self._updates || {};
+          self._updates[id] = { resolve: resolve, reject: reject };
+          try { self.native.checkUpdatesAsync(baseUrl || '', current || '', id); }
+          catch (error) { delete self._updates[id]; reject(error); }
+        });
+      }
       if (this.native && this.native.checkUpdates) {
         return Promise.resolve().then(function () { return JSON.parse(self.native.checkUpdates(baseUrl || '', current || '')); });
       }
@@ -171,6 +181,13 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ baseUrl: baseUrl || '', current: current || '' }),
       }).then(function (r) { return r.json(); });
+    },
+    onUpdateResult: function (id, response) {
+      var pending = (this._updates || {})[id];
+      if (!pending) return;
+      delete this._updates[id];
+      try { pending.resolve(typeof response === 'string' ? JSON.parse(response) : response); }
+      catch (error) { pending.reject(error); }
     },
     notify: function (message) {
       if (this.native && this.native.toast) { this.native.toast(message); return; }
@@ -579,6 +596,7 @@
   var C = CT.content = {
     bank: [], analogous: [], formulas: [], mistakes: { errors: {}, checklist: [] },
     topics: {}, order: [], counts: {}, byYear: {}, tools: {}, meta: {}, vectors: [],
+    study: {},
     loaded: false,
 
     load: function () {
@@ -594,6 +612,7 @@
         self.order = topics.order || Object.keys(self.topics);
         self.tools = topics.tools || {};
         self.byYear = topics.byYear || {};
+        self.study = topics.study || {};
         self.formulas = (data[3] && data[3].groups) || [];
         I.strings = (data[4] && data[4].strings) || {};
         self.mistakes = data[5] || { errors: {}, checklist: [] };
@@ -627,6 +646,18 @@
     toolTitle: function (key) { return I.pick(this.tools[key]) || key; },
     tasksByTopic: function (topic) { return this.bank.filter(function (t) { return t.topic === topic; }); },
     analogByTopic: function (topic) { return this.analogous.filter(function (t) { return t.topic === topic; }); },
+
+    /** Конспект темы («что изучить»), который открывается при неверном ответе. */
+    studyFor: function (topic) { return this.study[topic] || null; },
+
+    /** Разделы сборника формул, относящиеся к теме задания. */
+    formulaGroupsFor: function (topic) {
+      var entry = this.studyFor(topic);
+      if (!entry || !entry.formulas) return [];
+      var byId = {};
+      this.formulas.forEach(function (group) { byId[group.id] = group; });
+      return entry.formulas.map(function (id) { return byId[id]; }).filter(Boolean);
+    },
 
     /** Диагноз типичной ошибки по тегам задания. */
     diagnoses: function (task) {

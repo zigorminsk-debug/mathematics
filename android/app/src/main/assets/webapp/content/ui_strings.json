@@ -1,8 +1,8 @@
 {
  "strings": {
   "about_text": {
-   "ru": "Математический тренажёр для подготовки к централизованному тестированию по математике (Республика Беларусь). База содержит пять вариантов экзаменационного формата (2021–2025) и генератор однотипных заданий.",
-   "en": "A maths trainer for the Belarusian centralised testing (CT) exam. The bank contains five exam-format variants (2021–2025) plus a generator of analogous tasks for consolidation."
+   "ru": "Математический тренажёр для подготовки к централизованному тестированию по математике (Республика Беларусь). База содержит шесть вариантов экзаменационного формата (2021–2026) и генератор однотипных заданий.",
+   "en": "A maths trainer for the Belarusian centralised testing (CT) exam. The bank contains six exam-format variants (2021–2026) plus a generator of analogous tasks for consolidation."
   },
   "about_title": {
    "ru": "О программе",
@@ -312,6 +312,10 @@
    "ru": "Статистика",
    "en": "Statistics"
   },
+  "nav_study": {
+   "ru": "Изучение",
+   "en": "Study"
+  },
   "nav_tests": {
    "ru": "Тесты",
    "en": "Tests"
@@ -424,6 +428,10 @@
    "ru": "Продолжить",
    "en": "Resume"
   },
+  "return_to_task": {
+   "ru": "Вернуться к заданию",
+   "en": "Return to the task"
+  },
   "resume_text": {
    "ru": "У вас есть незаконченный вариант. Продолжить с того же места?",
    "en": "You have an unfinished variant. Continue where you left off?"
@@ -491,6 +499,42 @@
   "stat_time": {
    "ru": "Время занятий",
    "en": "Time practised"
+  },
+  "study_examples": {
+   "ru": "Разобранные примеры по теме",
+   "en": "Worked examples on this topic"
+  },
+  "study_formulas": {
+   "ru": "Формулы по теме",
+   "en": "Formulas for this topic"
+  },
+  "study_index_intro": {
+   "ru": "Выберите тему: краткий конспект, формулы и разобранные примеры. Тема также открывается автоматически при неверном ответе.",
+   "en": "Pick a topic: a short summary, formulas and worked examples. The topic also opens automatically after a wrong answer."
+  },
+  "study_intro": {
+   "ru": "Краткий конспект и формулы темы, затем — разобранные примеры. После изучения закрепите тему тренировкой.",
+   "en": "A short summary and the formulas of the topic, followed by worked examples. Afterwards consolidate the topic with practice."
+  },
+  "study_open": {
+   "ru": "Открыть тему",
+   "en": "Open the topic"
+  },
+  "study_points": {
+   "ru": "Что повторить",
+   "en": "What to revise"
+  },
+  "study_practice": {
+   "ru": "Тренировка по теме",
+   "en": "Practise this topic"
+  },
+  "study_title": {
+   "ru": "Тема для изучения",
+   "en": "Topic to study"
+  },
+  "study_topic_fmt": {
+   "ru": "Изучить тему: %s",
+   "en": "Study the topic: %s"
   },
   "task_grid": {
    "ru": "Все задания",
@@ -650,20 +694,21 @@
   }
  },
  "meta": {
-  "contentVersion": "2026.10.1",
+  "contentVersion": "2026.10.3",
   "schema": 1,
   "years": [
    2021,
    2022,
    2023,
    2024,
-   2025
+   2025,
+   2026
   ],
   "counts": {
-   "bank": 150,
+   "bank": 180,
    "analogous": 552,
-   "choice": 90,
-   "short": 60
+   "choice": 108,
+   "short": 72
   },
   "author": "Zakharevich Igor",
   "email": "ziv@csl.by",

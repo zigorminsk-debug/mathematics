@@ -492,6 +492,64 @@
     return card;
   };
 
+  /** Один раздел сборника формул (карточка «название — формула»). */
+  UI.formulaGroupCard = function (group) {
+    var card = el('div', { class: 'card formula-group' });
+    card.appendChild(el('h3', { text: I.pick(group) }));
+    (group.items || []).forEach(function (item) {
+      var row = el('div', { class: 'formula-row' });
+      row.appendChild(el('div', { class: 'formula-name', text: I.pick(item.name) }));
+      row.appendChild(el('div', { class: 'formula-body', text: item.formula }));
+      card.appendChild(row);
+    });
+    return card;
+  };
+
+  /**
+   * Тема для изучения: открывается сразу при неверном ответе.
+   *
+   * Короткий конспект темы и её формулы показываются прямо в разборе (ученик
+   * не должен сам догадываться, что повторять), а кнопка ведёт на полный
+   * экран темы с разобранными примерами.
+   */
+  UI.studyBlock = function (task) {
+    if (!task) return null;
+    var study = C.studyFor(task.topic);
+    var groups = C.formulaGroupsFor(task.topic);
+    if (!study && !groups.length) return null;
+    var box = el('div', { class: 'study-topic', 'data-topic': task.topic });
+    box.appendChild(el('h4', { text: t('study_topic_fmt', C.topicTitle(task.topic)) }));
+    var points = study ? (I.pick(study) || []) : [];
+    if (points.length) {
+      box.appendChild(el('h5', { text: t('study_points') }));
+      var ul = el('ul', { class: 'study-points' });
+      points.forEach(function (point) { ul.appendChild(el('li', { text: point })); });
+      box.appendChild(ul);
+    }
+    if (groups.length) {
+      box.appendChild(el('h5', { text: t('study_formulas') }));
+      groups.forEach(function (group) {
+        var wrap = el('div', { class: 'study-formulas' });
+        wrap.appendChild(el('div', { class: 'formula-group-title', text: I.pick(group) }));
+        (group.items || []).forEach(function (item) {
+          var row = el('div', { class: 'formula-row' });
+          row.appendChild(el('div', { class: 'formula-name', text: I.pick(item.name) }));
+          row.appendChild(el('div', { class: 'formula-body', text: item.formula }));
+          wrap.appendChild(row);
+        });
+        box.appendChild(wrap);
+      });
+    }
+    var row = el('div', { class: 'rowline wrap' });
+    var open = el('button', { class: 'btn primary', text: t('study_open') });
+    open.addEventListener('click', function () { go('#/study/' + task.topic); });
+    var practice = el('button', { class: 'btn ghost', text: t('study_practice') });
+    practice.addEventListener('click', function () { go('#/practice/' + task.topic); });
+    row.appendChild(open); row.appendChild(practice);
+    box.appendChild(row);
+    return box;
+  };
+
   /** Разбор одного задания (используется в результатах и в тренажёре ошибок). */
   UI.breakdown = function (task, userAnswer, options) {
     options = options || {};
@@ -534,6 +592,13 @@
     meta.textContent = [C.topicTitle(task.topic), task.src].filter(Boolean).join(' · ');
     box.appendChild(meta);
 
+    // Неверный ответ: сразу открываем необходимую тему для изучения —
+    // конспект и формулы этой темы, а не только правильный ответ.
+    if (!A.check(userAnswer, task)) {
+      var studyBlock = UI.studyBlock(task);
+      if (studyBlock) box.appendChild(studyBlock);
+    }
+
     if (options.analogous !== false) {
       var analogous = options.analogous || C.analogByTopic(task.topic).slice(0, 2);
       if (analogous.length) {
@@ -558,16 +623,29 @@
     var steps = el('ol', { class: 'steps' });
     (I.pick(task.solution) || []).forEach(function (step) { steps.appendChild(el('li', { text: step })); });
     solution.appendChild(steps);
+    var studyHolder = el('div', { class: 'hidden' });
     var row = el('div', { class: 'answer-row' });
     row.appendChild(input); row.appendChild(check); row.appendChild(reveal);
     wrap.appendChild(row);
     wrap.appendChild(feedback);
     wrap.appendChild(solution);
+    wrap.appendChild(studyHolder);
     check.addEventListener('click', function () {
       var ok = A.check(input.value, task);
       feedback.className = 'feedback ' + (ok ? 'good' : 'bad');
       feedback.textContent = ok ? t('answer_correct') : t('answer_incorrect');
-      if (!ok) solution.classList.remove('hidden');
+      if (!ok) {
+        solution.classList.remove('hidden');
+        // Не только ссылка: тема аналогичного задания тоже открывается сразу.
+        if (!studyHolder.firstChild) {
+          var study = UI.studyBlock(task);
+          if (study) studyHolder.appendChild(study);
+        }
+        studyHolder.classList.remove('hidden');
+        if (typeof studyHolder.scrollIntoView === 'function') studyHolder.scrollIntoView({ block: 'start' });
+      } else {
+        studyHolder.classList.add('hidden');
+      }
       S.recordTask(task, ok, 0);
       B.vibrate(ok ? 12 : 30);
     });
@@ -736,6 +814,14 @@
         var correct = RUN.checkCurrent();
         B.vibrate(correct ? 12 : 40);
         UI.render();
+        if (!correct) {
+          // при неверном ответе открываем необходимую тему: разбор с конспектом
+          // темы уже отрисован — доводим его до экрана ученика
+          var studyNode = doc.querySelector('.study-topic');
+          if (studyNode && typeof studyNode.scrollIntoView === 'function') {
+            studyNode.scrollIntoView({ block: 'start' });
+          }
+        }
         if (correct && S.settings.autoAdvance) {
           setTimeout(function () {
             if (!S.settings.autoAdvance) return;
@@ -964,9 +1050,10 @@
     var ul = el('ul', {});
     Object.keys(grouped).forEach(function (topic) {
       var li = el('li', {});
-      var link = el('a', { href: '#/practice/' + topic, text: C.topicTitle(topic) });
+      var link = el('a', { href: '#/study/' + topic, text: C.topicTitle(topic) });
       li.appendChild(link);
-      li.appendChild(doc.createTextNode(' — ' + t('tasks_count_fmt', grouped[topic].length)));
+      li.appendChild(doc.createTextNode(' — ' + t('tasks_count_fmt', grouped[topic].length) + ' · '));
+      li.appendChild(el('a', { href: '#/practice/' + topic, text: t('study_practice') }));
       ul.appendChild(li);
     });
     plan.appendChild(ul);
@@ -997,6 +1084,83 @@
       grid.appendChild(card);
     });
     root.appendChild(grid);
+    return root;
+  };
+
+  /**
+   * Изучение темы: конспект, формулы и разобранные примеры одной темы.
+   *
+   * Сюда приводит неверный ответ (разбор открывает эту тему сразу, кнопка
+   * «Открыть тему» — сюда), раздел «Изучение» и план повторения в разборе
+   * ошибок.
+   */
+  SCREENS['#/study'] = function (extra) {
+    var root = el('section', { class: 'screen' });
+    var topic = extra && C.topics[extra] ? extra : null;
+    if (!topic) {
+      root.appendChild(el('h1', { text: t('nav_study') }));
+      root.appendChild(el('p', { class: 'muted', text: t('study_index_intro') }));
+      var grid = el('div', { class: 'grid-3' });
+      C.order.forEach(function (key) {
+        var card = el('button', { class: 'btn topic-btn' });
+        card.appendChild(el('span', { class: 'topic-name', text: C.topicTitle(key) }));
+        card.appendChild(el('span', { class: 'muted small', text: t('tasks_count_fmt',
+          C.tasksByTopic(key).length + C.analogByTopic(key).length) }));
+        card.addEventListener('click', function () { go('#/study/' + key); });
+        grid.appendChild(card);
+      });
+      root.appendChild(grid);
+      return root;
+    }
+
+    root.appendChild(el('h1', { text: t('study_topic_fmt', C.topicTitle(topic)) }));
+    root.appendChild(el('p', { class: 'muted', text: t('study_intro') }));
+    if (S.session && !S.session.finished) {
+      var returnBtn = el('button', { class: 'btn', text: t('return_to_task') });
+      returnBtn.addEventListener('click', function () { go('#/run'); });
+      root.appendChild(returnBtn);
+    }
+
+    var study = C.studyFor(topic);
+    var points = study ? (I.pick(study) || []) : [];
+    if (points.length) {
+      var pointsCard = el('div', { class: 'card study-points-card' });
+      pointsCard.appendChild(el('h3', { text: t('study_points') }));
+      var ul = el('ul', { class: 'study-points' });
+      points.forEach(function (point) { ul.appendChild(el('li', { text: point })); });
+      pointsCard.appendChild(ul);
+      root.appendChild(pointsCard);
+    }
+
+    var groups = C.formulaGroupsFor(topic);
+    if (groups.length) {
+      root.appendChild(el('h2', { text: t('study_formulas') }));
+      var list = el('div', { class: 'formula-list' });
+      groups.forEach(function (group) { list.appendChild(UI.formulaGroupCard(group)); });
+      root.appendChild(list);
+    }
+
+    var examples = C.tasksByTopic(topic).concat(C.analogByTopic(topic)).slice(0, 3);
+    if (examples.length) {
+      root.appendChild(el('h2', { text: t('study_examples') }));
+      examples.forEach(function (example) {
+        var card = el('div', { class: 'card study-example' });
+        card.appendChild(el('div', { class: 'task-text', text: I.pick(example.text) }));
+        card.appendChild(el('p', {}, [el('strong', { text: t('correct_answer') + ': ' }),
+          doc.createTextNode(A.pick(example.answer))]));
+        var details = el('details', { class: 'hints' });
+        details.appendChild(el('summary', { text: t('show_solution') }));
+        var steps = el('ol', { class: 'steps' });
+        (I.pick(example.solution) || []).forEach(function (step) { steps.appendChild(el('li', { text: step })); });
+        details.appendChild(steps);
+        card.appendChild(details);
+        root.appendChild(card);
+      });
+    }
+
+    var practice = el('button', { class: 'btn primary', text: t('study_practice') });
+    practice.addEventListener('click', function () { go('#/practice/' + topic); });
+    root.appendChild(practice);
     return root;
   };
 
@@ -1494,12 +1658,19 @@
       B.checkUpdates(S.settings.baseUrl, C.meta.contentVersion).then(function (result) {
         update.disabled = false;
         if (result.status === 'uptodate') updateInfo.textContent = t('update_uptodate');
-        else if (result.status === 'updated') updateInfo.textContent = t('update_success_fmt', result.version);
+        else if (result.status === 'updated' || result.status === 'ok') updateInfo.textContent = t('update_success_fmt', result.version);
         else updateInfo.textContent = t('update_failed');
-        CT.toast(updateInfo.textContent);
+        var message = updateInfo.textContent;
+        if (result.status === 'updated' || result.status === 'ok') {
+          // Show the new years immediately, not only after an app restart.
+          return C.load().then(function () { UI.render(); CT.toast(message); });
+        }
+        CT.toast(message);
+        return null;
       }).catch(function () {
         update.disabled = false;
         updateInfo.textContent = t('update_failed');
+        CT.toast(t('update_failed'));
       });
     });
     about.appendChild(el('h3', { text: t('updates') }));
@@ -1562,6 +1733,7 @@
     ['#/home', 'nav_home', '🏠'],
     ['#/tests', 'nav_tests', '📚'],
     ['#/practice', 'nav_practice', '🔁'],
+    ['#/study', 'nav_study', '📖'],
     ['#/stats', 'nav_stats', '📊'],
     ['#/formulas', 'nav_formulas', '📐'],
     ['#/tools', 'nav_tools', '🧰'],
@@ -1613,8 +1785,12 @@
     if ($('#modal').classList.contains('open')) { UI.closeModal(); return null; }
     var route = parseHash();
     if (route.name === '#/home') return 'exit';
+    if (route.name === '#/study' && route.extra) {
+      go(S.session && !S.session.finished ? '#/run' : '#/study');
+      return null;
+    }
     var parent = { '#/run': '#/tests', '#/result': '#/home', '#/mistakes': '#/home',
-      '#/settings': '#/home', '#/about': '#/home' }[route.name];
+      '#/study': '#/home', '#/settings': '#/home', '#/about': '#/home' }[route.name];
     go(parent || '#/home');
     return null;
   };
@@ -1646,6 +1822,22 @@
       });
       UI.chrome();
       UI.render();
+      // Автообновление банка (настройка autoUpdate): без него новые варианты —
+      // например 2026 года — сами на устройство не приходили, а кнопкой в
+      // настройках пользовались не все. Ошибка сети просто пропускается.
+      if (S.settings.autoUpdate) {
+        B.checkUpdates(S.settings.baseUrl, C.meta.contentVersion).then(function (result) {
+          var updated = result && (result.status === 'updated' || result.status === 'ok');
+          if (updated && result.version && result.version !== C.meta.contentVersion) {
+            return C.load().then(function () {
+              // Do not replace a task/input while the student is answering it.
+              if (parseHash().name !== '#/run') UI.render();
+              CT.toast(t('update_success_fmt', result.version));
+            });
+          }
+          return null;
+        }).catch(function () { /* офлайн: работаем на встроенном банке */ });
+      }
       // экран не гасим только во время теста — см. RUN.startVariant/startSet
       return true;
     });

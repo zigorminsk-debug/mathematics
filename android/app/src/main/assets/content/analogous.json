@@ -1,19 +1,20 @@
 {
  "meta": {
-  "contentVersion": "2026.10.1",
+  "contentVersion": "2026.10.3",
   "schema": 1,
   "years": [
    2021,
    2022,
    2023,
    2024,
-   2025
+   2025,
+   2026
   ],
   "counts": {
-   "bank": 150,
+   "bank": 180,
    "analogous": 552,
-   "choice": 90,
-   "short": 60
+   "choice": 108,
+   "short": 72
   },
   "author": "Zakharevich Igor",
   "email": "ziv@csl.by",

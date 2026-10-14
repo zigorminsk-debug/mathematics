@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag (for example v2026.10.2)'
+        description: 'Release tag (for example v2026.10.3)'
         required: true
-        default: 'v2026.10.2'
+        default: 'v2026.10.3'
       release_name:
         description: 'Release name'
         required: false
@@ -52,30 +52,43 @@ jobs:
 
       - name: Resolve the release tag and versions
         id: meta
+        env:
+          REQUESTED_TAG: ${{ github.event.inputs.tag }}
+          RELEASE_NAME: ${{ github.event.inputs.release_name || 'CT Maths Tutor' }}
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            TAG="${{ github.event.inputs.tag }}"
+            TAG="$REQUESTED_TAG"
           else
             TAG="${GITHUB_REF_NAME}"
           fi
           CONTENT_VERSION=$(cat VERSION)
+          TAG_VERSION="${TAG#v}"
+          if [ "$TAG_VERSION" != "$CONTENT_VERSION" ]; then
+            echo "::error::тег $TAG не совпадает с VERSION ($CONTENT_VERSION) — поднимите VERSION и поставьте тег по нему, иначе versionCode APK не вырастет и обновление не встанет поверх"
+            exit 1
+          fi
+          # versionCode выводится из VERSION прямо в Gradle (2026.10.3 -> 261003)
+          # и одинаков во всех каналах сборки; github.run_number для него не годится.
+          CODE=$(python3 tools/check_apk_update.py --print-version-code)
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "content=$CONTENT_VERSION" >> "$GITHUB_OUTPUT"
-          echo "name=${{ github.event.inputs.release_name || 'CT Maths Tutor' }}" >> "$GITHUB_OUTPUT"
-          echo "code=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
-          echo "Releasing $TAG (content $CONTENT_VERSION, versionCode ${{ github.run_number }})"
+          echo "version=$TAG_VERSION" >> "$GITHUB_OUTPUT"
+          echo "name=$RELEASE_NAME" >> "$GITHUB_OUTPUT"
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          echo "Releasing $TAG (content $CONTENT_VERSION, versionCode $CODE)"
 
       - name: The permanent signing key still matches the committed fingerprint
-        run: python3 tools/check_signature.py --keystore android/keystore/ctmaths-release.p12
+        run: python3 tools/check_signature.py --require --keystore android/keystore/ctmaths-release.p12
 
-      - name: Android — unit tests, debug and signed release APK
+      - name: Android — unit tests and signed release APK
         working-directory: android
         env:
-          VERSION_CODE: ${{ github.run_number }}
-          VERSION_NAME: ${{ steps.meta.outputs.tag }}
+          # VERSION_CODE не задаём: Gradle выводит его из файла VERSION, чтобы
+          # локальная, CI- и релизная сборки одной версии имели один код.
+          VERSION_NAME: ${{ steps.meta.outputs.version }}
         run: |
           gradle --no-daemon testDebugUnitTest
-          gradle --no-daemon assembleDebug assembleRelease
+          gradle --no-daemon assembleRelease
 
       - name: Windows — tests and both architectures
         working-directory: windows
@@ -91,9 +104,28 @@ jobs:
       - name: Verify the release APK is signed with the permanent key
         working-directory: android
         run: |
-          python3 ../tools/check_signature.py \
+          python3 ../tools/check_signature.py --require \
             --apk app/build/outputs/apk/release/app-release.apk \
             --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
+
+      - name: Check update compatibility against the previous published APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PREVIOUS_TAG=$(gh release list --repo "$GITHUB_REPOSITORY" \
+            --exclude-drafts --exclude-pre-releases --limit 1 --json tagName --jq '.[0].tagName // ""')
+          PREVIOUS_ARGS=()
+          if [ -n "$PREVIOUS_TAG" ]; then
+            gh release download "$PREVIOUS_TAG" --repo "$GITHUB_REPOSITORY" \
+              --pattern app-release.apk --dir "$RUNNER_TEMP/previous-release"
+            PREVIOUS_APK="$RUNNER_TEMP/previous-release/app-release.apk"
+            python3 tools/check_signature.py --require --apk "$PREVIOUS_APK" \
+              --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
+            PREVIOUS_ARGS=(--previous "$PREVIOUS_APK")
+          fi
+          python3 tools/check_apk_update.py \
+            --apk android/app/build/outputs/apk/release/app-release.apk \
+            --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2" "${PREVIOUS_ARGS[@]}"
 
       - name: Collect the artefacts and the update manifest
         run: |
@@ -101,8 +133,10 @@ jobs:
           cp dist/content/*.json release/
           cp dist/CTMathsTutor-amd64.exe release/
           cp dist/CTMathsTutor-arm64.exe release/
-          cp android/app/build/outputs/apk/release/*.apk release/ 2>/dev/null || true
-          cp android/app/build/outputs/apk/debug/*.apk release/ 2>/dev/null || true
+          cp android/app/build/outputs/apk/release/*.apk release/
+          # app-debug.apk в релиз не кладём: у него другой пакет
+          # (by.ziv.ctmaths.debug) и он ставится рядом, а не поверх релиза, —
+          # его можно перепутать с обновлением релизной версии.
           python3 - <<'PY'
           import hashlib, json, pathlib, datetime
           out = pathlib.Path('release')
@@ -124,6 +158,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.meta.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           name: ${{ steps.meta.outputs.name }} ${{ steps.meta.outputs.tag }}
           make_latest: true
           body: |
@@ -133,12 +168,16 @@ jobs:
 
             ### Что внутри
             * `CTMathsTutor-amd64.exe`, `CTMathsTutor-arm64.exe` — Windows (Go + HTML GUI),
-              одинаковая подпись сборки и постоянный ключ обновлений.
-            * `app-release.apk` — Android, подписан **постоянным ключом проекта**:
-              новый APK устанавливается поверх старого без удаления и без потери статистики.
-            * `content/*.json` — база заданий (5 вариантов ЦТ 2021–2025 + генератор
+              общий с Android интерфейс и банк заданий.
+            * `app-release.apk` — Android, подписан **постоянным ключом проекта**, пакет
+              `by.ziv.ctmaths`, versionCode растёт вместе с файлом VERSION: новый APK
+              устанавливается поверх старого без удаления и без потери статистики.
+              Ставить нужно именно `app-release.apk` (debug-сборка в релиз больше не входит).
+            * `content/*.json` — база заданий (6 авторских тренировочных вариантов 2021–2026 + генератор
               однотипных заданий) и манифест `version.json` со SHA-256.
               Приложения загружают её из `releases/latest/download` и обновляются «поверх».
+            * При неверном ответе открывается тема для изучения: конспект, формулы темы,
+              разобранные примеры и тренировка по теме (раздел «Изучение»).
 
             ### Языки
             Русский и English — переключение языка прямо в интерфейсе,
@@ -146,4 +185,4 @@ jobs:
 
             Итог проверки заданий: точная арифметика по каждому ответу (см. лог сборки).
           files: release/*
-          fail_on_unmatched_files: false
+          fail_on_unmatched_files: true

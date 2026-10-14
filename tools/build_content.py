@@ -7,7 +7,7 @@
 
 Steps
 -----
-1. import every authoring module (``task_bank_2021``…``task_bank_2025``,
+1. import every authoring module (``task_bank_2021``…``task_bank_2026``,
    ``templates``, ``templates_extra``, …);
 2. run the exact-arithmetic ``check()`` of **every** item — the build fails if a
    single answer is wrong, a task has no solution, or part A is malformed;
@@ -115,8 +115,41 @@ def build_topics() -> dict:
     from kit import TOPICS, TOPIC_ORDER, TOOLS
     counts: dict[str, int] = {}
     by_year: dict[str, int] = {}
+    study = build_study(TOPIC_ORDER)
     return {"topics": TOPICS, "order": TOPIC_ORDER, "tools": TOOLS,
-            "counts": counts, "byYear": by_year}
+            "counts": counts, "byYear": by_year, "study": study}
+
+
+def build_study(topic_order: list[str]) -> dict:
+    """Конспекты «что изучить по теме» (content_src/study.py) для topics.json.
+
+    Проверка при сборке: тема без конспекта или ссылка на несуществующий
+    раздел сборника формул означают, что при неверном ответе приложению
+    нечего будет открыть ученику, — такой банк не публикуется.
+    """
+    smod = load("study")
+    if smod is None:
+        raise SystemExit("content_src/study.py is missing — no study notes to open on a wrong answer")
+    study = smod.payload()
+    fmod = load("formulas")
+    group_ids = {group["id"] for group in (fmod.groups()["groups"] if fmod else [])}
+    missing = [topic for topic in topic_order if topic not in study]
+    if missing:
+        raise SystemExit("study notes are missing for topics: " + ", ".join(missing))
+    for topic, entry in study.items():
+        if topic not in topic_order:
+            raise SystemExit(f"study notes for an unknown topic: {topic}")
+        for lang in ("ru", "en"):
+            if len(entry.get(lang) or []) < 2:
+                raise SystemExit(f"study notes for {topic} are too short ({lang})")
+        unknown = [group for group in entry.get("formulas") or [] if group not in group_ids]
+        if unknown:
+            raise SystemExit(f"study notes for {topic} reference unknown formula groups: "
+                             + ", ".join(unknown))
+        if not entry.get("formulas"):
+            raise SystemExit(f"study notes for {topic} reference no formula group")
+    print(f"  · study: notes for {len(study)} topics verified")
+    return study
 
 
 def sha256(path: Path) -> str:

@@ -1,18 +1,19 @@
 {
- "contentVersion": "2026.10.1",
+ "contentVersion": "2026.10.3",
  "schema": 1,
  "years": [
   2021,
   2022,
   2023,
   2024,
-  2025
+  2025,
+  2026
  ],
  "counts": {
-  "bank": 150,
+  "bank": 180,
   "analogous": 552,
-  "choice": 90,
-  "short": 60
+  "choice": 108,
+  "short": 72
  },
  "author": "Zakharevich Igor",
  "email": "ziv@csl.by",
@@ -83,6 +84,19 @@
    },
    "minutes": 180,
    "tasks": 30
+  },
+  {
+   "year": 2026,
+   "label": {
+    "ru": "Вариант 2026",
+    "en": "Variant 2026"
+   },
+   "parts": {
+    "A": 18,
+    "B": 12
+   },
+   "minutes": 180,
+   "tasks": 30
   }
  ],
  "disclaimer": {
@@ -92,32 +106,32 @@
  "examMinutes": 180,
  "files": {
   "analogous.json": {
-   "sha256": "61e1a70736db4ad8abe60f3d1e989a85e145deaa07c043a541f7d2538956cbba",
-   "bytes": 558405
+   "sha256": "017f7c57ade7f8c7c0f6052b0ff4918c699d11bef8e9b83fdc7e7295949c2366",
+   "bytes": 558415
   },
   "answer_vectors.json": {
    "sha256": "1979abdff6f9d97554ef7b59836fb283221a233584ceeee8e6a4e01368082bd6",
    "bytes": 3136
   },
   "bank.json": {
-   "sha256": "44d2a3b790607570548ea4ce7539372e41986c8133d6ce5e96a7a5d4e6c35c56",
-   "bytes": 203195
+   "sha256": "6702f53be8c464d41bbe074d817219cf85a9c62e68b7782f36b400dc8b970e8d",
+   "bytes": 246094
   },
   "formulas.json": {
-   "sha256": "6566a435363f4596e482fbe1c5738ebb4fd53883ec82b6e90da26e9dd49f6d34",
-   "bytes": 18903
+   "sha256": "f8c0c40161b755e8a45ab9168280ce31a0c3e666b8494cd7bd9ff6af87e8d19c",
+   "bytes": 23536
   },
   "mistakes.json": {
    "sha256": "99ed1109b535441ac7606b201e931e260d804dd1ffea55436fc749c9b27ed98e",
    "bytes": 36224
   },
   "topics.json": {
-   "sha256": "847af28f3eaf9c50772036f17d4c99d962ea958c318fe7bb7bb8017e1c2905ab",
-   "bytes": 2972
+   "sha256": "66c6ec9a549811a96b578ac72ab002f5707a78f486a6e33c41391e75898c8d5d",
+   "bytes": 18874
   },
   "ui_strings.json": {
-   "sha256": "49ac3d5f62efd7507538818d405812bc79f43502707de5ca6c63e8b6b29f2fa9",
-   "bytes": 18259
+   "sha256": "1b1edf540a3c191af74b7d40e99cb10b92b524524a59a2af4f6b1c19e0830613",
+   "bytes": 19913
   }
  },
  "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"

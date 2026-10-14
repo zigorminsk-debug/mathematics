@@ -26,6 +26,29 @@ val releaseKeyAlias = keystoreValue("ANDROID_KEY_ALIAS", "keyAlias")
 val releaseKeyPassword = keystoreValue("ANDROID_KEY_PASSWORD", "keyPassword")
 val releaseStoreType = keystoreValue("ANDROID_KEYSTORE_TYPE", "storeType") ?: "PKCS12"
 
+// The same versionCode in local, CI and release builds. Workflow run numbers
+// have separate counters and used to produce APK downgrades between channels.
+val contentVersion = rootProject.file("../VERSION").readText().trim()
+
+fun derivedVersionCode(version: String): Int {
+    val match = Regex("(20[0-9]{2})\\.([0-9]{1,2})\\.([0-9]{1,2})").matchEntire(version)
+        ?: error("VERSION must use YYYY.month.patch (2000–2099; patch 0–99)")
+    val year = match.groupValues[1].toInt()
+    val month = match.groupValues[2].toInt()
+    val patch = match.groupValues[3].toInt()
+    require(month in 1..12) { "VERSION month must be 1–12" }
+    return (year - 2000) * 10000 + month * 100 + patch
+}
+
+val versionCodeFromFile = derivedVersionCode(contentVersion)
+val appVersionCode = System.getenv("VERSION_CODE")?.let {
+    it.toIntOrNull() ?: error("VERSION_CODE must be a positive integer")
+} ?: versionCodeFromFile
+require(appVersionCode in versionCodeFromFile..2100000000) { "VERSION_CODE must not decrease" }
+val appVersionName = System.getenv("VERSION_NAME")?.removePrefix("v") ?: contentVersion
+require(appVersionName == contentVersion) { "VERSION_NAME must match VERSION" }
+
+
 android {
     namespace = "by.ziv.ctmaths"
     compileSdk = 34
@@ -34,8 +57,8 @@ android {
         applicationId = "by.ziv.ctmaths"
         minSdk = 24
         targetSdk = 34
-        versionCode = (System.getenv("VERSION_CODE") ?: "1").toInt()
-        versionName = System.getenv("VERSION_NAME") ?: "1.0.0"
+        versionCode = appVersionCode
+        versionName = appVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resValue("string", "developer_name", "Zakharevich Igor")
         resValue("string", "developer_email", "ziv@csl.by")
@@ -66,6 +89,14 @@ android {
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+            // Тот же постоянный ключ, что и у релиза: debug-ключ, который Gradle
+            // сам генерирует на каждой машине и на каждом CI-раннере, разный,
+            // поэтому debug-сборка с нового раннера не вставала поверх прежней.
+            // Пакет у debug всё равно отдельный (by.ziv.ctmaths.debug) — поверх
+            // релиза он не встанет по определению Android, только рядом.
+            if (signingConfigs.findByName("release") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 

@@ -51,6 +51,9 @@ jobs:
       - name: Content schema, periods and interface strings
         run: node tests/content_schema.js
 
+      - name: Android update checks (metadata and signature gate tests)
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+
       - name: Syntax gate (Go, Kotlin, Kotlin DSL)
         run: |
           python3 -m pip install --quiet tree-sitter tree-sitter-go tree-sitter-kotlin
@@ -153,7 +156,7 @@ jobs:
           python3 tools/sync_assets.py
 
       - name: The permanent signing key still matches the committed fingerprint
-        run: python3 tools/check_signature.py --keystore android/keystore/ctmaths-release.p12
+        run: python3 tools/check_signature.py --require --keystore android/keystore/ctmaths-release.p12
 
       - name: Unit tests (answer checker parity, Kotlin)
         working-directory: android
@@ -189,13 +192,25 @@ jobs:
       - name: Verify the release APK is signed with the permanent key
         working-directory: android
         run: |
-          python3 ../tools/check_signature.py \
+          python3 ../tools/check_signature.py --require \
             --apk app/build/outputs/apk/release/app-release.apk \
             --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
 
+      - name: Verify the release APK package and VERSION-derived versionCode
+        working-directory: android
+        run: |
+          python3 ../tools/check_apk_update.py \
+            --apk app/build/outputs/apk/release/app-release.apk \
+            --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2"
+
       - uses: actions/upload-artifact@v4
         with:
-          name: android-apk
-          path: |
-            android/app/build/outputs/apk/debug/*.apk
-            android/app/build/outputs/apk/release/*.apk
+          name: android-release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

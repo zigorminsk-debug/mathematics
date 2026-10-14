@@ -26,6 +26,9 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"strconv"
+	"sync"
+	"sort"
 	"time"
 )
 
@@ -42,6 +45,8 @@ const maxBlobBytes = 32 << 20
 type Store struct {
 	root string
 	http *http.Client
+	contentMu sync.RWMutex
+	updateMu sync.Mutex
 }
 
 // NewStore prepares (and creates if needed) the data directory under base.
@@ -55,6 +60,14 @@ func NewStore(base string) (*Store, error) {
 	}
 	if err := os.MkdirAll(filepath.Join(base, "reports"), 0o755); err != nil {
 		return nil, fmt.Errorf("store: create reports: %w", err)
+	}
+	// Restore the last pack after a crash between the commit renames.
+	content := filepath.Join(root, "content")
+	backup := filepath.Join(root, "content.previous")
+	if _, err := os.Stat(content); errors.Is(err, os.ErrNotExist) {
+		if _, err := os.Stat(backup); err == nil {
+			if err := os.Rename(backup, content); err != nil { return nil, err }
+		}
 	}
 	return &Store{root: root, http: &http.Client{Timeout: 45 * time.Second}}, nil
 }
@@ -116,6 +129,8 @@ func (s *Store) WriteBlob(key string, data []byte) error {
 
 // ReadContent returns an overlay content file (downloaded update) when present.
 func (s *Store) ReadContent(name string) ([]byte, bool) {
+	s.contentMu.RLock()
+	defer s.contentMu.RUnlock()
 	if !blobName.MatchString(name) {
 		return nil, false
 	}
@@ -128,6 +143,8 @@ func (s *Store) ReadContent(name string) ([]byte, bool) {
 
 // WriteContent stores one content file of a downloaded update.
 func (s *Store) WriteContent(name string, data []byte) error {
+	s.contentMu.Lock()
+	defer s.contentMu.Unlock()
 	if !blobName.MatchString(name) {
 		return fmt.Errorf("store: bad content name %q", name)
 	}
@@ -187,10 +204,38 @@ type UpdateResult struct {
 
 const defaultFeed = "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
 
+// compareContentVersions сравнивает версии банка по числовым компонентам:
+// "2026.10.3" новее "2026.9.9", хотя лексикографически было бы наоборот.
+func compareContentVersions(left, right string) int {
+	parse := func(version string) []int {
+		parts := strings.Split(version, ".")
+		out := make([]int, len(parts))
+		for i, part := range parts {
+			out[i], _ = strconv.Atoi(part)
+		}
+		return out
+	}
+	a, b := parse(left), parse(right)
+	for i := 0; i < len(a) || i < len(b); i++ {
+		var x, y int
+		if i < len(a) {
+			x = a[i]
+		}
+		if i < len(b) {
+			y = b[i]
+		}
+		if x < y { return -1 }
+		if x > y { return 1 }
+	}
+	return 0
+}
+
 // CheckUpdates downloads the manifest, verifies every file (SHA-256) and installs
 // the ones that differ into the content overlay. The installed version keeps
 // working when the network is unavailable.
 func (s *Store) CheckUpdates(feed, current string) UpdateResult {
+	s.updateMu.Lock()
+	defer s.updateMu.Unlock()
 	if feed == "" {
 		feed = defaultFeed
 	}
@@ -204,26 +249,43 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 	if err := json.Unmarshal(manifestData, &manifest); err != nil {
 		return UpdateResult{Status: "error", Message: "manifest: " + err.Error(), Version: current}
 	}
-	if manifest.ContentVersion == "" || len(manifest.Files) == 0 {
+	if !regexp.MustCompile(`^[0-9]+(\.[0-9]+)*$`).MatchString(manifest.ContentVersion) || len(manifest.Files) == 0 {
 		return UpdateResult{Status: "error", Message: "manifest is empty", Version: current}
 	}
-	if manifest.ContentVersion == current && !s.overlayOutdated() {
+	if compareContentVersions(manifest.ContentVersion, current) <= 0 {
+		// A build can be ahead of releases/latest. Never downgrade its bank.
 		return UpdateResult{Status: "uptodate", Version: current, Message: "already up to date"}
 	}
+	stage, err := os.MkdirTemp(s.root, "content-update-")
+	if err != nil { return UpdateResult{Status: "error", Version: current, Message: err.Error()} }
+	defer os.RemoveAll(stage)
 
 	var total int64
 	installed := 0
-	for name, meta := range manifest.Files {
+	names := make([]string, 0, len(manifest.Files))
+	for name := range manifest.Files { names = append(names, name) }
+	sort.Strings(names)
+	for _, name := range names {
+		meta := manifest.Files[name]
 		base := strings.TrimSuffix(name, ".json")
+		if name == "version.json" || !strings.HasSuffix(name, ".json") || !blobName.MatchString(base) {
+			return UpdateResult{Status: "error", Version: current, Message: "invalid content filename"}
+		}
+		if len(meta.SHA256) != 64 {
+			return UpdateResult{Status: "error", Version: current, Message: name + ": missing checksum"}
+		}
 		data, err := s.fetch(feed + "/" + name)
 		if err != nil {
 			return UpdateResult{Status: "error", Version: current, Message: name + ": " + err.Error()}
 		}
 		sum := sha256.Sum256(data)
-		if meta.SHA256 != "" && !strings.EqualFold(hex.EncodeToString(sum[:]), meta.SHA256) {
+		if !strings.EqualFold(hex.EncodeToString(sum[:]), meta.SHA256) {
 			return UpdateResult{Status: "error", Version: current, Message: name + ": checksum mismatch"}
 		}
-		if err := s.WriteContent(base, data); err != nil {
+		if !json.Valid(data) || (meta.Bytes > 0 && meta.Bytes != int64(len(data))) {
+			return UpdateResult{Status: "error", Version: current, Message: name + ": invalid JSON or size"}
+		}
+		if err := os.WriteFile(filepath.Join(stage, name), data, 0o644); err != nil {
 			return UpdateResult{Status: "error", Version: current, Message: name + ": " + err.Error()}
 		}
 		total += int64(len(data))
@@ -231,8 +293,11 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 	}
 	// сам манифест тоже кладём в оверлей: из него приложение узнаёт установленную
 	// версию банка (в списке files его нет — он описывает остальные файлы)
-	if err := s.WriteContent("version", manifestData); err != nil {
+	if err := os.WriteFile(filepath.Join(stage, "version.json"), manifestData, 0o644); err != nil {
 		return UpdateResult{Status: "error", Version: current, Message: "version.json: " + err.Error()}
+	}
+	if err := s.installContentPack(stage); err != nil {
+		return UpdateResult{Status: "error", Version: current, Message: err.Error()}
 	}
 	return UpdateResult{
 		Status: "updated", Version: manifest.ContentVersion, Previous: current,
@@ -241,19 +306,25 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 	}
 }
 
-// overlayOutdated reports whether a half-installed overlay exists (used when the
-// feed still carries the same version but local files were removed).
-func (s *Store) overlayOutdated() bool {
-	entries, err := os.ReadDir(s.ContentDir())
-	if err != nil {
-		return true
+// installContentPack commits only a fully verified pack; errors leave the
+// previous bank and all progress/settings/session blobs untouched.
+func (s *Store) installContentPack(stage string) error {
+	s.contentMu.Lock()
+	defer s.contentMu.Unlock()
+	backup := filepath.Join(s.root, "content.previous")
+	if err := os.RemoveAll(backup); err != nil { return err }
+	_, err := os.Stat(s.ContentDir())
+	hadPrevious := err == nil
+	if err != nil && !errors.Is(err, os.ErrNotExist) { return err }
+	if hadPrevious {
+		if err := os.Rename(s.ContentDir(), backup); err != nil { return err }
 	}
-	for _, entry := range entries {
-		if strings.HasSuffix(entry.Name(), ".json") {
-			return false
-		}
+	if err := os.Rename(stage, s.ContentDir()); err != nil {
+		if hadPrevious { _ = os.Rename(backup, s.ContentDir()) }
+		return err
 	}
-	return true
+	_ = os.RemoveAll(backup)
+	return nil
 }
 
 // secureURL accepts https anywhere and plain http only on this machine (used by

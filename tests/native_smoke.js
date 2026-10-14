@@ -65,6 +65,8 @@ const called = {};
 const reports = [];
 const toasts = [];
 let keepScreenOn = null;
+let updateStatus = 'uptodate';
+let availableVersion = fs.readFileSync(path.join(root, 'VERSION'), 'utf8').trim();
 const vibrated = [];
 
 const readSource = () => fs.readFileSync(path.join(web, 'core.js'), 'utf8');
@@ -89,7 +91,16 @@ window.CTNative = {
   getContent(name) {
     called.getContent = (called.getContent || 0) + 1;
     const file = path.join(contentDir, name + '.json');
-    return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
+    if (!fs.existsSync(file)) return null;
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (data.meta) data.meta.contentVersion = availableVersion;
+    return JSON.stringify(data);
+  },
+  checkUpdatesAsync(baseUrl, current, requestId) {
+    called.checkUpdatesAsync = (called.checkUpdatesAsync || 0) + 1;
+    if (updateStatus === 'updated') availableVersion = '2099.1.0';
+    const response = JSON.stringify({ status: updateStatus, version: availableVersion });
+    window.setTimeout(() => window.CT.bridge.onUpdateResult(requestId, response), 5);
   },
   checkUpdates(baseUrl, current) {
     called.checkUpdates = (called.checkUpdates || 0) + 1;
@@ -120,7 +131,7 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   check('state requested from the native side', called.getState === 1, String(called.getState));
   check('platform reported as android', window.CT.bridge.platform === 'android', window.CT.bridge.platform);
   check('data folder from the native state', window.CT.bridge.info.dataDir === '/data/user/0/by.ziv.ctmaths/files/data');
-  check('content read through the native bridge', window.CT.content.bank.length === 150, String(window.CT.content.bank.length));
+  check('content read through the native bridge', window.CT.content.bank.length === 180, String(window.CT.content.bank.length));
   check('footer shows the native data folder', /by\.ziv\.ctmaths/.test(doc.getElementById('app-folder').textContent),
     doc.getElementById('app-folder').textContent);
 
@@ -143,17 +154,29 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   check('the interface confirmed it with a toast', /открыт/i.test(doc.getElementById('toast').textContent),
     doc.getElementById('toast').textContent);
 
-  // update check through the bridge
+  // update check through the bridge (once at boot when autoUpdate is on, and
+  // once more from this button)
   const updateBtn = Array.from(doc.querySelectorAll('button')).find((b) => /Проверить обновления/.test(b.textContent));
+  const updatesBeforeClick = called.checkUpdatesAsync || 0;
+  check('auto update checked at boot', updatesBeforeClick >= 1, String(updatesBeforeClick));
   click(updateBtn);
   await sleep(60);
-  check('checkUpdates reached the native side', called.checkUpdates === 1, String(called.checkUpdates));
+  check('checkUpdates reached the native side', called.checkUpdatesAsync > updatesBeforeClick, String(called.checkUpdatesAsync));
   check('up-to-date message rendered', /актуальн/i.test(text()), text().slice(0, 120));
+  check('network checks use the asynchronous native bridge', !called.checkUpdates);
+  const readsBeforeUpdate = called.getContent;
+  updateStatus = 'updated';
+  click(updateBtn);
+  await sleep(80);
+  check('manual content update reloads the bank without restarting',
+    called.getContent > readsBeforeUpdate && window.CT.content.meta.contentVersion === '2099.1.0');
+  check('updated content version is visible in settings', /2099\.1\.0/.test(text()));
+  updateStatus = 'uptodate';
 
   // a whole exam round trip: answers, vibration, progress blob
   window.location.hash = '#/exam';
   await sleep(60);
-  click(Array.from(doc.querySelectorAll('button')).find((b) => b.textContent.trim() === '2024'));
+  click(Array.from(doc.querySelectorAll('button')).find((b) => b.textContent.trim() === '2026'));
   await sleep(80);
   check('exam screen opened', /Задание 1 из 30/.test(text()), text().slice(0, 90));
   const options = doc.querySelectorAll('.option');
@@ -180,6 +203,15 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   click(Array.from(card2024.querySelectorAll('button')).find((b) => b.textContent.trim() === 'Тренировка'));
   await sleep(80);
   check('keep screen on requested during a run', keepScreenOn === true, String(keepScreenOn));
+  const task = window.CT.runner.current();
+  const wrong = Array.from(doc.querySelectorAll('.option')).find((option) =>
+    !window.CT.answer.check(option.querySelector('.option-value').textContent, task));
+  click(wrong);
+  await sleep(20);
+  click(buttonWith('Проверить'));
+  await sleep(30);
+  const study = doc.querySelector('.study-topic');
+  check('native wrong answer opens the relevant study topic', study && study.getAttribute('data-topic') === task.topic);
 
   const back = window.CT.onAndroidBack();
   check('back from the run screen stays inside the app', back === null, String(back));
