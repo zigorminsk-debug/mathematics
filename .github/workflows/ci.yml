@@ -1,0 +1,195 @@
+name: CI
+
+# Автосборка запускается автоматически после каждого изменения (push) и для
+# каждого pull request: проверяются задания, интерфейс и собираются ОБА
+# приложения — APK для Android и EXE для Windows.
+#
+# Ошибки продублированы аннотациями GitHub (::error::): причина падения видна
+# прямо на странице запуска, без вычитывания полного лога.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  content:
+    name: Content & web (verify, parity, assets)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Отметка времени сборки = время коммита: банк собирается воспроизводимо,
+      # и проверка «копии не разъехались» не зависит от момента запуска CI.
+      - name: Reproducible build stamp (commit time)
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - name: Verify every task with exact arithmetic
+        run: python3 tools/build_content.py
+
+      - name: Ensure the committed assets match the sources
+        run: |
+          if ! python3 tools/sync_assets.py --check; then
+            echo "::error::копии интерфейса/банка устарели — запустите python3 tools/build_content.py && python3 tools/sync_assets.py"
+            exit 1
+          fi
+
+      - name: JavaScript syntax check
+        run: |
+          node --check webapp/core.js
+          node --check webapp/app.js
+
+      - name: Answer-checker parity (Python ↔ JS ↔ Kotlin vectors)
+        run: node tests/answer_parity.js
+
+      - name: Content schema, periods and interface strings
+        run: node tests/content_schema.js
+
+      - name: Syntax gate (Go, Kotlin, Kotlin DSL)
+        run: |
+          python3 -m pip install --quiet tree-sitter tree-sitter-go tree-sitter-kotlin
+          python3 tools/check_syntax.py --require
+
+      - name: Interface journeys in jsdom (UI + Android bridge)
+        run: |
+          npm install --no-save jsdom
+          node tests/ui_smoke.js
+          node tests/native_smoke.js
+
+      - name: Upload the content bank
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-bank
+          path: dist/content/
+
+  windows:
+    name: Windows app (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Reproducible build stamp (commit time)
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - name: Sync the shared interface into windows/web
+        run: |
+          python3 tools/build_content.py
+          python3 tools/sync_assets.py
+
+      - name: go vet
+        working-directory: windows
+        run: go vet ./... 2>&1 | sed 's/^/::error::/'
+
+      - name: go test
+        working-directory: windows
+        run: |
+          if ! go test ./... -v > /tmp/go-test.log 2>&1; then
+            grep -nE '(^| )--- FAIL|\.go:[0-9]+:|^(FAIL|panic)|expected|Error Trace' /tmp/go-test.log \
+              | head -40 | sed 's/^/::error::/'
+            tail -60 /tmp/go-test.log
+            exit 1
+          fi
+          tail -5 /tmp/go-test.log
+
+      - name: Build (windows/amd64)
+        working-directory: windows
+        run: |
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath \
+            -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u -d @${SOURCE_DATE_EPOCH} +%Y%m%d%H%M)" \
+            -o ../dist/CTMathsTutor-amd64.exe .
+
+      - name: Build (windows/arm64)
+        working-directory: windows
+        run: |
+          CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -trimpath \
+            -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u -d @${SOURCE_DATE_EPOCH} +%Y%m%d%H%M)" \
+            -o ../dist/CTMathsTutor-arm64.exe .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: dist/*.exe
+
+  android:
+    name: Android app (APK)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Reproducible build stamp (commit time)
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - name: Regenerate the shared interface and content
+        run: |
+          python3 tools/build_content.py
+          python3 tools/sync_assets.py
+
+      - name: Unit tests (answer checker parity, Kotlin)
+        working-directory: android
+        run: |
+          if ! gradle --no-daemon testDebugUnitTest > /tmp/gradle-test.log 2>&1; then
+            grep -nE '^e: |FAILED|expected:|AssertionError|Caused by|error:' /tmp/gradle-test.log \
+              | head -40 | sed 's/^/::error::/'
+            tail -80 /tmp/gradle-test.log
+            exit 1
+          fi
+          tail -5 /tmp/gradle-test.log
+
+      - name: Assemble debug APK
+        working-directory: android
+        run: |
+          if ! gradle --no-daemon assembleDebug > /tmp/gradle-build.log 2>&1; then
+            grep -nE '^e: |FAILED|error:|Caused by' /tmp/gradle-build.log | head -40 | sed 's/^/::error::/'
+            tail -80 /tmp/gradle-build.log
+            exit 1
+          fi
+          tail -5 /tmp/gradle-build.log
+
+      - name: Assemble signed release APK (constant key, updates install over)
+        working-directory: android
+        run: |
+          if ! gradle --no-daemon assembleRelease > /tmp/gradle-release.log 2>&1; then
+            grep -nE '^e: |FAILED|error:|Caused by' /tmp/gradle-release.log | head -40 | sed 's/^/::error::/'
+            tail -80 /tmp/gradle-release.log
+            exit 1
+          fi
+          tail -5 /tmp/gradle-release.log
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: |
+            android/app/build/outputs/apk/debug/*.apk
+            android/app/build/outputs/apk/release/*.apk

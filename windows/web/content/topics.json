@@ -1,0 +1,144 @@
+{
+ "topics": {
+  "numbers": {
+   "ru": "Числа и вычисления",
+   "en": "Numbers and computation"
+  },
+  "expressions": {
+   "ru": "Тождественные преобразования",
+   "en": "Algebraic expressions"
+  },
+  "equations": {
+   "ru": "Уравнения и системы",
+   "en": "Equations and systems"
+  },
+  "inequalities": {
+   "ru": "Неравенства",
+   "en": "Inequalities"
+  },
+  "functions": {
+   "ru": "Функции и графики",
+   "en": "Functions and graphs"
+  },
+  "progressions": {
+   "ru": "Прогрессии",
+   "en": "Progressions"
+  },
+  "wordproblems": {
+   "ru": "Текстовые задачи",
+   "en": "Word problems"
+  },
+  "trig": {
+   "ru": "Тригонометрия",
+   "en": "Trigonometry"
+  },
+  "trigequations": {
+   "ru": "Тригонометрические уравнения",
+   "en": "Trigonometric equations"
+  },
+  "logexp": {
+   "ru": "Показательные и логарифмические",
+   "en": "Exponential and logarithmic"
+  },
+  "planimetry": {
+   "ru": "Планиметрия",
+   "en": "Plane geometry"
+  },
+  "stereometry": {
+   "ru": "Стереометрия",
+   "en": "Solid geometry"
+  },
+  "derivative": {
+   "ru": "Производная",
+   "en": "Derivative"
+  },
+  "research": {
+   "ru": "Исследование функций",
+   "en": "Function study"
+  },
+  "combinatorics": {
+   "ru": "Комбинаторика и вероятность",
+   "en": "Combinatorics and probability"
+  },
+  "vectors": {
+   "ru": "Векторы и координаты",
+   "en": "Vectors and coordinates"
+  },
+  "param": {
+   "ru": "Задачи с параметром",
+   "en": "Problems with a parameter"
+  },
+  "logic": {
+   "ru": "Логика и последовательности",
+   "en": "Logic and sequences"
+  }
+ },
+ "order": [
+  "numbers",
+  "expressions",
+  "equations",
+  "inequalities",
+  "functions",
+  "progressions",
+  "wordproblems",
+  "trig",
+  "trigequations",
+  "logexp",
+  "planimetry",
+  "stereometry",
+  "derivative",
+  "research",
+  "combinatorics",
+  "vectors",
+  "param",
+  "logic"
+ ],
+ "tools": {
+  "calc": {
+   "ru": "Калькулятор",
+   "en": "Calculator"
+  },
+  "sheet": {
+   "ru": "Сборник формул",
+   "en": "Formula sheet"
+  },
+  "scratch": {
+   "ru": "Черновик",
+   "en": "Scratchpad"
+  },
+  "graph": {
+   "ru": "Построение графика",
+   "en": "Function plotter"
+  },
+  "hint": {
+   "ru": "Подсказка",
+   "en": "Hint"
+  }
+ },
+ "counts": {
+  "numbers": 28,
+  "expressions": 27,
+  "equations": 111,
+  "functions": 25,
+  "progressions": 53,
+  "wordproblems": 58,
+  "trig": 20,
+  "trigequations": 22,
+  "logexp": 58,
+  "planimetry": 63,
+  "stereometry": 34,
+  "derivative": 34,
+  "research": 29,
+  "combinatorics": 48,
+  "logic": 33,
+  "param": 30,
+  "inequalities": 29
+ },
+ "byYear": {
+  "2021": 30,
+  "2022": 30,
+  "2023": 30,
+  "2024": 30,
+  "2025": 30
+ }
+}
