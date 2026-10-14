@@ -330,3 +330,34 @@ published APK» скачал `phyzics.apk` из `physics-v2026.10.1`, прове
 `tests/test_icon.py`), парность, схема контента, `node --check`, три
 jsdom-смоука, `sync_assets.py --check`, `check_syntax.py --require`.
 Визуально сверены оба размера: 192 × 192 (favicon) и 48 × 48 (иконка лаунчера).
+
+---
+
+## 2026-10-14 (продолжение 5): иконка-атом опубликована — physics-v2026.10.4
+
+Коммит `0ce141c` (`feat(icon): знак приложения — атом вместо математической «Σ»`,
+13 файлов: генератор, тест, `webapp/icon.{png,svg}`, копии в `windows/web` и в
+android-ассетах, два drawable лаунчера, шаг в `ci.yml`, эта запись).
+
+Прогон **38572027756** (`push`, HEAD `0ce141c2`) — **success**, все пять job:
+
+* Content & web: в том числе новый шаг «Application icon still matches its
+  generator» — `make_icon.py --check` прошёл на чистом checkout;
+* Android (APK) 2m18s, Windows (Go) 48s, «Resolve effective build version»;
+* Publish verified builds automatically — **Publish the verified physics
+  release (make_latest=false)** 23s.
+
+Итог публикации: **`physics-v2026.10.4`**, 13 вложений, `versionCode 261004`,
+`sourceCommit 0ce141c2`, `phyzics.apk` 5 177 609 B
+(sha256 `23503a43…4d17a`), `CTPhysicsTutor-amd64.exe` 7 303 680 B
+(`821ef371…`), `-arm64.exe` 6 922 752 B (`ba72f9d4…`). Знак приложения внутри
+APK — из этих же векторов лаунчера (aapt компилирует их при сборке; самовольно
+APK из песочницы не скачивается, проверка — через CI-шаг и тесты иконки).
+
+Математика не тронута: `releases/latest` по-прежнему **`v2026.10.8`**
+(2026-10-14T09:09:31Z, 13 вложений), тэг `physics-*` не претендует на «latest».
+
+Как продолжить: правка мотива/цветов — константы в `tools/make_icon.py`, затем
+`python3 tools/make_icon.py` (перегенерирует PNG), `python3 tools/sync_assets.py`
+(разложит копии), `tests/test_icon.py` + `make_icon.py --check`. SVG и
+Android-вектор правятся руками — тест требует совпадения геометрии.
