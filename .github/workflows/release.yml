@@ -88,6 +88,13 @@ jobs:
             -ldflags "-s -w -H=windowsgui -X main.buildStamp=${{ github.run_number }}" \
             -o ../dist/CTMathsTutor-arm64.exe .
 
+      - name: Verify the release APK is signed with the permanent key
+        working-directory: android
+        run: |
+          python3 ../tools/check_signature.py \
+            --apk app/build/outputs/apk/release/app-release.apk \
+            --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
+
       - name: Collect the artefacts and the update manifest
         run: |
           mkdir -p release

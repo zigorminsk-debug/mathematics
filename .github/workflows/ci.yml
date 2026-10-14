@@ -187,6 +187,13 @@ jobs:
           fi
           tail -5 /tmp/gradle-release.log
 
+      - name: Verify the release APK is signed with the permanent key
+        working-directory: android
+        run: |
+          python3 ../tools/check_signature.py \
+            --apk app/build/outputs/apk/release/app-release.apk \
+            --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
+
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk
