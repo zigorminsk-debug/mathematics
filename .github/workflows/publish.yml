@@ -1,0 +1,68 @@
+name: Publish verified artifacts
+
+# Callable only after all build/check jobs. Never triggered from PR artifacts,
+# never recompiles native binaries, never overwrites a published release.
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      source_version:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  publish:
+    name: Promote verified artifacts to latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download the checked content from this same run
+        uses: actions/download-artifact@v4
+        with:
+          name: content-bank
+          path: staging/content
+      - name: Download both checked Windows builds from this same run
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-exe
+          path: staging/windows
+      - name: Download the signed release APK from this same run (never debug)
+        uses: actions/download-artifact@v4
+        with:
+          name: android-release-apk
+          path: staging/android
+      - name: Verify inventory, stage draft, publish and confirm latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.version }}
+          SOURCE_VERSION: ${{ inputs.source_version }}
+        run: |
+          python3 tools/publish_release.py --repo "$GITHUB_REPOSITORY" \
+            --version "$RELEASE_VERSION" --source-version "$SOURCE_VERSION" \
+            --run-id "$GITHUB_RUN_ID" --staging staging --output release
+      - name: Keep the machine-readable audit even if publication was interrupted
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-audit
+          if-no-files-found: warn
+          path: |
+            release/release-info.json
+            release/SHA256SUMS.txt
+            release/version.json

@@ -295,12 +295,49 @@
     if (settings) settings.addEventListener('click', function () { go('#/settings'); });
     var language = $('#lang-toggle');
     if (language) language.addEventListener('click', function () {
-      I.setLang(I.lang === 'ru' ? 'en' : 'ru');
-      S.settings.lang = I.lang;
-      S.saveSettings(true);
-      UI.chrome();
-      UI.render();
+      UI.changeLanguage(I.lang === 'ru' ? 'en' : 'ru');
     });
+  };
+
+  UI.changeLanguage = function (lang) {
+    // These fields are local UI state rather than progress/session blobs.
+    // Translate the screen without clearing an analogous answer or a search.
+    var formulaSearch = $('#view input[type="search"]');
+    var query = formulaSearch ? formulaSearch.value : null;
+    var analogues = $$('.analogous-item', $('#view')).map(function (item) {
+      return { id: item.getAttribute('data-task-id'), value: $('.answer-input', item).value,
+        status: $('.feedback', item).classList.contains('good') ? 'good'
+          : ($('.feedback', item).classList.contains('bad') ? 'bad' : null),
+        solution: !$('.analogous-solution', item).classList.contains('hidden'),
+        study: !$('.analogous-study', item).classList.contains('hidden') };
+    });
+    I.setLang(lang);
+    S.settings.lang = I.lang;
+    S.saveSettings(true);
+    UI.chrome();
+    UI.render();
+    var newSearch = $('#view input[type="search"]');
+    if (query !== null && newSearch) {
+      newSearch.value = query;
+      newSearch.dispatchEvent(new global.Event('input', { bubbles: true }));
+    }
+    $$('.analogous-item', $('#view')).forEach(function (item) {
+      var saved = analogues.filter(function (state) { return state.id === item.getAttribute('data-task-id'); })[0];
+      if (!saved) return;
+      $('.answer-input', item).value = saved.value;
+      $('.analogous-solution', item).classList.toggle('hidden', !saved.solution);
+      if (saved.status) {
+        var feedback = $('.feedback', item);
+        feedback.className = 'feedback ' + saved.status;
+        feedback.textContent = t(saved.status === 'good' ? 'answer_correct' : 'answer_incorrect');
+      }
+      if (saved.study) {
+        var holder = $('.analogous-study', item);
+        var block = UI.studyBlock(C.taskById(saved.id));
+        if (block) { holder.appendChild(block); holder.classList.remove('hidden'); }
+      }
+    });
+    if ($('#modal').classList.contains('open') && modalRefresh) modalRefresh(true);
   };
 
   /** Тема и размер шрифта: применяются к <html>, чтобы CSS подхватил сразу. */
@@ -341,16 +378,41 @@
   // CT.bridge.notify ищет тост интерфейса здесь
   CT.app = { toast: function (message) { CT.toast(message); } };
 
+  // A theory window can be opened from the formula sheet. Retain the actual
+  // DOM nodes (including input values and handlers), rather than rebuilding the
+  // parent tool and losing its search query. No session/progress blobs change.
+  var modalStack = [], modalFocus = null, modalRefresh = null;
+
   /** Модальное окно: принимает узел и заголовок. */
   UI.modal = function (title, node, options) {
     options = options || {};
     var overlay = $('#modal');
     var sheet = $('.sheet', overlay);
+    if (options.push && overlay.classList.contains('open')) {
+      modalStack.push({ nodes: Array.prototype.slice.call(sheet.childNodes),
+        className: sheet.className, scrollTop: sheet.scrollTop, focus: doc.activeElement,
+        lang: I.lang, refresh: modalRefresh });
+    } else if (!options.keepHistory) {
+      modalStack = [];
+      modalFocus = doc.activeElement;
+    }
+    modalRefresh = options.refresh || null;
     clear(sheet);
     sheet.className = 'sheet' + (options.wide ? ' wide' : '') + (options.tall ? ' tall' : '');
     var head = el('div', { class: 'sheet-head' });
-    head.appendChild(el('h2', { text: title }));
-    var close = el('button', { class: 'icon-btn', text: '✕', 'aria-label': t('close') });
+    if (modalStack.length) {
+      var back = el('button', { class: 'icon-btn modal-back', type: 'button', text: '←', 'aria-label': t('prev') });
+      back.addEventListener('click', UI.backModal);
+      head.appendChild(back);
+    }
+    head.appendChild(el('h2', { id: 'modal-title', text: title }));
+    if (options.language) {
+      var language = el('button', { class: 'icon-btn lang modal-lang', type: 'button',
+        text: I.lang === 'ru' ? 'EN' : 'RU', 'aria-label': t('language') });
+      language.addEventListener('click', function () { UI.changeLanguage(I.lang === 'ru' ? 'en' : 'ru'); });
+      head.appendChild(language);
+    }
+    var close = el('button', { class: 'icon-btn modal-close', type: 'button', text: '✕', 'aria-label': t('close') });
     close.addEventListener('click', UI.closeModal);
     head.appendChild(close);
     sheet.appendChild(head);
@@ -358,18 +420,63 @@
     body.appendChild(node);
     sheet.appendChild(body);
     if (options.footer) sheet.appendChild(options.footer);
+    sheet.scrollTop = 0;
     overlay.classList.add('open');
+    doc.body.classList.add('modal-open');
     overlay.setAttribute('aria-hidden', 'false');
+    overlay.setAttribute('aria-labelledby', 'modal-title');
+    close.focus();
     return sheet;
+  };
+  UI.backModal = function () {
+    var previous = modalStack.pop();
+    if (!previous) { UI.closeModal(); return; }
+    var sheet = $('.sheet', $('#modal'));
+    clear(sheet);
+    sheet.className = previous.className;
+    previous.nodes.forEach(function (node) { sheet.appendChild(node); });
+    sheet.scrollTop = previous.scrollTop;
+    modalRefresh = previous.refresh;
+    if (previous.lang !== I.lang && modalRefresh) {
+      var focusKey = previous.focus && previous.focus.getAttribute('data-focus-key');
+      modalRefresh(true);
+      sheet.scrollTop = previous.scrollTop;
+      if (focusKey) {
+        var replacement = $$('[data-focus-key]', sheet).filter(function (node) { return node.getAttribute('data-focus-key') === focusKey; })[0];
+        if (replacement) replacement.focus();
+      }
+      return;
+    }
+    if (previous.focus && previous.focus.isConnected) previous.focus.focus();
   };
   UI.closeModal = function () {
     var overlay = $('#modal');
     if (!overlay) return;
     overlay.classList.remove('open');
+    doc.body.classList.remove('modal-open');
     overlay.setAttribute('aria-hidden', 'true');
+    modalStack = [];
+    modalRefresh = null;
     clear($('.sheet', overlay));
+    if (modalFocus && modalFocus.isConnected) modalFocus.focus();
+    else if ($('#view')) $('#view').focus();
+    modalFocus = null;
   };
   CT.closeModal = UI.closeModal;
+
+  doc.addEventListener('keydown', function (event) {
+    if (!$('#modal').classList.contains('open')) return;
+    if (event.key === 'Escape') { event.preventDefault(); UI.backModal(); return; }
+    if (event.key !== 'Tab') return;
+    var controls = $$('button:not(:disabled), input:not(:disabled), textarea:not(:disabled), a[href]', $('.sheet'));
+    if (!controls.length) return;
+    var first = controls[0], last = controls[controls.length - 1];
+    if (event.shiftKey && (doc.activeElement === first || !$('.sheet').contains(doc.activeElement))) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && (doc.activeElement === last || !$('.sheet').contains(doc.activeElement))) {
+      event.preventDefault(); first.focus();
+    }
+  });
 
   /** Подтверждение с двумя кнопками. */
   UI.confirm = function (message, onYes, yesLabel) {
@@ -492,6 +599,292 @@
     return card;
   };
 
+  /** Build a figure only from finite coordinates and a fixed SVG allowlist.
+   * Downloaded content can never supply markup, event attributes, URLs or CSS.
+   * Validate the entire drawing before creating it: one bad last node rejects
+   * the whole SVG. Captions remain readable even if a future pack is malformed.
+   */
+  UI.diagramSvg = function (figure) {
+    var namespace = 'http://www.w3.org/2000/svg';
+    var fields = { line: ['x1', 'y1', 'x2', 'y2'], circle: ['cx', 'cy', 'r'],
+      ellipse: ['cx', 'cy', 'rx', 'ry'], rect: ['x', 'y', 'width', 'height'],
+      polyline: ['points'], polygon: ['points'], text: ['x', 'y', 'text', 'anchor'] };
+    var roles = ['axis', 'grid', 'primary', 'secondary', 'helper', 'region', 'point', 'openpoint', 'text'];
+    if (!figure || figure.width !== 420 || figure.height !== 280 || !Array.isArray(figure.drawing) ||
+        !figure.drawing.length || figure.drawing.length > 250) return null;
+    var bilingual = function (value) {
+      return value && ['ru', 'en'].every(function (lang) { return typeof value[lang] === 'string' && value[lang].trim(); });
+    };
+    var numeric = function (key, value) {
+      var bound = key.charAt(0) === 'y' || ['cy', 'ry', 'height'].indexOf(key) >= 0 ? 280 : 420;
+      return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= bound &&
+        (['r', 'rx', 'ry', 'width', 'height'].indexOf(key) < 0 || value > 0);
+    };
+    if (!bilingual(figure.title) || !bilingual(figure.caption)) return null;
+    var valid = figure.drawing.every(function (item) {
+      var allowed = item && typeof item.kind === 'string' && Object.prototype.hasOwnProperty.call(fields, item.kind) ? fields[item.kind] : null;
+      if (!allowed || roles.indexOf(item.role) < 0 || typeof item.filled !== 'boolean' ||
+          Object.keys(item).some(function (key) { return ['kind', 'role', 'filled'].concat(allowed).indexOf(key) < 0; })) return false;
+      return allowed.every(function (key) {
+        var value = item[key];
+        if (key === 'points') return Array.isArray(value) && value.length >= (item.kind === 'polygon' ? 3 : 2) &&
+          value.length <= 500 && value.every(function (point) {
+            return Array.isArray(point) && point.length === 2 && numeric('x', point[0]) && numeric('y', point[1]);
+          });
+        if (key === 'text') return bilingual(value);
+        if (key === 'anchor') return ['start', 'middle', 'end'].indexOf(value) >= 0;
+        return numeric(key, value);
+      });
+    });
+    if (!valid) return null;
+    var svg = doc.createElementNS(namespace, 'svg');
+    svg.setAttribute('viewBox', '0 0 420 280');
+    svg.setAttribute('class', 'diagram-svg');
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', I.pick(figure.title) + '. ' + I.pick(figure.caption));
+    svg.setAttribute('data-figure', figure.id);
+    var title = doc.createElementNS(namespace, 'title');
+    title.textContent = I.pick(figure.title);
+    var desc = doc.createElementNS(namespace, 'desc');
+    desc.textContent = I.pick(figure.caption);
+    svg.appendChild(title); svg.appendChild(desc);
+    figure.drawing.forEach(function (item) {
+      var node = doc.createElementNS(namespace, item.kind);
+      node.setAttribute('class', 'diagram-' + item.role + (item.filled ? ' diagram-filled' : ''));
+      fields[item.kind].forEach(function (key) {
+        if (key === 'text') node.textContent = I.pick(item.text);
+        else if (key === 'anchor') node.setAttribute('text-anchor', item.anchor);
+        else if (key === 'points') node.setAttribute('points', item.points.map(function (point) { return point.join(','); }).join(' '));
+        else node.setAttribute(key, String(item[key]));
+      });
+      if (item.kind !== 'text') node.setAttribute('vector-effect', 'non-scaling-stroke');
+      svg.appendChild(node);
+    });
+    return svg;
+  };
+
+  UI.diagramLegend = function (figure) {
+    var legend = el('div', { class: 'diagram-legend' });
+    (Array.isArray(figure.legend) ? figure.legend : []).forEach(function (item) {
+      if (!item || ['primary', 'secondary', 'helper', 'axis', 'region', 'point'].indexOf(item.role) < 0) return;
+      var label = el('span', { class: 'diagram-legend-item' });
+      label.appendChild(el('span', { class: 'diagram-key diagram-' + item.role, 'aria-hidden': 'true' }));
+      label.appendChild(el('span', { text: I.pick(item.text) }));
+      legend.appendChild(label);
+    });
+    return legend;
+  };
+
+  /** Nested viewer: touch/keyboard zoom, internal panning, same one-level Back. */
+  UI.openDiagram = function (figure) {
+    var state = { scale: 1, x: 0, y: 0 };
+    var render = function (keepHistory) {
+      var wrap = el('div', { class: 'diagram-viewer', 'data-figure': figure.id });
+      var controls = el('div', { class: 'diagram-controls' });
+      var smaller = el('button', { class: 'btn diagram-zoom-out', type: 'button', text: '−', 'aria-label': t('theory_zoom_out') });
+      var larger = el('button', { class: 'btn diagram-zoom-in', type: 'button', text: '+', 'aria-label': t('theory_zoom_in') });
+      var fit = el('button', { class: 'btn diagram-zoom-reset', type: 'button', text: t('theory_zoom_reset') });
+      var status = el('span', { class: 'diagram-zoom-status', 'aria-live': 'polite' });
+      [smaller, larger, fit, status].forEach(function (node) { controls.appendChild(node); });
+      var viewport = el('div', { class: 'diagram-viewport', tabindex: '0', 'aria-label': t('theory_pan_hint') });
+      var svg = UI.diagramSvg(figure);
+      if (svg) viewport.appendChild(svg);
+      else viewport.appendChild(el('p', { text: t('theory_visual_unavailable') }));
+      var update = function () {
+        if (svg) svg.style.width = (state.scale * 100) + '%';
+        status.textContent = t('theory_zoom_fmt', Math.round(state.scale * 100) + '%');
+        smaller.disabled = state.scale <= 1;
+        larger.disabled = state.scale >= 3;
+      };
+      smaller.addEventListener('click', function () { state.scale = Math.max(1, state.scale - .5); update(); });
+      larger.addEventListener('click', function () { state.scale = Math.min(3, state.scale + .5); update(); });
+      fit.addEventListener('click', function () {
+        state.scale = 1; state.x = state.y = 0; viewport.scrollLeft = viewport.scrollTop = 0; update();
+      });
+      viewport.addEventListener('scroll', function () { state.x = viewport.scrollLeft; state.y = viewport.scrollTop; });
+      update();
+      wrap.appendChild(controls); wrap.appendChild(viewport);
+      wrap.appendChild(UI.diagramLegend(figure));
+      wrap.appendChild(el('p', { class: 'diagram-caption', text: I.pick(figure.caption) }));
+      wrap.appendChild(el('p', { class: 'muted small', text: t('theory_pan_hint') }));
+      var footer = el('div', { class: 'theory-footer' });
+      var back = el('button', { class: 'btn', type: 'button', text: t('prev') });
+      back.addEventListener('click', UI.backModal); footer.appendChild(back);
+      UI.modal(I.pick(figure.title), wrap, { tall: true, wide: true, push: !keepHistory,
+        keepHistory: !!keepHistory, language: true, refresh: render, footer: footer });
+      viewport.scrollLeft = state.x; viewport.scrollTop = state.y;
+    };
+    render(false);
+  };
+
+  UI.diagramCard = function (figure, lessonId) {
+    var block = el('figure', { class: 'theory-figure', 'data-figure': figure.id });
+    block.appendChild(el('h4', { text: I.pick(figure.title) }));
+    var svg = UI.diagramSvg(figure);
+    block.appendChild(svg || el('p', { text: t('theory_visual_unavailable') }));
+    block.appendChild(UI.diagramLegend(figure));
+    block.appendChild(el('figcaption', { class: 'diagram-caption', text: I.pick(figure.caption) }));
+    if (svg) {
+      var enlarge = el('button', { class: 'btn diagram-enlarge', type: 'button', text: t('theory_enlarge'),
+        'aria-haspopup': 'dialog', 'data-focus-key': 'figure-' + lessonId + '-' + figure.id });
+      enlarge.addEventListener('click', function () { enlarge.focus(); UI.openDiagram(figure); });
+      block.appendChild(enlarge);
+    }
+    return block;
+  };
+
+  /** Definitions, conditions of rules/theorems, and worked examples. */
+  UI.openTheory = function (lessonIds, options) {
+    options = options || {};
+    var lessons = lessonIds.map(function (id) { return C.lessonById(id); }).filter(Boolean);
+    if (!lessons.length) return;
+    var render = function (keepHistory) {
+      var savedScroll = keepHistory ? $('.sheet', $('#modal')).scrollTop : 0;
+      var wrap = el('div', { class: 'theory-content' });
+      if (options.formula) {
+        wrap.appendChild(el('div', { class: 'banner info theory-formula', text: options.formula.formula }));
+      }
+      lessons.forEach(function (lesson) {
+        var article = el('article', { class: 'theory-lesson', 'data-lesson': lesson.id });
+        if (lessons.length > 1 || options.title) article.appendChild(el('h3', { text: I.pick(lesson.title) }));
+        if (lesson.everyday) {
+          var everyday = el('section', { class: 'theory-everyday' });
+          everyday.appendChild(el('h3', { text: t('theory_everyday') }));
+          (I.pick(lesson.everyday) || []).forEach(function (line) { everyday.appendChild(el('p', { text: line })); });
+          article.appendChild(everyday);
+        }
+        [['definitions', 'theory_definitions'], ['rules', 'theory_rules']].forEach(function (section) {
+          var block = el('section', { class: 'theory-' + section[0] });
+          block.appendChild(el('h3', { text: t(section[1]) }));
+          var list = el('ul', {});
+          (I.pick(lesson[section[0]]) || []).forEach(function (line) { list.appendChild(el('li', { text: line })); });
+          block.appendChild(list);
+          article.appendChild(block);
+        });
+        var figures = (lesson.figures || []).map(function (id) { return C.figureById(id); }).filter(Boolean);
+        if (figures.length) {
+          var visuals = el('section', { class: 'theory-visuals' });
+          visuals.appendChild(el('h3', { text: t('theory_visuals') }));
+          figures.forEach(function (figure) { visuals.appendChild(UI.diagramCard(figure, lesson.id)); });
+          article.appendChild(visuals);
+        }
+        (lesson.examples || []).forEach(function (example) {
+          var block = el('section', { class: 'theory-example' });
+          block.appendChild(el('h3', { text: t('theory_examples') }));
+          block.appendChild(el('p', { text: I.pick(example.statement) }));
+          var steps = el('ol', { class: 'steps' });
+          (I.pick(example.steps) || []).forEach(function (step) { steps.appendChild(el('li', { text: step })); });
+          block.appendChild(steps);
+          article.appendChild(block);
+        });
+        wrap.appendChild(article);
+      });
+      var footer = el('div', { class: 'rowline theory-footer' });
+      var back = el('button', { class: 'btn', type: 'button', text: t('prev') });
+      back.addEventListener('click', UI.backModal);
+      footer.appendChild(back);
+      UI.modal(I.pick(options.title || lessons[0].title), wrap, { tall: true,
+        push: !keepHistory, keepHistory: !!keepHistory, language: true,
+        refresh: render, footer: footer });
+      if (keepHistory) $('.sheet', $('#modal')).scrollTop = savedScroll;
+    };
+    render(false);
+  };
+
+  /** Native buttons: touch targets, keyboard activation and an explicit arrow. */
+  UI.theoryButton = function (label, ids, className, title) {
+    var button = el('button', { class: 'theory-trigger ' + (className || ''), type: 'button',
+      title: t('theory_open'), 'aria-haspopup': 'dialog', 'data-lesson': ids.join(' ') });
+    button.appendChild(el('span', { text: label }));
+    button.appendChild(el('span', { class: 'theory-arrow', text: '›', 'aria-hidden': 'true' }));
+    button.addEventListener('click', function () {
+      button.focus();
+      UI.openTheory(ids, { title: title });
+    });
+    return button;
+  };
+
+  UI.studyPoints = function (topic) {
+    var study = C.studyFor(topic);
+    var points = study ? (I.pick(study) || []) : [];
+    var list = el('ul', { class: 'study-points' });
+    points.forEach(function (point, index) {
+      var id = (study.lessons || [])[index];
+      list.appendChild(el('li', {}, [C.lessonById(id)
+        ? UI.theoryButton(point, [id], 'study-point-link') : doc.createTextNode(point)]));
+    });
+    return list;
+  };
+
+  UI.formulaMatches = function (item, needle, group) {
+    return !needle || (I.pick(item.name) + ' ' + (item.name.ru || '') + ' ' + (item.name.en || '') +
+      ' ' + item.formula + ' ' + (group.ru || '') + ' ' + (group.en || '')).toLowerCase().indexOf(needle) >= 0;
+  };
+
+  UI.formulaRow = function (item) {
+    var lesson = C.lessonById(item.lesson);
+    var row = el(lesson ? 'button' : 'div', { class: 'formula-row' + (lesson ? ' theory-trigger formula-link' : ''),
+      type: lesson ? 'button' : null, 'data-lesson': lesson ? lesson.id : null,
+      title: lesson ? t('theory_open') : null, 'aria-haspopup': lesson ? 'dialog' : null });
+    row.appendChild(el('span', { class: 'formula-name', text: I.pick(item.name) }));
+    row.appendChild(el('span', { class: 'formula-body', text: item.formula }));
+    if (lesson) {
+      row.appendChild(el('span', { class: 'theory-arrow', text: '›', 'aria-hidden': 'true' }));
+      row.addEventListener('click', function () {
+        row.focus();
+        UI.openTheory([lesson.id], { title: item.name, formula: item });
+      });
+    }
+    return row;
+  };
+
+  /** One shared renderer in Study, error remediation and both formula sheets. */
+  UI.formulaGroupCard = function (group, options) {
+    options = options || {};
+    var card = el('div', { class: (options.compact ? 'study-formulas' : 'card') + ' formula-group', 'data-group': group.id });
+    var heading = el(options.compact ? 'h5' : 'h3', { class: 'formula-group-title' });
+    var lessons = C.lessonsForGroup(group);
+    heading.appendChild(lessons.length ? UI.theoryButton(I.pick(group),
+      lessons.map(function (lesson) { return lesson.id; }), 'formula-group-link', group)
+      : doc.createTextNode(I.pick(group)));
+    card.appendChild(heading);
+    (options.items || group.items || []).forEach(function (item) { card.appendChild(UI.formulaRow(item)); });
+    return card;
+  };
+
+  /**
+   * Тема для изучения: открывается сразу при неверном ответе.
+   *
+   * Короткий конспект темы и её формулы показываются прямо в разборе (ученик
+   * не должен сам догадываться, что повторять), а кнопка ведёт на полный
+   * экран темы с разобранными примерами.
+   */
+  UI.studyBlock = function (task) {
+    if (!task) return null;
+    var study = C.studyFor(task.topic);
+    var groups = C.formulaGroupsFor(task.topic);
+    if (!study && !groups.length) return null;
+    var box = el('div', { class: 'study-topic', 'data-topic': task.topic });
+    box.appendChild(el('h4', { text: t('study_topic_fmt', C.topicTitle(task.topic)) }));
+    var points = study ? (I.pick(study) || []) : [];
+    if (points.length) {
+      box.appendChild(el('h5', { text: t('study_points') }));
+      box.appendChild(UI.studyPoints(task.topic));
+    }
+    if (groups.length) {
+      box.appendChild(el('h5', { text: t('study_formulas') }));
+      groups.forEach(function (group) { box.appendChild(UI.formulaGroupCard(group, { compact: true })); });
+    }
+    var row = el('div', { class: 'rowline wrap' });
+    var open = el('button', { class: 'btn primary', text: t('study_open') });
+    open.addEventListener('click', function () { go('#/study/' + task.topic); });
+    var practice = el('button', { class: 'btn ghost', text: t('study_practice') });
+    practice.addEventListener('click', function () { go('#/practice/' + task.topic); });
+    row.appendChild(open); row.appendChild(practice);
+    box.appendChild(row);
+    return box;
+  };
+
   /** Разбор одного задания (используется в результатах и в тренажёре ошибок). */
   UI.breakdown = function (task, userAnswer, options) {
     options = options || {};
@@ -534,6 +927,13 @@
     meta.textContent = [C.topicTitle(task.topic), task.src].filter(Boolean).join(' · ');
     box.appendChild(meta);
 
+    // Неверный ответ: сразу открываем необходимую тему для изучения —
+    // конспект и формулы этой темы, а не только правильный ответ.
+    if (!A.check(userAnswer, task)) {
+      var studyBlock = UI.studyBlock(task);
+      if (studyBlock) box.appendChild(studyBlock);
+    }
+
     if (options.analogous !== false) {
       var analogous = options.analogous || C.analogByTopic(task.topic).slice(0, 2);
       if (analogous.length) {
@@ -547,27 +947,40 @@
 
   /** Однотипное задание: ввести ответ, получить проверку и решение. */
   UI.analogousItem = function (task, index) {
-    var wrap = el('div', { class: 'analogous-item' });
+    var wrap = el('div', { class: 'analogous-item', 'data-task-id': task.id });
     wrap.appendChild(el('div', { class: 'analogous-head', text: t('analogous_task_fmt', index) + ' · ' + C.topicTitle(task.topic) }));
     wrap.appendChild(el('div', { class: 'task-text', text: I.pick(task.text) }));
     var input = el('input', { class: 'answer-input', type: 'text', placeholder: t('answer_placeholder') });
     var check = el('button', { class: 'btn primary', text: t('check_answer') });
     var reveal = el('button', { class: 'btn ghost', text: t('show_solution') });
     var feedback = el('div', { class: 'feedback' });
-    var solution = el('div', { class: 'hidden' });
+    var solution = el('div', { class: 'hidden analogous-solution' });
     var steps = el('ol', { class: 'steps' });
     (I.pick(task.solution) || []).forEach(function (step) { steps.appendChild(el('li', { text: step })); });
     solution.appendChild(steps);
+    var studyHolder = el('div', { class: 'hidden analogous-study' });
     var row = el('div', { class: 'answer-row' });
     row.appendChild(input); row.appendChild(check); row.appendChild(reveal);
     wrap.appendChild(row);
     wrap.appendChild(feedback);
     wrap.appendChild(solution);
+    wrap.appendChild(studyHolder);
     check.addEventListener('click', function () {
       var ok = A.check(input.value, task);
       feedback.className = 'feedback ' + (ok ? 'good' : 'bad');
       feedback.textContent = ok ? t('answer_correct') : t('answer_incorrect');
-      if (!ok) solution.classList.remove('hidden');
+      if (!ok) {
+        solution.classList.remove('hidden');
+        // Не только ссылка: тема аналогичного задания тоже открывается сразу.
+        if (!studyHolder.firstChild) {
+          var study = UI.studyBlock(task);
+          if (study) studyHolder.appendChild(study);
+        }
+        studyHolder.classList.remove('hidden');
+        if (typeof studyHolder.scrollIntoView === 'function') studyHolder.scrollIntoView({ block: 'start' });
+      } else {
+        studyHolder.classList.add('hidden');
+      }
       S.recordTask(task, ok, 0);
       B.vibrate(ok ? 12 : 30);
     });
@@ -736,6 +1149,14 @@
         var correct = RUN.checkCurrent();
         B.vibrate(correct ? 12 : 40);
         UI.render();
+        if (!correct) {
+          // при неверном ответе открываем необходимую тему: разбор с конспектом
+          // темы уже отрисован — доводим его до экрана ученика
+          var studyNode = doc.querySelector('.study-topic');
+          if (studyNode && typeof studyNode.scrollIntoView === 'function') {
+            studyNode.scrollIntoView({ block: 'start' });
+          }
+        }
         if (correct && S.settings.autoAdvance) {
           setTimeout(function () {
             if (!S.settings.autoAdvance) return;
@@ -964,9 +1385,10 @@
     var ul = el('ul', {});
     Object.keys(grouped).forEach(function (topic) {
       var li = el('li', {});
-      var link = el('a', { href: '#/practice/' + topic, text: C.topicTitle(topic) });
+      var link = el('a', { href: '#/study/' + topic, text: C.topicTitle(topic) });
       li.appendChild(link);
-      li.appendChild(doc.createTextNode(' — ' + t('tasks_count_fmt', grouped[topic].length)));
+      li.appendChild(doc.createTextNode(' — ' + t('tasks_count_fmt', grouped[topic].length) + ' · '));
+      li.appendChild(el('a', { href: '#/practice/' + topic, text: t('study_practice') }));
       ul.appendChild(li);
     });
     plan.appendChild(ul);
@@ -997,6 +1419,81 @@
       grid.appendChild(card);
     });
     root.appendChild(grid);
+    return root;
+  };
+
+  /**
+   * Изучение темы: конспект, формулы и разобранные примеры одной темы.
+   *
+   * Сюда приводит неверный ответ (разбор открывает эту тему сразу, кнопка
+   * «Открыть тему» — сюда), раздел «Изучение» и план повторения в разборе
+   * ошибок.
+   */
+  SCREENS['#/study'] = function (extra) {
+    var root = el('section', { class: 'screen' });
+    var topic = extra && C.topics[extra] ? extra : null;
+    if (!topic) {
+      root.appendChild(el('h1', { text: t('nav_study') }));
+      root.appendChild(el('p', { class: 'muted', text: t('study_index_intro') }));
+      var grid = el('div', { class: 'grid-3' });
+      C.order.forEach(function (key) {
+        var card = el('button', { class: 'btn topic-btn' });
+        card.appendChild(el('span', { class: 'topic-name', text: C.topicTitle(key) }));
+        card.appendChild(el('span', { class: 'muted small', text: t('tasks_count_fmt',
+          C.tasksByTopic(key).length + C.analogByTopic(key).length) }));
+        card.addEventListener('click', function () { go('#/study/' + key); });
+        grid.appendChild(card);
+      });
+      root.appendChild(grid);
+      return root;
+    }
+
+    root.appendChild(el('h1', { text: t('study_topic_fmt', C.topicTitle(topic)) }));
+    root.appendChild(el('p', { class: 'muted', text: t('study_intro') }));
+    if (S.session && !S.session.finished) {
+      var returnBtn = el('button', { class: 'btn', text: t('return_to_task') });
+      returnBtn.addEventListener('click', function () { go('#/run'); });
+      root.appendChild(returnBtn);
+    }
+
+    var study = C.studyFor(topic);
+    var points = study ? (I.pick(study) || []) : [];
+    if (points.length) {
+      var pointsCard = el('div', { class: 'card study-points-card' });
+      pointsCard.appendChild(el('h3', { text: t('study_points') }));
+      pointsCard.appendChild(UI.studyPoints(topic));
+      root.appendChild(pointsCard);
+    }
+
+    var groups = C.formulaGroupsFor(topic);
+    if (groups.length) {
+      root.appendChild(el('h2', { text: t('study_formulas') }));
+      var list = el('div', { class: 'formula-list' });
+      groups.forEach(function (group) { list.appendChild(UI.formulaGroupCard(group)); });
+      root.appendChild(list);
+    }
+
+    var examples = C.tasksByTopic(topic).concat(C.analogByTopic(topic)).slice(0, 3);
+    if (examples.length) {
+      root.appendChild(el('h2', { text: t('study_examples') }));
+      examples.forEach(function (example) {
+        var card = el('div', { class: 'card study-example' });
+        card.appendChild(el('div', { class: 'task-text', text: I.pick(example.text) }));
+        card.appendChild(el('p', {}, [el('strong', { text: t('correct_answer') + ': ' }),
+          doc.createTextNode(A.pick(example.answer))]));
+        var details = el('details', { class: 'hints' });
+        details.appendChild(el('summary', { text: t('show_solution') }));
+        var steps = el('ol', { class: 'steps' });
+        (I.pick(example.solution) || []).forEach(function (step) { steps.appendChild(el('li', { text: step })); });
+        details.appendChild(steps);
+        card.appendChild(details);
+        root.appendChild(card);
+      });
+    }
+
+    var practice = el('button', { class: 'btn primary', text: t('study_practice') });
+    practice.addEventListener('click', function () { go('#/practice/' + topic); });
+    root.appendChild(practice);
     return root;
   };
 
@@ -1094,19 +1591,10 @@
       var needle = String(query || '').trim().toLowerCase();
       C.formulas.forEach(function (group) {
         var items = group.items.filter(function (item) {
-          if (!needle) return true;
-          return (I.pick(item.name) + ' ' + item.formula).toLowerCase().indexOf(needle) >= 0;
+          return UI.formulaMatches(item, needle, group);
         });
         if (!items.length) return;
-        var card = el('div', { class: 'card formula-group' });
-        card.appendChild(el('h3', { text: I.pick(group) }));
-        items.forEach(function (item) {
-          var row = el('div', { class: 'formula-row' });
-          row.appendChild(el('div', { class: 'formula-name', text: I.pick(item.name) }));
-          row.appendChild(el('div', { class: 'formula-body', text: item.formula }));
-          card.appendChild(row);
-        });
-        list.appendChild(card);
+        list.appendChild(UI.formulaGroupCard(group, { items: items }));
       });
       if (!list.firstChild) list.appendChild(el('p', { class: 'muted', text: t('nothing_found') }));
     };
@@ -1179,7 +1667,8 @@
       evaluate();
     },
 
-    sheet: function (task) {
+    sheet: function (task, query, options) {
+      options = options || {};
       var wrap = el('div', { class: 'formula-list in-modal' });
       var search = el('input', { class: 'answer-input', type: 'search', placeholder: t('search_formula') });
       wrap.appendChild(search);
@@ -1190,21 +1679,17 @@
         var needle = String(query || '').trim().toLowerCase();
         C.formulas.forEach(function (group) {
           var items = group.items.filter(function (item) {
-            return !needle || (I.pick(item.name) + ' ' + item.formula).toLowerCase().indexOf(needle) >= 0;
+            return UI.formulaMatches(item, needle, group);
           });
           if (!items.length) return;
-          var card = el('div', { class: 'card formula-group' });
-          card.appendChild(el('h3', { text: I.pick(group) }));
-          items.forEach(function (item) {
-            card.appendChild(h('<div class="formula-row"><div class="formula-name">' + esc(I.pick(item.name)) +
-              '</div><div class="formula-body">' + esc(item.formula) + '</div></div>'));
-          });
-          holder.appendChild(card);
+          holder.appendChild(UI.formulaGroupCard(group, { items: items }));
         });
       };
       search.addEventListener('input', function () { render(search.value); });
-      render('');
-      UI.modal(t('tool_sheet'), wrap, { tall: true });
+      search.value = query || '';
+      render(search.value);
+      UI.modal(t('tool_sheet'), wrap, { tall: true, keepHistory: !!options.keepHistory,
+        language: true, refresh: function () { TOOLS.sheet(task, search.value, { keepHistory: true }); } });
     },
 
     scratchpad: function (task) {
@@ -1391,10 +1876,7 @@
     [['ru', 'Русский'], ['en', 'English']].forEach(function (pair) {
       var btn = el('button', { class: 'btn' + (S.settings.lang === pair[0] ? ' primary' : ''), text: pair[1] });
       btn.addEventListener('click', function () {
-        S.settings.lang = pair[0];
-        I.setLang(pair[0]);
-        S.saveSettings(true);
-        UI.chrome(); UI.render();
+        UI.changeLanguage(pair[0]);
       });
       row.appendChild(btn);
     });
@@ -1494,12 +1976,19 @@
       B.checkUpdates(S.settings.baseUrl, C.meta.contentVersion).then(function (result) {
         update.disabled = false;
         if (result.status === 'uptodate') updateInfo.textContent = t('update_uptodate');
-        else if (result.status === 'updated') updateInfo.textContent = t('update_success_fmt', result.version);
+        else if (result.status === 'updated' || result.status === 'ok') updateInfo.textContent = t('update_success_fmt', result.version);
         else updateInfo.textContent = t('update_failed');
-        CT.toast(updateInfo.textContent);
+        var message = updateInfo.textContent;
+        if (result.status === 'updated' || result.status === 'ok') {
+          // Show the new years immediately, not only after an app restart.
+          return C.load().then(function () { UI.render(); CT.toast(message); });
+        }
+        CT.toast(message);
+        return null;
       }).catch(function () {
         update.disabled = false;
         updateInfo.textContent = t('update_failed');
+        CT.toast(t('update_failed'));
       });
     });
     about.appendChild(el('h3', { text: t('updates') }));
@@ -1562,6 +2051,7 @@
     ['#/home', 'nav_home', '🏠'],
     ['#/tests', 'nav_tests', '📚'],
     ['#/practice', 'nav_practice', '🔁'],
+    ['#/study', 'nav_study', '📖'],
     ['#/stats', 'nav_stats', '📊'],
     ['#/formulas', 'nav_formulas', '📐'],
     ['#/tools', 'nav_tools', '🧰'],
@@ -1610,11 +2100,15 @@
 
   /** Системная кнопка «назад» на Android: «exit» — выйти из приложения. */
   CT.onAndroidBack = function () {
-    if ($('#modal').classList.contains('open')) { UI.closeModal(); return null; }
+    if ($('#modal').classList.contains('open')) { UI.backModal(); return null; }
     var route = parseHash();
     if (route.name === '#/home') return 'exit';
+    if (route.name === '#/study' && route.extra) {
+      go(S.session && !S.session.finished ? '#/run' : '#/study');
+      return null;
+    }
     var parent = { '#/run': '#/tests', '#/result': '#/home', '#/mistakes': '#/home',
-      '#/settings': '#/home', '#/about': '#/home' }[route.name];
+      '#/study': '#/home', '#/settings': '#/home', '#/about': '#/home' }[route.name];
     go(parent || '#/home');
     return null;
   };
@@ -1646,6 +2140,22 @@
       });
       UI.chrome();
       UI.render();
+      // Автообновление банка (настройка autoUpdate): без него новые варианты —
+      // например 2026 года — сами на устройство не приходили, а кнопкой в
+      // настройках пользовались не все. Ошибка сети просто пропускается.
+      if (S.settings.autoUpdate) {
+        B.checkUpdates(S.settings.baseUrl, C.meta.contentVersion).then(function (result) {
+          var updated = result && (result.status === 'updated' || result.status === 'ok');
+          if (updated && result.version && result.version !== C.meta.contentVersion) {
+            return C.load().then(function () {
+              // Do not replace a task/input while the student is answering it.
+              if (parseHash().name !== '#/run') UI.render();
+              CT.toast(t('update_success_fmt', result.version));
+            });
+          }
+          return null;
+        }).catch(function () { /* офлайн: работаем на встроенном банке */ });
+      }
       // экран не гасим только во время теста — см. RUN.startVariant/startSet
       return true;
     });

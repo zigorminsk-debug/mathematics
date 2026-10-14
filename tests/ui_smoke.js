@@ -82,7 +82,7 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
 
 (async () => {
   for (let i = 0; i < 80 && !window.CT.content.bank.length; i++) await sleep(50);
-  check('bank loaded into the interface', window.CT.content.bank.length === 150, String(window.CT.content.bank.length));
+  check('bank loaded into the interface', window.CT.content.bank.length === 180, String(window.CT.content.bank.length));
   check('analogous bank loaded', window.CT.content.analogous.length > 300, String(window.CT.content.analogous.length));
   check('formula sheet loaded', window.CT.content.formulas.length >= 5);
   check('bilingual error catalogue loaded', Object.keys(window.CT.content.mistakes.errors || {}).length >= 50);
@@ -105,9 +105,10 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   window.location.hash = '#/tests';
   await sleep(80);
   check('variant list rendered', /Вариант 2024/.test(text()), text().slice(0, 80));
+  check('variant 2026 is offered', /Вариант 2026/.test(text()), text().slice(0, 120));
   const cardFor = (year) => Array.from(doc.querySelectorAll('.card'))
     .find((card) => card.querySelector('h3') && card.querySelector('h3').textContent.indexOf(String(year)) >= 0);
-  const card2024 = cardFor(2024);
+  const card2024 = cardFor(2026);
   check('each year has its card with exam and train buttons', !!card2024 && !!card2024.querySelector('button'));
   const trainBtn = Array.from(card2024.querySelectorAll('button')).find((b) => b.textContent.trim() === 'Тренировка');
   click(trainBtn);
@@ -135,8 +136,30 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   await sleep(80);
   check('wrong answer is reported', /Пока неверно/.test(bodyText()), bodyText().slice(0, 120));
   check('mistake breakdown shown', /Типичная причина|Правильное решение|Верный ответ/.test(bodyText()));
+  // при неверном ответе открывается тема, к которой относится задание
+  const studyBlock = doc.querySelector('.study-topic');
+  check('wrong answer opens the topic to study', !!studyBlock && /Изучить тему/.test(studyBlock.textContent)
+    && studyBlock.getAttribute('data-topic') === task.topic,
+    studyBlock ? studyBlock.textContent.slice(0, 80) : 'no .study-topic');
+  check('the opened topic shows its formulas', !!studyBlock && studyBlock.querySelectorAll('.formula-row').length >= 1,
+    studyBlock ? String(studyBlock.querySelectorAll('.formula-row').length) : '0');
   check('analogous task offered', doc.querySelectorAll('.analogous-item').length >= 1,
     String(doc.querySelectorAll('.analogous-item').length));
+
+  const savedRunId = window.CT.store.session.id;
+  const savedAnswer = window.CT.store.session.answers[task.id];
+  click(Array.from(studyBlock.querySelectorAll('button')).find((b) => b.textContent === 'Открыть тему'));
+  await sleep(50);
+  check('the study link opens the full topic', window.location.hash === '#/study/' + task.topic);
+  click(doc.getElementById('lang-toggle'));
+  await sleep(20);
+  check('study notes switch to English', /What to revise/.test(text()));
+  click(doc.getElementById('lang-toggle'));
+  await sleep(20);
+  click(buttonWith('Вернуться к заданию'));
+  await sleep(50);
+  check('return from studying preserves the run and answer', window.CT.store.session.id === savedRunId
+    && window.CT.store.session.answers[task.id] === savedAnswer && window.location.hash === '#/run');
 
   const analog = doc.querySelector('.analogous-item');
   if (analog) {
@@ -144,9 +167,15 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
     check('the analogous task comes from the bank', !!known);
     if (known) {
       const input = analog.querySelector('.answer-input');
-      input.value = known.answer.ru;
       const button = Array.from(analog.querySelectorAll('button')).find((b) => b.textContent === 'Проверить');
+      input.value = 'incorrect';
       click(button);
+      const analogStudy = analog.querySelector('.study-topic');
+      check('a wrong analogous answer also opens its study topic', !!analogStudy
+        && analogStudy.getAttribute('data-topic') === known.topic && !analogStudy.parentElement.classList.contains('hidden'));
+      input.value = known.answer.ru;
+      click(button);
+      check('a correct analogous answer closes automatic remediation', analogStudy.parentElement.classList.contains('hidden'));
       await sleep(40);
       check('the analogous task accepts the stored answer', /Верно/.test(analog.textContent), analog.textContent.slice(0, 80));
     }
@@ -207,8 +236,8 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   const attempt = progress.attempts[0];
   check('attempt holds 30 graded results', attempt.results.length === 30);
   // 1 задание решено в тренировке + 30 в экзамене
-  // 30 заданий экзамена + 1 неверный ответ в тренировке + 1 верный аналог
-  check('statistics counters updated', progress.tasksDone === 32 && Object.keys(progress.byTopic).length > 4,
+  // 30 экзаменационных + 1 неверный ответ в тренировке + 2 проверки аналога
+  check('statistics counters updated', progress.tasksDone === 33 && Object.keys(progress.byTopic).length > 4,
     'tasksDone=' + progress.tasksDone);
   check('daily activity matches the solved tasks',
     Object.values(progress.daily).reduce((a, b) => a + b, 0) === progress.tasksDone,
@@ -257,6 +286,14 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   window.location.hash = '#/practice/planimetry';
   await sleep(120);
   check('topic practice renders a task', !!doc.querySelector('.answer-input') || !!doc.querySelector('.option'));
+
+  // ---- изучение темы -------------------------------------------------------
+  window.location.hash = '#/study/planimetry';
+  await sleep(100);
+  check('study screen opens the topic', /Изучить тему/.test(text()) && doc.querySelectorAll('.formula-group').length >= 1,
+    text().slice(0, 120));
+  check('study screen has worked examples', doc.querySelectorAll('.study-example').length >= 1,
+    String(doc.querySelectorAll('.study-example').length));
 
   window.location.hash = '#/settings';
   await sleep(80);

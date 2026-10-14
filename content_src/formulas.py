@@ -9,6 +9,8 @@ Formula reference book shown by the "formula sheet" tool of both applications.
 
 from __future__ import annotations
 
+from theory import FORMULA_LESSONS
+
 GROUPS = [
     {
         "id": "powers",
@@ -21,8 +23,8 @@ GROUPS = [
             {"ru": "Дробный показатель", "en": "Fractional exponent", "f": "a^(1/n) = ⁿ√a,  a^(m/n) = ⁿ√(aᵐ)"},
             {"ru": "Корень из произведения", "en": "Root of a product", "f": "√(a·b) = √a · √b  (a, b ≥ 0)"},
             {"ru": "Корень из частного", "en": "Root of a quotient", "f": "√(a : b) = √a : √b  (a ≥ 0, b > 0)"},
-            {"ru": "Квадрат корня", "en": "Square of a root", "f": "(√a)² = a = √(a²) = |a|"},
-            {"ru": "Вынесение множителя", "en": "Extracting a factor", "f": "√(a²b) = |a|·√b"},
+            {"ru": "Квадрат корня", "en": "Square of a root", "f": "(√a)² = a (a ≥ 0);  √(a²) = |a|"},
+            {"ru": "Вынесение множителя", "en": "Extracting a factor", "f": "√(a²b) = |a|·√b (b ≥ 0)"},
             {"ru": "Модуль", "en": "Absolute value", "f": "|x| = x при x ≥ 0;  |x| = −x при x < 0"},
             {"ru": "Свойства модуля", "en": "Properties of |x|", "f": "|a·b| = |a|·|b|,  |a + b| ≤ |a| + |b|"},
         ],
@@ -53,7 +55,7 @@ GROUPS = [
             {"ru": "Разложение на множители", "en": "Factored form", "f": "ax² + bx + c = a(x − x₁)(x − x₂)"},
             {"ru": "Вершина параболы", "en": "Vertex of a parabola", "f": "x₀ = −b/(2a),  y₀ = c − b²/(4a)"},
             {"ru": "Знаки D", "en": "Signs of the discriminant", "f": "D > 0 — два корня, D = 0 — один, D < 0 — нет"},
-            {"ru": "Формула для корня при D > 0", "en": "Simplified root formula", "f": "x = (2c) : (−b ∓ √D)"},
+            {"ru": "Формула для корня при D > 0", "en": "Simplified root formula", "f": "x = (2c) : (−b ∓ √D) (знаменатель ≠ 0 / denominator ≠ 0)"},
         ],
     },
     {
@@ -77,7 +79,7 @@ GROUPS = [
         "en": "Trigonometry",
         "items": [
             {"ru": "Основное тождество", "en": "Pythagorean identity", "f": "sin²α + cos²α = 1"},
-            {"ru": "Тангенс и котангенс", "en": "Tangent and cotangent", "f": "tg α = sin α / cos α,  ctg α = 1 / tg α"},
+            {"ru": "Тангенс и котангенс", "en": "Tangent and cotangent", "f": "tg α = sin α / cos α,  ctg α = cos α / sin α"},
             {"ru": "Формула сложения", "en": "Addition formulas", "f": "sin(α ± β) = sin α cos β ± cos α sin β;  cos(α ± β) = cos α cos β ∓ sin α sin β"},
             {"ru": "Двойной угол", "en": "Double angle", "f": "sin 2α = 2 sin α cos α;  cos 2α = cos²α − sin²α"},
             {"ru": "Понижение степени", "en": "Reduction of powers", "f": "sin²α = (1 − cos 2α)/2;  cos²α = (1 + cos 2α)/2"},
@@ -136,7 +138,7 @@ GROUPS = [
             {"ru": "Ромб", "en": "Rhombus", "f": "S = d₁·d₂/2 = a²·sin α"},
             {"ru": "Круг и окружность", "en": "Circle", "f": "S = πR²,  C = 2πR,  длина дуги l = πR·α°/180°"},
             {"ru": "Вписанный угол", "en": "Inscribed angle", "f": "вписанный угол равен половине центрального, опирающегося на ту же дугу"},
-            {"ru": "Касательная и хорда", "en": "Tangent and chord", "f": "квадрат касательной = произведение секущей на её внешнюю часть"},
+            {"ru": "Касательная и секущая", "en": "Tangent and secant", "f": "квадрат касательной = произведение секущей на её внешнюю часть"},
             {"ru": "Подобие", "en": "Similarity", "f": "площади относятся как квадрат коэффициента подобия: S₂/S₁ = k²"},
         ],
     },
@@ -145,7 +147,7 @@ GROUPS = [
         "ru": "Стереометрия",
         "en": "Solid geometry",
         "items": [
-            {"ru": "Призма", "en": "Prism", "f": "V = Sосн · h,  Sбок = Pосн · h"},
+            {"ru": "Призма", "en": "Prism", "f": "V = Sосн · h;  Sбок = Pосн · h (для прямой призмы / right prism)"},
             {"ru": "Пирамида", "en": "Pyramid", "f": "V = Sосн · h / 3"},
             {"ru": "Цилиндр", "en": "Cylinder", "f": "V = πR²h,  Sбок = 2πRh"},
             {"ru": "Конус", "en": "Cone", "f": "V = πR²h/3,  Sбок = πRl,  l = √(R² + h²)"},
@@ -171,6 +173,46 @@ GROUPS = [
         ],
     },
     {
+        "id": "inequalities",
+        "ru": "Неравенства и метод интервалов",
+        "en": "Inequalities and the interval method",
+        "items": [
+            {"ru": "Смена знака", "en": "Sign change", "f": "при умножении или делении на отрицательное число знак неравенства меняется на противоположный"},
+            {"ru": "Метод интервалов", "en": "Interval method", "f": "корни на числовую прямую → знак на каждом интервале → ответ с учётом строгости"},
+            {"ru": "Квадратное неравенство", "en": "Quadratic inequality", "f": "при a ≠ 0, D > 0: знак трёхчлена совпадает со знаком a вне корней и противоположен между корнями"},
+            {"ru": "Модуль: |x| < a", "en": "Absolute value: |x| < a", "f": "|x| < a ⇔ −a < x < a (при a > 0)"},
+            {"ru": "Модуль: |x| > a", "en": "Absolute value: |x| > a", "f": "|x| > a ⇔ x < −a или x > a (при a > 0)"},
+            {"ru": "Дробное неравенство", "en": "Fractional inequality", "f": "знак дроби = знак произведения числителя и знаменателя; нули знаменателя всегда выколоты"},
+        ],
+    },
+    {
+        "id": "functions",
+        "ru": "Функции и графики",
+        "en": "Functions and graphs",
+        "items": [
+            {"ru": "Область определения", "en": "Domain", "f": "знаменатель ≠ 0; под корнем чётной степени ≥ 0; под логарифмом > 0"},
+            {"ru": "Область значений", "en": "Range", "f": "−1 ≤ sin x ≤ 1 и −1 ≤ cos x ≤ 1; у a·f(x) + b границы умножаются на a и сдвигаются на b"},
+            {"ru": "Чётность", "en": "Parity", "f": "чётная: f(−x) = f(x) (график симметричен оси Oy); нечётная: f(−x) = −f(x)"},
+            {"ru": "Сдвиг графика", "en": "Shifting a graph", "f": "y = f(x − a) — вправо на a; y = f(x) + b — вверх на b"},
+            {"ru": "Растяжение графика", "en": "Stretching a graph", "f": "y = k·f(x) — растяжение от оси Ox в k раз; y = f(kx) — сжатие к оси Oy в k раз"},
+            {"ru": "Линейная функция", "en": "Linear function", "f": "y = kx + b: k — угловой коэффициент, b — точка пересечения с осью Oy"},
+            {"ru": "Обратная пропорциональность", "en": "Inverse proportion", "f": "y = k/x — гипербола, x ≠ 0"},
+        ],
+    },
+    {
+        "id": "vectors",
+        "ru": "Векторы и координаты",
+        "en": "Vectors and coordinates",
+        "items": [
+            {"ru": "Координаты вектора", "en": "Vector coordinates", "f": "AB→ = (x₂ − x₁; y₂ − y₁)"},
+            {"ru": "Длина вектора", "en": "Length of a vector", "f": "|a| = √(x² + y²)"},
+            {"ru": "Скалярное произведение", "en": "Dot product", "f": "a·b = x₁x₂ + y₁y₂ = |a|·|b|·cos φ"},
+            {"ru": "Перпендикулярность", "en": "Perpendicularity", "f": "a ⊥ b ⇔ x₁x₂ + y₁y₂ = 0 (a, b ≠ 0)"},
+            {"ru": "Середина отрезка", "en": "Midpoint", "f": "M((x₁ + x₂)/2; (y₁ + y₂)/2)"},
+            {"ru": "Расстояние между точками", "en": "Distance between points", "f": "d = √((x₂ − x₁)² + (y₂ − y₁)²)"},
+        ],
+    },
+    {
         "id": "numbers",
         "ru": "Числа и делимость",
         "en": "Numbers and divisibility",
@@ -179,7 +221,7 @@ GROUPS = [
             {"ru": "Признак делимости на 4", "en": "Divisible by 4", "f": "две последние цифры образуют число, кратное 4"},
             {"ru": "Признак делимости на 11", "en": "Divisible by 11", "f": "разность сумм цифр на чётных и нечётных местах кратна 11"},
             {"ru": "НОД и НОК", "en": "GCD and LCM", "f": "НОК(a, b) = a·b : НОД(a, b)"},
-            {"ru": "Деление с остатком", "en": "Division with remainder", "f": "a = b·q + r,  0 ≤ r < b"},
+            {"ru": "Деление с остатком", "en": "Division with remainder", "f": "a = b·q + r,  0 ≤ r < b (a, b, q, r ∈ Z; b > 0)"},
             {"ru": "Простые числа до 50", "en": "Primes below 50", "f": "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47"},
             {"ru": "Оценка корня", "en": "Estimating a root", "f": "√a между соседними целыми: n ≤ √a < n + 1 ⇔ n² ≤ a < (n + 1)²"},
         ],
@@ -196,11 +238,16 @@ def groups() -> dict:
     """
     exported = []
     for group in GROUPS:
+        lesson_ids = FORMULA_LESSONS.get(group["id"], [])
+        if len(lesson_ids) != len(group["items"]):
+            raise ValueError(f"formula group {group['id']} needs one theory link per row")
         items = [
-            {"name": {"ru": item["ru"], "en": item["en"]}, "formula": item["f"]}
-            for item in group["items"]
+            {"name": {"ru": item["ru"], "en": item["en"]}, "formula": item["f"],
+             "lesson": lesson_id}
+            for item, lesson_id in zip(group["items"], lesson_ids)
         ]
-        exported.append({"id": group["id"], "ru": group["ru"], "en": group["en"], "items": items})
+        exported.append({"id": group["id"], "ru": group["ru"], "en": group["en"],
+                         "items": items, "lessons": list(dict.fromkeys(lesson_ids))})
     total = sum(len(group["items"]) for group in exported)
     return {"groups": exported, "counts": {"groups": len(exported), "items": total}}
 
