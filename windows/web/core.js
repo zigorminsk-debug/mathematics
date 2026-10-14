@@ -596,7 +596,7 @@
   var C = CT.content = {
     bank: [], analogous: [], formulas: [], mistakes: { errors: {}, checklist: [] },
     topics: {}, order: [], counts: {}, byYear: {}, tools: {}, meta: {}, vectors: [],
-    study: {},
+    study: {}, lessons: {},
     loaded: false,
 
     load: function () {
@@ -613,6 +613,7 @@
         self.tools = topics.tools || {};
         self.byYear = topics.byYear || {};
         self.study = topics.study || {};
+        self.lessons = topics.lessons || {};
         self.formulas = (data[3] && data[3].groups) || [];
         I.strings = (data[4] && data[4].strings) || {};
         self.mistakes = data[5] || { errors: {}, checklist: [] };
@@ -649,6 +650,17 @@
 
     /** Конспект темы («что изучить»), который открывается при неверном ответе. */
     studyFor: function (topic) { return this.study[topic] || null; },
+    lessonById: function (id) { return this.lessons[id] || null; },
+
+    /** Detailed explanations for a formula section, in its authoring order. */
+    lessonsForGroup: function (group) {
+      var self = this, seen = {};
+      return (group.lessons || []).map(function (id) {
+        if (seen[id]) return null;
+        seen[id] = true;
+        return self.lessonById(id);
+      }).filter(Boolean);
+    },
 
     /** Разделы сборника формул, относящиеся к теме задания. */
     formulaGroupsFor: function (topic) {

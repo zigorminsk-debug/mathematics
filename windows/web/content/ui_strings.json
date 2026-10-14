@@ -292,6 +292,14 @@
    "ru": "Показать подсказки (%s)",
    "en": "Show hints (%s)"
   },
+  "nav_home": {
+   "ru": "Главная",
+   "en": "Home"
+  },
+  "nav_about": {
+   "ru": "О программе",
+   "en": "About"
+  },
   "nav_exam": {
    "ru": "Экзамен",
    "en": "Exam"
@@ -513,12 +521,28 @@
    "en": "Pick a topic: a short summary, formulas and worked examples. The topic also opens automatically after a wrong answer."
   },
   "study_intro": {
-   "ru": "Краткий конспект и формулы темы, затем — разобранные примеры. После изучения закрепите тему тренировкой.",
-   "en": "A short summary and the formulas of the topic, followed by worked examples. Afterwards consolidate the topic with practice."
+   "ru": "Нажмите пункт конспекта, название раздела или формулу: откроются определения, правила, теоремы и примеры. После изучения закрепите тему тренировкой.",
+   "en": "Tap a summary point, section title or formula to open definitions, rules, theorems and examples. Afterwards consolidate the topic with practice."
   },
   "study_open": {
    "ru": "Открыть тему",
    "en": "Open the topic"
+  },
+  "theory_open": {
+   "ru": "Открыть определения и теоремы",
+   "en": "Open definitions and theorems"
+  },
+  "theory_definitions": {
+   "ru": "Определения",
+   "en": "Definitions"
+  },
+  "theory_rules": {
+   "ru": "Правила и теоремы",
+   "en": "Rules and theorems"
+  },
+  "theory_examples": {
+   "ru": "Пример применения",
+   "en": "Worked example"
   },
   "study_points": {
    "ru": "Что повторить",
@@ -694,7 +718,7 @@
   }
  },
  "meta": {
-  "contentVersion": "2026.10.3",
+  "contentVersion": "2026.10.4",
   "schema": 1,
   "years": [
    2021,

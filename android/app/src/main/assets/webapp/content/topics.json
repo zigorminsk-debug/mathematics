@@ -157,6 +157,11 @@
     "Order of operations: brackets → powers → multiplication and division → addition and subtraction.",
     "Give fractions a common denominator; replace division by multiplication by the reciprocal.",
     "Rewrite a decimal as a fraction (0.125 = 1/8) and sanity-check the size of the result."
+   ],
+   "lessons": [
+    "order",
+    "fractions",
+    "decimals"
    ]
   },
   "expressions": {
@@ -173,6 +178,11 @@
     "Power rules: exponents add when multiplying and multiply when raising a power to a power.",
     "Apply the identities as a whole; do not drop the middle term 2ab.",
     "Only common factors may be cancelled, after factoring — never individual terms."
+   ],
+   "lessons": [
+    "powers",
+    "identities",
+    "factoring"
    ]
   },
   "equations": {
@@ -189,6 +199,11 @@
     "A term moved across the equals sign changes its sign; solve proportions by cross-multiplying.",
     "Quadratic equations: the discriminant and the root formula; Vieta's theorem for monic ones.",
     "After solving, check the domain and discard extraneous roots by substitution."
+   ],
+   "lessons": [
+    "linear-equations",
+    "quadratic",
+    "equation-domain"
    ]
   },
   "inequalities": {
@@ -205,6 +220,11 @@
     "Multiplying or dividing by a negative number reverses the inequality sign.",
     "Interval method: roots on the number line, the sign on each interval, strict points are open.",
     "For a quadratic inequality use the roots of the trinomial and the direction of the branches."
+   ],
+   "lessons": [
+    "linear-inequalities",
+    "intervals",
+    "quadratic-inequalities"
    ]
   },
   "functions": {
@@ -221,6 +241,11 @@
     "Domain: the denominator must not vanish; an even root needs a non-negative radicand.",
     "The range of y = a + b·sin x (or cos x) comes from −1 ≤ sin x ≤ 1, keeping track of sign flips.",
     "Graph transformations: shifts, stretches and reflections in the axes."
+   ],
+   "lessons": [
+    "function-domain-range",
+    "function-domain-range",
+    "graph-transformations"
    ]
   },
   "progressions": {
@@ -236,6 +261,11 @@
     "Arithmetic: aₙ = a₁ + (n − 1)d — there are n − 1 steps between the first and n-th terms.",
     "Geometric: bₙ = b₁·qⁿ⁻¹; b₃/b₁ gives q², and the sign of q follows from the statement.",
     "Sums: Sₙ = (a₁ + aₙ)·n/2 (arithmetic) and b₁(qⁿ − 1)/(q − 1) (geometric)."
+   ],
+   "lessons": [
+    "arithmetic-progression",
+    "geometric-progression",
+    "progression-sums"
    ]
   },
   "wordproblems": {
@@ -252,6 +282,11 @@
     "Let x be the unknown and write down what is equal in the two situations (distance, work, cost).",
     "Motion: s = vt; speeds add when moving towards each other, and downstream the current is added.",
     "Percentages refer to the current value: a p% reduction multiplies by (1 − p/100), and the next percentage applies to the new price."
+   ],
+   "lessons": [
+    "modeling",
+    "motion-work",
+    "percentages"
    ]
   },
   "trig": {
@@ -267,6 +302,11 @@
     "The Pythagorean identity sin²α + cos²α = 1 links the sine and cosine of one angle.",
     "Fix the sign from the quadrant and the value from the table angles 30°, 45°, 60°.",
     "Double-angle formulas: sin 2α = 2sin α·cos α, cos 2α = cos²α − sin²α = 1 − 2sin²α."
+   ],
+   "lessons": [
+    "trig-identities",
+    "trig-values",
+    "trig-formulas"
    ]
   },
   "trigequations": {
@@ -282,6 +322,11 @@
     "First reduce the equation to a basic form sin x = a, cos x = a or tg x = a.",
     "Write the general series of roots, and only then select the roots on the given interval or the smallest positive one.",
     "Do not lose the second series: sin x = a gives x = (−1)ⁿ arcsin a + πn."
+   ],
+   "lessons": [
+    "trig-equations",
+    "trig-selection",
+    "trig-equations"
    ]
   },
   "logexp": {
@@ -297,6 +342,11 @@
     "Definition: log_a b = c ⇔ aᶜ = b (a > 0, a ≠ 1, b > 0); hence a^(log_a b) = b.",
     "Properties: the logarithm of a product is a sum, and an exponent comes out as a factor.",
     "For an exponential equation use one common base and equate the exponents; for a logarithmic one check the domain."
+   ],
+   "lessons": [
+    "log-definition",
+    "log-properties",
+    "exponential-equations"
    ]
   },
   "planimetry": {
@@ -312,6 +362,11 @@
     "Start from a drawing and the known elements: sides, angles, heights, diagonals.",
     "Right triangle: the Pythagorean theorem; the median to the hypotenuse equals half of it.",
     "Areas: triangle a·h/2, trapezoid (a + b)·h/2, rhombus d₁·d₂/2; the laws of sines and cosines link sides and angles."
+   ],
+   "lessons": [
+    "plane-figures",
+    "right-triangle",
+    "plane-areas"
    ]
   },
   "stereometry": {
@@ -327,6 +382,11 @@
     "Volumes of prisms and cylinders are base area times height: V = S·h.",
     "Pyramids and cones carry a factor 1/3: V = S·h/3, V = πR²h/3.",
     "If the coefficient at π is requested, factor π out and do not substitute 3.14."
+   ],
+   "lessons": [
+    "prism-cylinder",
+    "pyramid-cone",
+    "pyramid-cone"
    ]
   },
   "derivative": {
@@ -342,6 +402,11 @@
     "Derivative table: (xⁿ)′ = n·xⁿ⁻¹, (sin x)′ = cos x, (cos x)′ = −sin x.",
     "Composite functions: differentiate the outer function, then multiply by the derivative of the inner one.",
     "Differentiate first and only then substitute x₀ into f′, not into f."
+   ],
+   "lessons": [
+    "derivative-table",
+    "chain-rule",
+    "derivative-point"
    ]
   },
   "research": {
@@ -350,14 +415,19 @@
     "functions"
    ],
    "ru": [
-    "Критические точки — нули производной; вид экстремума определяет смена знака f′.",
+    "Критические точки — внутренние точки, где производная равна нулю или не существует; вид экстремума определяет смена знака f′.",
     "Через точку, где f′ меняет знак с − на +, — минимум, с + на − — максимум.",
     "На отрезке наибольшее и наименьшее значения ищем и в критических точках, и на концах."
    ],
    "en": [
-    "Critical points are the zeros of the derivative; the type of extremum follows from the sign change of f′.",
+    "Critical points are interior points where the derivative is zero or does not exist; the type of extremum follows from the sign change of f′.",
     "A sign change − → + gives a minimum, + → − gives a maximum.",
     "On a segment, check both the critical points and the endpoints for the largest and smallest values."
+   ],
+   "lessons": [
+    "extrema",
+    "extrema",
+    "segment-extrema"
    ]
   },
   "combinatorics": {
@@ -373,6 +443,11 @@
     "If the order matters use arrangements or permutations; if not, combinations Cₙᵏ = n!/(k!(n − k)!).",
     "Classical probability P = m/n: favourable outcomes over all equally likely outcomes.",
     "Cancel factorials and combinations before computing: C(n,2) = n(n − 1)/2."
+   ],
+   "lessons": [
+    "counting",
+    "probability",
+    "factorials"
    ]
   },
   "vectors": {
@@ -389,6 +464,11 @@
     "Vector coordinates are the end minus the start; the length is the root of the sum of squared coordinates.",
     "Dot product: a·b = x₁x₂ + y₁y₂ = |a||b|cos φ; perpendicularity ⇔ a·b = 0.",
     "The midpoint is the half-sum of the endpoint coordinates; collinearity means proportional coordinates."
+   ],
+   "lessons": [
+    "vector-coordinates",
+    "dot-product",
+    "midpoint-collinearity"
    ]
   },
   "param": {
@@ -405,6 +485,11 @@
     "Translate the condition on the number of roots into a condition on the discriminant: D > 0, D = 0 or D < 0.",
     "Tangency of a line and a parabola is also D = 0 for the equation obtained by equating them.",
     "From several parameter values pick the one the statement asks for (largest, smallest, integer)."
+   ],
+   "lessons": [
+    "parameters",
+    "parameter-tangency",
+    "parameters"
    ]
   },
   "logic": {
@@ -421,6 +506,2609 @@
     "Look for the rule: differences of consecutive terms, an n-th term formula, or a cycle of residues.",
     "Residues of powers repeat in cycles — what matters is the exponent modulo the cycle length.",
     "Check the rule you found against every given term, not just the first two."
+   ],
+   "lessons": [
+    "sequences",
+    "modular-cycles",
+    "sequences"
+   ]
+  }
+ },
+ "lessons": {
+  "order": {
+   "id": "order",
+   "title": {
+    "ru": "Порядок действий и скобки",
+    "en": "Order of operations and brackets"
+   },
+   "definitions": {
+    "ru": [
+     "Числовое выражение — запись из чисел, знаков действий и скобок. Его значение получается после выполнения всех допустимых действий."
+    ],
+    "en": [
+     "A numerical expression consists of numbers, operations and brackets. Its value is obtained by carrying out all permitted operations."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Сначала выполняют действия в скобках, начиная с внутренних. Затем — степени и корни, умножение и деление, сложение и вычитание.",
+     "Действия одной ступени выполняют слева направо: 18 : 3 · 2 = 12, а не 3. Знак минус перед степенью не заменяет скобки: −3² = −9, но (−3)² = 9."
+    ],
+    "en": [
+     "Evaluate brackets first, starting with the innermost ones. Then evaluate powers and roots, multiplication and division, addition and subtraction.",
+     "Operations of equal precedence are evaluated from left to right: 18 / 3 × 2 = 12, not 3. A minus sign before a power is not a bracket: −3² = −9, whereas (−3)² = 9."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Вычислите 24 : (2 + 4) · 3 − 2².",
+      "en": "Evaluate 24 / (2 + 4) × 3 − 2²."
+     },
+     "steps": {
+      "ru": [
+       "Скобки: 2 + 4 = 6. Степень: 2² = 4.",
+       "Деление и умножение слева направо: 24 : 6 · 3 = 4 · 3 = 12.",
+       "Вычитаем: 12 − 4 = 8."
+      ],
+      "en": [
+       "Brackets: 2 + 4 = 6. Power: 2² = 4.",
+       "Division and multiplication from left to right: 24 / 6 × 3 = 4 × 3 = 12.",
+       "Subtract: 12 − 4 = 8."
+      ]
+     }
+    }
+   ]
+  },
+  "fractions": {
+   "id": "fractions",
+   "title": {
+    "ru": "Обыкновенные дроби",
+    "en": "Fractions"
+   },
+   "definitions": {
+    "ru": [
+     "Дробь a/b обозначает частное a и b; b ≠ 0. Число a — числитель, b — знаменатель. Обратная дробь к a/b — b/a при a ≠ 0."
+    ],
+    "en": [
+     "The fraction a/b is the quotient of a and b, with b ≠ 0. Here a is the numerator and b the denominator. Its reciprocal is b/a when a ≠ 0."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Основное свойство дроби: a/b = (ak)/(bk) при b ≠ 0 и k ≠ 0. Поэтому дробь можно расширять и сокращать на общий ненулевой множитель.",
+     "Для сложения нужен общий знаменатель: a/b + c/d = (ad + bc)/(bd). При умножении перемножают числители и знаменатели; при делении умножают на обратную дробь (делитель не равен нулю)."
+    ],
+    "en": [
+     "The fundamental property is a/b = (ak)/(bk) for b ≠ 0 and k ≠ 0. A fraction may therefore be expanded or reduced by a common non-zero factor.",
+     "Addition requires a common denominator: a/b + c/d = (ad + bc)/(bd). Multiply numerators and denominators for a product; divide by multiplying by the reciprocal of a non-zero divisor."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Вычислите 1/6 + 3/4 и (5/6) : (2/3).",
+      "en": "Evaluate 1/6 + 3/4 and (5/6) / (2/3)."
+     },
+     "steps": {
+      "ru": [
+       "Общий знаменатель 6 и 4 — 12: 1/6 = 2/12, 3/4 = 9/12.",
+       "Сумма равна 11/12.",
+       "Деление: (5/6) · (3/2) = 15/12 = 5/4."
+      ],
+      "en": [
+       "A common denominator of 6 and 4 is 12: 1/6 = 2/12, 3/4 = 9/12.",
+       "The sum is 11/12.",
+       "Division: (5/6) × (3/2) = 15/12 = 5/4."
+      ]
+     }
+    }
+   ]
+  },
+  "decimals": {
+   "id": "decimals",
+   "title": {
+    "ru": "Десятичные дроби и оценка результата",
+    "en": "Decimals and estimating a result"
+   },
+   "definitions": {
+    "ru": [
+     "Конечная десятичная дробь с k знаками после запятой — дробь со знаменателем 10ᵏ. Округление заменяет число близким числом с заданной точностью."
+    ],
+    "en": [
+     "A terminating decimal with k decimal places is a fraction with denominator 10ᵏ. Rounding replaces a number by a nearby number of specified precision."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Чтобы получить обыкновенную дробь, уберите запятую из числителя, запишите знаменатель 10ᵏ и сократите: 0,125 = 125/1000 = 1/8.",
+     "При округлении смотрят на первый отброшенный разряд: 0–4 — оставляют, 5–9 — увеличивают сохраняемый разряд на один. До окончательного ответа лучше считать точно.",
+     "Оценка порядка величины помогает заметить ошибку в запятой: умножение положительного числа на число от 0 до 1 уменьшает результат."
+    ],
+    "en": [
+     "To obtain a fraction, remove the decimal point in the numerator, use denominator 10ᵏ and reduce: 0.125 = 125/1000 = 1/8.",
+     "For rounding, inspect the first discarded digit: 0–4 leaves the retained digit unchanged, 5–9 increases it by one. Keep exact values until the final answer.",
+     "A size estimate helps detect a misplaced decimal point: multiplying a positive number by a number between 0 and 1 makes it smaller."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Вычислите 0,125 · 2,4 без округления.",
+      "en": "Evaluate 0.125 × 2.4 without rounding."
+     },
+     "steps": {
+      "ru": [
+       "Запишем 0,125 = 1/8 и 2,4 = 12/5.",
+       "Произведение: 12/40 = 3/10 = 0,3.",
+       "Проверка: восьмая часть числа 2,4 действительно равна 0,3."
+      ],
+      "en": [
+       "Write 0.125 = 1/8 and 2.4 = 12/5.",
+       "The product is 12/40 = 3/10 = 0.3.",
+       "Check: one eighth of 2.4 is indeed 0.3."
+      ]
+     }
+    }
+   ]
+  },
+  "divisibility": {
+   "id": "divisibility",
+   "title": {
+    "ru": "Делимость, простые числа, НОД и НОК",
+    "en": "Divisibility, primes, GCD and LCM"
+   },
+   "definitions": {
+    "ru": [
+     "Целое a делится на ненулевое целое b, если a = bq для некоторого целого q. Простое число — натуральное число больше 1 с ровно двумя положительными делителями: 1 и самим собой. Число 1 не простое.",
+     "НОД двух положительных целых — их наибольший общий делитель; НОК — наименьшее положительное общее кратное. При делении a на b > 0 остаток r удовлетворяет a = bq + r, 0 ≤ r < b."
+    ],
+    "en": [
+     "An integer a is divisible by a non-zero integer b if a = bq for an integer q. A prime is a natural number greater than 1 with exactly two positive divisors: 1 and itself. The number 1 is not prime.",
+     "The GCD of two positive integers is their greatest common divisor; the LCM is their least positive common multiple. Division by b > 0 gives a = bq + r with 0 ≤ r < b."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Число делится на 3 или 9 тогда и только тогда, когда сумма его цифр делится на 3 или 9. На 4 — когда число из двух последних цифр делится на 4. На 11 — когда разность сумм цифр на чередующихся местах делится на 11 (в том числе равна нулю).",
+     "Для положительных целых a,b: НОД(a,b) · НОК(a,b) = ab. НОД находят разложением на простые множители или алгоритмом Евклида: НОД(a,b) = НОД(b,r).",
+     "Признаки делимости следуют из остатков степеней 10: 10 ≡ 1 по модулю 3 и 9, 100 делится на 4, а 10 ≡ −1 по модулю 11."
+    ],
+    "en": [
+     "A number is divisible by 3 or 9 exactly when its digit sum is. It is divisible by 4 when its last two digits form a multiple of 4, and by 11 when the alternating digit-sum difference is a multiple of 11, including zero.",
+     "For positive integers a,b: GCD(a,b) × LCM(a,b) = ab. Find the GCD using prime factors or Euclid's algorithm: GCD(a,b) = GCD(b,r).",
+     "The tests follow from powers of 10: 10 ≡ 1 modulo 3 and 9, 100 is divisible by 4, and 10 ≡ −1 modulo 11."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите НОД(18,24) и НОК(18,24).",
+      "en": "Find GCD(18,24) and LCM(18,24)."
+     },
+     "steps": {
+      "ru": [
+       "18 = 2 · 3², 24 = 2³ · 3.",
+       "Общие множители с меньшими показателями дают НОД = 2 · 3 = 6.",
+       "НОК = 18 · 24 / 6 = 72. Проверяем: 72 делится и на 18, и на 24."
+      ],
+      "en": [
+       "18 = 2 × 3², 24 = 2³ × 3.",
+       "Common factors with the smaller exponents give GCD = 2 × 3 = 6.",
+       "LCM = 18 × 24 / 6 = 72. Check: 72 is divisible by both 18 and 24."
+      ]
+     }
+    }
+   ]
+  },
+  "powers": {
+   "id": "powers",
+   "title": {
+    "ru": "Степени и их свойства",
+    "en": "Powers and their properties"
+   },
+   "definitions": {
+    "ru": [
+     "При натуральном n степень aⁿ — произведение n одинаковых множителей a. При a ≠ 0 определяют a⁰ = 1 и a⁻ⁿ = 1/aⁿ.",
+     "Дробную степень для a > 0 определяют через корень: a^(m/n) = ⁿ√(aᵐ), где m — целое, n — положительное целое."
+    ],
+    "en": [
+     "For a positive integer n, aⁿ is the product of n copies of a. For a ≠ 0 define a⁰ = 1 and a⁻ⁿ = 1/aⁿ.",
+     "For a > 0, a fractional power is defined by a^(m/n) = ⁿ√(aᵐ), where m is an integer and n a positive integer."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Для целых показателей и a ≠ 0: aᵐaⁿ = aᵐ⁺ⁿ, aᵐ/aⁿ = aᵐ⁻ⁿ, (aᵐ)ⁿ = aᵐⁿ. Для произвольных вещественных показателей эти правила используют при a > 0.",
+     "Для целого n: (ab)ⁿ = aⁿbⁿ и (a/b)ⁿ = aⁿ/bⁿ там, где обе части определены. При натуральных показателях основания могут быть нулевыми, но знаменатель не может быть нулём."
+    ],
+    "en": [
+     "For integer exponents and a ≠ 0: aᵐaⁿ = aᵐ⁺ⁿ, aᵐ/aⁿ = aᵐ⁻ⁿ, (aᵐ)ⁿ = aᵐⁿ. For arbitrary real exponents use these rules with a > 0.",
+     "For integer n: (ab)ⁿ = aⁿbⁿ and (a/b)ⁿ = aⁿ/bⁿ wherever both sides are defined. For positive integer exponents bases may be zero, but denominators cannot be zero."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Вычислите 2³ · 2⁻¹ и 27^(2/3).",
+      "en": "Evaluate 2³ × 2⁻¹ and 27^(2/3)."
+     },
+     "steps": {
+      "ru": [
+       "В произведении складываем показатели: 2^(3 − 1) = 2² = 4.",
+       "Кубический корень из 27 равен 3.",
+       "Следовательно, 27^(2/3) = 3² = 9."
+      ],
+      "en": [
+       "Add exponents in the product: 2^(3 − 1) = 2² = 4.",
+       "The cube root of 27 is 3.",
+       "Thus 27^(2/3) = 3² = 9."
+      ]
+     }
+    }
+   ]
+  },
+  "roots-absolute": {
+   "id": "roots-absolute",
+   "title": {
+    "ru": "Корни и модуль",
+    "en": "Roots and absolute value"
+   },
+   "definitions": {
+    "ru": [
+     "Арифметический квадратный корень √a при a ≥ 0 — единственное неотрицательное число, квадрат которого равен a.",
+     "Модуль |x| — расстояние от x до нуля: |x| = x при x ≥ 0 и |x| = −x при x < 0. Поэтому модуль всегда неотрицателен."
+    ],
+    "en": [
+     "The square root √a for a ≥ 0 is the unique non-negative number whose square is a.",
+     "The absolute value |x| is the distance from x to zero: |x| = x for x ≥ 0 and |x| = −x for x < 0. It is always non-negative."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "(√a)² = a при a ≥ 0, но √(a²) = |a| для любого вещественного a. Модуль нельзя убирать без проверки знака.",
+     "√(ab) = √a√b при a,b ≥ 0; √(a/b) = √a/√b при a ≥ 0, b > 0. Из √(a²b) выносится |a|√b при b ≥ 0.",
+     "|ab| = |a||b|; неравенство треугольника: |a + b| ≤ |a| + |b|. Для n ≥ 0: n ≤ √a < n + 1 равносильно n² ≤ a < (n + 1)²."
+    ],
+    "en": [
+     "(√a)² = a for a ≥ 0, but √(a²) = |a| for every real a. Do not drop the absolute value without checking the sign.",
+     "√(ab) = √a√b for a,b ≥ 0; √(a/b) = √a/√b for a ≥ 0, b > 0. Extracting a factor gives √(a²b) = |a|√b for b ≥ 0.",
+     "|ab| = |a||b|; the triangle inequality is |a + b| ≤ |a| + |b|. For n ≥ 0: n ≤ √a < n + 1 is equivalent to n² ≤ a < (n + 1)²."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Упростите √(x² · 12) при x = −2.",
+      "en": "Simplify √(x² × 12) for x = −2."
+     },
+     "steps": {
+      "ru": [
+       "√(x² · 12) = |x|√12 = 2|x|√3.",
+       "При x = −2 модуль равен 2, а не −2.",
+       "Ответ: 4√3. Он положителен, как и арифметический корень."
+      ],
+      "en": [
+       "√(x² × 12) = |x|√12 = 2|x|√3.",
+       "For x = −2 the absolute value is 2, not −2.",
+       "Answer: 4√3. It is positive, as a square root must be."
+      ]
+     }
+    }
+   ]
+  },
+  "identities": {
+   "id": "identities",
+   "title": {
+    "ru": "Формулы сокращённого умножения",
+    "en": "Algebraic identities"
+   },
+   "definitions": {
+    "ru": [
+     "Тождество — равенство, верное при всех допустимых значениях переменных. Формулы сокращённого умножения — тождества для раскрытия скобок и разложения на множители."
+    ],
+    "en": [
+     "An identity is an equality true for every permitted value of its variables. Algebraic identities expand brackets or factor expressions."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "(a ± b)² = a² ± 2ab + b²; a² − b² = (a − b)(a + b). Средний член 2ab обязателен: он возникает из ab + ba.",
+     "(a + b)³ = a³ + 3a²b + 3ab² + b³; (a − b)³ = a³ − 3a²b + 3ab² − b³.",
+     "a³ ± b³ = (a ± b)(a² ∓ ab + b²). Выделение полного квадрата при a ≠ 0: ax² + bx + c = a(x + b/(2a))² + c − b²/(4a)."
+    ],
+    "en": [
+     "(a ± b)² = a² ± 2ab + b²; a² − b² = (a − b)(a + b). The middle term 2ab is essential: it comes from ab + ba.",
+     "(a + b)³ = a³ + 3a²b + 3ab² + b³; (a − b)³ = a³ − 3a²b + 3ab² − b³.",
+     "a³ ± b³ = (a ± b)(a² ∓ ab + b²). Completing the square for a ≠ 0: ax² + bx + c = a(x + b/(2a))² + c − b²/(4a)."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Упростите (x + 3)² − (x − 3)².",
+      "en": "Simplify (x + 3)² − (x − 3)²."
+     },
+     "steps": {
+      "ru": [
+       "Применим разность квадратов к a = x + 3, b = x − 3.",
+       "Получаем ((x + 3) − (x − 3)) · ((x + 3) + (x − 3)).",
+       "Произведение 6 · 2x = 12x."
+      ],
+      "en": [
+       "Apply the difference of squares with a = x + 3, b = x − 3.",
+       "This gives ((x + 3) − (x − 3)) × ((x + 3) + (x − 3)).",
+       "The product is 6 × 2x = 12x."
+      ]
+     }
+    }
+   ]
+  },
+  "factoring": {
+   "id": "factoring",
+   "title": {
+    "ru": "Разложение на множители и сокращение",
+    "en": "Factoring and cancellation"
+   },
+   "definitions": {
+    "ru": [
+     "Множители — выражения, соединённые знаком умножения; слагаемые — части суммы. Сокращение дроби означает деление числителя и знаменателя на один ненулевой множитель."
+    ],
+    "en": [
+     "Factors are expressions joined by multiplication; terms are parts of a sum. Cancelling a fraction means dividing its numerator and denominator by the same non-zero factor."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Сначала вынесите общий множитель, примените тождество или группировку. Сокращают множители, но не отдельные слагаемые: (ab + ac)/a = b + c при a ≠ 0.",
+     "После сокращения сохраняют ограничения исходного знаменателя. Новая короткая запись не делает допустимой точку, где исходная дробь не определена."
+    ],
+    "en": [
+     "First extract a common factor, apply an identity or group terms. Cancel factors, never individual terms: (ab + ac)/a = b + c for a ≠ 0.",
+     "Keep restrictions from the original denominator after cancelling. A shorter expression does not make a point valid when the original fraction was undefined."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Упростите (x² − 9)/(x − 3).",
+      "en": "Simplify (x² − 9)/(x − 3)."
+     },
+     "steps": {
+      "ru": [
+       "Исходная область допустимых значений: x ≠ 3.",
+       "Разложим числитель: x² − 9 = (x − 3)(x + 3).",
+       "Сокращаем общий ненулевой множитель: ответ x + 3 при x ≠ 3."
+      ],
+      "en": [
+       "The original domain requires x ≠ 3.",
+       "Factor the numerator: x² − 9 = (x − 3)(x + 3).",
+       "Cancel the common non-zero factor: the answer is x + 3 for x ≠ 3."
+      ]
+     }
+    }
+   ]
+  },
+  "linear-equations": {
+   "id": "linear-equations",
+   "title": {
+    "ru": "Линейные уравнения и пропорции",
+    "en": "Linear equations and proportions"
+   },
+   "definitions": {
+    "ru": [
+     "Корень уравнения — допустимое значение неизвестного, при котором обе части равны. Равносильные уравнения имеют одинаковое множество корней."
+    ],
+    "en": [
+     "A root of an equation is a permitted value making its two sides equal. Equivalent equations have the same set of roots."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Прибавление одного выражения к обеим частям сохраняет равенство. Умножение или деление обеих частей на одно ненулевое число также сохраняет корни.",
+     "ax + b = 0: при a ≠ 0 корень x = −b/a; при a = 0, b = 0 подходит любое x, а при a = 0, b ≠ 0 корней нет.",
+     "Пропорция a/b = c/d при b,d ≠ 0 равносильна ad = bc. При переменных знаменателях ограничения сохраняют."
+    ],
+    "en": [
+     "Adding the same expression to both sides preserves equality. Multiplying or dividing both sides by the same non-zero number preserves roots too.",
+     "For ax + b = 0: if a ≠ 0 the root is x = −b/a; if a = b = 0 every x works, while a = 0, b ≠ 0 gives no roots.",
+     "The proportion a/b = c/d for b,d ≠ 0 is equivalent to ad = bc. Keep restrictions when denominators contain variables."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите 3(x − 2) = 2x + 5.",
+      "en": "Solve 3(x − 2) = 2x + 5."
+     },
+     "steps": {
+      "ru": [
+       "Раскрываем скобки: 3x − 6 = 2x + 5.",
+       "Вычитаем 2x и прибавляем 6: x = 11.",
+       "Проверка: 3 · 9 = 22 + 5 = 27."
+      ],
+      "en": [
+       "Expand: 3x − 6 = 2x + 5.",
+       "Subtract 2x and add 6: x = 11.",
+       "Check: 3 × 9 = 22 + 5 = 27."
+      ]
+     }
+    }
+   ]
+  },
+  "quadratic": {
+   "id": "quadratic",
+   "title": {
+    "ru": "Квадратное уравнение, теорема Виета и парабола",
+    "en": "Quadratics, Vieta's theorem and the parabola"
+   },
+   "definitions": {
+    "ru": [
+     "Квадратное уравнение имеет вид ax² + bx + c = 0, где a ≠ 0. Дискриминант D = b² − 4ac определяет число его вещественных корней.",
+     "График y = ax² + bx + c — парабола. Её ось симметрии проходит через вершину с абсциссой x₀ = −b/(2a)."
+    ],
+    "en": [
+     "A quadratic equation has the form ax² + bx + c = 0 with a ≠ 0. Its discriminant D = b² − 4ac determines the number of real roots.",
+     "The graph y = ax² + bx + c is a parabola. Its symmetry axis passes through the vertex at x₀ = −b/(2a)."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "При D > 0 корни x₁,₂ = (−b ± √D)/(2a); при D = 0 один корень −b/(2a); при D < 0 вещественных корней нет. Если b чётно, можно использовать D/4 = b²/4 − ac.",
+     "Теорема Виета: x₁ + x₂ = −b/a, x₁x₂ = c/a. При существующих корнях ax² + bx + c = a(x − x₁)(x − x₂).",
+     "Вершина: y₀ = c − b²/(4a). При a > 0 ветви направлены вверх, при a < 0 — вниз. Равенство x = 2c/(−b ∓ √D) применимо только при ненулевом знаменателе."
+    ],
+    "en": [
+     "For D > 0 the roots are x₁,₂ = (−b ± √D)/(2a); for D = 0 there is one root −b/(2a); for D < 0 there are no real roots. For even b one may use D/4 = b²/4 − ac.",
+     "Vieta's theorem: x₁ + x₂ = −b/a and x₁x₂ = c/a. When roots exist, ax² + bx + c = a(x − x₁)(x − x₂).",
+     "The vertex has y₀ = c − b²/(4a). The branches point up for a > 0 and down for a < 0. The alternative root form x = 2c/(−b ∓ √D) requires a non-zero denominator."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите x² − 5x + 6 = 0 и проверьте теорему Виета.",
+      "en": "Solve x² − 5x + 6 = 0 and check Vieta's theorem."
+     },
+     "steps": {
+      "ru": [
+       "D = 25 − 24 = 1.",
+       "Корни: (5 − 1)/2 = 2 и (5 + 1)/2 = 3.",
+       "Сумма 2 + 3 = 5 = −b/a, произведение 2 · 3 = 6 = c/a."
+      ],
+      "en": [
+       "D = 25 − 24 = 1.",
+       "The roots are (5 − 1)/2 = 2 and (5 + 1)/2 = 3.",
+       "The sum is 2 + 3 = 5 = −b/a; the product is 2 × 3 = 6 = c/a."
+      ]
+     }
+    }
+   ]
+  },
+  "equation-domain": {
+   "id": "equation-domain",
+   "title": {
+    "ru": "ОДЗ и посторонние корни",
+    "en": "Domain restrictions and extraneous roots"
+   },
+   "definitions": {
+    "ru": [
+     "Область допустимых значений (ОДЗ) — значения, при которых все выражения исходного уравнения определены. Посторонний корень удовлетворяет преобразованному, но не исходному уравнению."
+    ],
+    "en": [
+     "Domain restrictions are the values for which every expression in the original equation is defined. An extraneous root solves a transformed equation but not the original one."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Знаменатели не равны нулю; под корнем чётной степени выражение неотрицательно; аргумент логарифма положителен, основание положительно и не равно 1.",
+     "Возведение в квадрат может добавить корни, а деление на выражение с переменной — потерять его нули. Поэтому после таких шагов проверяют кандидатов в исходном уравнении."
+    ],
+    "en": [
+     "Denominators must be non-zero; even roots need non-negative radicands; logarithm arguments and bases must be positive, and a base cannot be 1.",
+     "Squaring may add roots, while division by an expression containing a variable may lose its zeros. Check candidates in the original equation after such steps."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите √(x + 2) = x.",
+      "en": "Solve √(x + 2) = x."
+     },
+     "steps": {
+      "ru": [
+       "ОДЗ: x ≥ −2; поскольку корень неотрицателен, дополнительно x ≥ 0.",
+       "После возведения в квадрат: x² − x − 2 = 0, кандидаты −1 и 2.",
+       "−1 не подходит: √1 ≠ −1. Для 2 получаем √4 = 2. Ответ: 2."
+      ],
+      "en": [
+       "The domain gives x ≥ −2; since a square root is non-negative, also require x ≥ 0.",
+       "Squaring gives x² − x − 2 = 0, with candidates −1 and 2.",
+       "−1 fails because √1 ≠ −1. For 2 we have √4 = 2. Answer: 2."
+      ]
+     }
+    }
+   ]
+  },
+  "linear-inequalities": {
+   "id": "linear-inequalities",
+   "title": {
+    "ru": "Линейные неравенства и модуль",
+    "en": "Linear inequalities and absolute value"
+   },
+   "definitions": {
+    "ru": [
+     "Решение неравенства — множество допустимых значений, при которых сравнение верно. Строгое неравенство (< или >) не включает точку равенства."
+    ],
+    "en": [
+     "The solution of an inequality is the set of permitted values making the comparison true. A strict inequality (< or >) excludes equality."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "При сложении с одним числом знак сохраняется. При умножении или делении на положительное число он сохраняется, на отрицательное — меняется на противоположный.",
+     "При a > 0: |x| < a ⇔ −a < x < a; |x| > a ⇔ x < −a или x > a. Для ≤ и ≥ включают границы. При a ≤ 0 случай нужно разобрать отдельно по |x| ≥ 0."
+    ],
+    "en": [
+     "Adding the same number preserves the sign. Multiplication or division by a positive number preserves it; by a negative number it reverses it.",
+     "For a > 0: |x| < a ⇔ −a < x < a; |x| > a ⇔ x < −a or x > a. Include boundaries for ≤ and ≥. For a ≤ 0 examine the case separately using |x| ≥ 0."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите −2x + 3 > 7.",
+      "en": "Solve −2x + 3 > 7."
+     },
+     "steps": {
+      "ru": [
+       "Вычитаем 3: −2x > 4.",
+       "Делим на −2 и меняем знак: x < −2.",
+       "Точка −2 не входит в ответ: (−∞; −2)."
+      ],
+      "en": [
+       "Subtract 3: −2x > 4.",
+       "Divide by −2 and reverse the sign: x < −2.",
+       "The point −2 is excluded: (−∞, −2)."
+      ]
+     }
+    }
+   ]
+  },
+  "intervals": {
+   "id": "intervals",
+   "title": {
+    "ru": "Метод интервалов для дробных неравенств",
+    "en": "The interval method for rational inequalities"
+   },
+   "definitions": {
+    "ru": [
+     "Нули числителя и знаменателя делят числовую прямую на интервалы. Между соседними такими точками знак произведения или дроби из линейных множителей постоянен."
+    ],
+    "en": [
+     "Zeros of the numerator and denominator divide the number line into intervals. Between consecutive zeros the sign of a product or quotient of linear factors is constant."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Разложите выражение на множители, отметьте все нули и определите знак на каждом интервале подстановкой пробной точки. Нули знаменателя всегда исключены.",
+     "При проходе через корень нечётной кратности знак меняется, чётной — нет. Нельзя механически чередовать знаки у повторяющихся множителей.",
+     "В нестрогом неравенстве нули числителя включают, только если исходный знаменатель там не равен нулю. Умножать на знаменатель неизвестного знака без разбора случаев нельзя."
+    ],
+    "en": [
+     "Factor the expression, mark all zeros and determine the sign on each interval using a test point. Denominator zeros are always excluded.",
+     "The sign changes across a root of odd multiplicity but not even multiplicity. Do not alternate signs blindly when factors repeat.",
+     "In a non-strict inequality include numerator zeros only where the original denominator is non-zero. Do not multiply by a denominator of unknown sign without splitting cases."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите (x − 1)/(x + 2) ≤ 0.",
+      "en": "Solve (x − 1)/(x + 2) ≤ 0."
+     },
+     "steps": {
+      "ru": [
+       "Критические для знака точки: −2 (исключена) и 1.",
+       "На интервалах (−∞; −2), (−2; 1), (1; +∞) знаки соответственно +, −, +.",
+       "Берём отрицательный интервал и допустимый нуль: (−2; 1]."
+      ],
+      "en": [
+       "The sign boundaries are −2 (excluded) and 1.",
+       "On (−∞, −2), (−2, 1), (1, +∞) the signs are respectively +, −, +.",
+       "Take the negative interval and the permitted zero: (−2, 1]."
+      ]
+     }
+    }
+   ]
+  },
+  "quadratic-inequalities": {
+   "id": "quadratic-inequalities",
+   "title": {
+    "ru": "Квадратные неравенства",
+    "en": "Quadratic inequalities"
+   },
+   "definitions": {
+    "ru": [
+     "Квадратное неравенство сравнивает трёхчлен ax² + bx + c с нулём при a ≠ 0. Его знак читают по положению параболы относительно оси Ox."
+    ],
+    "en": [
+     "A quadratic inequality compares ax² + bx + c with zero, with a ≠ 0. Its sign is read from the parabola's position relative to the x-axis."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "При D > 0 и x₁ < x₂ знак трёхчлена совпадает со знаком a вне [x₁; x₂] и противоположен между корнями. В корнях значение равно нулю.",
+     "При D = 0 выражение равно a(x − x₀)²: имеет знак a везде, кроме нуля x₀. При D < 0 оно имеет знак a на всей прямой.",
+     "Строгое неравенство исключает корни; нестрогое включает подходящие точки равенства."
+    ],
+    "en": [
+     "For D > 0 and x₁ < x₂, the sign matches a outside [x₁, x₂] and is opposite between the roots. At the roots the value is zero.",
+     "For D = 0 the expression is a(x − x₀)²: its sign is a except at the zero x₀. For D < 0 its sign is a everywhere.",
+     "Strict inequalities exclude roots; non-strict inequalities include the appropriate equality points."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите x² − 5x + 6 < 0.",
+      "en": "Solve x² − 5x + 6 < 0."
+     },
+     "steps": {
+      "ru": [
+       "Разложение: (x − 2)(x − 3). Корни 2 и 3.",
+       "a = 1 > 0, поэтому между корнями трёхчлен отрицателен.",
+       "Корни исключены: ответ (2; 3)."
+      ],
+      "en": [
+       "Factor: (x − 2)(x − 3). The roots are 2 and 3.",
+       "a = 1 > 0, so the quadratic is negative between its roots.",
+       "The roots are excluded: answer (2, 3)."
+      ]
+     }
+    }
+   ]
+  },
+  "function-domain-range": {
+   "id": "function-domain-range",
+   "title": {
+    "ru": "Функция, область определения и область значений",
+    "en": "Functions, domain and range"
+   },
+   "definitions": {
+    "ru": [
+     "Функция сопоставляет каждому x из области определения D ровно одно значение y. Область значений E — все значения y, которые функция действительно принимает."
+    ],
+    "en": [
+     "A function assigns exactly one value y to each x in its domain D. Its range E contains all values y that it actually attains."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Для области определения одновременно выполняют все ограничения: знаменатель ≠ 0, под чётным корнем ≥ 0, под логарифмом > 0; основание логарифма > 0 и ≠ 1.",
+     "Если m ≤ f(x) ≤ M, то у af(x) + b границы — min(am + b, aM + b) и max(am + b, aM + b). При a < 0 порядок границ меняется.",
+     "−1 ≤ sin x, cos x ≤ 1. При поиске области значений учитывают заданную область x: ограничение аргумента может сузить результат."
+    ],
+    "en": [
+     "For the domain impose all restrictions together: denominators ≠ 0, even-root radicands ≥ 0, logarithm arguments > 0, and logarithm bases > 0 and ≠ 1.",
+     "If m ≤ f(x) ≤ M, the bounds of af(x) + b are min(am + b, aM + b) and max(am + b, aM + b). For a < 0 their order reverses.",
+     "−1 ≤ sin x, cos x ≤ 1. When finding a range, account for any restriction on x: it may narrow the result."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите область определения и значений y = √(4 − x²).",
+      "en": "Find the domain and range of y = √(4 − x²)."
+     },
+     "steps": {
+      "ru": [
+       "4 − x² ≥ 0 ⇔ −2 ≤ x ≤ 2. Область определения [−2; 2].",
+       "Корень неотрицателен; максимум √4 = 2 достигается при x = 0.",
+       "Минимум 0 достигается при x = ±2. Область значений [0; 2]."
+      ],
+      "en": [
+       "4 − x² ≥ 0 ⇔ −2 ≤ x ≤ 2. The domain is [−2, 2].",
+       "The root is non-negative; its maximum √4 = 2 occurs at x = 0.",
+       "The minimum 0 occurs at x = ±2. The range is [0, 2]."
+      ]
+     }
+    }
+   ]
+  },
+  "graph-transformations": {
+   "id": "graph-transformations",
+   "title": {
+    "ru": "Преобразования графиков",
+    "en": "Graph transformations"
+   },
+   "definitions": {
+    "ru": [
+     "Преобразование графика строит новую функцию из известной: меняют аргумент x или значение y. Горизонтальные изменения действуют на аргумент, вертикальные — на значение функции."
+    ],
+    "en": [
+     "A graph transformation constructs a new function from a known one by changing x or y. Horizontal changes act on the argument; vertical changes act on the function value."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "y = f(x − a) сдвигает график вправо на a (при a < 0 — влево); y = f(x) + b — вверх на b (при b < 0 — вниз).",
+     "Для k > 1: y = kf(x) растягивает по вертикали в k раз, y = f(kx) сжимает по горизонтали в k раз. При 0 < k < 1 эффекты обратные.",
+     "y = −f(x) отражает относительно Ox, y = f(−x) — относительно Oy. Отрицательный коэффициент сочетает масштабирование с отражением."
+    ],
+    "en": [
+     "y = f(x − a) shifts the graph right by a (left when a < 0); y = f(x) + b shifts it up by b (down when b < 0).",
+     "For k > 1, y = kf(x) stretches vertically by k and y = f(kx) compresses horizontally by k. For 0 < k < 1 these effects are reversed.",
+     "y = −f(x) reflects in the x-axis, y = f(−x) in the y-axis. A negative scale factor combines scaling and reflection."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Опишите график y = −2(x − 3)² + 1.",
+      "en": "Describe the graph y = −2(x − 3)² + 1."
+     },
+     "steps": {
+      "ru": [
+       "Начинаем с y = x² и сдвигаем вправо на 3.",
+       "Умножение на −2 растягивает вдвое и отражает относительно Ox; затем сдвиг вверх на 1.",
+       "Вершина (3; 1), ветви вниз, область значений (−∞; 1]."
+      ],
+      "en": [
+       "Start with y = x² and shift right by 3.",
+       "Multiplication by −2 stretches vertically by 2 and reflects in the x-axis; then shift up by 1.",
+       "The vertex is (3, 1), the branches point down, and the range is (−∞, 1]."
+      ]
+     }
+    }
+   ]
+  },
+  "function-properties": {
+   "id": "function-properties",
+   "title": {
+    "ru": "Чётность, прямая и гипербола",
+    "en": "Parity, lines and hyperbolas"
+   },
+   "definitions": {
+    "ru": [
+     "Чётная функция удовлетворяет f(−x) = f(x), нечётная — f(−x) = −f(x). В обоих определениях область должна быть симметрична относительно нуля.",
+     "Линейная функция y = kx + b имеет график-прямую; k — угловой коэффициент, b — ордината пересечения с Oy. Обратная пропорциональность y = k/x при k ≠ 0 имеет график-гиперболу."
+    ],
+    "en": [
+     "An even function satisfies f(−x) = f(x); an odd one satisfies f(−x) = −f(x). In either definition the domain must be symmetric about zero.",
+     "The linear function y = kx + b has a straight-line graph; k is its slope and b its y-intercept. Inverse proportion y = k/x for k ≠ 0 has a hyperbola as its graph."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "График чётной функции симметричен относительно Oy, нечётной — относительно начала координат. Если нечётная функция определена в нуле, f(0) = 0.",
+     "Для прямой k = (y₂ − y₁)/(x₂ − x₁) при x₂ ≠ x₁. У y = k/x область определения x ≠ 0, оси являются асимптотами."
+    ],
+    "en": [
+     "An even graph is symmetric in the y-axis; an odd graph is symmetric about the origin. If an odd function is defined at zero, f(0) = 0.",
+     "For a line k = (y₂ − y₁)/(x₂ − x₁) when x₂ ≠ x₁. The domain of y = k/x excludes zero and the axes are asymptotes."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Определите чётность f(x) = x³ − x.",
+      "en": "Determine the parity of f(x) = x³ − x."
+     },
+     "steps": {
+      "ru": [
+       "Область определения — вся числовая прямая, она симметрична.",
+       "f(−x) = −x³ + x = −(x³ − x) = −f(x).",
+       "Функция нечётная, её график симметричен относительно начала координат."
+      ],
+      "en": [
+       "The domain is the entire real line, which is symmetric.",
+       "f(−x) = −x³ + x = −(x³ − x) = −f(x).",
+       "The function is odd, so its graph is symmetric about the origin."
+      ]
+     }
+    }
+   ]
+  },
+  "arithmetic-progression": {
+   "id": "arithmetic-progression",
+   "title": {
+    "ru": "Арифметическая прогрессия",
+    "en": "Arithmetic progressions"
+   },
+   "definitions": {
+    "ru": [
+     "Арифметическая прогрессия — последовательность, в которой каждый следующий член получается прибавлением одного и того же числа d: aₙ₊₁ = aₙ + d."
+    ],
+    "en": [
+     "An arithmetic progression is a sequence in which each next term is obtained by adding the same number d: aₙ₊₁ = aₙ + d."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "aₙ = a₁ + (n − 1)d, где n — положительное целое. Между первым и n-м членом ровно n − 1 переходов.",
+     "Для внутреннего члена aₙ = (aₙ₋₁ + aₙ₊₁)/2. Сумма первых n членов: Sₙ = n(a₁ + aₙ)/2."
+    ],
+    "en": [
+     "aₙ = a₁ + (n − 1)d, where n is a positive integer. There are exactly n − 1 steps from the first term to the n-th.",
+     "An interior term satisfies aₙ = (aₙ₋₁ + aₙ₊₁)/2. The sum of the first n terms is Sₙ = n(a₁ + aₙ)/2."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "В прогрессии a₁ = 4, d = 3. Найдите a₇.",
+      "en": "A progression has a₁ = 4 and d = 3. Find a₇."
+     },
+     "steps": {
+      "ru": [
+       "От первого до седьмого члена 6 переходов.",
+       "a₇ = 4 + 6 · 3 = 22.",
+       "Проверка по последовательности: 4, 7, 10, 13, 16, 19, 22."
+      ],
+      "en": [
+       "There are 6 steps from the first to the seventh term.",
+       "a₇ = 4 + 6 × 3 = 22.",
+       "Check the sequence: 4, 7, 10, 13, 16, 19, 22."
+      ]
+     }
+    }
+   ]
+  },
+  "geometric-progression": {
+   "id": "geometric-progression",
+   "title": {
+    "ru": "Геометрическая прогрессия",
+    "en": "Geometric progressions"
+   },
+   "definitions": {
+    "ru": [
+     "Геометрическая прогрессия — последовательность ненулевых чисел, у которой bₙ₊₁/bₙ = q постоянно. Число q ≠ 0 называется знаменателем прогрессии."
+    ],
+    "en": [
+     "A geometric progression is a sequence of non-zero numbers with a constant ratio bₙ₊₁/bₙ = q. This non-zero q is the common ratio."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "bₙ = b₁qⁿ⁻¹. Если известны b₁ и b₃, то q² = b₃/b₁: знак q нельзя выбирать без дополнительных условий.",
+     "При q ≠ 1 сумма Sₙ = b₁(qⁿ − 1)/(q − 1), при q = 1 сумма равна nb₁. Для |q| < 1 сумма бесконечной прогрессии равна b₁/(1 − q)."
+    ],
+    "en": [
+     "bₙ = b₁qⁿ⁻¹. Knowing b₁ and b₃ gives q² = b₃/b₁: additional conditions are needed to determine the sign of q.",
+     "For q ≠ 1, Sₙ = b₁(qⁿ − 1)/(q − 1); for q = 1 the sum is nb₁. If |q| < 1, the infinite sum is b₁/(1 − q)."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Дано b₁ = 3, b₃ = 12, все члены положительны. Найдите b₄.",
+      "en": "Given b₁ = 3 and b₃ = 12, with all terms positive, find b₄."
+     },
+     "steps": {
+      "ru": [
+       "q² = 12/3 = 4, поэтому q = 2 или −2.",
+       "Из положительности всех членов следует q = 2.",
+       "b₄ = 3 · 2³ = 24."
+      ],
+      "en": [
+       "q² = 12/3 = 4, so q is 2 or −2.",
+       "Since all terms are positive, q = 2.",
+       "b₄ = 3 × 2³ = 24."
+      ]
+     }
+    }
+   ]
+  },
+  "progression-sums": {
+   "id": "progression-sums",
+   "title": {
+    "ru": "Суммы прогрессий",
+    "en": "Sums of progressions"
+   },
+   "definitions": {
+    "ru": [
+     "Частичная сумма Sₙ — сумма первых n членов последовательности. Бесконечная сумма — предел частичных сумм, если он существует."
+    ],
+    "en": [
+     "A partial sum Sₙ is the sum of the first n terms of a sequence. An infinite sum is the limit of partial sums, if it exists."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Для арифметической прогрессии: 2Sₙ = n(a₁ + aₙ), потому что пары равноудалённых от концов членов имеют одинаковую сумму. В частности, 1 + … + n = n(n + 1)/2.",
+     "В геометрической прогрессии вычитание Sₙ из qSₙ даёт (q − 1)Sₙ = b₁(qⁿ − 1). Формула с делением на q − 1 требует q ≠ 1; при q = 1 считают nb₁.",
+     "Бесконечная геометрическая сумма b₁/(1 − q) существует при |q| < 1, так как qⁿ стремится к нулю."
+    ],
+    "en": [
+     "For an arithmetic progression, 2Sₙ = n(a₁ + aₙ), since equally spaced terms from opposite ends have the same sum. In particular, 1 + … + n = n(n + 1)/2.",
+     "For a geometric progression, subtracting Sₙ from qSₙ gives (q − 1)Sₙ = b₁(qⁿ − 1). Division by q − 1 requires q ≠ 1; for q = 1 use nb₁.",
+     "The infinite geometric sum b₁/(1 − q) exists for |q| < 1, because qⁿ tends to zero."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите 2 + 4 + 6 + … + 20.",
+      "en": "Find 2 + 4 + 6 + … + 20."
+     },
+     "steps": {
+      "ru": [
+       "Это арифметическая прогрессия с a₁ = 2, d = 2.",
+       "20 = 2 + (n − 1) · 2, откуда n = 10.",
+       "S₁₀ = (2 + 20) · 10/2 = 110."
+      ],
+      "en": [
+       "This is an arithmetic progression with a₁ = 2 and d = 2.",
+       "20 = 2 + (n − 1) × 2, giving n = 10.",
+       "S₁₀ = (2 + 20) × 10/2 = 110."
+      ]
+     }
+    }
+   ]
+  },
+  "modeling": {
+   "id": "modeling",
+   "title": {
+    "ru": "Как составить уравнение текстовой задачи",
+    "en": "Modelling a word problem"
+   },
+   "definitions": {
+    "ru": [
+     "Математическая модель — уравнение или система, выражающая связи величин из условия. Неизвестную обозначают вместе с её смыслом и единицами измерения."
+    ],
+    "en": [
+     "A mathematical model is an equation or system expressing the relationships in a problem. Define the unknown together with its meaning and units."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Выберите x, выразите через него остальные величины и запишите, что равно, что суммируется или отличается на заданную величину. Полезна таблица «ситуация — величины — связь».",
+     "Стоимость = цена · количество; путь = скорость · время; работа = производительность · время. В одном равенстве единицы должны быть согласованы.",
+     "После решения проверьте ограничения смысла задачи: длины и времена положительны, количество предметов — целое, найденное значение отвечает именно на вопрос."
+    ],
+    "en": [
+     "Choose x, express other quantities in terms of it, and identify what is equal, added or differs by a specified amount. A table of situations, quantities and relationships is useful.",
+     "Cost = price × quantity; distance = speed × time; work = rate × time. Units must be consistent within an equation.",
+     "After solving, check the context: lengths and times are positive, item counts are integers, and the value answers the actual question."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Два числа в сумме дают 34; одно на 8 больше другого. Найдите меньшее.",
+      "en": "Two numbers sum to 34, and one is 8 greater than the other. Find the smaller one."
+     },
+     "steps": {
+      "ru": [
+       "Пусть x — меньшее число, тогда большее x + 8.",
+       "x + (x + 8) = 34 ⇒ 2x = 26 ⇒ x = 13.",
+       "Проверка: 13 + 21 = 34, 21 − 13 = 8. Ответ: 13."
+      ],
+      "en": [
+       "Let x be the smaller number; the larger is x + 8.",
+       "x + (x + 8) = 34 ⇒ 2x = 26 ⇒ x = 13.",
+       "Check: 13 + 21 = 34 and 21 − 13 = 8. Answer: 13."
+      ]
+     }
+    }
+   ]
+  },
+  "motion-work": {
+   "id": "motion-work",
+   "title": {
+    "ru": "Движение и совместная работа",
+    "en": "Motion and combined work"
+   },
+   "definitions": {
+    "ru": [
+     "При равномерном движении скорость v — путь за единицу времени: v = s/t. Производительность — объём работы за единицу времени."
+    ],
+    "en": [
+     "For uniform motion, speed v is distance per unit time: v = s/t. A work rate is the amount of work completed per unit time."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "s = vt. При движении навстречу скорость сближения v₁ + v₂; при движении в одном направлении — разность скоростей. Средняя скорость — весь путь, делённый на всё время.",
+     "На реке: по течению v + u, против течения v − u, где v — собственная скорость, u — скорость течения; для движения против течения нужно v > u.",
+     "Если весь объём работы принят за 1, то при времени T производительность 1/T. При совместной независимой работе производительности складываются, а не времена."
+    ],
+    "en": [
+     "s = vt. Towards each other the closing speed is v₁ + v₂; in the same direction it is the difference. Average speed is total distance divided by total time.",
+     "On a river, downstream speed is v + u and upstream speed v − u, where v is still-water speed and u the current speed; upstream motion requires v > u.",
+     "Taking the whole job as 1, completion time T gives rate 1/T. For independent workers their rates add, not their completion times."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Первый выполняет работу за 6 ч, второй — за 3 ч. За сколько часов они выполнят её вместе?",
+      "en": "One worker takes 6 hours and another 3 hours. How long do they take together?"
+     },
+     "steps": {
+      "ru": [
+       "Производительности: 1/6 и 1/3 работы в час.",
+       "Вместе: 1/6 + 1/3 = 1/2 работы в час.",
+       "Время: 1 : (1/2) = 2 ч."
+      ],
+      "en": [
+       "Their rates are 1/6 and 1/3 of the job per hour.",
+       "Together: 1/6 + 1/3 = 1/2 of the job per hour.",
+       "Time: 1 / (1/2) = 2 hours."
+      ]
+     }
+    }
+   ]
+  },
+  "percentages": {
+   "id": "percentages",
+   "title": {
+    "ru": "Проценты и последовательные изменения",
+    "en": "Percentages and successive changes"
+   },
+   "definitions": {
+    "ru": [
+     "Один процент — одна сотая величины. p% от A равно A · p/100. База процента — величина, от которой этот процент берётся."
+    ],
+    "en": [
+     "One percent is one hundredth of a quantity. p% of A is A × p/100. The percentage base is the quantity to which the percentage applies."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Рост на p% даёт A(1 + p/100), снижение на p% — A(1 − p/100). При нескольких изменениях множители перемножают.",
+     "Проценты нельзя просто складывать, если меняется база. Рост и затем снижение на одинаковый процент обычно не возвращают исходную величину."
+    ],
+    "en": [
+     "An increase by p% gives A(1 + p/100), and a decrease gives A(1 − p/100). Multiply the factors for successive changes.",
+     "Do not simply add percentages when their base changes. An increase followed by the same percentage decrease generally does not restore the original value."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Цену 200 руб. снизили на 10%, затем повысили на 10%. Найдите новую цену.",
+      "en": "A price of 200 is reduced by 10% and then increased by 10%. Find the new price."
+     },
+     "steps": {
+      "ru": [
+       "После снижения: 200 · 0,9 = 180.",
+       "Повышение берётся от 180: 180 · 1,1 = 198.",
+       "Итого 198 руб., это на 1% ниже исходной цены."
+      ],
+      "en": [
+       "After the reduction: 200 × 0.9 = 180.",
+       "The increase applies to 180: 180 × 1.1 = 198.",
+       "The final price is 198, which is 1% below the original."
+      ]
+     }
+    }
+   ]
+  },
+  "trig-identities": {
+   "id": "trig-identities",
+   "title": {
+    "ru": "Тригонометрические функции и тождества",
+    "en": "Trigonometric functions and identities"
+   },
+   "definitions": {
+    "ru": [
+     "На единичной окружности точка угла α имеет координаты (cos α; sin α). Тангенс tg α = sin α/cos α определён при cos α ≠ 0, котангенс ctg α = cos α/sin α — при sin α ≠ 0."
+    ],
+    "en": [
+     "On the unit circle the point at angle α has coordinates (cos α, sin α). The tangent tg α = sin α/cos α requires cos α ≠ 0, and cotangent ctg α = cos α/sin α requires sin α ≠ 0."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Основное тождество sin²α + cos²α = 1 следует из уравнения единичной окружности x² + y² = 1.",
+     "1 + tg²α = 1/cos²α при cos α ≠ 0; 1 + ctg²α = 1/sin²α при sin α ≠ 0. Равенство ctg α = 1/tg α требует одновременно sin α ≠ 0 и cos α ≠ 0.",
+     "Из известного квадрата функции нельзя определить её знак: при извлечении корня учитывают четверть угла."
+    ],
+    "en": [
+     "The identity sin²α + cos²α = 1 follows from the unit-circle equation x² + y² = 1.",
+     "1 + tg²α = 1/cos²α for cos α ≠ 0; 1 + ctg²α = 1/sin²α for sin α ≠ 0. The equality ctg α = 1/tg α requires both sin α and cos α to be non-zero.",
+     "Knowing the square of a function does not fix its sign: use the quadrant when taking the square root."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "sin α = 3/5, угол во II четверти. Найдите cos α.",
+      "en": "sin α = 3/5 and α is in quadrant II. Find cos α."
+     },
+     "steps": {
+      "ru": [
+       "cos²α = 1 − 9/25 = 16/25.",
+       "Во II четверти косинус отрицателен.",
+       "cos α = −4/5."
+      ],
+      "en": [
+       "cos²α = 1 − 9/25 = 16/25.",
+       "Cosine is negative in quadrant II.",
+       "cos α = −4/5."
+      ]
+     }
+    }
+   ]
+  },
+  "trig-values": {
+   "id": "trig-values",
+   "title": {
+    "ru": "Радианы, табличные углы и знаки",
+    "en": "Radians, standard angles and signs"
+   },
+   "definitions": {
+    "ru": [
+     "Радианная мера угла — отношение длины дуги к радиусу. Полный оборот равен 2π радиан или 360°, поэтому 180° = π радиан."
+    ],
+    "en": [
+     "An angle in radians is arc length divided by radius. A full turn is 2π radians or 360°, so 180° = π radians."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Для 30°, 45°, 60° значения sin равны 1/2, √2/2, √3/2; значения cos — √3/2, √2/2, 1/2. Для 0°: sin = 0, cos = 1; для 90°: sin = 1, cos = 0.",
+     "Знаки по четвертям I–IV: sin (+,+,−,−), cos (+,−,−,+), tg (+,−,+,−). На границах четвертей значения проверяют отдельно."
+    ],
+    "en": [
+     "At 30°, 45°, 60°, sine is 1/2, √2/2, √3/2 and cosine is √3/2, √2/2, 1/2. At 0°: sin = 0, cos = 1; at 90°: sin = 1, cos = 0.",
+     "Signs in quadrants I–IV: sin (+,+,−,−), cos (+,−,−,+), tg (+,−,+,−). Check values separately on quadrant boundaries."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите sin 150° и cos 150°.",
+      "en": "Find sin 150° and cos 150°."
+     },
+     "steps": {
+      "ru": [
+       "150° = 180° − 30°, это II четверть.",
+       "sin 150° = sin 30° = 1/2.",
+       "cos 150° = −cos 30° = −√3/2."
+      ],
+      "en": [
+       "150° = 180° − 30°, in quadrant II.",
+       "sin 150° = sin 30° = 1/2.",
+       "cos 150° = −cos 30° = −√3/2."
+      ]
+     }
+    }
+   ]
+  },
+  "trig-formulas": {
+   "id": "trig-formulas",
+   "title": {
+    "ru": "Сложение углов и двойной угол",
+    "en": "Angle addition and double angles"
+   },
+   "definitions": {
+    "ru": [
+     "Формулы сложения выражают функцию суммы углов через функции отдельных углов. Формулы двойного угла получаются при равных слагаемых α + α."
+    ],
+    "en": [
+     "Angle-addition formulas express a function of a sum using functions of the individual angles. Double-angle formulas use α + α."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "sin(α ± β) = sin α cos β ± cos α sin β; cos(α ± β) = cos α cos β ∓ sin α sin β. Знаки у косинуса противоположны знаку между углами.",
+     "sin 2α = 2sin α cos α; cos 2α = cos²α − sin²α = 1 − 2sin²α = 2cos²α − 1.",
+     "sin²α = (1 − cos 2α)/2, cos²α = (1 + cos 2α)/2. Чётность: cos(−α) = cos α, sin(−α) = −sin α, tg(−α) = −tg α там, где тангенс определён."
+    ],
+    "en": [
+     "sin(α ± β) = sin α cos β ± cos α sin β; cos(α ± β) = cos α cos β ∓ sin α sin β. The cosine formula uses the opposite sign.",
+     "sin 2α = 2sin α cos α; cos 2α = cos²α − sin²α = 1 − 2sin²α = 2cos²α − 1.",
+     "sin²α = (1 − cos 2α)/2 and cos²α = (1 + cos 2α)/2. Parity: cos(−α) = cos α, sin(−α) = −sin α, tg(−α) = −tg α wherever tangent is defined."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите sin 75°.",
+      "en": "Find sin 75°."
+     },
+     "steps": {
+      "ru": [
+       "75° = 45° + 30°.",
+       "sin 75° = (√2/2)(√3/2) + (√2/2)(1/2).",
+       "Ответ: (√6 + √2)/4."
+      ],
+      "en": [
+       "75° = 45° + 30°.",
+       "sin 75° = (√2/2)(√3/2) + (√2/2)(1/2).",
+       "Answer: (√6 + √2)/4."
+      ]
+     }
+    }
+   ]
+  },
+  "trig-equations": {
+   "id": "trig-equations",
+   "title": {
+    "ru": "Простейшие тригонометрические уравнения",
+    "en": "Basic trigonometric equations"
+   },
+   "definitions": {
+    "ru": [
+     "Общее решение тригонометрического уравнения перечисляет все его корни с помощью целого параметра n. arcsin a лежит в [−π/2; π/2], arccos a — в [0; π]."
+    ],
+    "en": [
+     "A general trigonometric solution lists all roots using an integer parameter n. arcsin a lies in [−π/2, π/2] and arccos a in [0, π]."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Для |a| ≤ 1: sin x = a ⇔ x = (−1)ⁿ arcsin a + πn; cos x = a ⇔ x = ±arccos a + 2πn, n ∈ Z. Если |a| > 1, корней нет.",
+     "tg x = a ⇔ x = arctg a + πn для любого вещественного a. Для sin x = a также удобны две серии: arcsin a + 2πn и π − arcsin a + 2πn.",
+     "Если аргумент равен kx + b, общую формулу записывают для всего аргумента, а затем решают линейное уравнение относительно x."
+    ],
+    "en": [
+     "For |a| ≤ 1: sin x = a ⇔ x = (−1)ⁿ arcsin a + πn; cos x = a ⇔ x = ±arccos a + 2πn, n ∈ Z. If |a| > 1 there are no roots.",
+     "tg x = a ⇔ x = arctg a + πn for every real a. For sin x = a one can also use two families: arcsin a + 2πn and π − arcsin a + 2πn.",
+     "If the argument is kx + b, write the general formula for the whole argument and then solve the resulting linear equation for x."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите sin x = 1/2.",
+      "en": "Solve sin x = 1/2."
+     },
+     "steps": {
+      "ru": [
+       "arcsin(1/2) = π/6.",
+       "На одном обороте корни π/6 и 5π/6.",
+       "Общее решение: x = π/6 + 2πn или x = 5π/6 + 2πn, n ∈ Z."
+      ],
+      "en": [
+       "arcsin(1/2) = π/6.",
+       "In one full turn the roots are π/6 and 5π/6.",
+       "The general solution is x = π/6 + 2πn or x = 5π/6 + 2πn, n ∈ Z."
+      ]
+     }
+    }
+   ]
+  },
+  "trig-selection": {
+   "id": "trig-selection",
+   "title": {
+    "ru": "Отбор тригонометрических корней",
+    "en": "Selecting trigonometric roots"
+   },
+   "definitions": {
+    "ru": [
+     "Отбор корней — пересечение общего решения с заданным промежутком или условием (например, x > 0). Целый параметр n ограничивают отдельно в каждой серии."
+    ],
+    "en": [
+     "Selecting roots means intersecting the general solution with the required interval or condition, such as x > 0. Restrict the integer n separately in each family."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Для серии x = c + Tn, T > 0, на [A; B] решают A ≤ c + Tn ≤ B и выбирают все целые n. При открытых концах неравенства соответствующих границ строгие.",
+     "Проверяйте все серии, границы и повторяющиеся корни. Для наименьшего положительного корня нуль не подходит."
+    ],
+    "en": [
+     "For a family x = c + Tn with T > 0 on [A, B], solve A ≤ c + Tn ≤ B and take all integer n. Open endpoints require strict inequalities.",
+     "Check every family, the endpoints and duplicate roots. Zero is not a smallest positive root."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите sin x = 1/2 на отрезке [0; 2π].",
+      "en": "Solve sin x = 1/2 on [0, 2π]."
+     },
+     "steps": {
+      "ru": [
+       "Серии: π/6 + 2πn и 5π/6 + 2πn.",
+       "В обеих сериях отрезку соответствует только n = 0.",
+       "Ответ: π/6 и 5π/6. Концы 0 и 2π не удовлетворяют уравнению."
+      ],
+      "en": [
+       "The families are π/6 + 2πn and 5π/6 + 2πn.",
+       "In both families only n = 0 lies in the interval.",
+       "Answer: π/6 and 5π/6. The endpoints 0 and 2π do not solve the equation."
+      ]
+     }
+    }
+   ]
+  },
+  "log-definition": {
+   "id": "log-definition",
+   "title": {
+    "ru": "Определение логарифма",
+    "en": "The definition of a logarithm"
+   },
+   "definitions": {
+    "ru": [
+     "Логарифм log_a b — показатель степени, в которую нужно возвести a, чтобы получить b: log_a b = c ⇔ aᶜ = b. Требуется a > 0, a ≠ 1, b > 0.",
+     "lg b — логарифм по основанию 10; ln b — по основанию e."
+    ],
+    "en": [
+     "The logarithm log_a b is the exponent to which a must be raised to obtain b: log_a b = c ⇔ aᶜ = b. It requires a > 0, a ≠ 1 and b > 0.",
+     "lg b is the base-10 logarithm; ln b is the logarithm with base e."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "log_a a = 1, log_a 1 = 0 и a^(log_a b) = b при допустимых a,b. Эти равенства непосредственно следуют из определения.",
+     "Логарифм нуля или отрицательного числа в вещественных числах не определён. Основание 1 не годится, поскольку 1ᶜ не различает показатели."
+    ],
+    "en": [
+     "log_a a = 1, log_a 1 = 0 and a^(log_a b) = b for valid a,b. These equalities follow directly from the definition.",
+     "The real logarithm of zero or a negative number is undefined. Base 1 is invalid because 1ᶜ cannot distinguish exponents."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите log₂ 8 и log₃(1/9).",
+      "en": "Find log₂ 8 and log₃(1/9)."
+     },
+     "steps": {
+      "ru": [
+       "2³ = 8, поэтому log₂ 8 = 3.",
+       "3⁻² = 1/9, поэтому log₃(1/9) = −2.",
+       "Оба основания допустимы, оба аргумента положительны."
+      ],
+      "en": [
+       "2³ = 8, so log₂ 8 = 3.",
+       "3⁻² = 1/9, so log₃(1/9) = −2.",
+       "Both bases are valid and both arguments are positive."
+      ]
+     }
+    }
+   ]
+  },
+  "log-properties": {
+   "id": "log-properties",
+   "title": {
+    "ru": "Свойства логарифмов",
+    "en": "Properties of logarithms"
+   },
+   "definitions": {
+    "ru": [
+     "Свойства логарифмов преобразуют произведения, частные и степени аргументов. Во всех формулах a > 0, a ≠ 1; аргументы положительны."
+    ],
+    "en": [
+     "Logarithm properties transform products, quotients and powers of arguments. In every formula a > 0, a ≠ 1 and the arguments are positive."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "log_a(bc) = log_a b + log_a c; log_a(b/c) = log_a b − log_a c при b,c > 0. Логарифм суммы таким способом не раскрывается.",
+     "log_a(bᵏ) = k log_a b при b > 0. Переход к основанию c: log_a b = log_c b / log_c a, где c > 0, c ≠ 1.",
+     "Правило произведения следует из aᵘaᵛ = aᵘ⁺ᵛ: если b = aᵘ и c = aᵛ, то bc = aᵘ⁺ᵛ."
+    ],
+    "en": [
+     "log_a(bc) = log_a b + log_a c; log_a(b/c) = log_a b − log_a c for b,c > 0. There is no corresponding rule for a sum.",
+     "log_a(bᵏ) = k log_a b for b > 0. Change of base: log_a b = log_c b / log_c a, where c > 0 and c ≠ 1.",
+     "The product rule follows from aᵘaᵛ = aᵘ⁺ᵛ: if b = aᵘ and c = aᵛ, then bc = aᵘ⁺ᵛ."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Вычислите log₂ 12 − log₂ 3.",
+      "en": "Evaluate log₂ 12 − log₂ 3."
+     },
+     "steps": {
+      "ru": [
+       "Аргументы 12 и 3 положительны, основание 2 допустимо.",
+       "Разность логарифмов равна log₂(12/3) = log₂ 4.",
+       "2² = 4, поэтому ответ 2."
+      ],
+      "en": [
+       "The arguments 12 and 3 are positive and base 2 is valid.",
+       "The difference is log₂(12/3) = log₂ 4.",
+       "2² = 4, so the answer is 2."
+      ]
+     }
+    }
+   ]
+  },
+  "exponential-equations": {
+   "id": "exponential-equations",
+   "title": {
+    "ru": "Показательные и логарифмические уравнения",
+    "en": "Exponential and logarithmic equations"
+   },
+   "definitions": {
+    "ru": [
+     "Показательное уравнение содержит неизвестную в показателе степени, логарифмическое — в аргументе или основании логарифма."
+    ],
+    "en": [
+     "An exponential equation contains the unknown in an exponent; a logarithmic equation contains it in a logarithm's argument or base."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Функция aˣ при a > 0, a ≠ 1 строго монотонна, поэтому aᵘ = aᵛ ⇔ u = v. Уравнение aˣ = b имеет решение x = log_a b при b > 0.",
+     "Равенство log_a u = log_a v равносильно u = v только при допустимом основании и u,v > 0. Сначала записывают ОДЗ, затем решают и проверяют.",
+     "При 0 < a < 1 функция убывает: в показательных и логарифмических неравенствах переход к аргументам меняет знак."
+    ],
+    "en": [
+     "For a > 0, a ≠ 1, aˣ is strictly monotone, so aᵘ = aᵛ ⇔ u = v. The equation aˣ = b has solution x = log_a b when b > 0.",
+     "log_a u = log_a v is equivalent to u = v only for a valid base and u,v > 0. Write the domain first, then solve and check.",
+     "For 0 < a < 1 the function decreases: removing the exponential or logarithm from an inequality reverses its sign."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Решите 3^(2x − 1) = 27.",
+      "en": "Solve 3^(2x − 1) = 27."
+     },
+     "steps": {
+      "ru": [
+       "27 = 3³: приводим обе части к основанию 3.",
+       "Основание допустимо, поэтому 2x − 1 = 3.",
+       "x = 2; проверка: 3³ = 27."
+      ],
+      "en": [
+       "27 = 3³: write both sides with base 3.",
+       "The base is valid, so 2x − 1 = 3.",
+       "x = 2; check: 3³ = 27."
+      ]
+     }
+    }
+   ]
+  },
+  "plane-figures": {
+   "id": "plane-figures",
+   "title": {
+    "ru": "Основные определения планиметрии",
+    "en": "Basic definitions in plane geometry"
+   },
+   "definitions": {
+    "ru": [
+     "Высота треугольника — перпендикуляр из вершины к прямой противоположной стороны; медиана соединяет вершину с серединой противоположной стороны; биссектриса делит угол пополам.",
+     "Параллелограмм имеет попарно параллельные противоположные стороны; ромб — параллелограмм с равными сторонами; трапеция имеет пару параллельных сторон-оснований. Диагональ соединяет несоседние вершины."
+    ],
+    "en": [
+     "A triangle's altitude is the perpendicular from a vertex to the opposite side's line; a median joins a vertex to the midpoint of the opposite side; an angle bisector divides an angle in half.",
+     "A parallelogram has opposite sides parallel; a rhombus is a parallelogram with equal sides; a trapezoid has a pair of parallel base sides. A diagonal joins non-adjacent vertices."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Сумма углов треугольника 180°. Внешний угол равен сумме двух внутренних, не смежных с ним. Сумма углов выпуклого четырёхугольника 360°.",
+     "В параллелограмме противоположные стороны и углы равны, диагонали делятся точкой пересечения пополам. У ромба диагонали перпендикулярны и делят углы пополам.",
+     "Чертёж помогает выбрать теорему, но равенство длин, прямой угол и параллельность нельзя считать данными только по внешнему виду рисунка."
+    ],
+    "en": [
+     "A triangle's angles sum to 180°. An exterior angle equals the sum of the two non-adjacent interior angles. A convex quadrilateral's angles sum to 360°.",
+     "In a parallelogram opposite sides and angles are equal and diagonals bisect each other. A rhombus has perpendicular diagonals that bisect its angles.",
+     "A drawing helps select a theorem, but equal lengths, right angles and parallel lines cannot be assumed from appearance alone."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Углы треугольника равны 2x, 3x и 4x. Найдите больший угол.",
+      "en": "A triangle has angles 2x, 3x and 4x. Find the largest angle."
+     },
+     "steps": {
+      "ru": [
+       "2x + 3x + 4x = 180°.",
+       "9x = 180°, значит x = 20°.",
+       "Больший угол 4x = 80°."
+      ],
+      "en": [
+       "2x + 3x + 4x = 180°.",
+       "9x = 180°, so x = 20°.",
+       "The largest angle is 4x = 80°."
+      ]
+     }
+    }
+   ]
+  },
+  "right-triangle": {
+   "id": "right-triangle",
+   "title": {
+    "ru": "Прямоугольный треугольник и теорема Пифагора",
+    "en": "Right triangles and the Pythagorean theorem"
+   },
+   "definitions": {
+    "ru": [
+     "В прямоугольном треугольнике один угол равен 90°. Прилежащие к нему стороны — катеты a,b; противоположная и самая длинная сторона — гипотенуза c."
+    ],
+    "en": [
+     "A right triangle has one 90° angle. Its adjacent sides a,b are the legs; the opposite and longest side c is the hypotenuse."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Теорема Пифагора: c² = a² + b². Обратная теорема: если квадрат наибольшей стороны равен сумме квадратов двух других, треугольник прямоугольный.",
+     "Медиана к гипотенузе равна c/2. Центр описанной окружности — середина гипотенузы, поэтому R = c/2. Радиус вписанной окружности r = (a + b − c)/2.",
+     "Для острого угла sin = противолежащий катет / c, cos = прилежащий катет / c, tg = противолежащий / прилежащий катет."
+    ],
+    "en": [
+     "The Pythagorean theorem states c² = a² + b². Conversely, if the square of the longest side equals the sum of the other two squares, the triangle is right-angled.",
+     "The median to the hypotenuse is c/2. The circumcentre is its midpoint, so R = c/2. The inradius is r = (a + b − c)/2.",
+     "For an acute angle, sin = opposite leg / c, cos = adjacent leg / c, tg = opposite leg / adjacent leg."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Катеты равны 3 и 4. Найдите гипотенузу и медиану к ней.",
+      "en": "The legs are 3 and 4. Find the hypotenuse and the median to it."
+     },
+     "steps": {
+      "ru": [
+       "c² = 3² + 4² = 25.",
+       "Длина положительна, поэтому c = 5.",
+       "Медиана равна c/2 = 2,5."
+      ],
+      "en": [
+       "c² = 3² + 4² = 25.",
+       "A length is positive, so c = 5.",
+       "The median is c/2 = 2.5."
+      ]
+     }
+    }
+   ]
+  },
+  "plane-areas": {
+   "id": "plane-areas",
+   "title": {
+    "ru": "Площади, теоремы синусов и косинусов",
+    "en": "Areas and the laws of sines and cosines"
+   },
+   "definitions": {
+    "ru": [
+     "Площадь измеряет размер плоской фигуры в квадратных единицах. Высота h к основанию a перпендикулярна прямой основания. Полупериметр треугольника p = (a + b + c)/2."
+    ],
+    "en": [
+     "Area measures a plane figure in square units. The altitude h to base a is perpendicular to its line. A triangle's semiperimeter is p = (a + b + c)/2."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Треугольник: S = ah/2 = ab sin C/2 = pr = abc/(4R); формула Герона S = √(p(p − a)(p − b)(p − c)). Здесь C — угол между сторонами a,b, r и R — радиусы вписанной и описанной окружностей.",
+     "Параллелограмм: S = ah = ab sin α; трапеция: S = (a + b)h/2, средняя линия (a + b)/2; ромб: S = d₁d₂/2. В трапеции a,b — основания.",
+     "Теорема синусов: a/sin A = b/sin B = c/sin C = 2R. Теорема косинусов: c² = a² + b² − 2ab cos C. Сторона и одноимённый угол лежат друг напротив друга."
+    ],
+    "en": [
+     "For a triangle S = ah/2 = ab sin C/2 = pr = abc/(4R); Heron's formula is S = √(p(p − a)(p − b)(p − c)). Here C is between sides a,b and r,R are the inradius and circumradius.",
+     "A parallelogram has S = ah = ab sin α; a trapezoid has S = (a + b)h/2 and midline (a + b)/2; a rhombus has S = d₁d₂/2. In the trapezoid a,b are its bases.",
+     "The sine rule is a/sin A = b/sin B = c/sin C = 2R. The cosine rule is c² = a² + b² − 2ab cos C. Each named side is opposite the correspondingly named angle."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Две стороны треугольника равны 5 и 8, угол между ними 30°. Найдите площадь.",
+      "en": "Two triangle sides are 5 and 8 and their included angle is 30°. Find its area."
+     },
+     "steps": {
+      "ru": [
+       "Известны две стороны и угол между ними, выбираем S = ab sin C/2.",
+       "sin 30° = 1/2.",
+       "S = 5 · 8 · (1/2)/2 = 10 квадратных единиц."
+      ],
+      "en": [
+       "Two sides and their included angle are known, so use S = ab sin C/2.",
+       "sin 30° = 1/2.",
+       "S = 5 × 8 × (1/2)/2 = 10 square units."
+      ]
+     }
+    }
+   ]
+  },
+  "circle-theorems": {
+   "id": "circle-theorems",
+   "title": {
+    "ru": "Окружность: углы, касательные и секущие",
+    "en": "Circles: angles, tangents and secants"
+   },
+   "definitions": {
+    "ru": [
+     "Окружность — точки на расстоянии R от центра; круг включает также внутренние точки. Хорда соединяет две точки окружности, секущая пересекает её в двух точках, касательная — в одной.",
+     "Центральный угол имеет вершину в центре, вписанный — на окружности; стороны вписанного угла пересекают окружность."
+    ],
+    "en": [
+     "A circle's circumference consists of points at distance R from its centre; the disk also contains the interior. A chord joins two circle points, a secant meets the circle twice, and a tangent once.",
+     "A central angle has its vertex at the centre; an inscribed angle has its vertex on the circle and its sides intersect the circle."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Вписанный угол равен половине центрального угла, опирающегося на ту же дугу. Касательная перпендикулярна радиусу в точке касания.",
+     "Из внешней точки P: PA² = PB · PC, где PA — касательная, B,C — точки пересечения секущей, PB — внешняя часть, PC — вся секущая.",
+     "Длина окружности 2πR, площадь круга πR². Дуга центрального угла α° имеет длину πRα/180; для α в радианах — Rα."
+    ],
+    "en": [
+     "An inscribed angle is half the central angle subtending the same arc. A tangent is perpendicular to the radius at the contact point.",
+     "From an external point P: PA² = PB × PC, where PA is a tangent, B,C are the secant intersections, PB the external part and PC the full secant.",
+     "Circumference is 2πR and disk area πR². An arc with central angle α° has length πRα/180; when α is in radians its length is Rα."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Радиус 6, центральный угол дуги 60°. Найдите длину дуги.",
+      "en": "The radius is 6 and an arc's central angle is 60°. Find its length."
+     },
+     "steps": {
+      "ru": [
+       "60° составляет 1/6 полного оборота.",
+       "Длина всей окружности 2π · 6 = 12π.",
+       "Длина дуги 12π/6 = 2π."
+      ],
+      "en": [
+       "60° is 1/6 of a full turn.",
+       "The full circumference is 2π × 6 = 12π.",
+       "The arc length is 12π/6 = 2π."
+      ]
+     }
+    }
+   ]
+  },
+  "similarity": {
+   "id": "similarity",
+   "title": {
+    "ru": "Подобие треугольников и отношение площадей",
+    "en": "Triangle similarity and area ratios"
+   },
+   "definitions": {
+    "ru": [
+     "Подобные треугольники имеют равные соответствующие углы и пропорциональные соответствующие стороны. Коэффициент подобия k > 0 — отношение соответствующих длин второго треугольника к первому."
+    ],
+    "en": [
+     "Similar triangles have equal corresponding angles and proportional corresponding sides. The scale factor k > 0 is the ratio of a length in the second triangle to the corresponding first length."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Признаки подобия: по двум углам; по двум пропорциональным сторонам и равному углу между ними; по трём пропорциональным сторонам.",
+     "Соответствующие высоты и периметры относятся как k, площади — как k². Это следует из S = ah/2: и основание, и высота умножаются на k."
+    ],
+    "en": [
+     "Similarity tests: two equal angles; two proportional sides with equal included angles; or three proportional sides.",
+     "Corresponding altitudes and perimeters have ratio k, and areas ratio k². In S = ah/2 both the base and altitude are multiplied by k."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Стороны подобного треугольника в 3 раза больше. Во сколько раз больше площадь?",
+      "en": "A similar triangle has sides 3 times larger. How much larger is its area?"
+     },
+     "steps": {
+      "ru": [
+       "Коэффициент подобия k = 3.",
+       "Площадь меняется в k² = 9 раз.",
+       "Если первая площадь 4, вторая равна 36, а не 12."
+      ],
+      "en": [
+       "The scale factor is k = 3.",
+       "The area changes by k² = 9.",
+       "If the first area is 4, the second is 36, not 12."
+      ]
+     }
+    }
+   ]
+  },
+  "prism-cylinder": {
+   "id": "prism-cylinder",
+   "title": {
+    "ru": "Призма и цилиндр",
+    "en": "Prisms and cylinders"
+   },
+   "definitions": {
+    "ru": [
+     "Призма имеет два равных параллельных многоугольных основания. Высота — перпендикулярное расстояние между плоскостями оснований; у прямой призмы боковые рёбра перпендикулярны основаниям.",
+     "Прямой круговой цилиндр имеет основания-круги радиуса R, а высота h перпендикулярна основаниям."
+    ],
+    "en": [
+     "A prism has two congruent parallel polygonal bases. Its height is the perpendicular distance between the base planes; a right prism has lateral edges perpendicular to its bases.",
+     "A right circular cylinder has disk bases of radius R and height h perpendicular to them."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Объём любой призмы V = Sоснh. Формула боковой поверхности Sбок = Pоснh применима к прямой призме, а не к произвольной наклонной.",
+     "Для прямого цилиндра V = πR²h, Sбок = 2πRh, Sполн = 2πR² + 2πRh. Объём измеряют в кубических единицах, поверхность — в квадратных."
+    ],
+    "en": [
+     "Every prism has volume V = Sbaseh. The lateral-area formula Slateral = Pbaseh applies to a right prism, not an arbitrary oblique prism.",
+     "For a right cylinder V = πR²h, Slateral = 2πRh and Stotal = 2πR² + 2πRh. Volume uses cubic units and surface area square units."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Цилиндр имеет R = 2, h = 5. Найдите объём.",
+      "en": "A cylinder has R = 2 and h = 5. Find its volume."
+     },
+     "steps": {
+      "ru": [
+       "Площадь основания πR² = 4π.",
+       "Умножаем на высоту: V = 4π · 5 = 20π.",
+       "Коэффициент при π равен 20; число π подставлять не нужно."
+      ],
+      "en": [
+       "The base area is πR² = 4π.",
+       "Multiply by height: V = 4π × 5 = 20π.",
+       "The coefficient of π is 20; there is no need to replace π numerically."
+      ]
+     }
+    }
+   ]
+  },
+  "pyramid-cone": {
+   "id": "pyramid-cone",
+   "title": {
+    "ru": "Пирамида, конус и коэффициент при π",
+    "en": "Pyramids, cones and coefficients of π"
+   },
+   "definitions": {
+    "ru": [
+     "Пирамида имеет многоугольное основание и общую вершину боковых граней. Высота — перпендикуляр от вершины к плоскости основания.",
+     "У прямого кругового конуса основание — круг радиуса R, вершина над его центром. Образующая l соединяет вершину с точкой окружности основания; она не равна высоте h."
+    ],
+    "en": [
+     "A pyramid has a polygonal base and a common apex for its lateral faces. Its height is perpendicular from the apex to the base plane.",
+     "A right circular cone has a disk base of radius R with its apex above the centre. Its slant height l joins the apex to the base circumference and is not the perpendicular height h."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Пирамида: V = Sоснh/3. Конус: V = πR²h/3. По сравнению с призмой или цилиндром с тем же основанием и высотой объём втрое меньше.",
+     "Для прямого конуса l² = R² + h², Sбок = πRl, Sполн = πR² + πRl. Если ответ записан kπ, коэффициент при π — число k, без π."
+    ],
+    "en": [
+     "A pyramid has V = Sbaseh/3 and a cone V = πR²h/3. Each has one third the volume of a prism or cylinder with the same base and height.",
+     "For a right cone l² = R² + h², Slateral = πRl and Stotal = πR² + πRl. If an answer is kπ, its coefficient of π is k, without π."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "У конуса R = 3, h = 4. Найдите коэффициент при π в объёме.",
+      "en": "A cone has R = 3 and h = 4. Find the coefficient of π in its volume."
+     },
+     "steps": {
+      "ru": [
+       "V = π · 3² · 4/3.",
+       "V = 12π; коэффициент равен 12.",
+       "Для боковой поверхности понадобилась бы образующая l = √(9 + 16) = 5, а не высота 4."
+      ],
+      "en": [
+       "V = π × 3² × 4/3.",
+       "V = 12π; the coefficient is 12.",
+       "For lateral area one would need the slant height l = √(9 + 16) = 5, not the height 4."
+      ]
+     }
+    }
+   ]
+  },
+  "sphere-cube": {
+   "id": "sphere-cube",
+   "title": {
+    "ru": "Шар, сфера и куб",
+    "en": "Balls, spheres and cubes"
+   },
+   "definitions": {
+    "ru": [
+     "Сфера — поверхность точек на расстоянии R от центра; шар включает также внутренние точки. Куб — прямоугольный параллелепипед с шестью квадратными гранями и равными рёбрами a."
+    ],
+    "en": [
+     "A sphere is the surface of points at distance R from its centre; a ball also includes its interior. A cube is a rectangular solid with six square faces and equal edges a."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Объём шара V = 4πR³/3, площадь сферы S = 4πR². Куб: V = a³, Sполн = 6a².",
+     "Диагональ грани куба a√2, пространственная диагональ a√3: дважды применяют теорему Пифагора."
+    ],
+    "en": [
+     "A ball has volume V = 4πR³/3 and its sphere has area S = 4πR². For a cube V = a³ and Stotal = 6a².",
+     "A cube's face diagonal is a√2 and its space diagonal a√3, by applying the Pythagorean theorem twice."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Ребро куба равно 2. Найдите объём и пространственную диагональ.",
+      "en": "A cube has edge length 2. Find its volume and space diagonal."
+     },
+     "steps": {
+      "ru": [
+       "V = 2³ = 8.",
+       "Диагональ грани равна 2√2.",
+       "Пространственная диагональ √((2√2)² + 2²) = √12 = 2√3."
+      ],
+      "en": [
+       "V = 2³ = 8.",
+       "The face diagonal is 2√2.",
+       "The space diagonal is √((2√2)² + 2²) = √12 = 2√3."
+      ]
+     }
+    }
+   ]
+  },
+  "solid-perpendiculars": {
+   "id": "solid-perpendiculars",
+   "title": {
+    "ru": "Проекции и теорема о трёх перпендикулярах",
+    "en": "Projections and the three-perpendiculars theorem"
+   },
+   "definitions": {
+    "ru": [
+     "Если A вне плоскости α, H — основание перпендикуляра из A, B лежит в α и B ≠ H, то AB — наклонная, HB — её ортогональная проекция на α.",
+     "Угол между неперпендикулярной прямой и плоскостью — острый угол (или 0°) между прямой и её проекцией. Для перпендикулярной прямой угол равен 90°."
+    ],
+    "en": [
+     "If A is outside plane α, H is the perpendicular foot from A and B lies in α with B ≠ H, then AB is an oblique segment and HB its orthogonal projection onto α.",
+     "The angle between a non-perpendicular line and a plane is the acute angle, or 0°, between the line and its projection. A perpendicular line makes angle 90°."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Теорема о трёх перпендикулярах: прямая l в α, проходящая через B, перпендикулярна HB тогда и только тогда, когда она перпендикулярна AB.",
+     "В прямоугольном треугольнике AHB: AB² = AH² + HB²; для угла φ между AB и плоскостью sin φ = AH/AB и tg φ = AH/HB."
+    ],
+    "en": [
+     "The three-perpendiculars theorem: a line l in α through B is perpendicular to HB if and only if it is perpendicular to AB.",
+     "In right triangle AHB, AB² = AH² + HB²; for the angle φ between AB and the plane, sin φ = AH/AB and tg φ = AH/HB."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Перпендикуляр к плоскости равен 3, проекция наклонной — 4. Найдите наклонную и синус её угла с плоскостью.",
+      "en": "The perpendicular is 3 and an oblique segment's projection is 4. Find the segment and the sine of its angle with the plane."
+     },
+     "steps": {
+      "ru": [
+       "Получаем прямоугольный треугольник с катетами 3 и 4.",
+       "Наклонная AB = √(9 + 16) = 5.",
+       "sin φ = 3/5."
+      ],
+      "en": [
+       "This forms a right triangle with legs 3 and 4.",
+       "The oblique segment AB = √(9 + 16) = 5.",
+       "sin φ = 3/5."
+      ]
+     }
+    }
+   ]
+  },
+  "derivative-table": {
+   "id": "derivative-table",
+   "title": {
+    "ru": "Определение производной и таблица",
+    "en": "The derivative definition and table"
+   },
+   "definitions": {
+    "ru": [
+     "Производная f′(x₀) — предел (f(x₀ + h) − f(x₀))/h при h → 0, если он существует и конечен. Она показывает мгновенную скорость изменения функции."
+    ],
+    "en": [
+     "The derivative f′(x₀) is the limit of (f(x₀ + h) − f(x₀))/h as h → 0, if the limit exists and is finite. It gives the function's instantaneous rate of change."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "(C)′ = 0; (kx + b)′ = k; (xⁿ)′ = nxⁿ⁻¹. Для натурального n правило степени действует на всей прямой; для произвольного вещественного n его используют при x > 0.",
+     "При измерении угла в радианах: (sin x)′ = cos x, (cos x)′ = −sin x. Также (eˣ)′ = eˣ, (ln x)′ = 1/x при x > 0."
+    ],
+    "en": [
+     "(C)′ = 0; (kx + b)′ = k; (xⁿ)′ = nxⁿ⁻¹. For positive integer n the power rule holds on the real line; for arbitrary real n use it on x > 0.",
+     "With angles in radians, (sin x)′ = cos x and (cos x)′ = −sin x. Also (eˣ)′ = eˣ and (ln x)′ = 1/x for x > 0."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите производную f(x) = x³ − 4x + 7.",
+      "en": "Differentiate f(x) = x³ − 4x + 7."
+     },
+     "steps": {
+      "ru": [
+       "Производная x³ равна 3x².",
+       "Производная −4x равна −4, постоянной 7 — нулю.",
+       "f′(x) = 3x² − 4."
+      ],
+      "en": [
+       "The derivative of x³ is 3x².",
+       "The derivative of −4x is −4 and of the constant 7 is zero.",
+       "f′(x) = 3x² − 4."
+      ]
+     }
+    }
+   ]
+  },
+  "derivative-rules": {
+   "id": "derivative-rules",
+   "title": {
+    "ru": "Правила дифференцирования",
+    "en": "Differentiation rules"
+   },
+   "definitions": {
+    "ru": [
+     "Дифференцировать функцию — найти её производную. Правила суммы, произведения и частного применяют там, где составляющие функции u,v дифференцируемы."
+    ],
+    "en": [
+     "To differentiate is to find a derivative. Sum, product and quotient rules apply where their component functions u,v are differentiable."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "(u + v)′ = u′ + v′, (cu)′ = cu′ для постоянной c. (uv)′ = u′v + uv′: производная произведения не равна произведению производных.",
+     "(u/v)′ = (u′v − uv′)/v² при v ≠ 0. В числителе важны порядок множителей и знак минус."
+    ],
+    "en": [
+     "(u + v)′ = u′ + v′ and (cu)′ = cu′ for constant c. (uv)′ = u′v + uv′: the derivative of a product is not the product of derivatives.",
+     "(u/v)′ = (u′v − uv′)/v² for v ≠ 0. The order of factors and the minus sign in the numerator matter."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите производную f(x) = x² sin x.",
+      "en": "Differentiate f(x) = x² sin x."
+     },
+     "steps": {
+      "ru": [
+       "u = x², v = sin x; u′ = 2x, v′ = cos x.",
+       "Применяем правило произведения u′v + uv′.",
+       "f′(x) = 2x sin x + x² cos x."
+      ],
+      "en": [
+       "u = x², v = sin x; u′ = 2x, v′ = cos x.",
+       "Apply the product rule u′v + uv′.",
+       "f′(x) = 2x sin x + x² cos x."
+      ]
+     }
+    }
+   ]
+  },
+  "chain-rule": {
+   "id": "chain-rule",
+   "title": {
+    "ru": "Производная сложной функции",
+    "en": "The chain rule"
+   },
+   "definitions": {
+    "ru": [
+     "Сложная функция f(g(x)) сначала вычисляет внутреннюю g(x), затем внешнюю f. Например, в (3x − 1)⁴ внешняя функция — четвёртая степень, внутренняя — 3x − 1."
+    ],
+    "en": [
+     "A composite function f(g(x)) first evaluates the inner function g(x), then the outer f. In (3x − 1)⁴ the outer function is the fourth power and the inner one 3x − 1."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Если g дифференцируема в x, а f — в g(x), то (f(g(x)))′ = f′(g(x)) · g′(x). Производную внутренней функции нельзя пропускать.",
+     "Частные случаи: (uⁿ)′ = nuⁿ⁻¹u′; (sin u)′ = cos u · u′; (ln u)′ = u′/u при u > 0."
+    ],
+    "en": [
+     "If g is differentiable at x and f at g(x), then (f(g(x)))′ = f′(g(x)) × g′(x). Do not omit the inner derivative.",
+     "Special cases: (uⁿ)′ = nuⁿ⁻¹u′; (sin u)′ = cos u × u′; (ln u)′ = u′/u for u > 0."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите производную (3x − 1)⁴.",
+      "en": "Differentiate (3x − 1)⁴."
+     },
+     "steps": {
+      "ru": [
+       "Внешняя производная: 4(3x − 1)³.",
+       "Внутренняя производная (3x − 1)′ = 3.",
+       "Ответ: 12(3x − 1)³."
+      ],
+      "en": [
+       "The outer derivative is 4(3x − 1)³.",
+       "The inner derivative is (3x − 1)′ = 3.",
+       "Answer: 12(3x − 1)³."
+      ]
+     }
+    }
+   ]
+  },
+  "derivative-point": {
+   "id": "derivative-point",
+   "title": {
+    "ru": "Производная в точке и касательная",
+    "en": "Derivatives at a point and tangents"
+   },
+   "definitions": {
+    "ru": [
+     "Значение f′(x₀) — число, получаемое подстановкой x₀ в найденную производную. Оно обычно отличается от значения самой функции f(x₀).",
+     "Касательная к графику дифференцируемой функции в (x₀; f(x₀)) имеет угловой коэффициент f′(x₀)."
+    ],
+    "en": [
+     "The value f′(x₀) is obtained by substituting x₀ into the derivative. It generally differs from the function value f(x₀).",
+     "The tangent to a differentiable function at (x₀, f(x₀)) has slope f′(x₀)."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Уравнение касательной: y = f(x₀) + f′(x₀)(x − x₀). Если α — угол наклона касательной к положительному направлению Ox, то tg α = f′(x₀).",
+     "Сначала дифференцируют, затем подставляют точку. Для касательной нужны два отдельных значения: f(x₀) и f′(x₀)."
+    ],
+    "en": [
+     "The tangent equation is y = f(x₀) + f′(x₀)(x − x₀). If α is its inclination to the positive x-axis, tg α = f′(x₀).",
+     "Differentiate first, then substitute the point. A tangent needs two separate values: f(x₀) and f′(x₀)."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите касательную к y = x² при x₀ = 2.",
+      "en": "Find the tangent to y = x² at x₀ = 2."
+     },
+     "steps": {
+      "ru": [
+       "f′(x) = 2x, поэтому f′(2) = 4.",
+       "f(2) = 4, точка касания (2; 4).",
+       "y = 4 + 4(x − 2) = 4x − 4."
+      ],
+      "en": [
+       "f′(x) = 2x, so f′(2) = 4.",
+       "f(2) = 4, so the contact point is (2, 4).",
+       "y = 4 + 4(x − 2) = 4x − 4."
+      ]
+     }
+    }
+   ]
+  },
+  "extrema": {
+   "id": "extrema",
+   "title": {
+    "ru": "Критические точки, монотонность и экстремумы",
+    "en": "Critical points, monotonicity and extrema"
+   },
+   "definitions": {
+    "ru": [
+     "Точка локального минимума (максимума) — внутренняя точка области определения, в окрестности которой значение функции не больше (не меньше) соседних значений.",
+     "Критические точки — внутренние точки области определения, где f′ = 0 или производная не существует. Точки, где сама функция не определена, не являются её экстремумами."
+    ],
+    "en": [
+     "A local minimum (maximum) is an interior domain point whose value is no greater (no smaller) than nearby values.",
+     "Critical points are interior domain points where f′ = 0 or the derivative does not exist. Points where the function itself is undefined are not its extrema."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "На интервале f′ > 0 означает возрастание, f′ < 0 — убывание. Теорема Ферма: в дифференцируемой точке внутреннего экстремума f′ = 0, но одного равенства недостаточно (например, x³ в нуле).",
+     "Для непрерывной в точке функции смена знака производной с − на + даёт минимум, с + на − — максимум. Если знак не меняется, экстремума по этому признаку нет."
+    ],
+    "en": [
+     "On an interval f′ > 0 implies increase and f′ < 0 decrease. Fermat's theorem: at a differentiable interior extremum f′ = 0, but this equality alone is insufficient, as x³ at zero shows.",
+     "For a function continuous at the point, a derivative sign change − to + gives a minimum, + to − a maximum. Without a sign change this test gives no extremum."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите экстремум f(x) = x² − 4x + 1.",
+      "en": "Find the extremum of f(x) = x² − 4x + 1."
+     },
+     "steps": {
+      "ru": [
+       "f′(x) = 2x − 4, критическая точка x = 2.",
+       "Слева производная отрицательна, справа положительна: это минимум.",
+       "f(2) = 4 − 8 + 1 = −3. Точка минимума (2; −3)."
+      ],
+      "en": [
+       "f′(x) = 2x − 4, so the critical point is x = 2.",
+       "The derivative is negative on the left and positive on the right: this is a minimum.",
+       "f(2) = 4 − 8 + 1 = −3. The minimum point is (2, −3)."
+      ]
+     }
+    }
+   ]
+  },
+  "segment-extrema": {
+   "id": "segment-extrema",
+   "title": {
+    "ru": "Наибольшее и наименьшее значения на отрезке",
+    "en": "Maximum and minimum on a closed interval"
+   },
+   "definitions": {
+    "ru": [
+     "Наибольшее и наименьшее значения на множестве сравнивают со всеми его точками, а не только с соседними. Значение функции и аргумент, где оно достигается, — разные ответы."
+    ],
+    "en": [
+     "An absolute maximum or minimum compares with every point of the set, not just nearby points. The function value and the argument attaining it are different answers."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Теорема Вейерштрасса: непрерывная на замкнутом ограниченном отрезке функция достигает на нём наибольшего и наименьшего значений.",
+     "Для обычных заданий ЦТ находят внутренние критические точки (нули f′ и точки недифференцируемости), вычисляют значения в них и на обоих концах, затем сравнивают. На открытом промежутке крайнее значение может не достигаться."
+    ],
+    "en": [
+     "The extreme value theorem states that a function continuous on a closed bounded interval attains its maximum and minimum there.",
+     "For typical CT tasks, find interior critical points, including derivative zeros and non-differentiable points, evaluate there and at both endpoints, then compare. An open interval may not attain an extreme value."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите максимум и минимум f(x) = x³ − 3x на [−2; 2].",
+      "en": "Find the maximum and minimum of f(x) = x³ − 3x on [−2, 2]."
+     },
+     "steps": {
+      "ru": [
+       "f′ = 3x² − 3 = 0 ⇒ x = −1 и 1; обе точки внутри отрезка.",
+       "f(−2) = −2, f(−1) = 2, f(1) = −2, f(2) = 2.",
+       "Максимум 2, минимум −2. Концы отрезка исключать нельзя."
+      ],
+      "en": [
+       "f′ = 3x² − 3 = 0 gives x = −1 and 1, both inside the interval.",
+       "f(−2) = −2, f(−1) = 2, f(1) = −2, f(2) = 2.",
+       "The maximum is 2 and the minimum −2. Do not omit the endpoints."
+      ]
+     }
+    }
+   ]
+  },
+  "counting": {
+   "id": "counting",
+   "title": {
+    "ru": "Перестановки, размещения и сочетания",
+    "en": "Permutations, arrangements and combinations"
+   },
+   "definitions": {
+    "ru": [
+     "Перестановка упорядочивает все n различных объектов; размещение выбирает и упорядочивает k из n; сочетание выбирает k из n без учёта порядка. Ниже объекты не повторяются, 0 ≤ k ≤ n."
+    ],
+    "en": [
+     "A permutation orders all n distinct objects; an arrangement selects and orders k of n; a combination selects k of n without order. The formulas below use no repetition and 0 ≤ k ≤ n."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Pₙ = n!; Aₙᵏ = n!/(n − k)!; Cₙᵏ = n!/(k!(n − k)!). Деление на k! убирает разные порядки одной и той же выбранной группы.",
+     "Правило произведения: если первый выбор можно сделать m способами, а второй после каждого первого — n способами, пару можно выбрать mn способами. Для k мест с повторением из n объектов — nᵏ вариантов."
+    ],
+    "en": [
+     "Pₙ = n!; Aₙᵏ = n!/(n − k)!; Cₙᵏ = n!/(k!(n − k)!). Dividing by k! removes the different orders of the same selected group.",
+     "The product rule: if a first choice has m options and a second has n options after each first choice, there are mn pairs. For k positions chosen from n objects with repetition there are nᵏ possibilities."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Из 5 учеников выбирают двух дежурных без разных ролей. Сколько способов?",
+      "en": "Choose two pupils out of 5 for identical duties. How many ways are there?"
+     },
+     "steps": {
+      "ru": [
+       "Порядок не важен, поэтому нужны сочетания.",
+       "C₅² = 5!/(2! · 3!) = 5 · 4/2.",
+       "Ответ: 10. При различных ролях было бы 5 · 4 = 20."
+      ],
+      "en": [
+       "Order does not matter, so use combinations.",
+       "C₅² = 5!/(2! × 3!) = 5 × 4/2.",
+       "Answer: 10. Different roles would instead give 5 × 4 = 20."
+      ]
+     }
+    }
+   ]
+  },
+  "probability": {
+   "id": "probability",
+   "title": {
+    "ru": "Вероятность и действия с событиями",
+    "en": "Probability and operations on events"
+   },
+   "definitions": {
+    "ru": [
+     "Событие — множество исходов опыта. Несовместные события не могут произойти вместе. Независимые события не меняют вероятности друг друга; это другое условие."
+    ],
+    "en": [
+     "An event is a set of outcomes. Disjoint events cannot occur together. Independent events do not change each other's probabilities; this is a different condition."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "В конечной модели с равновозможными исходами P(A) = m/n, где m — число благоприятных исходов, n > 0 — число всех. Если исходы не равновозможны, одного подсчёта недостаточно.",
+     "P(A ∪ B) = P(A) + P(B) − P(A ∩ B). Для несовместных событий пересечение пусто, и вероятности складываются.",
+     "Для независимых событий P(A ∩ B) = P(A)P(B). Противоположное событие имеет вероятность P(Ā) = 1 − P(A). Всегда 0 ≤ P(A) ≤ 1."
+    ],
+    "en": [
+     "In a finite model of equally likely outcomes, P(A) = m/n, where m is the favourable count and n > 0 the total. Counts alone are insufficient if outcomes are not equally likely.",
+     "P(A ∪ B) = P(A) + P(B) − P(A ∩ B). For disjoint events the intersection is empty and the probabilities add.",
+     "For independent events P(A ∩ B) = P(A)P(B). The complement has P(Ā) = 1 − P(A). Always 0 ≤ P(A) ≤ 1."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Бросают два независимых правильных кубика. Найдите вероятность двух шестёрок.",
+      "en": "Roll two independent fair dice. Find the probability of two sixes."
+     },
+     "steps": {
+      "ru": [
+       "У каждого кубика 6 равновозможных исходов, P(шестёрка) = 1/6.",
+       "События независимы, перемножаем: (1/6) · (1/6) = 1/36.",
+       "Или считаем пары: из 36 упорядоченных пар благоприятна одна (6; 6)."
+      ],
+      "en": [
+       "Each die has 6 equally likely outcomes, so P(six) = 1/6.",
+       "The events are independent, so multiply: (1/6) × (1/6) = 1/36.",
+       "Alternatively count pairs: among 36 ordered pairs only (6, 6) is favourable."
+      ]
+     }
+    }
+   ]
+  },
+  "factorials": {
+   "id": "factorials",
+   "title": {
+    "ru": "Факториал и сокращение сочетаний",
+    "en": "Factorials and simplifying combinations"
+   },
+   "definitions": {
+    "ru": [
+     "Для натурального n факториал n! = 1 · 2 · … · n. По определению 0! = 1. Факториал относится к неотрицательным целым числам в школьной комбинаторике."
+    ],
+    "en": [
+     "For a positive integer n, n! = 1 × 2 × … × n. By definition 0! = 1. School combinatorics uses factorials of non-negative integers."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "n! = n(n − 1)! при n ≥ 1. Сначала сокращают одинаковые произведения, а не вычисляют большие факториалы целиком.",
+     "Cₙ² = n(n − 1)/2 при n ≥ 2; Cₙ⁰ = Cₙⁿ = 1; Cₙᵏ = Cₙⁿ⁻ᵏ. Последнее равенство соответствует выбору группы или её дополнения."
+    ],
+    "en": [
+     "n! = n(n − 1)! for n ≥ 1. Cancel common products before evaluating large factorials.",
+     "Cₙ² = n(n − 1)/2 for n ≥ 2; Cₙ⁰ = Cₙⁿ = 1; Cₙᵏ = Cₙⁿ⁻ᵏ. The last equality corresponds to choosing a group or its complement."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Вычислите C₈².",
+      "en": "Evaluate C₈²."
+     },
+     "steps": {
+      "ru": [
+       "C₈² = 8!/(2! · 6!).",
+       "Сокращаем 6!: остаётся 8 · 7/(2 · 1).",
+       "Ответ: 28."
+      ],
+      "en": [
+       "C₈² = 8!/(2! × 6!).",
+       "Cancel 6!: this leaves 8 × 7/(2 × 1).",
+       "Answer: 28."
+      ]
+     }
+    }
+   ]
+  },
+  "vector-coordinates": {
+   "id": "vector-coordinates",
+   "title": {
+    "ru": "Векторы, координаты и длина",
+    "en": "Vectors, coordinates and length"
+   },
+   "definitions": {
+    "ru": [
+     "Вектор — направленный отрезок, заданный длиной и направлением. Координаты AB→ получают вычитанием координат начала A из координат конца B."
+    ],
+    "en": [
+     "A vector is a directed segment specified by magnitude and direction. The coordinates of AB→ are the end coordinates B minus the start coordinates A."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Если A(x₁; y₁), B(x₂; y₂), то AB→ = (x₂ − x₁; y₂ − y₁). Сумма векторов и умножение на число выполняются по координатам.",
+     "Длина (x; y) равна √(x² + y²), в пространстве (x; y; z) — √(x² + y² + z²). Расстояние между точками равно длине соединяющего их вектора."
+    ],
+    "en": [
+     "For A(x₁, y₁) and B(x₂, y₂), AB→ = (x₂ − x₁, y₂ − y₁). Add vectors or multiply by a scalar coordinate by coordinate.",
+     "The length of (x, y) is √(x² + y²); in space (x, y, z) it is √(x² + y² + z²). Distance between points is the length of their joining vector."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "A(1; −2), B(4; 2). Найдите AB→ и его длину.",
+      "en": "A(1, −2), B(4, 2). Find AB→ and its length."
+     },
+     "steps": {
+      "ru": [
+       "AB→ = (4 − 1; 2 − (−2)) = (3; 4).",
+       "Длина √(3² + 4²) = 5.",
+       "Для BA→ координаты противоположны, но длина та же."
+      ],
+      "en": [
+       "AB→ = (4 − 1, 2 − (−2)) = (3, 4).",
+       "Its length is √(3² + 4²) = 5.",
+       "BA→ has opposite coordinates but the same length."
+      ]
+     }
+    }
+   ]
+  },
+  "dot-product": {
+   "id": "dot-product",
+   "title": {
+    "ru": "Скалярное произведение и перпендикулярность",
+    "en": "Dot products and perpendicularity"
+   },
+   "definitions": {
+    "ru": [
+     "Скалярное произведение двух векторов — число a·b = x₁x₂ + y₁y₂ (в пространстве добавляют z₁z₂). Для ненулевых векторов оно равно |a||b| cos φ."
+    ],
+    "en": [
+     "The dot product is the number a·b = x₁x₂ + y₁y₂, adding z₁z₂ in space. For non-zero vectors it also equals |a||b| cos φ."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Ненулевые векторы перпендикулярны тогда и только тогда, когда a·b = 0. При поиске угла cos φ = (a·b)/(|a||b|), поэтому нулевой вектор нужно исключить.",
+     "a·a = |a|²; скалярное произведение симметрично и распределяется по сумме: a·(b + c) = a·b + a·c."
+    ],
+    "en": [
+     "Non-zero vectors are perpendicular if and only if a·b = 0. To find an angle use cos φ = (a·b)/(|a||b|), so exclude zero vectors.",
+     "a·a = |a|²; the dot product is symmetric and distributes over addition: a·(b + c) = a·b + a·c."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Проверьте перпендикулярность a = (2; 3), b = (3; −2).",
+      "en": "Check whether a = (2, 3) and b = (3, −2) are perpendicular."
+     },
+     "steps": {
+      "ru": [
+       "a·b = 2 · 3 + 3 · (−2).",
+       "Скалярное произведение равно 0, оба вектора ненулевые.",
+       "Следовательно, угол между ними 90°."
+      ],
+      "en": [
+       "a·b = 2 × 3 + 3 × (−2).",
+       "The dot product is zero and both vectors are non-zero.",
+       "Therefore their angle is 90°."
+      ]
+     }
+    }
+   ]
+  },
+  "midpoint-collinearity": {
+   "id": "midpoint-collinearity",
+   "title": {
+    "ru": "Середина отрезка и коллинеарность",
+    "en": "Midpoints and collinearity"
+   },
+   "definitions": {
+    "ru": [
+     "Середина отрезка делит его на две равные части. Ненулевые коллинеарные векторы лежат на одной или параллельных прямых; один является числовым множителем другого."
+    ],
+    "en": [
+     "A midpoint divides a segment into two equal parts. Non-zero collinear vectors lie on the same or parallel lines; one is a scalar multiple of the other."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Середина A(x₁; y₁), B(x₂; y₂): M((x₁ + x₂)/2; (y₁ + y₂)/2). В пространстве так же усредняют z.",
+     "Для ненулевых векторов (x₁; y₁), (x₂; y₂) коллинеарность равносильна x₁y₂ − y₁x₂ = 0. Это надёжнее отношений координат, в которых возможен нулевой знаменатель."
+    ],
+    "en": [
+     "The midpoint of A(x₁, y₁), B(x₂, y₂) is M((x₁ + x₂)/2, (y₁ + y₂)/2). In space average z in the same way.",
+     "For non-zero vectors (x₁, y₁), (x₂, y₂), collinearity is equivalent to x₁y₂ − y₁x₂ = 0. This is safer than coordinate ratios with possible zero denominators."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите середину A(−2; 5), B(4; −1).",
+      "en": "Find the midpoint of A(−2, 5) and B(4, −1)."
+     },
+     "steps": {
+      "ru": [
+       "Абсцисса: (−2 + 4)/2 = 1.",
+       "Ордината: (5 − 1)/2 = 2.",
+       "Ответ: M(1; 2)."
+      ],
+      "en": [
+       "The x-coordinate is (−2 + 4)/2 = 1.",
+       "The y-coordinate is (5 − 1)/2 = 2.",
+       "Answer: M(1, 2)."
+      ]
+     }
+    }
+   ]
+  },
+  "parameters": {
+   "id": "parameters",
+   "title": {
+    "ru": "Уравнения с параметром: число и условия на корни",
+    "en": "Parameters: root counts and root conditions"
+   },
+   "definitions": {
+    "ru": [
+     "Параметр — число, от значения которого меняются коэффициенты или условия задачи. Неизвестную решают для каждого допустимого значения параметра."
+    ],
+    "en": [
+     "A parameter is a number whose value changes coefficients or conditions. Solve for the unknown at each permitted parameter value."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "В ax² + bx + c = 0 сначала отдельно рассматривают значения параметра, при которых a = 0. Для a ≠ 0 число вещественных корней задаётся D: два при D > 0, один при D = 0, ни одного при D < 0.",
+     "Условия на знаки корней переводят через Виета, но учитывают существование корней. Два различных положительных корня требуют D > 0, −b/a > 0 и c/a > 0.",
+     "В конце пересекают все ограничения и выбирают требуемое значение: целое, наибольшее или наименьшее. У открытого множества наибольшего значения может не быть."
+    ],
+    "en": [
+     "In ax² + bx + c = 0 first split off parameter values with a = 0. For a ≠ 0, D gives two real roots if D > 0, one if D = 0 and none if D < 0.",
+     "Use Vieta for root signs, but also require roots to exist. Two distinct positive roots require D > 0, −b/a > 0 and c/a > 0.",
+     "Finally intersect all restrictions and choose the requested value: integer, largest or smallest. An open set may have no largest value."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "При каких m у x² − (m + 1)x + m = 0 два различных положительных корня?",
+      "en": "For which m does x² − (m + 1)x + m = 0 have two distinct positive roots?"
+     },
+     "steps": {
+      "ru": [
+       "Разложим: (x − 1)(x − m) = 0, корни 1 и m.",
+       "Положительность обоих требует m > 0; различность — m ≠ 1.",
+       "Ответ: (0; 1) ∪ (1; +∞). Одного условия D ≥ 0 было бы недостаточно."
+      ],
+      "en": [
+       "Factor: (x − 1)(x − m) = 0, so the roots are 1 and m.",
+       "Both are positive if m > 0, and distinct if m ≠ 1.",
+       "Answer: (0, 1) ∪ (1, +∞). D ≥ 0 alone would be insufficient."
+      ]
+     }
+    }
+   ]
+  },
+  "parameter-tangency": {
+   "id": "parameter-tangency",
+   "title": {
+    "ru": "Касание прямой и параболы",
+    "en": "Tangency between a line and a parabola"
+   },
+   "definitions": {
+    "ru": [
+     "Общие точки двух графиков удовлетворяют обоим уравнениям. Для неперерождённой параболы и невертикальной прямой касание означает один двукратный корень уравнения пересечения."
+    ],
+    "en": [
+     "Intersection points satisfy both graph equations. For a non-degenerate parabola and a non-vertical line, tangency means a double root of the intersection equation."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Приравняйте значения y, приведите к квадратному уравнению с ненулевым старшим коэффициентом и потребуйте D = 0. Координату касания затем находят по x₀ = −b/(2a).",
+     "В точке касания угловой коэффициент прямой равен производной параболы. Этот способ даёт независимую проверку."
+    ],
+    "en": [
+     "Equate the y-values, obtain a quadratic with non-zero leading coefficient and require D = 0. Then find the contact x-coordinate using x₀ = −b/(2a).",
+     "At the contact point the line's slope equals the parabola's derivative. This gives an independent check."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите k, при котором y = 2x + k касается y = x².",
+      "en": "Find k such that y = 2x + k is tangent to y = x²."
+     },
+     "steps": {
+      "ru": [
+       "x² = 2x + k ⇒ x² − 2x − k = 0.",
+       "D = 4 + 4k = 0 ⇒ k = −1.",
+       "Касание в (1; 1); производная 2x при x = 1 равна 2, как и наклон прямой."
+      ],
+      "en": [
+       "x² = 2x + k ⇒ x² − 2x − k = 0.",
+       "D = 4 + 4k = 0 ⇒ k = −1.",
+       "The contact is (1, 1); the derivative 2x at x = 1 is 2, matching the line's slope."
+      ]
+     }
+    }
+   ]
+  },
+  "sequences": {
+   "id": "sequences",
+   "title": {
+    "ru": "Последовательности и проверка закономерности",
+    "en": "Sequences and checking a pattern"
+   },
+   "definitions": {
+    "ru": [
+     "Последовательность задаёт член aₙ для каждого натурального номера n. Её можно определить формулой aₙ или начальным значением и рекуррентным правилом."
+    ],
+    "en": [
+     "A sequence assigns a term aₙ to each positive integer n. It can be defined by a formula or by an initial value and recurrence."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Исследуйте разности соседних членов, отношения, чередование и зависимость от n. Найденное правило должно согласоваться со всеми данными, а не только с первыми двумя числами.",
+     "Конечный список сам по себе не определяет единственную бесконечную последовательность. Если дано рекуррентное правило, общую формулу доказывают, например, индукцией: база и переход от n к n + 1."
+    ],
+    "en": [
+     "Inspect consecutive differences, ratios, alternation and dependence on n. A proposed rule must agree with all given terms, not only the first two.",
+     "A finite list alone does not uniquely determine an infinite sequence. If a recurrence is given, prove a formula, for example by induction: a base case and the step from n to n + 1."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Дано a₁ = 2, aₙ₊₁ = aₙ + 2(n + 1). Найдите формулу и a₅.",
+      "en": "Given a₁ = 2 and aₙ₊₁ = aₙ + 2(n + 1), find a formula and a₅."
+     },
+     "steps": {
+      "ru": [
+       "Предполагаем aₙ = n(n + 1); при n = 1 получаем 2.",
+       "Переход: n(n + 1) + 2(n + 1) = (n + 1)(n + 2), формула согласуется с рекурсией.",
+       "Поэтому a₅ = 5 · 6 = 30."
+      ],
+      "en": [
+       "Propose aₙ = n(n + 1); at n = 1 this gives 2.",
+       "The step gives n(n + 1) + 2(n + 1) = (n + 1)(n + 2), agreeing with the recurrence.",
+       "Thus a₅ = 5 × 6 = 30."
+      ]
+     }
+    }
+   ]
+  },
+  "modular-cycles": {
+   "id": "modular-cycles",
+   "title": {
+    "ru": "Остатки и циклы степеней",
+    "en": "Remainders and power cycles"
+   },
+   "definitions": {
+    "ru": [
+     "a ≡ b (mod m), m > 0, означает, что a − b делится на m. Остаток выбирают от 0 до m − 1; последняя цифра числа — остаток при делении на 10."
+    ],
+    "en": [
+     "a ≡ b (mod m), with m > 0, means a − b is divisible by m. Choose a remainder from 0 to m − 1; a number's last digit is its remainder modulo 10."
+    ]
+   },
+   "rules": {
+    "ru": [
+     "Остатки можно складывать и перемножать: если a ≡ b и c ≡ d, то a + c ≡ b + d и ac ≡ bd по одному модулю. Это позволяет не вычислять большие степени целиком.",
+     "Последовательность остатков степеней в итоге повторяется, поскольку остатков конечное число. При взаимно простых основании и модуле цикл начинается сразу; иначе возможна начальная непериодическая часть.",
+     "Сначала выпишите цикл и его начало, затем найдите позицию показателя. Остаток 0 при делении показателя на длину чистого цикла соответствует последнему элементу, а не первому."
+    ],
+    "en": [
+     "Remainders can be added and multiplied: if a ≡ b and c ≡ d, then a + c ≡ b + d and ac ≡ bd for the same modulus. Large powers need not be evaluated in full.",
+     "Power remainders eventually repeat because only finitely many remainders exist. If base and modulus are coprime the cycle starts immediately; otherwise there may be an initial non-periodic part.",
+     "Write the cycle and its starting point, then locate the exponent. Remainder 0 modulo a pure cycle's length corresponds to its last element, not its first."
+    ]
+   },
+   "examples": [
+    {
+     "statement": {
+      "ru": "Найдите последнюю цифру 7²⁰²⁶.",
+      "en": "Find the last digit of 7²⁰²⁶."
+     },
+     "steps": {
+      "ru": [
+       "Последние цифры 7¹, 7², 7³, 7⁴: 7, 9, 3, 1; далее цикл повторяется.",
+       "Длина цикла 4, 2026 = 4 · 506 + 2.",
+       "Вторая позиция цикла — 9. Ответ: 9."
+      ],
+      "en": [
+       "The last digits of 7¹, 7², 7³, 7⁴ are 7, 9, 3, 1; the cycle then repeats.",
+       "The cycle length is 4, and 2026 = 4 × 506 + 2.",
+       "The second cycle entry is 9. Answer: 9."
+      ]
+     }
+    }
    ]
   }
  }

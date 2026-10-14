@@ -115,12 +115,51 @@ def build_topics() -> dict:
     from kit import TOPICS, TOPIC_ORDER, TOOLS
     counts: dict[str, int] = {}
     by_year: dict[str, int] = {}
-    study = build_study(TOPIC_ORDER)
+    lessons = build_theory()
+    study = build_study(TOPIC_ORDER, lessons)
     return {"topics": TOPICS, "order": TOPIC_ORDER, "tools": TOOLS,
-            "counts": counts, "byYear": by_year, "study": study}
+            "counts": counts, "byYear": by_year, "study": study, "lessons": lessons}
 
 
-def build_study(topic_order: list[str]) -> dict:
+def build_theory() -> dict:
+    """Fail closed on incomplete definitions, theorems or worked examples."""
+    mod = load("theory")
+    if mod is None:
+        raise SystemExit("content_src/theory.py is missing")
+    lessons = mod.payload()
+    if not lessons:
+        raise SystemExit("the theory catalogue is empty")
+
+    def bilingual_text(value, where):
+        for lang in ("ru", "en"):
+            if not isinstance(value, dict) or not isinstance(value.get(lang), str) or not value[lang].strip():
+                raise SystemExit(f"{where} has no text ({lang})")
+
+    def bilingual_lines(value, where, minimum=1):
+        for lang in ("ru", "en"):
+            lines = value.get(lang) if isinstance(value, dict) else None
+            if not isinstance(lines, list) or len(lines) < minimum or any(
+                    not isinstance(line, str) or not line.strip() for line in lines):
+                raise SystemExit(f"{where} is incomplete ({lang})")
+        if len(value["ru"]) != len(value["en"]):
+            raise SystemExit(f"{where} has different numbers of RU/EN paragraphs")
+
+    for key, entry in lessons.items():
+        if not re.fullmatch(r"[a-z][a-z0-9-]*", key) or entry.get("id") != key:
+            raise SystemExit(f"invalid theory lesson id: {key}")
+        bilingual_text(entry.get("title"), f"lesson {key} title")
+        for field in ("definitions", "rules"):
+            bilingual_lines(entry.get(field), f"lesson {key} {field}")
+        if not isinstance(entry.get("examples"), list) or not entry["examples"]:
+            raise SystemExit(f"lesson {key} has no worked example")
+        for example in entry["examples"]:
+            bilingual_text(example.get("statement"), f"lesson {key} example")
+            bilingual_lines(example.get("steps"), f"lesson {key} solution", minimum=2)
+    print(f"  · theory: {len(lessons)} bilingual lessons verified")
+    return lessons
+
+
+def build_study(topic_order: list[str], lessons: dict) -> dict:
     """Конспекты «что изучить по теме» (content_src/study.py) для topics.json.
 
     Проверка при сборке: тема без конспекта или ссылка на несуществующий
@@ -132,7 +171,18 @@ def build_study(topic_order: list[str]) -> dict:
         raise SystemExit("content_src/study.py is missing — no study notes to open on a wrong answer")
     study = smod.payload()
     fmod = load("formulas")
-    group_ids = {group["id"] for group in (fmod.groups()["groups"] if fmod else [])}
+    groups = fmod.groups()["groups"] if fmod else []
+    group_ids = {group["id"] for group in groups}
+    used_lessons = set()
+    for group in groups:
+        group_lessons = group.get("lessons") or []
+        if not group_lessons or any(key not in lessons for key in group_lessons):
+            raise SystemExit(f"formula group {group['id']} references missing theory")
+        for item in group["items"]:
+            key = item.get("lesson")
+            if key not in lessons or key not in group_lessons:
+                raise SystemExit(f"formula row in {group['id']} references missing theory: {key}")
+            used_lessons.add(key)
     missing = [topic for topic in topic_order if topic not in study]
     if missing:
         raise SystemExit("study notes are missing for topics: " + ", ".join(missing))
@@ -142,13 +192,22 @@ def build_study(topic_order: list[str]) -> dict:
         for lang in ("ru", "en"):
             if len(entry.get(lang) or []) < 2:
                 raise SystemExit(f"study notes for {topic} are too short ({lang})")
+        lesson_ids = entry.get("lessons") or []
+        if len(lesson_ids) != len(entry["ru"]) or len(lesson_ids) != len(entry["en"]):
+            raise SystemExit(f"study notes for {topic} need one theory link per point in both languages")
+        if any(key not in lessons for key in lesson_ids):
+            raise SystemExit(f"study notes for {topic} reference missing theory")
+        used_lessons.update(lesson_ids)
         unknown = [group for group in entry.get("formulas") or [] if group not in group_ids]
         if unknown:
             raise SystemExit(f"study notes for {topic} reference unknown formula groups: "
                              + ", ".join(unknown))
         if not entry.get("formulas"):
             raise SystemExit(f"study notes for {topic} reference no formula group")
-    print(f"  · study: notes for {len(study)} topics verified")
+    unreachable = set(lessons) - used_lessons
+    if unreachable:
+        raise SystemExit("unreachable theory lessons: " + ", ".join(sorted(unreachable)))
+    print(f"  · study: notes and theory links for {len(study)} topics verified")
     return study
 
 

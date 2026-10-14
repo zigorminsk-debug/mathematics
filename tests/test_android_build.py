@@ -16,6 +16,7 @@ import check_signature as signature
 class ApkVersionTests(unittest.TestCase):
     def test_version_counter(self):
         self.assertEqual(261003, update.version_code("2026.10.3"))
+        self.assertEqual(261004, update.version_code("2026.10.4"))
         self.assertGreater(update.version_code("2026.11.0"), update.version_code("2026.10.99"))
         self.assertGreater(update.version_code("2027.1.0"), update.version_code("2026.12.99"))
         for bad in ("1.0.0", "2026.13.1", "2026.0.1", "2026.10.100", "2026.10.x"):

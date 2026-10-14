@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag (for example v2026.10.3)'
+        description: 'Release tag (for example v2026.10.4)'
         required: true
-        default: 'v2026.10.3'
+        default: 'v2026.10.4'
       release_name:
         description: 'Release name'
         required: false
@@ -67,7 +67,7 @@ jobs:
             echo "::error::тег $TAG не совпадает с VERSION ($CONTENT_VERSION) — поднимите VERSION и поставьте тег по нему, иначе versionCode APK не вырастет и обновление не встанет поверх"
             exit 1
           fi
-          # versionCode выводится из VERSION прямо в Gradle (2026.10.3 -> 261003)
+          # versionCode выводится из VERSION прямо в Gradle (2026.10.4 -> 261004)
           # и одинаков во всех каналах сборки; github.run_number для него не годится.
           CODE=$(python3 tools/check_apk_update.py --print-version-code)
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
@@ -178,6 +178,9 @@ jobs:
               Приложения загружают её из `releases/latest/download` и обновляются «поверх».
             * При неверном ответе открывается тема для изучения: конспект, формулы темы,
               разобранные примеры и тренировка по теме (раздел «Изучение»).
+            * Пункты конспекта, разделы и формулы кликабельны: 56 офлайн-материалов
+              с определениями, правилами/теоремами и примерами на RU/EN.
+              «Назад» возвращает к заданию или поиску формул, сохраняя ввод.
 
             ### Языки
             Русский и English — переключение языка прямо в интерфейсе,

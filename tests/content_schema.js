@@ -72,12 +72,41 @@ if (!topics.study || !Object.keys(topics.study).length) fail('topics.json has no
   if (!Array.isArray(entry.ru) || entry.ru.length < 2) fail(`study notes for "${topic}" are too short (ru)`);
   if (!Array.isArray(entry.en) || entry.en.length < 2) fail(`study notes for "${topic}" are too short (en)`);
   if (!Array.isArray(entry.formulas) || !entry.formulas.length) fail(`study notes for "${topic}" name no formula group`);
+  if (!Array.isArray(entry.lessons) || entry.lessons.length !== entry.ru.length || entry.lessons.length !== entry.en.length) {
+    fail(`study notes for "${topic}" need one theory link per point`);
+  }
+  (entry.lessons || []).forEach((id) => {
+    if (!(topics.lessons || {})[id]) fail(`study point in "${topic}" links to missing theory "${id}"`);
+  });
 });
 const unknownTopics = new Set();
 bank.tasks.concat(analogous.tasks).forEach((task) => {
   if (!topics.topics[task.topic]) unknownTopics.add(task.topic);
 });
 if (unknownTopics.size) fail('tasks reference unknown topics: ' + [...unknownTopics].join(', '));
+
+const lessons = topics.lessons || {};
+if (!Object.keys(lessons).length) fail('topics.json has no detailed lessons');
+const bilingualLines = (value, where, minimum = 1) => {
+  ['ru', 'en'].forEach((lang) => {
+    const lines = value && value[lang];
+    if (!Array.isArray(lines) || lines.length < minimum || lines.some((line) => typeof line !== 'string' || !line.trim())) {
+      fail(`${where} is incomplete (${lang})`);
+    }
+  });
+  if (value && value.ru && value.en && value.ru.length !== value.en.length) fail(`${where} differs between languages`);
+};
+Object.entries(lessons).forEach(([id, lesson]) => {
+  if (id !== lesson.id || !/^[a-z][a-z0-9-]*$/.test(id)) fail(`invalid theory lesson id "${id}"`);
+  if (!lesson.title || !lesson.title.ru || !lesson.title.en) fail(`lesson "${id}" has no bilingual title`);
+  bilingualLines(lesson.definitions, `lesson "${id}" definitions`);
+  bilingualLines(lesson.rules, `lesson "${id}" theorems/rules`);
+  if (!Array.isArray(lesson.examples) || !lesson.examples.length) fail(`lesson "${id}" has no example`);
+  (lesson.examples || []).forEach((example) => {
+    if (!example.statement || !example.statement.ru || !example.statement.en) fail(`lesson "${id}" has no example statement`);
+    bilingualLines(example.steps, `lesson "${id}" worked example`, 2);
+  });
+});
 
 const formulas = read('formulas');
 if (!Array.isArray(formulas.groups) || formulas.groups.length < 5) fail('formulas.json is too small');
@@ -89,9 +118,14 @@ Object.keys(topics.study || {}).forEach((topic) => {
 });
 formulas.groups.forEach((group) => {
   if (!group.items || !group.items.length) fail(`formula group ${group.id} is empty`);
+  if (!Array.isArray(group.lessons) || !group.lessons.length) fail(`formula group ${group.id} has no theory`);
+  (group.lessons || []).forEach((id) => {
+    if (!lessons[id]) fail(`formula group "${group.id}" links to missing theory "${id}"`);
+  });
   group.items.forEach((item) => {
     if (!item.formula) fail(`formula "${JSON.stringify(item.name)}" has no body`);
     if (!item.name || !item.name.ru || !item.name.en) fail(`formula in ${group.id} is not bilingual`);
+    if (!lessons[item.lesson] || !(group.lessons || []).includes(item.lesson)) fail(`formula in ${group.id} links to missing theory`);
   });
 });
 
@@ -119,6 +153,10 @@ const usedKeys = new Set();
   const pattern = /(?<![A-Za-z0-9_$.])t\(\s*['"]([a-z0-9_]+)['"]/g;
   let match;
   while ((match = pattern.exec(source)) !== null) usedKeys.add(match[1]);
+  // NAV and the theory panels pass keys indirectly to t(...). Validate these
+  // too: the previous literal-only gate missed nav_home and nav_about.
+  const indirect = /['"]((?:nav_|theory_)[a-z0-9_]+)['"]/g;
+  while ((match = indirect.exec(source)) !== null) usedKeys.add(match[1]);
 });
 usedKeys.forEach((key) => {
   if (!ui[key]) fail(`the interface uses the missing string "${key}"`);
@@ -160,5 +198,6 @@ if (failures) {
   process.exit(1);
 }
 console.log(`✓ content schema: ${bank.tasks.length} exam tasks, ${analogous.tasks.length} analogous, ` +
-  `${Object.keys(ui).length} interface strings, ${Object.keys(mistakes.errors).length} error diagnoses, ` +
+  `${Object.keys(ui).length} interface strings, ${Object.keys(lessons).length} detailed lessons, ` +
+  `${Object.keys(mistakes.errors).length} error diagnoses, ` +
   `${usedKeys.size} strings referenced by the UI`);

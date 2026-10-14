@@ -78,8 +78,10 @@
     <string name="mixed_exam">Сборный вариант</string>
     <string name="mixed_exam_title">Сборный вариант из всех лет</string>
     <string name="more_hints_fmt">Показать подсказки (%1$s)</string>
+    <string name="nav_about">О программе</string>
     <string name="nav_exam">Экзамен</string>
     <string name="nav_formulas">Формулы</string>
+    <string name="nav_home">Главная</string>
     <string name="nav_practice">Тренировка</string>
     <string name="nav_settings">Настройки</string>
     <string name="nav_stats">Статистика</string>
@@ -133,7 +135,7 @@
     <string name="study_examples">Разобранные примеры по теме</string>
     <string name="study_formulas">Формулы по теме</string>
     <string name="study_index_intro">Выберите тему: краткий конспект, формулы и разобранные примеры. Тема также открывается автоматически при неверном ответе.</string>
-    <string name="study_intro">Краткий конспект и формулы темы, затем — разобранные примеры. После изучения закрепите тему тренировкой.</string>
+    <string name="study_intro">Нажмите пункт конспекта, название раздела или формулу: откроются определения, правила, теоремы и примеры. После изучения закрепите тему тренировкой.</string>
     <string name="study_open">Открыть тему</string>
     <string name="study_points">Что повторить</string>
     <string name="study_practice">Тренировка по теме</string>
@@ -149,6 +151,10 @@
     <string name="theme_dark">Тёмная</string>
     <string name="theme_light">Светлая</string>
     <string name="theme_system">Как в системе</string>
+    <string name="theory_definitions">Определения</string>
+    <string name="theory_examples">Пример применения</string>
+    <string name="theory_open">Открыть определения и теоремы</string>
+    <string name="theory_rules">Правила и теоремы</string>
     <string name="time_col">Время</string>
     <string name="time_is_up">Время вышло! Тест завершён.</string>
     <string name="time_spent_fmt">Затрачено времени: %1$s</string>

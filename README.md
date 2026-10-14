@@ -16,6 +16,7 @@
 | База на основе заданий ЦТ за 6 лет | 6 полных вариантов экзаменационного формата **2021–2026**: по 18 заданий части А (выбор из пяти) и 12 заданий части В (краткий ответ) = **180 заданий** |
 | Математический тренажёр | Режим тренировки (проверка сразу), экзаменационный режим (таймер 180 минут, без подсказок), бесконечная тренировка по темам (**552 однотипных задания** в 25 семействах) |
 | Полный разбор ошибок | Для каждого неверного ответа: ваш ответ ↔ правильный ответ, **типичная причина ошибки** (каталог 106 диагнозов по тегам заданий), пошаговое решение, чек-лист самопроверки и **сразу открывающаяся тема для изучения** (конспект и формулы темы, экран «Изучение» с разобранными примерами) |
+| Изучение определений и теорем | **56 подробных двуязычных материалов** для всех 18 тем: нажмите пункт «Что повторить», название раздела или любую из 116 формул — откроются определения, правила/теоремы с условиями применения и разобранный пример. Материалы доступны офлайн; «Назад» сохраняет задание, ответ и поиск формул |
 | Закрепление на аналогичных примерах | К каждой ошибке автоматически подбираются однотипные задания того же раздела с ответом и полным решением; на экране результата кнопка **«Закрепить похожими заданиями»** собирает отдельный прогон по всем ошибкам |
 | Инструменты для решения | Калькулятор с клавиатурой (без `eval`), сборник формул с поиском (14 разделов, 116 формул), черновик с сохранением по заданию, построитель графиков функций, подсказки, сетка всех заданий варианта, отметки «вернуться», символы `√ π ² −` и ввод дробей |
 | Статистика и прогресс | Пройдено вариантов, решено заданий, точность, время занятий, среднее время на задание, диаграммы по темам и годам, календарь активности, серия дней, цель на день, слабые темы с переходом в тренировку, экспорт отчёта в HTML |
@@ -24,7 +25,7 @@
 | Windows на Go с GUI и HTML | `windows/` — Go (только стандартная библиотека), HTML/CSS/JS интерфейс встроен в EXE через `go:embed`, окно открывается в режиме приложения (Edge/Chrome `--app`) |
 | Автосборка на GitHub Actions | `.github/workflows/ci.yml` — сборка APK и EXE после каждого изменения; `release.yml` — публикация подписанного APK, EXE и обновляемого банка заданий |
 | Контакты кликабельны | Экраны «О программе» и подвал: `mailto:`, `tel:`, WhatsApp, ссылка на исходный код (на Android открываются системными приложениями) |
-| Переключение языка | Русский ⇄ English одной кнопкой в шапке: 173 строки интерфейса, условия, варианты, подсказки, разборы и отчёт — на двух языках (заодно технический английский) |
+| Переключение языка | Русский ⇄ English одной кнопкой в шапке: 179 строк интерфейса, условия, варианты, подсказки, разборы и отчёт — на двух языках (заодно технический английский) |
 | Оформление | Светлая/тёмная тема (по системе или вручную) и три размера шрифта заданий — для работы при ярком свете и вечером |
 
 ---
@@ -84,11 +85,12 @@ python3 tools/sync_assets.py       # разложить интерфейс и б
 python3 tools/check_syntax.py      # синтаксис Go и Kotlin (tree-sitter; --require в CI)
 node tests/answer_parity.js        # паритет проверки ответов (Python ↔ JS) и статистики
 node tests/content_schema.js       # структура банка, тем для изучения и манифеста периодов
-python3 -m unittest discover -s tests -p 'test_*.py'  # проверки обновляемости APK
+python3 -m unittest discover -s tests -p 'test_*.py'  # проверки APK и целостности учебных материалов
 # необязательно: сквозные тесты интерфейса в jsdom
 npm install --no-save jsdom
 node tests/ui_smoke.js             # прогон интерфейса: вариант → разбор → закрепление → статистика
 node tests/native_smoke.js         # тот же интерфейс через мост Android (поддельный CTNative)
+node tests/theory_smoke.js         # все кликабельные пункты/формулы, RU/EN, офлайн, возврат и сохранение ввода
 ```
 
 ## Структура репозитория
@@ -96,7 +98,7 @@ node tests/native_smoke.js         # тот же интерфейс через �
 ```
 content_src/       исходники заданий (Python): kit.py (модель и проверка ответов), periods.py
                    (годы ЦТ), task_bank_2021…2026.py, templates.py, templates_extra.py,
-                   formulas.py, ui_strings.py, mistakes.py, study.py (темы для изучения)
+                   formulas.py, ui_strings.py, mistakes.py, study.py и theory.py (конспекты и теория)
 tools/             build_content.py (проверка + сборка банка), sync_assets.py (единый интерфейс),
                    check_syntax.py (синтаксис Go/Kotlin)
 dist/content/      собранный банк (генерируется, в git не хранится): bank.json, analogous.json,
@@ -109,7 +111,7 @@ android/           приложение Android (Gradle, Kotlin), src/main/asset
                    keystore/ — постоянный ключ подписи
 windows/           приложение Windows на Go (main.go, store.go), go:embed web/
 tests/             answer_parity.js (проверка ответов и статистики), content_schema.js,
-                   ui_smoke.js и native_smoke.js (интерфейс в jsdom)
+                   ui_smoke.js, native_smoke.js и theory_smoke.js (интерфейс в jsdom), test_theory.py
 docs/              ARCHITECTURE.md, CONTENT.md, RELEASE.md
 .github/workflows/ ci.yml (автосборка), release.yml (релиз + обновляемый банк)
 ```
@@ -147,11 +149,14 @@ offline web interface** running inside an Android WebView and inside a Go/Window
 * every wrong answer gets a full analysis: your answer vs. the correct one, the typical cause
   of the mistake, the step-by-step solution, the automatically opened study topic (summary,
   formulas and worked examples) and similar tasks with worked solutions;
+* 56 offline bilingual lessons with definitions, rules/theorems and worked examples,
+  opened by tapping a revision point, a formula section or any formula; Back preserves
+  the task, answer and formula search;
 * exam mode with a 180-minute timer, practice mode, endless topic drilling;
 * tools available during a test: calculator, searchable formula sheet, scratchpad,
   function plotter, hints;
 * statistics: accuracy by topic and by year, streaks, daily goal, weak topics, HTML report;
-* Russian ⇄ English switch (173 interface strings) covers statements, hints, every solution step
+* Russian ⇄ English switch (179 interface strings) covers statements, hints, every solution step
   and the exported report; light/dark theme and three task font sizes;
 * the task bank updates itself in place from the GitHub release feed (SHA-256 verified),
   and the Android release is signed with a constant key so updates install over the old

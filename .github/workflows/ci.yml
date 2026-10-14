@@ -64,6 +64,7 @@ jobs:
           npm install --no-save jsdom
           node tests/ui_smoke.js
           node tests/native_smoke.js
+          node tests/theory_smoke.js
 
       - name: Upload the content bank
         uses: actions/upload-artifact@v4

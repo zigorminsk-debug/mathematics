@@ -295,12 +295,49 @@
     if (settings) settings.addEventListener('click', function () { go('#/settings'); });
     var language = $('#lang-toggle');
     if (language) language.addEventListener('click', function () {
-      I.setLang(I.lang === 'ru' ? 'en' : 'ru');
-      S.settings.lang = I.lang;
-      S.saveSettings(true);
-      UI.chrome();
-      UI.render();
+      UI.changeLanguage(I.lang === 'ru' ? 'en' : 'ru');
     });
+  };
+
+  UI.changeLanguage = function (lang) {
+    // These fields are local UI state rather than progress/session blobs.
+    // Translate the screen without clearing an analogous answer or a search.
+    var formulaSearch = $('#view input[type="search"]');
+    var query = formulaSearch ? formulaSearch.value : null;
+    var analogues = $$('.analogous-item', $('#view')).map(function (item) {
+      return { id: item.getAttribute('data-task-id'), value: $('.answer-input', item).value,
+        status: $('.feedback', item).classList.contains('good') ? 'good'
+          : ($('.feedback', item).classList.contains('bad') ? 'bad' : null),
+        solution: !$('.analogous-solution', item).classList.contains('hidden'),
+        study: !$('.analogous-study', item).classList.contains('hidden') };
+    });
+    I.setLang(lang);
+    S.settings.lang = I.lang;
+    S.saveSettings(true);
+    UI.chrome();
+    UI.render();
+    var newSearch = $('#view input[type="search"]');
+    if (query !== null && newSearch) {
+      newSearch.value = query;
+      newSearch.dispatchEvent(new global.Event('input', { bubbles: true }));
+    }
+    $$('.analogous-item', $('#view')).forEach(function (item) {
+      var saved = analogues.filter(function (state) { return state.id === item.getAttribute('data-task-id'); })[0];
+      if (!saved) return;
+      $('.answer-input', item).value = saved.value;
+      $('.analogous-solution', item).classList.toggle('hidden', !saved.solution);
+      if (saved.status) {
+        var feedback = $('.feedback', item);
+        feedback.className = 'feedback ' + saved.status;
+        feedback.textContent = t(saved.status === 'good' ? 'answer_correct' : 'answer_incorrect');
+      }
+      if (saved.study) {
+        var holder = $('.analogous-study', item);
+        var block = UI.studyBlock(C.taskById(saved.id));
+        if (block) { holder.appendChild(block); holder.classList.remove('hidden'); }
+      }
+    });
+    if ($('#modal').classList.contains('open') && modalRefresh) modalRefresh(true);
   };
 
   /** Тема и размер шрифта: применяются к <html>, чтобы CSS подхватил сразу. */
@@ -341,16 +378,41 @@
   // CT.bridge.notify ищет тост интерфейса здесь
   CT.app = { toast: function (message) { CT.toast(message); } };
 
+  // A theory window can be opened from the formula sheet. Retain the actual
+  // DOM nodes (including input values and handlers), rather than rebuilding the
+  // parent tool and losing its search query. No session/progress blobs change.
+  var modalStack = [], modalFocus = null, modalRefresh = null;
+
   /** Модальное окно: принимает узел и заголовок. */
   UI.modal = function (title, node, options) {
     options = options || {};
     var overlay = $('#modal');
     var sheet = $('.sheet', overlay);
+    if (options.push && overlay.classList.contains('open')) {
+      modalStack.push({ nodes: Array.prototype.slice.call(sheet.childNodes),
+        className: sheet.className, scrollTop: sheet.scrollTop, focus: doc.activeElement,
+        lang: I.lang, refresh: modalRefresh });
+    } else if (!options.keepHistory) {
+      modalStack = [];
+      modalFocus = doc.activeElement;
+    }
+    modalRefresh = options.refresh || null;
     clear(sheet);
     sheet.className = 'sheet' + (options.wide ? ' wide' : '') + (options.tall ? ' tall' : '');
     var head = el('div', { class: 'sheet-head' });
-    head.appendChild(el('h2', { text: title }));
-    var close = el('button', { class: 'icon-btn', text: '✕', 'aria-label': t('close') });
+    if (modalStack.length) {
+      var back = el('button', { class: 'icon-btn modal-back', type: 'button', text: '←', 'aria-label': t('prev') });
+      back.addEventListener('click', UI.backModal);
+      head.appendChild(back);
+    }
+    head.appendChild(el('h2', { id: 'modal-title', text: title }));
+    if (options.language) {
+      var language = el('button', { class: 'icon-btn lang modal-lang', type: 'button',
+        text: I.lang === 'ru' ? 'EN' : 'RU', 'aria-label': t('language') });
+      language.addEventListener('click', function () { UI.changeLanguage(I.lang === 'ru' ? 'en' : 'ru'); });
+      head.appendChild(language);
+    }
+    var close = el('button', { class: 'icon-btn modal-close', type: 'button', text: '✕', 'aria-label': t('close') });
     close.addEventListener('click', UI.closeModal);
     head.appendChild(close);
     sheet.appendChild(head);
@@ -358,18 +420,54 @@
     body.appendChild(node);
     sheet.appendChild(body);
     if (options.footer) sheet.appendChild(options.footer);
+    sheet.scrollTop = 0;
     overlay.classList.add('open');
+    doc.body.classList.add('modal-open');
     overlay.setAttribute('aria-hidden', 'false');
+    overlay.setAttribute('aria-labelledby', 'modal-title');
+    close.focus();
     return sheet;
+  };
+  UI.backModal = function () {
+    var previous = modalStack.pop();
+    if (!previous) { UI.closeModal(); return; }
+    var sheet = $('.sheet', $('#modal'));
+    clear(sheet);
+    sheet.className = previous.className;
+    previous.nodes.forEach(function (node) { sheet.appendChild(node); });
+    sheet.scrollTop = previous.scrollTop;
+    modalRefresh = previous.refresh;
+    if (previous.lang !== I.lang && modalRefresh) { modalRefresh(true); return; }
+    if (previous.focus && previous.focus.isConnected) previous.focus.focus();
   };
   UI.closeModal = function () {
     var overlay = $('#modal');
     if (!overlay) return;
     overlay.classList.remove('open');
+    doc.body.classList.remove('modal-open');
     overlay.setAttribute('aria-hidden', 'true');
+    modalStack = [];
+    modalRefresh = null;
     clear($('.sheet', overlay));
+    if (modalFocus && modalFocus.isConnected) modalFocus.focus();
+    else if ($('#view')) $('#view').focus();
+    modalFocus = null;
   };
   CT.closeModal = UI.closeModal;
+
+  doc.addEventListener('keydown', function (event) {
+    if (!$('#modal').classList.contains('open')) return;
+    if (event.key === 'Escape') { event.preventDefault(); UI.backModal(); return; }
+    if (event.key !== 'Tab') return;
+    var controls = $$('button:not(:disabled), input:not(:disabled), textarea:not(:disabled), a[href]', $('.sheet'));
+    if (!controls.length) return;
+    var first = controls[0], last = controls[controls.length - 1];
+    if (event.shiftKey && (doc.activeElement === first || !$('.sheet').contains(doc.activeElement))) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && (doc.activeElement === last || !$('.sheet').contains(doc.activeElement))) {
+      event.preventDefault(); first.focus();
+    }
+  });
 
   /** Подтверждение с двумя кнопками. */
   UI.confirm = function (message, onYes, yesLabel) {
@@ -492,16 +590,107 @@
     return card;
   };
 
-  /** Один раздел сборника формул (карточка «название — формула»). */
-  UI.formulaGroupCard = function (group) {
-    var card = el('div', { class: 'card formula-group' });
-    card.appendChild(el('h3', { text: I.pick(group) }));
-    (group.items || []).forEach(function (item) {
-      var row = el('div', { class: 'formula-row' });
-      row.appendChild(el('div', { class: 'formula-name', text: I.pick(item.name) }));
-      row.appendChild(el('div', { class: 'formula-body', text: item.formula }));
-      card.appendChild(row);
+  /** Definitions, conditions of rules/theorems, and worked examples. */
+  UI.openTheory = function (lessonIds, options) {
+    options = options || {};
+    var lessons = lessonIds.map(function (id) { return C.lessonById(id); }).filter(Boolean);
+    if (!lessons.length) return;
+    var render = function (keepHistory) {
+      var wrap = el('div', { class: 'theory-content' });
+      if (options.formula) {
+        wrap.appendChild(el('div', { class: 'banner info theory-formula', text: options.formula.formula }));
+      }
+      lessons.forEach(function (lesson) {
+        var article = el('article', { class: 'theory-lesson', 'data-lesson': lesson.id });
+        if (lessons.length > 1 || options.title) article.appendChild(el('h3', { text: I.pick(lesson.title) }));
+        [['definitions', 'theory_definitions'], ['rules', 'theory_rules']].forEach(function (section) {
+          var block = el('section', { class: 'theory-' + section[0] });
+          block.appendChild(el('h3', { text: t(section[1]) }));
+          var list = el('ul', {});
+          (I.pick(lesson[section[0]]) || []).forEach(function (line) { list.appendChild(el('li', { text: line })); });
+          block.appendChild(list);
+          article.appendChild(block);
+        });
+        (lesson.examples || []).forEach(function (example) {
+          var block = el('section', { class: 'theory-example' });
+          block.appendChild(el('h3', { text: t('theory_examples') }));
+          block.appendChild(el('p', { text: I.pick(example.statement) }));
+          var steps = el('ol', { class: 'steps' });
+          (I.pick(example.steps) || []).forEach(function (step) { steps.appendChild(el('li', { text: step })); });
+          block.appendChild(steps);
+          article.appendChild(block);
+        });
+        wrap.appendChild(article);
+      });
+      var footer = el('div', { class: 'rowline theory-footer' });
+      var back = el('button', { class: 'btn', type: 'button', text: t('prev') });
+      back.addEventListener('click', UI.backModal);
+      footer.appendChild(back);
+      UI.modal(I.pick(options.title || lessons[0].title), wrap, { tall: true,
+        push: !keepHistory, keepHistory: !!keepHistory, language: true,
+        refresh: render, footer: footer });
+    };
+    render(false);
+  };
+
+  /** Native buttons: touch targets, keyboard activation and an explicit arrow. */
+  UI.theoryButton = function (label, ids, className, title) {
+    var button = el('button', { class: 'theory-trigger ' + (className || ''), type: 'button',
+      title: t('theory_open'), 'aria-haspopup': 'dialog', 'data-lesson': ids.join(' ') });
+    button.appendChild(el('span', { text: label }));
+    button.appendChild(el('span', { class: 'theory-arrow', text: '›', 'aria-hidden': 'true' }));
+    button.addEventListener('click', function () {
+      button.focus();
+      UI.openTheory(ids, { title: title });
     });
+    return button;
+  };
+
+  UI.studyPoints = function (topic) {
+    var study = C.studyFor(topic);
+    var points = study ? (I.pick(study) || []) : [];
+    var list = el('ul', { class: 'study-points' });
+    points.forEach(function (point, index) {
+      var id = (study.lessons || [])[index];
+      list.appendChild(el('li', {}, [C.lessonById(id)
+        ? UI.theoryButton(point, [id], 'study-point-link') : doc.createTextNode(point)]));
+    });
+    return list;
+  };
+
+  UI.formulaMatches = function (item, needle, group) {
+    return !needle || (I.pick(item.name) + ' ' + (item.name.ru || '') + ' ' + (item.name.en || '') +
+      ' ' + item.formula + ' ' + (group.ru || '') + ' ' + (group.en || '')).toLowerCase().indexOf(needle) >= 0;
+  };
+
+  UI.formulaRow = function (item) {
+    var lesson = C.lessonById(item.lesson);
+    var row = el(lesson ? 'button' : 'div', { class: 'formula-row' + (lesson ? ' theory-trigger formula-link' : ''),
+      type: lesson ? 'button' : null, 'data-lesson': lesson ? lesson.id : null,
+      title: lesson ? t('theory_open') : null, 'aria-haspopup': lesson ? 'dialog' : null });
+    row.appendChild(el('span', { class: 'formula-name', text: I.pick(item.name) }));
+    row.appendChild(el('span', { class: 'formula-body', text: item.formula }));
+    if (lesson) {
+      row.appendChild(el('span', { class: 'theory-arrow', text: '›', 'aria-hidden': 'true' }));
+      row.addEventListener('click', function () {
+        row.focus();
+        UI.openTheory([lesson.id], { title: item.name, formula: item });
+      });
+    }
+    return row;
+  };
+
+  /** One shared renderer in Study, error remediation and both formula sheets. */
+  UI.formulaGroupCard = function (group, options) {
+    options = options || {};
+    var card = el('div', { class: (options.compact ? 'study-formulas' : 'card') + ' formula-group', 'data-group': group.id });
+    var heading = el(options.compact ? 'h5' : 'h3', { class: 'formula-group-title' });
+    var lessons = C.lessonsForGroup(group);
+    heading.appendChild(lessons.length ? UI.theoryButton(I.pick(group),
+      lessons.map(function (lesson) { return lesson.id; }), 'formula-group-link', group)
+      : doc.createTextNode(I.pick(group)));
+    card.appendChild(heading);
+    (options.items || group.items || []).forEach(function (item) { card.appendChild(UI.formulaRow(item)); });
     return card;
   };
 
@@ -522,23 +711,11 @@
     var points = study ? (I.pick(study) || []) : [];
     if (points.length) {
       box.appendChild(el('h5', { text: t('study_points') }));
-      var ul = el('ul', { class: 'study-points' });
-      points.forEach(function (point) { ul.appendChild(el('li', { text: point })); });
-      box.appendChild(ul);
+      box.appendChild(UI.studyPoints(task.topic));
     }
     if (groups.length) {
       box.appendChild(el('h5', { text: t('study_formulas') }));
-      groups.forEach(function (group) {
-        var wrap = el('div', { class: 'study-formulas' });
-        wrap.appendChild(el('div', { class: 'formula-group-title', text: I.pick(group) }));
-        (group.items || []).forEach(function (item) {
-          var row = el('div', { class: 'formula-row' });
-          row.appendChild(el('div', { class: 'formula-name', text: I.pick(item.name) }));
-          row.appendChild(el('div', { class: 'formula-body', text: item.formula }));
-          wrap.appendChild(row);
-        });
-        box.appendChild(wrap);
-      });
+      groups.forEach(function (group) { box.appendChild(UI.formulaGroupCard(group, { compact: true })); });
     }
     var row = el('div', { class: 'rowline wrap' });
     var open = el('button', { class: 'btn primary', text: t('study_open') });
@@ -612,18 +789,18 @@
 
   /** Однотипное задание: ввести ответ, получить проверку и решение. */
   UI.analogousItem = function (task, index) {
-    var wrap = el('div', { class: 'analogous-item' });
+    var wrap = el('div', { class: 'analogous-item', 'data-task-id': task.id });
     wrap.appendChild(el('div', { class: 'analogous-head', text: t('analogous_task_fmt', index) + ' · ' + C.topicTitle(task.topic) }));
     wrap.appendChild(el('div', { class: 'task-text', text: I.pick(task.text) }));
     var input = el('input', { class: 'answer-input', type: 'text', placeholder: t('answer_placeholder') });
     var check = el('button', { class: 'btn primary', text: t('check_answer') });
     var reveal = el('button', { class: 'btn ghost', text: t('show_solution') });
     var feedback = el('div', { class: 'feedback' });
-    var solution = el('div', { class: 'hidden' });
+    var solution = el('div', { class: 'hidden analogous-solution' });
     var steps = el('ol', { class: 'steps' });
     (I.pick(task.solution) || []).forEach(function (step) { steps.appendChild(el('li', { text: step })); });
     solution.appendChild(steps);
-    var studyHolder = el('div', { class: 'hidden' });
+    var studyHolder = el('div', { class: 'hidden analogous-study' });
     var row = el('div', { class: 'answer-row' });
     row.appendChild(input); row.appendChild(check); row.appendChild(reveal);
     wrap.appendChild(row);
@@ -1126,9 +1303,7 @@
     if (points.length) {
       var pointsCard = el('div', { class: 'card study-points-card' });
       pointsCard.appendChild(el('h3', { text: t('study_points') }));
-      var ul = el('ul', { class: 'study-points' });
-      points.forEach(function (point) { ul.appendChild(el('li', { text: point })); });
-      pointsCard.appendChild(ul);
+      pointsCard.appendChild(UI.studyPoints(topic));
       root.appendChild(pointsCard);
     }
 
@@ -1258,19 +1433,10 @@
       var needle = String(query || '').trim().toLowerCase();
       C.formulas.forEach(function (group) {
         var items = group.items.filter(function (item) {
-          if (!needle) return true;
-          return (I.pick(item.name) + ' ' + item.formula).toLowerCase().indexOf(needle) >= 0;
+          return UI.formulaMatches(item, needle, group);
         });
         if (!items.length) return;
-        var card = el('div', { class: 'card formula-group' });
-        card.appendChild(el('h3', { text: I.pick(group) }));
-        items.forEach(function (item) {
-          var row = el('div', { class: 'formula-row' });
-          row.appendChild(el('div', { class: 'formula-name', text: I.pick(item.name) }));
-          row.appendChild(el('div', { class: 'formula-body', text: item.formula }));
-          card.appendChild(row);
-        });
-        list.appendChild(card);
+        list.appendChild(UI.formulaGroupCard(group, { items: items }));
       });
       if (!list.firstChild) list.appendChild(el('p', { class: 'muted', text: t('nothing_found') }));
     };
@@ -1343,7 +1509,8 @@
       evaluate();
     },
 
-    sheet: function (task) {
+    sheet: function (task, query, options) {
+      options = options || {};
       var wrap = el('div', { class: 'formula-list in-modal' });
       var search = el('input', { class: 'answer-input', type: 'search', placeholder: t('search_formula') });
       wrap.appendChild(search);
@@ -1354,21 +1521,17 @@
         var needle = String(query || '').trim().toLowerCase();
         C.formulas.forEach(function (group) {
           var items = group.items.filter(function (item) {
-            return !needle || (I.pick(item.name) + ' ' + item.formula).toLowerCase().indexOf(needle) >= 0;
+            return UI.formulaMatches(item, needle, group);
           });
           if (!items.length) return;
-          var card = el('div', { class: 'card formula-group' });
-          card.appendChild(el('h3', { text: I.pick(group) }));
-          items.forEach(function (item) {
-            card.appendChild(h('<div class="formula-row"><div class="formula-name">' + esc(I.pick(item.name)) +
-              '</div><div class="formula-body">' + esc(item.formula) + '</div></div>'));
-          });
-          holder.appendChild(card);
+          holder.appendChild(UI.formulaGroupCard(group, { items: items }));
         });
       };
       search.addEventListener('input', function () { render(search.value); });
-      render('');
-      UI.modal(t('tool_sheet'), wrap, { tall: true });
+      search.value = query || '';
+      render(search.value);
+      UI.modal(t('tool_sheet'), wrap, { tall: true, keepHistory: !!options.keepHistory,
+        language: true, refresh: function () { TOOLS.sheet(task, search.value, { keepHistory: true }); } });
     },
 
     scratchpad: function (task) {
@@ -1555,10 +1718,7 @@
     [['ru', 'Русский'], ['en', 'English']].forEach(function (pair) {
       var btn = el('button', { class: 'btn' + (S.settings.lang === pair[0] ? ' primary' : ''), text: pair[1] });
       btn.addEventListener('click', function () {
-        S.settings.lang = pair[0];
-        I.setLang(pair[0]);
-        S.saveSettings(true);
-        UI.chrome(); UI.render();
+        UI.changeLanguage(pair[0]);
       });
       row.appendChild(btn);
     });
@@ -1782,7 +1942,7 @@
 
   /** Системная кнопка «назад» на Android: «exit» — выйти из приложения. */
   CT.onAndroidBack = function () {
-    if ($('#modal').classList.contains('open')) { UI.closeModal(); return null; }
+    if ($('#modal').classList.contains('open')) { UI.backModal(); return null; }
     var route = parseHash();
     if (route.name === '#/home') return 'exit';
     if (route.name === '#/study' && route.extra) {

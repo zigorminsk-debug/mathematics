@@ -7,13 +7,17 @@
 
 ``STUDY`` покрывает каждую тему из ``kit.TOPICS``: ``build_content.py`` падает,
 если тема осталась без конспекта или указан несуществующий раздел формул, а
-``formulas`` — ключи разделов из ``content_src/formulas.py``.
+``formulas`` — ключи разделов из ``content_src/formulas.py``. Каждый пункт
+конспекта связан через ``theory.STUDY_LESSONS`` с определениями, правилами и
+теоремами; при экспорте ссылки попадают в ``lessons``.
 
 Study notes per topic: what to revise after a mistake, plus the formula-sheet
 sections that belong to the topic. Opened automatically on a wrong answer.
 """
 
 from __future__ import annotations
+
+from theory import STUDY_LESSONS
 
 STUDY: dict[str, dict] = {
     "numbers": {
@@ -135,10 +139,10 @@ STUDY: dict[str, dict] = {
     },
     "research": {
         "formulas": ["derivative", "functions"],
-        "ru": ["Критические точки — нули производной; вид экстремума определяет смена знака f′.",
+        "ru": ["Критические точки — внутренние точки, где производная равна нулю или не существует; вид экстремума определяет смена знака f′.",
                "Через точку, где f′ меняет знак с − на +, — минимум, с + на − — максимум.",
                "На отрезке наибольшее и наименьшее значения ищем и в критических точках, и на концах."],
-        "en": ["Critical points are the zeros of the derivative; the type of extremum follows from the sign change of f′.",
+        "en": ["Critical points are interior points where the derivative is zero or does not exist; the type of extremum follows from the sign change of f′.",
                "A sign change − → + gives a minimum, + → − gives a maximum.",
                "On a segment, check both the critical points and the endpoints for the largest and smallest values."],
     },
@@ -188,5 +192,6 @@ def topics() -> list[str]:
 
 def payload() -> dict:
     """Часть ``topics.json``: конспекты по ключам тем из ``kit.TOPICS``."""
-    return {key: {"formulas": entry["formulas"], "ru": entry["ru"], "en": entry["en"]}
+    return {key: {"formulas": entry["formulas"], "ru": entry["ru"], "en": entry["en"],
+                  "lessons": STUDY_LESSONS.get(key, [])}
             for key, entry in STUDY.items()}
