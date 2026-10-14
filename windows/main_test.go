@@ -184,9 +184,17 @@ func TestCheckUpdatesRejectsTamperedFile(t *testing.T) {
 
 func TestCheckUpdatesOffline(t *testing.T) {
 	store := newTestStore(t)
-	result := store.CheckUpdates("", "2026.10.1")
+	// Закрытый порт на этой машине: соединение отклоняется сразу, поэтому тест
+	// не зависит от того, доступен ли настоящий канал обновлений.
+	result := store.CheckUpdates("http://127.0.0.1:1", "2026.10.1")
 	if result.Status != "offline" {
 		t.Fatalf("status = %q, want offline", result.Status)
+	}
+	// Пустой адрес означает «взять канал по умолчанию»; сам адрес должен
+	// указывать на последний релиз репозитория (без обращения к сети).
+	want := "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
+	if defaultFeed != want {
+		t.Fatalf("defaultFeed = %q, want %q", defaultFeed, want)
 	}
 }
 

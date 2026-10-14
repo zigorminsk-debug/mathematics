@@ -29,6 +29,19 @@
 
 ---
 
+## Как установить готовую сборку
+
+1. Откройте [последний релиз](https://github.com/zigorminsk-debug/mathematics/releases/latest).
+2. **Android** — скачайте `app-release.apk` и установите (разрешите установку из этого
+   источника). Каждое следующее обновление ставится **поверх** без удаления приложения и
+   без потери статистики: APK подписан постоянным ключом проекта, а CI сверяет подпись
+   с эталоном (`python3 tools/check_signature.py`).
+3. **Windows** — скачайте `CTMathsTutor-amd64.exe` (или `arm64` для ARM-устройств) и
+   запустите: приложение работает офлайн, прогресс хранится в `%APPDATA%\CTMathsTutor`.
+4. **База заданий** обновляется из того же релиза: в настройках нажмите
+   «Проверить обновления» (или включите автообновление) — новые варианты и однотипные
+   задания подтягиваются поверх установленных, статистика остаётся.
+
 ## Быстрый старт
 
 ### Android
@@ -130,7 +143,8 @@ offline web interface** running inside an Android WebView and inside a Go/Window
 * Russian ⇄ English switch (162 interface strings) covers statements, hints, every solution step
   and the exported report; light/dark theme and three task font sizes;
 * the task bank updates itself in place from the GitHub release feed (SHA-256 verified),
-  and the Android release is signed with a constant key so updates install over the old build.
+  and the Android release is signed with a constant key so updates install over the old
+  build (CI compares the APK certificate with the committed fingerprint).
 
 Tests: `node tests/answer_parity.js`, `node tests/content_schema.js`, and the jsdom journeys
 `node tests/ui_smoke.js` / `node tests/native_smoke.js`.
