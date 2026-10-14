@@ -1,0 +1,6 @@
+# Runtime content/build/release tools use only Python's standard library.
+# These dependencies are for the test/workflow and native syntax gates.
+PyYAML==6.0.3
+tree-sitter==0.26.0
+tree-sitter-go==0.25.0
+tree-sitter-kotlin==1.1.0

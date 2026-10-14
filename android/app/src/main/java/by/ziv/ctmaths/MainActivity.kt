@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
             .build()
 
-        bridge = NativeBridge(this)
+        bridge = NativeBridge(this) { script -> webView.evaluateJavascript(script, null) }
         webView = WebView(this)
         webView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 // let the page decide: it navigates back inside the SPA, and only
                 // when it is already at the start does the activity finish
                 webView.evaluateJavascript("window.CT && window.CT.onAndroidBack && window.CT.onAndroidBack()") { result ->
-                    if (result == null || result == "null" || result == "\"exit\"") finish()
+                    if (result == "\"exit\"") finish()
                 }
             }
         })

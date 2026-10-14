@@ -41,13 +41,15 @@ func webRootFS() (fs.FS, error) { return fs.Sub(embedded, "web") }
 //	go build -ldflags "-X main.buildStamp=2026.10.1+42"
 var buildStamp = "dev"
 
+// The shell version tracks the VERSION of its embedded bank.
+var appVersion = embeddedVersion()
+
 const (
-	appName    = "Репетитор ЦТ: Математика"
-	appVersion = "2026.10.1"
-	appRepo    = "https://github.com/zigorminsk-debug/mathematics"
-	developer  = "Захаревич Игорь (Zakharevich Igor)"
-	devEmail   = "ziv@csl.by"
-	devPhone   = "+3753371412"
+	appName   = "Репетитор ЦТ: Математика"
+	appRepo   = "https://github.com/zigorminsk-debug/mathematics"
+	developer = "Захаревич Игорь (Zakharevich Igor)"
+	devEmail  = "ziv@csl.by"
+	devPhone  = "+3753371412"
 )
 
 // server holds everything the HTTP handlers need.
@@ -195,14 +197,41 @@ func (s *server) handleState(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, payload)
 }
 
-// contentVersion reads the manifest from the overlay (downloaded update) or,
-// when there is none, from the embedded bank.
-func (s *server) contentVersion() string {
+// overlayCurrent reports whether the downloaded pack may shadow the bank
+// embedded in this executable: only when it is not older. A stale overlay
+// must not hide a newer bank shipped inside a new EXE/APK — otherwise the
+// new variant would never appear after an in-place update.
+func (s *server) overlayVersion() string {
 	if data, ok := s.store.ReadContent("version"); ok {
 		var manifest contentManifest
 		if json.Unmarshal(data, &manifest) == nil && manifest.ContentVersion != "" {
 			return manifest.ContentVersion
 		}
+	}
+	// Legacy Android-style/manual packs sometimes had no version.json.
+	if data, ok := s.store.ReadContent("bank"); ok {
+		var bank struct {
+			Meta struct {
+				Version string `json:"contentVersion"`
+			} `json:"meta"`
+		}
+		if json.Unmarshal(data, &bank) == nil {
+			return bank.Meta.Version
+		}
+	}
+	return ""
+}
+
+func (s *server) overlayCurrent() bool {
+	version := s.overlayVersion()
+	embeddedVersionName := embeddedVersion()
+	return version == "" || embeddedVersionName == "" || compareContentVersions(version, embeddedVersionName) >= 0
+}
+
+// contentVersion is the newest of the embedded and downloaded banks.
+func (s *server) contentVersion() string {
+	if version := s.overlayVersion(); version != "" && s.overlayCurrent() {
+		return version
 	}
 	return embeddedVersion()
 }
@@ -273,8 +302,9 @@ func (s *server) handleUpdate(w http.ResponseWriter, r *http.Request) {
 	if request.BaseURL == "" {
 		request.BaseURL = s.feed
 	}
-	if request.Current == "" {
-		request.Current = s.contentVersion()
+	// Do not let an outdated page's version request a downgrade of a newer build.
+	if installed := s.contentVersion(); compareContentVersions(installed, request.Current) > 0 {
+		request.Current = installed
 	}
 	result := s.store.CheckUpdates(request.BaseURL, request.Current)
 	writeJSON(w, http.StatusOK, result)
@@ -356,7 +386,8 @@ func (s *server) staticHandler(webRoot fs.FS) http.Handler {
 }
 
 // contentHandler serves the task bank: a downloaded update (overlay) wins over
-// the embedded copy, so progress files are never touched by an update.
+// the embedded copy while it is not older than it, so progress files are never
+// touched by an update and a new build is never shadowed by a stale pack.
 func (s *server) contentHandler(webRoot fs.FS) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		s.touch()
@@ -366,7 +397,7 @@ func (s *server) contentHandler(webRoot fs.FS) http.Handler {
 			return
 		}
 		w.Header().Set("Cache-Control", "no-cache")
-		if data, ok := s.store.ReadContent(name); ok {
+		if data, ok := s.store.ReadContent(name); ok && s.overlayCurrent() {
 			w.Header().Set("Content-Type", "application/json; charset=utf-8")
 			_, _ = w.Write(data)
 			return
