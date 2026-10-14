@@ -1,12 +1,16 @@
 {
  "strings": {
   "about_text": {
-   "ru": "Математический тренажёр для подготовки к централизованному тестированию по математике (Республика Беларусь). База содержит шесть вариантов экзаменационного формата (2021–2026) и генератор однотипных заданий.",
-   "en": "A maths trainer for the Belarusian centralised testing (CT) exam. The bank contains six exam-format variants (2021–2026) plus a generator of analogous tasks for consolidation."
+   "ru": "Физический тренажёр для подготовки к централизованному тестированию по физике (Республика Беларусь). База содержит шесть авторских тренировочных вариантов (2021–2026, по 10 заданий части A и 20 заданий части B), генератор однотипных заданий, теорию с бытовыми объяснениями и схемами. Формат сверен с перечнем РИКЗ: 30 заданий, 210 минут.",
+   "en": "A physics trainer for the Belarusian centralised testing (CT) exam. The bank contains six authored practice papers (2021–2026, each with 10 part A and 20 part B tasks), a generator of analogous tasks, and offline theory with everyday explanations and diagrams. The format follows the official RIKZ list: 30 tasks, 210 minutes."
   },
   "about_title": {
    "ru": "О программе",
    "en": "About"
+  },
+  "accepted_forms_fmt": {
+   "ru": "Принимаются также записи: %s",
+   "en": "Also accepted: %s"
   },
   "analogous_hint": {
    "ru": "Похожие задания для закрепления",
@@ -25,8 +29,8 @@
    "en": "Correct! Well done."
   },
   "answer_hint": {
-   "ru": "Запишите ответ (например, 12,5 или 5/6)",
-   "en": "Type the answer (for example 12.5 or 5/6)"
+   "ru": "Запишите ответ: число, при необходимости с единицей — 10 м/с, 36 км/ч, 19,6",
+   "en": "Type the answer: a number, with a unit where needed — 10 m/s, 36 km/h, 19.6"
   },
   "answer_incorrect": {
    "ru": "Пока неверно. Посмотрите разбор и попробуйте ещё раз.",
@@ -40,13 +44,25 @@
    "ru": "Ответ",
    "en": "Answer"
   },
+  "answer_quantity_hint": {
+   "ru": "Ответ — физическая величина: число и, если нужно, единица",
+   "en": "The answer is a physical quantity: a number and, if needed, a unit"
+  },
+  "answer_unit_hint": {
+   "ru": "Единицу можно указать вместе с числом: 10 м/с или 36 км/ч",
+   "en": "You may type the unit with the number: 10 m/s or 36 km/h"
+  },
+  "answer_unit_label": {
+   "ru": "Единица измерения",
+   "en": "Unit"
+  },
   "app_name": {
-   "ru": "Репетитор ЦТ: Математика",
-   "en": "CT Maths Tutor"
+   "ru": "Репетитор ЦТ: Физика",
+   "en": "CT Physics Tutor"
   },
   "app_tagline": {
-   "ru": "Математический тренажёр для подготовки к ЦТ (РБ)",
-   "en": "Maths trainer for the CT exam (Belarus)"
+   "ru": "Физический тренажёр для подготовки к ЦТ (РБ)",
+   "en": "Physics trainer for the CT exam (Belarus)"
   },
   "auto_advance": {
    "ru": "Переходить к следующему заданию автоматически",
@@ -168,6 +184,10 @@
    "ru": "Захаревич Игорь",
    "en": "Igor Zakharevich"
   },
+  "dimension_mismatch_hint": {
+   "ru": "Подсказка: сверьте размерность ответа с формулой и переведите данные в СИ.",
+   "en": "Hint: compare the dimension of the answer with your formula and convert the data to SI."
+  },
   "discard": {
    "ru": "Начать заново",
    "en": "Start over"
@@ -177,8 +197,8 @@
    "en": "Discard the unfinished variant?"
   },
   "disclaimer": {
-   "ru": "Задания составлены автором по мотивам открытых материалов ЦТ и не являются официальными материалами РИКЗ.",
-   "en": "The tasks are authored in the spirit of publicly available CT materials and are not official RIKZ papers."
+   "ru": "Авторские тренировочные варианты, составленные по программе и формату ЦТ по физике. Это не официальные задания РИКЗ.",
+   "en": "Authored practice papers written to the physics CT syllabus and format. They are not official RIKZ materials."
   },
   "error_analysis": {
    "ru": "Разбор",
@@ -193,20 +213,24 @@
    "en": "Variant time"
   },
   "exam_rules_fmt": {
-   "ru": "На решение отводится %s. Ответы к частям A и B проверяются автоматически.",
-   "en": "%s are allowed. Parts A and B are graded automatically."
+   "ru": "На решение отводится %s. Часть A — 10 заданий с выбором ответа, часть B — 20 заданий с кратким ответом.",
+   "en": "%s are allowed. Part A has 10 multiple-choice tasks, part B has 20 short-answer tasks."
   },
   "exam_settings": {
    "ru": "Экзамен",
    "en": "Exam"
+  },
+  "expected_dimension_fmt": {
+   "ru": "Ожидается размерность: %s",
+   "en": "Expected dimension: %s"
   },
   "export_report": {
    "ru": "Сохранить отчёт",
    "en": "Save report"
   },
   "feedback_subject": {
-   "ru": "Репетитор ЦТ: Математика — обратная связь",
-   "en": "CT Maths Tutor — feedback"
+   "ru": "Репетитор ЦТ: Физика — обратная связь",
+   "en": "CT Physics Tutor — feedback"
   },
   "finish_confirm": {
    "ru": "Завершить тест и увидеть результаты?",
@@ -215,6 +239,30 @@
   "finish_test": {
    "ru": "Завершить тест",
    "en": "Finish the test"
+  },
+  "font_large": {
+   "ru": "Крупный",
+   "en": "Large"
+  },
+  "font_normal": {
+   "ru": "Обычный",
+   "en": "Normal"
+  },
+  "font_size": {
+   "ru": "Размер шрифта заданий",
+   "en": "Task font size"
+  },
+  "font_small": {
+   "ru": "Мелкий",
+   "en": "Small"
+  },
+  "formula_conditions": {
+   "ru": "Условия применимости",
+   "en": "Conditions of validity"
+  },
+  "given_data": {
+   "ru": "Дано",
+   "en": "Given"
   },
   "goal_done": {
    "ru": "Цель дня выполнена!",
@@ -225,20 +273,20 @@
    "en": "Grade: %s"
   },
   "graph_help": {
-   "ru": "Функции — по одной в строке: y = x^2 — 3x + 1",
-   "en": "Functions — one per line: y = x^2 - 3x + 1"
+   "ru": "Величины — по одной в строке: x = 4t + t^2; v = 4 + 2t",
+   "en": "Quantities — one per line: x = 4t + t^2; v = 4 + 2t"
   },
   "graph_hint": {
-   "ru": "Введите функции и постройте графики",
-   "en": "Enter functions and plot them"
+   "ru": "Введите зависимость и постройте график",
+   "en": "Enter a dependence and plot it"
   },
   "hints": {
    "ru": "Подсказки",
    "en": "Hints"
   },
   "insert_symbols": {
-   "ru": "Вставить знаки √ π ²",
-   "en": "Insert symbols √ π ²"
+   "ru": "Вставить знаки · ² ³ ·10⁻³",
+   "en": "Insert symbols · ² ³ ·10⁻³"
   },
   "interface_settings": {
    "ru": "Интерфейс",
@@ -288,13 +336,13 @@
    "ru": "Сборный вариант из всех лет",
    "en": "Mixed variant from all years"
   },
+  "model_limits": {
+   "ru": "Границы модели",
+   "en": "Model limits"
+  },
   "more_hints_fmt": {
    "ru": "Показать подсказки (%s)",
    "en": "Show hints (%s)"
-  },
-  "nav_home": {
-   "ru": "Главная",
-   "en": "Home"
   },
   "nav_about": {
    "ru": "О программе",
@@ -307,6 +355,10 @@
   "nav_formulas": {
    "ru": "Формулы",
    "en": "Formulas"
+  },
+  "nav_home": {
+   "ru": "Главная",
+   "en": "Home"
   },
   "nav_practice": {
    "ru": "Тренировка",
@@ -392,6 +444,26 @@
    "ru": "Прогресс сброшен",
    "en": "Progress reset"
   },
+  "reason_dimension": {
+   "ru": "Размерность не та: проверьте, какую величину спрашивают, и выбранную формулу.",
+   "en": "Wrong dimension: check which quantity is asked for and which formula you used."
+  },
+  "reason_empty": {
+   "ru": "Ответ пустой — запишите число и, если нужно, единицу.",
+   "en": "The answer is empty — type a number and, if needed, a unit."
+  },
+  "reason_missing_unit": {
+   "ru": "Нужно указать единицу измерения ответа.",
+   "en": "Add the unit of the answer."
+  },
+  "reason_unit": {
+   "ru": "Такая единица измерения неизвестна. Используйте единицы СИ и их стандартные обозначения.",
+   "en": "This unit is not recognised. Use SI units and their standard symbols."
+  },
+  "reason_value": {
+   "ru": "Число не совпало с верным значением. Проверьте перевод единиц и подстановку данных.",
+   "en": "The number does not match. Check the unit conversion and the substitution of data."
+  },
   "reinforce": {
    "ru": "Закрепить похожими заданиями",
    "en": "Consolidate with similar tasks"
@@ -436,10 +508,6 @@
    "ru": "Продолжить",
    "en": "Resume"
   },
-  "return_to_task": {
-   "ru": "Вернуться к заданию",
-   "en": "Return to the task"
-  },
   "resume_text": {
    "ru": "У вас есть незаконченный вариант. Продолжить с того же места?",
    "en": "You have an unfinished variant. Continue where you left off?"
@@ -447,6 +515,10 @@
   "resume_title": {
    "ru": "Продолжить?",
    "en": "Continue?"
+  },
+  "return_to_task": {
+   "ru": "Вернуться к заданию",
+   "en": "Return to the task"
   },
   "review_mistakes_fmt": {
    "ru": "Разобрать ошибки (%s)",
@@ -468,9 +540,25 @@
    "ru": "Показать решение",
    "en": "Show the solution"
   },
+  "skip_task": {
+   "ru": "Пропустить",
+   "en": "Skip"
+  },
   "solution": {
    "ru": "Решение",
    "en": "Solution"
+  },
+  "solution_answer": {
+   "ru": "Ответ",
+   "en": "Answer"
+  },
+  "solution_formula": {
+   "ru": "Формула",
+   "en": "Formula"
+  },
+  "solution_substitution": {
+   "ru": "Подстановка",
+   "en": "Substitution"
   },
   "source_code": {
    "ru": "Исходный код проекта",
@@ -521,64 +609,12 @@
    "en": "Pick a topic: a short summary, formulas and worked examples. The topic also opens automatically after a wrong answer."
   },
   "study_intro": {
-   "ru": "Нажмите пункт конспекта, название раздела или формулу: откроются определения, правила, теоремы и примеры. После изучения закрепите тему тренировкой.",
-   "en": "Tap a summary point, section title or formula to open definitions, rules, theorems and examples. Afterwards consolidate the topic with practice."
+   "ru": "Нажмите пункт конспекта, название раздела или формулу: откроются определения, условия применимости, границы модели и разобранные примеры.",
+   "en": "Tap a summary point, section title or formula to open definitions, conditions of validity, model limits and worked examples."
   },
   "study_open": {
    "ru": "Открыть тему",
    "en": "Open the topic"
-  },
-  "theory_open": {
-   "ru": "Открыть определения и теоремы",
-   "en": "Open definitions and theorems"
-  },
-  "theory_definitions": {
-   "ru": "Определения",
-   "en": "Definitions"
-  },
-  "theory_rules": {
-   "ru": "Правила и теоремы",
-   "en": "Rules and theorems"
-  },
-  "theory_everyday": {
-   "ru": "Просто и на примере из жизни",
-   "en": "In everyday terms"
-  },
-  "theory_visuals": {
-   "ru": "Наглядно: графики и схемы",
-   "en": "See it: graphs and diagrams"
-  },
-  "theory_enlarge": {
-   "ru": "Рассмотреть крупнее",
-   "en": "Enlarge diagram"
-  },
-  "theory_visual_unavailable": {
-   "ru": "Схема недоступна; пояснение приведено ниже.",
-   "en": "Diagram unavailable; read the explanation below."
-  },
-  "theory_zoom_in": {
-   "ru": "Увеличить схему",
-   "en": "Zoom in"
-  },
-  "theory_zoom_out": {
-   "ru": "Уменьшить схему",
-   "en": "Zoom out"
-  },
-  "theory_zoom_reset": {
-   "ru": "Вписать в окно",
-   "en": "Fit to window"
-  },
-  "theory_zoom_fmt": {
-   "ru": "Масштаб: %s",
-   "en": "Zoom: %s"
-  },
-  "theory_pan_hint": {
-   "ru": "Увеличенную схему можно прокручивать пальцем или полосами прокрутки. Назад вернёт к материалу без потери ответа.",
-   "en": "Pan an enlarged diagram by touch or scrollbars. Back returns to the lesson without losing your answer."
-  },
-  "theory_examples": {
-   "ru": "Пример применения",
-   "en": "Worked example"
   },
   "study_points": {
    "ru": "Что повторить",
@@ -624,33 +660,69 @@
    "ru": "Оформление",
    "en": "Theme"
   },
-  "theme_system": {
-   "ru": "Как в системе",
-   "en": "System default"
+  "theme_dark": {
+   "ru": "Тёмная",
+   "en": "Dark"
   },
   "theme_light": {
    "ru": "Светлая",
    "en": "Light"
   },
-  "theme_dark": {
-   "ru": "Тёмная",
-   "en": "Dark"
+  "theme_system": {
+   "ru": "Как в системе",
+   "en": "System default"
   },
-  "font_size": {
-   "ru": "Размер шрифта заданий",
-   "en": "Task font size"
+  "theory_definitions": {
+   "ru": "Определения",
+   "en": "Definitions"
   },
-  "font_small": {
-   "ru": "Мелкий",
-   "en": "Small"
+  "theory_enlarge": {
+   "ru": "Рассмотреть крупнее",
+   "en": "Enlarge diagram"
   },
-  "font_normal": {
-   "ru": "Обычный",
-   "en": "Normal"
+  "theory_everyday": {
+   "ru": "Просто и на примере из жизни",
+   "en": "In everyday terms"
   },
-  "font_large": {
-   "ru": "Крупный",
-   "en": "Large"
+  "theory_examples": {
+   "ru": "Пример применения",
+   "en": "Worked example"
+  },
+  "theory_open": {
+   "ru": "Открыть определения и теоремы",
+   "en": "Open definitions and theorems"
+  },
+  "theory_pan_hint": {
+   "ru": "Увеличенную схему можно прокручивать пальцем или полосами прокрутки. Назад вернёт к материалу без потери ответа.",
+   "en": "Pan an enlarged diagram by touch or scrollbars. Back returns to the lesson without losing your answer."
+  },
+  "theory_rules": {
+   "ru": "Правила и теоремы",
+   "en": "Rules and theorems"
+  },
+  "theory_visual_unavailable": {
+   "ru": "Схема недоступна; пояснение приведено ниже.",
+   "en": "Diagram unavailable; read the explanation below."
+  },
+  "theory_visuals": {
+   "ru": "Наглядно: графики и схемы",
+   "en": "See it: graphs and diagrams"
+  },
+  "theory_zoom_fmt": {
+   "ru": "Масштаб: %s",
+   "en": "Zoom: %s"
+  },
+  "theory_zoom_in": {
+   "ru": "Увеличить схему",
+   "en": "Zoom in"
+  },
+  "theory_zoom_out": {
+   "ru": "Уменьшить схему",
+   "en": "Zoom out"
+  },
+  "theory_zoom_reset": {
+   "ru": "Вписать в окно",
+   "en": "Fit to window"
   },
   "time_col": {
    "ru": "Время",
@@ -673,8 +745,8 @@
    "en": "Calculator"
   },
   "tool_graph": {
-   "ru": "График функции",
-   "en": "Function plotter"
+   "ru": "График зависимости",
+   "en": "Plotter"
   },
   "tool_hint": {
    "ru": "Подсказка",
@@ -688,9 +760,13 @@
    "ru": "Формулы",
    "en": "Formulas"
   },
+  "tool_units": {
+   "ru": "Единицы и размерности",
+   "en": "Units and dimensions"
+  },
   "tools_intro": {
-   "ru": "Калькулятор, формулы, черновик и графики — всё под рукой.",
-   "en": "Calculator, formulas, scratchpad and plots — all at hand."
+   "ru": "Калькулятор, формулы, единицы, графики и черновик — всё под рукой.",
+   "en": "Calculator, formulas, units, plots and scratchpad — all at hand."
   },
   "topic": {
    "ru": "Тема",
@@ -703,6 +779,30 @@
   "unanswered_warning_fmt": {
    "ru": "Без ответа осталось заданий: %s",
    "en": "Tasks left unanswered: %s"
+  },
+  "unit_of_answer": {
+   "ru": "Единица ответа",
+   "en": "Answer unit"
+  },
+  "units_dimension_col": {
+   "ru": "Размерность",
+   "en": "Dimension"
+  },
+  "units_factor_col": {
+   "ru": "Множитель к СИ",
+   "en": "Factor to SI"
+  },
+  "units_intro": {
+   "ru": "Единицы СИ, приставки и размерности. Размерность результата подсказывает, верна ли формула.",
+   "en": "SI units, prefixes and dimensions. The dimension of the result tells whether the formula is right."
+  },
+  "units_nothing_found": {
+   "ru": "Ничего не найдено — проверьте написание.",
+   "en": "Nothing found — check the spelling."
+  },
+  "units_search_hint": {
+   "ru": "Найти единицу или величину",
+   "en": "Find a unit or quantity"
   },
   "update_failed": {
    "ru": "Не удалось обновить задания. Проверьте подключение к интернету.",
@@ -754,8 +854,11 @@
   }
  },
  "meta": {
-  "contentVersion": "2026.10.5",
+  "contentVersion": "2026.10.1",
   "schema": 1,
+  "subject": "physics",
+  "package": "by.ziv.ctphysics",
+  "app": "CTPhysicsTutor",
   "years": [
    2021,
    2022,
@@ -766,13 +869,18 @@
   ],
   "counts": {
    "bank": 180,
-   "analogous": 552,
-   "choice": 108,
-   "short": 72
+   "analogous": 39,
+   "choice": 60,
+   "quantity": 120,
+   "lessons": 37,
+   "figures": 26
   },
   "author": "Zakharevich Igor",
-  "email": "ziv@csl.by",
-  "phone": "+3753371412",
-  "repo": "https://github.com/zigorminsk-debug/mathematics"
+  "repo": "https://github.com/zigorminsk-debug/mathematics",
+  "disclosure": {
+   "ru": "Авторские тренировочные варианты, составленные по программе и формату ЦТ по физике. Это не официальные задания РИКЗ.",
+   "en": "Authored practice papers written to the physics CT syllabus and format. They are not official RIKZ materials."
+  },
+  "structureSource": "Перечень РИКЗ: физика — 10 заданий части A, 20 заданий части B, всего 30, 210 минут (ЦТ/ЦЭ 2025). Проверено 2026-10-14."
  }
 }

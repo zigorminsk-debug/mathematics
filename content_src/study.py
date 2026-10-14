@@ -1,197 +1,160 @@
-"""study.py — что изучить по каждой теме («тема для изучения» при ошибке).
+"""study.py — конспект «что изучить по теме» для каждой области курса.
 
-Когда ученик отвечает неверно, приложение не ограничивается правильным ответом:
-оно сразу открывает тему, к которой относится задание, — этот короткий конспект
-(что повторить + какие разделы сборника формул открыть), а на отдельном экране
-«Изучение» — ещё и разобранные примеры и переход к тренировке по теме.
-
-``STUDY`` покрывает каждую тему из ``kit.TOPICS``: ``build_content.py`` падает,
-если тема осталась без конспекта или указан несуществующий раздел формул, а
-``formulas`` — ключи разделов из ``content_src/formulas.py``. Каждый пункт
-конспекта связан через ``theory.STUDY_LESSONS`` с определениями, правилами и
-теоремами; при экспорте ссылки попадают в ``lessons``.
-
-Study notes per topic: what to revise after a mistake, plus the formula-sheet
-sections that belong to the topic. Opened automatically on a wrong answer.
+Открывается сразу после неверного ответа: три-четыре пункта по существу, каждый
+со ссылкой на урок теории и на раздел сборника формул. Именно поэтому здесь нет
+общих слов: каждый пункт — это то, что ученик реально перепутал в задании.
 """
 
 from __future__ import annotations
 
-from theory import STUDY_LESSONS
+from kit import PhysicsError, TOPIC_ORDER
+
+
+def _entry(ru, en, lessons, groups):
+    if len(ru) != len(en) or len(ru) != len(lessons):
+        raise PhysicsError("конспект темы: пункты и ссылки на теорию должны совпадать")
+    return {"ru": list(ru), "en": list(en), "lessons": list(lessons), "formulas": list(groups)}
+
 
 STUDY: dict[str, dict] = {
-    "numbers": {
-        "formulas": ["numbers", "powers"],
-        "ru": ["Порядок действий: скобки → степень → умножение и деление → сложение и вычитание.",
-               "Обыкновенные дроби приводим к общему знаменателю; деление заменяем умножением на обратную дробь.",
-               "Десятичную дробь полезно записать обыкновенной (0,125 = 1/8), а результат оценить по величине."],
-        "en": ["Order of operations: brackets → powers → multiplication and division → addition and subtraction.",
-               "Give fractions a common denominator; replace division by multiplication by the reciprocal.",
-               "Rewrite a decimal as a fraction (0.125 = 1/8) and sanity-check the size of the result."],
-    },
-    "expressions": {
-        "formulas": ["powers", "multiplication"],
-        "ru": ["Действия со степенями: при умножении показатели складываются, при возведении степени в степень — перемножаются.",
-               "Формулы сокращённого умножения применяются целиком, среднее слагаемое 2ab не теряется.",
-               "Сокращать можно только общие множители после разложения на множители, а не отдельные слагаемые."],
-        "en": ["Power rules: exponents add when multiplying and multiply when raising a power to a power.",
-               "Apply the identities as a whole; do not drop the middle term 2ab.",
-               "Only common factors may be cancelled, after factoring — never individual terms."],
-    },
-    "equations": {
-        "formulas": ["quadratic", "multiplication"],
-        "ru": ["При переносе слагаемого через знак равенства его знак меняется; пропорция решается крест-накрест.",
-               "Квадратное уравнение: дискриминант и формула корней, для приведённого — теорема Виета.",
-               "После решения проверяем ОДЗ и отбрасываем посторонние корни подстановкой."],
-        "en": ["A term moved across the equals sign changes its sign; solve proportions by cross-multiplying.",
-               "Quadratic equations: the discriminant and the root formula; Vieta's theorem for monic ones.",
-               "After solving, check the domain and discard extraneous roots by substitution."],
-    },
-    "inequalities": {
-        "formulas": ["inequalities", "quadratic"],
-        "ru": ["При умножении или делении на отрицательное число знак неравенства переворачивается.",
-               "Метод интервалов: корни на числовую прямую, знак на каждом интервале, строгие точки выколоты.",
-               "Для квадратного неравенства смотрим на корни трёхчлена и направление ветвей параболы."],
-        "en": ["Multiplying or dividing by a negative number reverses the inequality sign.",
-               "Interval method: roots on the number line, the sign on each interval, strict points are open.",
-               "For a quadratic inequality use the roots of the trinomial and the direction of the branches."],
-    },
-    "functions": {
-        "formulas": ["functions", "quadratic"],
-        "ru": ["Область определения: знаменатель не равен нулю, под корнем чётной степени — неотрицательное выражение.",
-               "Область значений y = a + b·sin x (или cos x) получаем из −1 ≤ sin x ≤ 1, не теряя знаки при умножении.",
-               "Преобразования графика: сдвиги, растяжения и отражения от осей."],
-        "en": ["Domain: the denominator must not vanish; an even root needs a non-negative radicand.",
-               "The range of y = a + b·sin x (or cos x) comes from −1 ≤ sin x ≤ 1, keeping track of sign flips.",
-               "Graph transformations: shifts, stretches and reflections in the axes."],
-    },
-    "progressions": {
-        "formulas": ["progressions"],
-        "ru": ["Арифметическая: aₙ = a₁ + (n − 1)d — между первым и n-м членом n − 1 шагов.",
-               "Геометрическая: bₙ = b₁·qⁿ⁻¹; из b₃/b₁ получаем q², знак q выбираем по условию.",
-               "Сумма: Sₙ = (a₁ + aₙ)·n/2 для арифметической и b₁(qⁿ − 1)/(q − 1) для геометрической."],
-        "en": ["Arithmetic: aₙ = a₁ + (n − 1)d — there are n − 1 steps between the first and n-th terms.",
-               "Geometric: bₙ = b₁·qⁿ⁻¹; b₃/b₁ gives q², and the sign of q follows from the statement.",
-               "Sums: Sₙ = (a₁ + aₙ)·n/2 (arithmetic) and b₁(qⁿ − 1)/(q − 1) (geometric)."],
-    },
-    "wordproblems": {
-        "formulas": ["numbers", "progressions"],
-        "ru": ["Обозначаем неизвестное за x и записываем, что именно одинаково в двух ситуациях (путь, работа, стоимость).",
-               "Движение: s = vt; навстречу скорости складываются, по течению — собственная плюс скорость течения.",
-               "Проценты берутся от текущей величины: снижение на p% — умножение на (1 − p/100), и следующий процент уже от новой цены."],
-        "en": ["Let x be the unknown and write down what is equal in the two situations (distance, work, cost).",
-               "Motion: s = vt; speeds add when moving towards each other, and downstream the current is added.",
-               "Percentages refer to the current value: a p% reduction multiplies by (1 − p/100), and the next percentage applies to the new price."],
-    },
-    "trig": {
-        "formulas": ["trig"],
-        "ru": ["Основное тождество sin²α + cos²α = 1 связывает синус и косинус одного угла.",
-               "Знак функции определяем по четверти, значение — по табличным углам 30°, 45°, 60°.",
-               "Формулы двойного угла: sin 2α = 2sin α·cos α, cos 2α = cos²α − sin²α = 1 − 2sin²α."],
-        "en": ["The Pythagorean identity sin²α + cos²α = 1 links the sine and cosine of one angle.",
-               "Fix the sign from the quadrant and the value from the table angles 30°, 45°, 60°.",
-               "Double-angle formulas: sin 2α = 2sin α·cos α, cos 2α = cos²α − sin²α = 1 − 2sin²α."],
-    },
-    "trigequations": {
-        "formulas": ["trig"],
-        "ru": ["Сначала приводим уравнение к простейшему виду sin x = a, cos x = a или tg x = a.",
-               "Записываем общую серию корней и только потом отбираем корни на заданном отрезке или наименьший положительный.",
-               "Не теряем вторую серию: у sin x = a корни даёт формула (−1)ⁿ arcsin a + πn."],
-        "en": ["First reduce the equation to a basic form sin x = a, cos x = a or tg x = a.",
-               "Write the general series of roots, and only then select the roots on the given interval or the smallest positive one.",
-               "Do not lose the second series: sin x = a gives x = (−1)ⁿ arcsin a + πn."],
-    },
-    "logexp": {
-        "formulas": ["logexp"],
-        "ru": ["Определение: log_a b = c ⇔ aᶜ = b (a > 0, a ≠ 1, b > 0); отсюда a^(log_a b) = b.",
-               "Свойства: логарифм произведения — сумма логарифмов, степени — показатель выносится множителем.",
-               "Показательное уравнение приводим к одному основанию и приравниваем показатели; в логарифмическом проверяем ОДЗ."],
-        "en": ["Definition: log_a b = c ⇔ aᶜ = b (a > 0, a ≠ 1, b > 0); hence a^(log_a b) = b.",
-               "Properties: the logarithm of a product is a sum, and an exponent comes out as a factor.",
-               "For an exponential equation use one common base and equate the exponents; for a logarithmic one check the domain."],
-    },
-    "planimetry": {
-        "formulas": ["planimetry"],
-        "ru": ["Начинаем с чертежа и известных элементов: стороны, углы, высоты, диагонали.",
-               "Прямоугольный треугольник: теорема Пифагора, медиана к гипотенузе равна её половине.",
-               "Площади: треугольник a·h/2, трапеция (a + b)·h/2, ромб d₁·d₂/2; теоремы синусов и косинусов связывают стороны и углы."],
-        "en": ["Start from a drawing and the known elements: sides, angles, heights, diagonals.",
-               "Right triangle: the Pythagorean theorem; the median to the hypotenuse equals half of it.",
-               "Areas: triangle a·h/2, trapezoid (a + b)·h/2, rhombus d₁·d₂/2; the laws of sines and cosines link sides and angles."],
-    },
-    "stereometry": {
-        "formulas": ["stereometry"],
-        "ru": ["Объём призмы и цилиндра — площадь основания на высоту: V = Sосн·h.",
-               "У пирамиды и конуса появляется множитель 1/3: V = Sосн·h/3, V = πR²h/3.",
-               "Если спрашивают коэффициент при π, выносим π за скобки и не подставляем 3,14."],
-        "en": ["Volumes of prisms and cylinders are base area times height: V = S·h.",
-               "Pyramids and cones carry a factor 1/3: V = S·h/3, V = πR²h/3.",
-               "If the coefficient at π is requested, factor π out and do not substitute 3.14."],
-    },
-    "derivative": {
-        "formulas": ["derivative"],
-        "ru": ["Таблица производных: (xⁿ)′ = n·xⁿ⁻¹, (sin x)′ = cos x, (cos x)′ = −sin x.",
-               "Сложная функция: сначала производная внешней, затем умножаем на производную внутренней.",
-               "Значение в точке считаем после записи производной: подставляем x₀ в f′, а не в f."],
-        "en": ["Derivative table: (xⁿ)′ = n·xⁿ⁻¹, (sin x)′ = cos x, (cos x)′ = −sin x.",
-               "Composite functions: differentiate the outer function, then multiply by the derivative of the inner one.",
-               "Differentiate first and only then substitute x₀ into f′, not into f."],
-    },
-    "research": {
-        "formulas": ["derivative", "functions"],
-        "ru": ["Критические точки — внутренние точки, где производная равна нулю или не существует; вид экстремума определяет смена знака f′.",
-               "Через точку, где f′ меняет знак с − на +, — минимум, с + на − — максимум.",
-               "На отрезке наибольшее и наименьшее значения ищем и в критических точках, и на концах."],
-        "en": ["Critical points are interior points where the derivative is zero or does not exist; the type of extremum follows from the sign change of f′.",
-               "A sign change − → + gives a minimum, + → − gives a maximum.",
-               "On a segment, check both the critical points and the endpoints for the largest and smallest values."],
-    },
-    "combinatorics": {
-        "formulas": ["combinatorics"],
-        "ru": ["Порядок важен — размещения или перестановки, не важен — сочетания Cₙᵏ = n!/(k!(n − k)!).",
-               "Классическая вероятность P = m/n: благоприятные исходы ко всем равновозможным.",
-               "Факториалы и сочетания сокращаем до вычисления: C(n,2) = n(n − 1)/2."],
-        "en": ["If the order matters use arrangements or permutations; if not, combinations Cₙᵏ = n!/(k!(n − k)!).",
-               "Classical probability P = m/n: favourable outcomes over all equally likely outcomes.",
-               "Cancel factorials and combinations before computing: C(n,2) = n(n − 1)/2."],
-    },
-    "vectors": {
-        "formulas": ["vectors", "planimetry"],
-        "ru": ["Координаты вектора — разность координат конца и начала; длина — корень из суммы квадратов координат.",
-               "Скалярное произведение: a·b = x₁x₂ + y₁y₂ = |a||b|cos φ; перпендикулярность ⇔ a·b = 0.",
-               "Середина отрезка — полусумма координат концов, коллинеарность — пропорциональность координат."],
-        "en": ["Vector coordinates are the end minus the start; the length is the root of the sum of squared coordinates.",
-               "Dot product: a·b = x₁x₂ + y₁y₂ = |a||b|cos φ; perpendicularity ⇔ a·b = 0.",
-               "The midpoint is the half-sum of the endpoint coordinates; collinearity means proportional coordinates."],
-    },
-    "param": {
-        "formulas": ["quadratic", "functions"],
-        "ru": ["Условие на число корней переводим в условие на дискриминант: D > 0, D = 0 или D < 0.",
-               "Касание прямой и параболы — тоже D = 0 у уравнения, полученного приравниванием.",
-               "Из нескольких значений параметра выбираем то, что спрашивает условие (наибольшее, наименьшее, целое)."],
-        "en": ["Translate the condition on the number of roots into a condition on the discriminant: D > 0, D = 0 or D < 0.",
-               "Tangency of a line and a parabola is also D = 0 for the equation obtained by equating them.",
-               "From several parameter values pick the one the statement asks for (largest, smallest, integer)."],
-    },
-    "logic": {
-        "formulas": ["numbers", "progressions"],
-        "ru": ["Ищем правило: разности соседних членов, формулу n-го члена или периодичность остатков.",
-               "Остатки степеней по модулю повторяются циклами — важен остаток показателя при делении на длину цикла.",
-               "Проверяем найденное правило на всех заданных членах, а не только на первых двух."],
-        "en": ["Look for the rule: differences of consecutive terms, an n-th term formula, or a cycle of residues.",
-               "Residues of powers repeat in cycles — what matters is the exponent modulo the cycle length.",
-               "Check the rule you found against every given term, not just the first two."],
-    },
+    "measurements": _entry(
+        ["Все величины в СИ: м, кг, с, А, К, моль. Перед подстановкой в формулу переведите данные в одну систему единиц.",
+         "Приставки меняют множитель: 1 км = 10³ м, 1 см = 10⁻² м, 1 мм = 10⁻³ м, 1 мкм = 10⁻⁶ м, 1 кВт = 10³ Вт.",
+         "Размерность проверяет формулу: путь — м, скорость — м/с, ускорение — м/с², сила — Н, энергия — Дж.",
+         "У измеренной величины есть погрешность: она не меньше половины цены деления прибора."],
+        ["All quantities in SI: m, kg, s, A, K, mol. Convert the data to one system of units before substitution.",
+         "Prefixes change the factor: 1 km = 10³ m, 1 cm = 10⁻² m, 1 mm = 10⁻³ m, 1 µm = 10⁻⁶ m, 1 kW = 10³ W.",
+         "The dimension checks the formula: m, m/s, m/s², N, J.",
+         "Every measured value carries an uncertainty of at least half a scale division."],
+        ["units-si", "dimensions-check", "dimensions-check", "measure-accuracy"], ["units"]),
+    "kinematics": _entry(
+        ["Путь — длина траектории, перемещение — вектор из начала в конец; при возврате они различаются.",
+         "Средняя скорость — весь путь, делённый на всё время, а не среднее арифметическое скоростей.",
+         "При равноускоренном движении v = v₀ + at и s = v₀t + at²/2: множитель ½ только у слагаемого ускорения.",
+         "На графике v(t) наклон — ускорение, площадь под графиком — путь; свободное падение идёт с a = g."],
+        ["Distance and displacement differ: the first is the trajectory length, the second is a vector.",
+         "Average speed is total distance over total time, not the mean of the speeds.",
+         "Uniformly accelerated motion: v = v₀ + at and s = v₀t + at²/2 — the factor ½ belongs to the acceleration term.",
+         "On a v(t) graph the slope is acceleration and the area is distance; free fall has a = g."],
+        ["motion-terms", "motion-terms", "accelerated-motion", "kinematics-graphs"], ["kinematics"]),
+    "dynamics": _entry(
+        ["Второй закон Ньютона работает с равнодействующей всех сил: a = F/m.",
+         "Сила тяжести F = mg приложена к телу, вес — к опоре; масса измеряется в килограммах.",
+         "Трение скольжения Fтр = μN, где N — сила нормального давления, а не всегда mg.",
+         "Силы удобно рисовать: выберите тело, покажите все силы и только потом пишите уравнение."],
+        ["The second law uses the net force: a = F/m.",
+         "Gravity acts on the body, weight on the support; mass is measured in kilograms.",
+         "Sliding friction F = μN where N is the normal force, not always mg.",
+         "Draw a free-body diagram: choose the body, show every force, then write the equation."],
+        ["newton-laws", "forces-weight", "friction-elasticity", "force-diagram"], ["dynamics"]),
+    "workenergy": _entry(
+        ["Работа A = Fs·cos α: сила, перпендикулярная перемещению, работы не совершает.",
+         "Мощность P = A/t, КПД — отношение полезной работы к затраченной и всегда меньше 100 %.",
+         "Механическая энергия сохраняется только без трения и потерь; с потерями часть её уходит в тепло.",
+         "Импульс p = mv сохраняется в замкнутой системе, удар и отдача — типичные примеры."],
+        ["Work A = Fs·cos α: a force perpendicular to the displacement does no work.",
+         "Power P = A/t, efficiency is useful work over total work and stays below 100 %.",
+         "Mechanical energy is conserved only without friction and losses.",
+         "Momentum p = mv is conserved in a closed system; collisions and recoil are the standard cases."],
+        ["work-power", "work-power", "energy-conservation", "momentum"], ["energy"]),
+    "statics": _entry(
+        ["Момент силы M = Fd, где d — плечо: перпендикуляр от оси вращения до линии действия силы.",
+         "Равновесие требует равенства нулю и суммы сил, и суммы моментов.",
+         "Давление p = F/S; давление жидкости p = ρgh зависит от глубины, а не от формы сосуда.",
+         "Сила Архимеда F = ρжVпогрg; тело плавает, когда она уравновешивает силу тяжести."],
+        ["Torque M = Fd where d is the perpendicular distance from the axis to the line of action.",
+         "Equilibrium needs both zero net force and zero net torque.",
+         "Pressure p = F/S; liquid pressure p = ρgh depends on depth, not on the shape of the vessel.",
+         "Buoyancy F = ρ_liquid·V_submerged·g balances gravity for a floating body."],
+        ["torque", "torque", "pressure-hydrostatics", "archimedes"], ["statics"]),
+    "molecular": _entry(
+        ["Количество вещества ν = m/M в молях; молярная масса численно равна относительной молекулярной.",
+         "В уравнении pV = νRT температура обязательно в кельвинах: T = t + 273.",
+         "Для одной порции газа p₁V₁/T₁ = p₂V₂/T₂; выбирайте закон по постоянной величине (T, p или V).",
+         "Средняя кинетическая энергия молекул растёт с температурой, а не с объёмом сосуда."],
+        ["Amount of substance ν = m/M in moles; molar mass equals the relative molecular mass numerically.",
+         "In pV = νRT the temperature is in kelvin: T = t + 273.",
+         "For one gas sample p₁V₁/T₁ = p₂V₂/T₂; pick the law by the constant quantity.",
+         "The mean kinetic energy of molecules grows with temperature, not with volume."],
+        ["amount-substance", "ideal-gas", "isoprocesses", "amount-substance"], ["molecular"]),
+    "thermo": _entry(
+        ["Теплота нагревания Q = cmΔt зависит от разности температур; Δt в °C равно ΔT в К.",
+         "При плавлении и кипении температура постоянна: Q = λm и Q = Lm.",
+         "Тепловой баланс: сколько теплоты отдано, столько и получено (с потерями — меньше).",
+         "Первый закон термодинамики ΔU = Q + Aвнешн: теплота и работа меняют внутреннюю энергию."],
+        ["Heat Q = cmΔt depends on the temperature difference; a difference in °C equals one in K.",
+         "During melting and boiling the temperature is constant: Q = λm and Q = Lm.",
+         "Heat balance: the heat given away equals the heat received (less with losses).",
+         "First law ΔU = Q + A_external: heat and work change internal energy."],
+        ["heat-capacity", "phase-first-law", "heat-capacity", "phase-first-law"], ["thermo"]),
+    "electrostatics": _entry(
+        ["Закон Кулона F = k|q₁q₂|/r²: сила убывает как квадрат расстояния и направлена вдоль прямой между зарядами.",
+         "Напряжённость E = F/q — силовая характеристика поля, измеряется в В/м.",
+         "Напряжение — это работа поля по переносу единичного заряда: U = A/q, в однородном поле E = U/d.",
+         "Ёмкость конденсатора C = q/U; для плоского C = εε₀S/d."],
+        ["Coulomb's law F = k|q₁q₂|/r² falls as the square of the distance.",
+         "Field strength E = F/q is measured in V/m.",
+         "Voltage is work per unit charge: U = A/q, and E = U/d in a uniform field.",
+         "Capacitance C = q/U; for a flat capacitor C = εε₀S/d."],
+        ["coulomb-field", "coulomb-field", "potential-capacitance", "potential-capacitance"], ["electrostatics"]),
+    "current": _entry(
+        ["Закон Ома для участка цепи I = U/R: ток не «расходуется» в лампе.",
+         "Последовательное соединение: ток одинаков, сопротивления складываются.",
+         "Параллельное соединение: напряжение одинаково, общее сопротивление меньше наименьшего.",
+         "Работа и мощность тока: A = UIt, P = UI; амперметр — последовательно, вольтметр — параллельно."],
+        ["Ohm's law I = U/R: current is not consumed by a lamp.",
+         "In series the current is the same and resistances add.",
+         "In parallel the voltage is the same and the total resistance is the smallest one's limit.",
+         "A = UIt and P = UI; an ammeter goes in series, a voltmeter in parallel."],
+        ["ohm-law", "circuits", "circuits", "current-work"], ["dc"]),
+    "magnetism": _entry(
+        ["Сила Ампера F = BIl·sin α действует на проводник с током; максимум при перпендикулярном поле.",
+         "Сила Лоренца перпендикулярна скорости: она не совершает работы и меняет только направление.",
+         "Магнитный поток Φ = BS·cos α; ЭДС индукции возникает при изменении потока: |ε| = ΔΦ/Δt.",
+         "Правило Ленца: индукционный ток противодействует причине, его вызвавшей."],
+        ["Ampère force F = BIl·sin α is maximal when the field is perpendicular to the wire.",
+         "The Lorentz force is perpendicular to the velocity, does no work and only turns the motion.",
+         "Flux Φ = BS·cos α; EMF appears while the flux changes: |ε| = ΔΦ/Δt.",
+         "Lenz's rule: the induced current opposes the change that produced it."],
+        ["magnetic-forces", "magnetic-forces", "induction", "induction"], ["magnetism"]),
+    "oscillations": _entry(
+        ["Период и частота: ν = 1/T; круговая частота ω = 2πν.",
+         "Период нитяного маятника T = 2π√(l/g) не зависит от массы, пружинного — от амплитуды (при малых колебаниях).",
+         "Длина волны λ = vT = v/ν; скорость волны задаёт среда, частоту — источник.",
+         "Эхо и эхолот: сигнал идёт туда и обратно, поэтому 2s = vt."],
+        ["Period and frequency: ν = 1/T, angular frequency ω = 2πν.",
+         "A pendulum's period T = 2π√(l/g) is independent of mass; a spring pendulum's is independent of small amplitudes.",
+         "Wavelength λ = vT = v/ν: the medium sets the speed, the source the frequency.",
+         "Echo and sonar use the doubled path: 2s = vt."],
+        ["oscillations", "oscillations", "waves-sound", "waves-sound"], ["waves"]),
+    "optics": _entry(
+        ["Углы падения и отражения отсчитываются от перпендикуляра к поверхности.",
+         "При переходе в более плотную среду луч идёт ближе к перпендикуляру, n = sin α / sin γ.",
+         "Формула тонкой линзы 1/F = 1/d + 1/f; для мнимого изображения f < 0.",
+         "Оптическая сила D = 1/F в диоптриях, фокусное расстояние — в метрах."],
+        ["Angles of incidence and reflection are measured from the normal.",
+         "Entering a denser medium the ray bends towards the normal, n = sin α / sin γ.",
+         "Thin lens: 1/F = 1/d + 1/f; a virtual image has f < 0.",
+         "Optical power D = 1/F in dioptres with F in metres."],
+        ["reflection-refraction", "reflection-refraction", "lens", "lens"], ["optics"]),
+    "quantum": _entry(
+        ["Энергия фотона E = hν = hc/λ; интенсивность света меняет число фотонов, а не энергию одного.",
+         "Уравнение фотоэффекта hν = Aвых + Eк; красная граница определяется работой выхода.",
+         "Ядро: Z протонов, A − Z нейтронов; при α-распаде A уменьшается на 4, Z — на 2, при β-распаде Z растёт на 1.",
+         "Закон распада N = N₀·2^(−t/T): период полураспада не зависит от внешних условий."],
+        ["Photon energy E = hν = hc/λ; intensity changes the number of photons, not the energy of one.",
+         "Photoelectric equation hν = A_escape + E_kinetic; the red threshold comes from the work function.",
+         "Nucleus: Z protons, A − Z neutrons; alpha decay reduces A by 4 and Z by 2, beta decay raises Z by 1.",
+         "Decay law N = N₀·2^(−t/T): the half-life is independent of external conditions."],
+        ["photoeffect", "photoeffect", "atom-nucleus", "radioactivity"], ["quantum"]),
 }
 
 
-def topics() -> list[str]:
-    """Темы, для которых есть конспект (порядок задаёт kit.TOPIC_ORDER)."""
-    return list(STUDY)
-
-
 def payload() -> dict:
-    """Часть ``topics.json``: конспекты по ключам тем из ``kit.TOPICS``."""
-    return {key: {"formulas": entry["formulas"], "ru": entry["ru"], "en": entry["en"],
-                  "lessons": STUDY_LESSONS.get(key, [])}
-            for key, entry in STUDY.items()}
+    missing = [topic for topic in TOPIC_ORDER if topic not in STUDY]
+    if missing:
+        raise PhysicsError("нет конспекта для тем: " + ", ".join(missing))
+    extra = [topic for topic in STUDY if topic not in TOPIC_ORDER]
+    if extra:
+        raise PhysicsError("конспект для неизвестных тем: " + ", ".join(extra))
+    return STUDY

@@ -4,7 +4,7 @@ name: Release
 # and SAME artifacts as automatic branch publication; no unverified rebuilds.
 on:
   push:
-    tags: ['v*']
+    tags: ['physics-v*']
   workflow_dispatch:
     inputs:
       tag:
@@ -17,17 +17,18 @@ permissions:
   contents: write
   actions: read
 
-# This is the same outer lock as trusted branch CI. The reusable CI caller
-# receives release_request=true so it uses a different inner group (no deadlock).
+# Тот же outer lock, что у доверенного branch CI этой ветки (физика). Ключ
+# отличается от математического, поэтому предметные очереди не блокируют друг
+# друга. Reusable CI вызывается с release_request=true и берёт свой inner group.
 concurrency:
-  group: ctmaths-release-pipeline
+  group: ctphysics-release-pipeline
   queue: max
   cancel-in-progress: false
 
 jobs:
   build_verify_publish:
     name: Build, verify and release
-    if: ${{ github.repository == 'zigorminsk-debug/mathematics' && (github.ref_type == 'branch' || startsWith(github.ref, 'refs/tags/v')) }}
+    if: ${{ github.repository == 'zigorminsk-debug/mathematics' && (github.ref_type == 'branch' || startsWith(github.ref, 'refs/tags/physics-v')) }}
     uses: ./.github/workflows/ci.yml
     with:
       publish: true

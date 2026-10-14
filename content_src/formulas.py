@@ -1,257 +1,174 @@
-"""formulas.py — справочник формул, доступный во время решения задания.
+"""formulas.py — сборник формул по физике (разделы и строки).
 
-Каждая группа двуязычна: название группы, названия формул (ru/en) и сама формула
-в виде обычного текста (без LaTeX, чтобы её можно было показывать и в Android, и
-в Windows, и в печатном отчёте, и искать простым поиском по строке).
-
-Formula reference book shown by the "formula sheet" tool of both applications.
+Каждая строка ссылается на урок теории: в приложении формулу можно открыть
+вместе с определением, обозначениями и границами применимости. Группы формул
+привязаны к темам через study.py, поэтому при неверном ответе ученик получает
+и конспект, и нужный раздел формул.
 """
 
 from __future__ import annotations
 
-from theory import FORMULA_LESSONS
+from kit import PhysicsError
 
-GROUPS = [
+
+def _row(name_ru: str, name_en: str, formula: str, lesson: str) -> dict:
+    return {"name": {"ru": name_ru, "en": name_en}, "formula": formula, "lesson": lesson}
+
+
+GROUPS: list[dict] = [
     {
-        "id": "powers",
-        "ru": "Степени, корни, модуль",
-        "en": "Powers, roots, absolute value",
+        "id": "units", "ru": "Измерения, единицы, размерность", "en": "Measurement, units, dimensions",
+        "lessons": ["units-si", "dimensions-check", "measure-accuracy"],
         "items": [
-            {"ru": "Произведение степеней", "en": "Product of powers", "f": "aᵐ · aⁿ = aᵐ⁺ⁿ"},
-            {"ru": "Частное степеней", "en": "Quotient of powers", "f": "aᵐ : aⁿ = aᵐ⁻ⁿ"},
-            {"ru": "Степень степени", "en": "Power of a power", "f": "(aᵐ)ⁿ = aᵐⁿ"},
-            {"ru": "Дробный показатель", "en": "Fractional exponent", "f": "a^(1/n) = ⁿ√a,  a^(m/n) = ⁿ√(aᵐ)"},
-            {"ru": "Корень из произведения", "en": "Root of a product", "f": "√(a·b) = √a · √b  (a, b ≥ 0)"},
-            {"ru": "Корень из частного", "en": "Root of a quotient", "f": "√(a : b) = √a : √b  (a ≥ 0, b > 0)"},
-            {"ru": "Квадрат корня", "en": "Square of a root", "f": "(√a)² = a (a ≥ 0);  √(a²) = |a|"},
-            {"ru": "Вынесение множителя", "en": "Extracting a factor", "f": "√(a²b) = |a|·√b (b ≥ 0)"},
-            {"ru": "Модуль", "en": "Absolute value", "f": "|x| = x при x ≥ 0;  |x| = −x при x < 0"},
-            {"ru": "Свойства модуля", "en": "Properties of |x|", "f": "|a·b| = |a|·|b|,  |a + b| ≤ |a| + |b|"},
+            _row("Скорость из единиц", "Speed from units", "1 км/ч = 5/18 м/с ≈ 0,278 м/с", "dimensions-check"),
+            _row("Приставки СИ", "SI prefixes", "мк = 10⁻⁶, м = 10⁻³, с = 10⁻², к = 10³, М = 10⁶", "units-si"),
+            _row("Мощность и энергия", "Power and energy", "1 кВт·ч = 3,6·10⁶ Дж; 1 кВт = 1000 Вт", "units-si"),
+            _row("Цена деления", "Scale division", "c = (a₂ − a₁)/n — разность соседних подписей на число промежутков", "measure-accuracy"),
         ],
     },
     {
-        "id": "multiplication",
-        "ru": "Формулы сокращённого умножения",
-        "en": "Algebraic identities",
+        "id": "kinematics", "ru": "Кинематика", "en": "Kinematics",
+        "lessons": ["motion-terms", "uniform-motion", "accelerated-motion", "kinematics-graphs", "free-fall"],
         "items": [
-            {"ru": "Квадрат суммы", "en": "Square of a sum", "f": "(a + b)² = a² + 2ab + b²"},
-            {"ru": "Квадрат разности", "en": "Square of a difference", "f": "(a − b)² = a² − 2ab + b²"},
-            {"ru": "Разность квадратов", "en": "Difference of squares", "f": "a² − b² = (a − b)(a + b)"},
-            {"ru": "Куб суммы", "en": "Cube of a sum", "f": "(a + b)³ = a³ + 3a²b + 3ab² + b³"},
-            {"ru": "Куб разности", "en": "Cube of a difference", "f": "(a − b)³ = a³ − 3a²b + 3ab² − b³"},
-            {"ru": "Сумма кубов", "en": "Sum of cubes", "f": "a³ + b³ = (a + b)(a² − ab + b²)"},
-            {"ru": "Разность кубов", "en": "Difference of cubes", "f": "a³ − b³ = (a − b)(a² + ab + b²)"},
-            {"ru": "Полный квадрат", "en": "Completing the square", "f": "ax² + bx + c = a(x + b/(2a))² − (b² − 4ac)/(4a)"},
+            _row("Средняя скорость", "Average speed", "vср = s/t (весь путь на всё время)", "motion-terms"),
+            _row("Равномерное движение", "Uniform motion", "s = vt, x = x₀ + vt", "uniform-motion"),
+            _row("Скорость при разгоне", "Velocity under acceleration", "v = v₀ + at", "accelerated-motion"),
+            _row("Путь при разгоне", "Distance under acceleration", "s = v₀t + at²/2, s = (v₀ + v)t/2", "accelerated-motion"),
+            _row("Путь без времени", "Distance without time", "s = (v² − v₀²)/(2a)", "accelerated-motion"),
+            _row("Свободное падение", "Free fall", "h = gt²/2, v = gt (при v₀ = 0, без сопротивления)", "free-fall"),
+            _row("Наклон на графике v(t)", "Slope of v(t)", "a = Δv/Δt, путь = площадь под графиком", "kinematics-graphs"),
         ],
     },
     {
-        "id": "quadratic",
-        "ru": "Квадратное уравнение и парабола",
-        "en": "Quadratic equation and parabola",
+        "id": "dynamics", "ru": "Динамика", "en": "Dynamics",
+        "lessons": ["newton-laws", "forces-weight", "friction-elasticity", "force-diagram"],
         "items": [
-            {"ru": "Корни квадратного уравнения", "en": "Roots of ax² + bx + c = 0", "f": "x = (−b ± √D) : (2a),  D = b² − 4ac"},
-            {"ru": "Чётный коэффициент b", "en": "Even middle coefficient", "f": "x = (−b/2 ± √(b²/4 − ac)) : a"},
-            {"ru": "Теорема Виета", "en": "Vieta's theorem", "f": "x₁ + x₂ = −b/a,  x₁·x₂ = c/a"},
-            {"ru": "Разложение на множители", "en": "Factored form", "f": "ax² + bx + c = a(x − x₁)(x − x₂)"},
-            {"ru": "Вершина параболы", "en": "Vertex of a parabola", "f": "x₀ = −b/(2a),  y₀ = c − b²/(4a)"},
-            {"ru": "Знаки D", "en": "Signs of the discriminant", "f": "D > 0 — два корня, D = 0 — один, D < 0 — нет"},
-            {"ru": "Формула для корня при D > 0", "en": "Simplified root formula", "f": "x = (2c) : (−b ∓ √D) (знаменатель ≠ 0 / denominator ≠ 0)"},
+            _row("Второй закон Ньютона", "Second law", "a = F/m, F = ma (равнодействующая)", "newton-laws"),
+            _row("Третий закон", "Third law", "F₁₂ = −F₂₁: силы приложены к разным телам", "newton-laws"),
+            _row("Сила тяжести и вес", "Weight", "F = mg; P = mg при покое на горизонтальной опоре", "forces-weight"),
+            _row("Трение скольжения", "Sliding friction", "Fтр = μN", "friction-elasticity"),
+            _row("Закон Гука", "Hooke's law", "F = kx (в пределах упругости)", "friction-elasticity"),
         ],
     },
     {
-        "id": "progressions",
-        "ru": "Прогрессии",
-        "en": "Progressions",
+        "id": "energy", "ru": "Работа, энергия, импульс", "en": "Work, energy, momentum",
+        "lessons": ["work-power", "energy-conservation", "momentum"],
         "items": [
-            {"ru": "n-й член арифметической", "en": "n-th term, arithmetic", "f": "aₙ = a₁ + (n − 1)d"},
-            {"ru": "Сумма арифметической", "en": "Sum, arithmetic", "f": "Sₙ = (a₁ + aₙ)·n/2 = (2a₁ + (n − 1)d)·n/2"},
-            {"ru": "Свойство арифметической", "en": "Arithmetic mean property", "f": "aₙ = (aₙ₋₁ + aₙ₊₁)/2"},
-            {"ru": "n-й член геометрической", "en": "n-th term, geometric", "f": "bₙ = b₁·qⁿ⁻¹"},
-            {"ru": "Сумма геометрической", "en": "Sum, geometric", "f": "Sₙ = b₁(qⁿ − 1)/(q − 1),  q ≠ 1"},
-            {"ru": "Бесконечная геометрическая", "en": "Infinite geometric series", "f": "S = b₁/(1 − q),  |q| < 1"},
-            {"ru": "Сумма натуральных чисел", "en": "Sum of integers", "f": "1 + 2 + … + n = n(n + 1)/2"},
-            {"ru": "Проценты", "en": "Percentages", "f": "на p% → умножить на (1 + p/100); снижение на p% → (1 − p/100)"},
+            _row("Механическая работа", "Work", "A = Fs·cos α", "work-power"),
+            _row("Мощность и КПД", "Power and efficiency", "P = A/t, η = Aполез/Aзатр", "work-power"),
+            _row("Кинетическая энергия", "Kinetic energy", "Eк = mv²/2", "energy-conservation"),
+            _row("Потенциальная энергия", "Potential energy", "Eп = mgh, Eупр = kx²/2", "energy-conservation"),
+            _row("Импульс и сохранение", "Momentum", "p = mv; m₁v₁ + m₂v₂ = m₁v₁′ + m₂v₂′", "momentum"),
         ],
     },
     {
-        "id": "trig",
-        "ru": "Тригонометрия",
-        "en": "Trigonometry",
+        "id": "statics", "ru": "Статика, давление, гидростатика", "en": "Statics, pressure, hydrostatics",
+        "lessons": ["torque", "pressure-hydrostatics", "archimedes"],
         "items": [
-            {"ru": "Основное тождество", "en": "Pythagorean identity", "f": "sin²α + cos²α = 1"},
-            {"ru": "Тангенс и котангенс", "en": "Tangent and cotangent", "f": "tg α = sin α / cos α,  ctg α = cos α / sin α"},
-            {"ru": "Формула сложения", "en": "Addition formulas", "f": "sin(α ± β) = sin α cos β ± cos α sin β;  cos(α ± β) = cos α cos β ∓ sin α sin β"},
-            {"ru": "Двойной угол", "en": "Double angle", "f": "sin 2α = 2 sin α cos α;  cos 2α = cos²α − sin²α"},
-            {"ru": "Понижение степени", "en": "Reduction of powers", "f": "sin²α = (1 − cos 2α)/2;  cos²α = (1 + cos 2α)/2"},
-            {"ru": "Таблица значений", "en": "Table of values", "f": "sin 30° = 1/2, sin 45° = √2/2, sin 60° = √3/2, sin 90° = 1"},
-            {"ru": "Чётность", "en": "Parity", "f": "cos(−α) = cos α (чётная), sin(−α) = −sin α, tg(−α) = −tg α"},
-            {"ru": "Решение sin x = a", "en": "Solution of sin x = a", "f": "x = (−1)ⁿ arcsin a + πn"},
-            {"ru": "Решение cos x = a", "en": "Solution of cos x = a", "f": "x = ± arccos a + 2πn"},
-            {"ru": "Решение tg x = a", "en": "Solution of tg x = a", "f": "x = arctg a + πn"},
-            {"ru": "Теорема синусов", "en": "Law of sines", "f": "a / sin A = b / sin B = c / sin C = 2R"},
-            {"ru": "Теорема косинусов", "en": "Law of cosines", "f": "c² = a² + b² − 2ab·cos C"},
+            _row("Момент силы", "Torque", "M = Fd, где d — плечо (перпендикуляр от оси)", "torque"),
+            _row("Правило рычага", "Lever rule", "F₁d₁ = F₂d₂", "torque"),
+            _row("Давление", "Pressure", "p = F/S; 1 Па = 1 Н/м²", "pressure-hydrostatics"),
+            _row("Давление жидкости", "Liquid pressure", "p = ρgh (глубина, не объём)", "pressure-hydrostatics"),
+            _row("Сила Архимеда", "Buoyancy", "FА = ρжVпогрg; условие плавания FА = mg", "archimedes"),
         ],
     },
     {
-        "id": "logexp",
-        "ru": "Логарифмы и показательные",
-        "en": "Logarithms and exponentials",
+        "id": "molecular", "ru": "Молекулярная физика", "en": "Molecular physics",
+        "lessons": ["amount-substance", "ideal-gas", "isoprocesses"],
         "items": [
-            {"ru": "Определение логарифма", "en": "Definition", "f": "log_a b = c ⇔ aᶜ = b  (a > 0, a ≠ 1, b > 0)"},
-            {"ru": "Логарифм произведения", "en": "Logarithm of a product", "f": "log_a(b·c) = log_a b + log_a c"},
-            {"ru": "Логарифм частного", "en": "Logarithm of a quotient", "f": "log_a(b/c) = log_a b − log_a c"},
-            {"ru": "Логарифм степени", "en": "Logarithm of a power", "f": "log_a bᵏ = k·log_a b"},
-            {"ru": "Переход к новому основанию", "en": "Change of base", "f": "log_a b = log_c b / log_c a"},
-            {"ru": "Следствия", "en": "Immediate consequences", "f": "log_a a = 1,  log_a 1 = 0,  a^(log_a b) = b"},
-            {"ru": "Степени двойки", "en": "Powers of two", "f": "2³ = 8, 2⁴ = 16, 2⁵ = 32, 2⁶ = 64, 2⁷ = 128, 2⁸ = 256, 2¹⁰ = 1024"},
-            {"ru": "Степени тройки", "en": "Powers of three", "f": "3³ = 27, 3⁴ = 81, 3⁵ = 243"},
-            {"ru": "Решение a^x = b", "en": "Solving aˣ = b", "f": "x = log_a b (приводим обе части к одному основанию)"},
+            _row("Количество вещества", "Amount of substance", "ν = m/M; N = νNₐ", "amount-substance"),
+            _row("Уравнение состояния", "Ideal gas law", "pV = νRT, T = t + 273", "ideal-gas"),
+            _row("Объединённый газовый закон", "Combined gas law", "p₁V₁/T₁ = p₂V₂/T₂", "ideal-gas"),
+            _row("Изопроцессы", "Isoprocesses", "T = const: pV = const; p = const: V/T = const; V = const: p/T = const", "isoprocesses"),
         ],
     },
     {
-        "id": "derivative",
-        "ru": "Производная и исследование функции",
-        "en": "Derivative and function study",
+        "id": "thermo", "ru": "Теплота и термодинамика", "en": "Heat and thermodynamics",
+        "lessons": ["heat-capacity", "phase-first-law"],
         "items": [
-            {"ru": "Степень", "en": "Power rule", "f": "(xⁿ)′ = n·xⁿ⁻¹"},
-            {"ru": "Постоянная и линейная", "en": "Constant and linear", "f": "(C)′ = 0,  (kx + b)′ = k"},
-            {"ru": "Сумма", "en": "Sum", "f": "(u + v)′ = u′ + v′"},
-            {"ru": "Произведение", "en": "Product", "f": "(u·v)′ = u′v + uv′"},
-            {"ru": "Частное", "en": "Quotient", "f": "(u/v)′ = (u′v − uv′)/v²"},
-            {"ru": "Геометрический смысл", "en": "Geometric meaning", "f": "f′(x₀) = tg α — угловой коэффициент касательной"},
-            {"ru": "Уравнение касательной", "en": "Tangent line", "f": "y = f(x₀) + f′(x₀)(x − x₀)"},
-            {"ru": "Монотонность", "en": "Monotonicity", "f": "f′ > 0 — возрастает, f′ < 0 — убывает"},
-            {"ru": "Экстремум", "en": "Extremum", "f": "f′(x₀) = 0 и смена знака: − на + минимум, + на − максимум"},
-            {"ru": "Наибольшее значение", "en": "Maximum on a segment", "f": "сравниваем значения в критических точках и на концах отрезка"},
+            _row("Нагревание", "Heating", "Q = cm(t₂ − t₁)", "heat-capacity"),
+            _row("Сгорание топлива", "Fuel combustion", "Q = qm", "heat-capacity"),
+            _row("Плавление и парообразование", "Phase change", "Q = λm (плавление), Q = Lm (кипение)", "phase-first-law"),
+            _row("Первый закон термодинамики", "First law", "ΔU = Q + Aвнешн", "phase-first-law"),
         ],
     },
     {
-        "id": "planimetry",
-        "ru": "Планиметрия",
-        "en": "Plane geometry",
+        "id": "electrostatics", "ru": "Электростатика", "en": "Electrostatics",
+        "lessons": ["coulomb-field", "potential-capacitance"],
         "items": [
-            {"ru": "Площадь треугольника", "en": "Area of a triangle", "f": "S = a·h/2 = (a·b·sin C)/2 = p·r = abc/(4R)"},
-            {"ru": "Формула Герона", "en": "Heron's formula", "f": "S = √(p(p − a)(p − b)(p − c)),  p = (a + b + c)/2"},
-            {"ru": "Прямоугольный треугольник", "en": "Right triangle", "f": "c² = a² + b²;  r = (a + b − c)/2;  R = c/2"},
-            {"ru": "Параллелограмм", "en": "Parallelogram", "f": "S = a·h = a·b·sin α"},
-            {"ru": "Трапеция", "en": "Trapezoid", "f": "S = (a + b)·h/2,  средняя линия m = (a + b)/2"},
-            {"ru": "Ромб", "en": "Rhombus", "f": "S = d₁·d₂/2 = a²·sin α"},
-            {"ru": "Круг и окружность", "en": "Circle", "f": "S = πR²,  C = 2πR,  длина дуги l = πR·α°/180°"},
-            {"ru": "Вписанный угол", "en": "Inscribed angle", "f": "вписанный угол равен половине центрального, опирающегося на ту же дугу"},
-            {"ru": "Касательная и секущая", "en": "Tangent and secant", "f": "квадрат касательной = произведение секущей на её внешнюю часть"},
-            {"ru": "Подобие", "en": "Similarity", "f": "площади относятся как квадрат коэффициента подобия: S₂/S₁ = k²"},
+            _row("Закон Кулона", "Coulomb's law", "F = k|q₁q₂|/r²", "coulomb-field"),
+            _row("Напряжённость поля", "Field strength", "E = F/q, E = U/d для однородного поля", "coulomb-field"),
+            _row("Работа поля и напряжение", "Field work", "A = qU = q(φ₁ − φ₂)", "potential-capacitance"),
+            _row("Электроёмкость", "Capacitance", "C = q/U; для плоского конденсатора C = εε₀S/d", "potential-capacitance"),
         ],
     },
     {
-        "id": "stereometry",
-        "ru": "Стереометрия",
-        "en": "Solid geometry",
+        "id": "dc", "ru": "Постоянный ток", "en": "Direct current",
+        "lessons": ["ohm-law", "circuits", "current-work"],
         "items": [
-            {"ru": "Призма", "en": "Prism", "f": "V = Sосн · h;  Sбок = Pосн · h (для прямой призмы / right prism)"},
-            {"ru": "Пирамида", "en": "Pyramid", "f": "V = Sосн · h / 3"},
-            {"ru": "Цилиндр", "en": "Cylinder", "f": "V = πR²h,  Sбок = 2πRh"},
-            {"ru": "Конус", "en": "Cone", "f": "V = πR²h/3,  Sбок = πRl,  l = √(R² + h²)"},
-            {"ru": "Шар и сфера", "en": "Sphere and ball", "f": "V = 4πR³/3,  S = 4πR²"},
-            {"ru": "Куб", "en": "Cube", "f": "V = a³,  S = 6a²,  d = a√3"},
-            {"ru": "Теорема о трёх перпендикулярах", "en": "Theorem of three perpendiculars", "f": "проекция наклонной ⟂ прямой ⇔ наклонная ⟂ прямой"},
-            {"ru": "Угол между прямой и плоскостью", "en": "Angle between a line and a plane", "f": "угол между прямой и её проекцией"},
+            _row("Закон Ома", "Ohm's law", "I = U/R", "ohm-law"),
+            _row("Сопротивление проводника", "Wire resistance", "R = ρl/S", "ohm-law"),
+            _row("Последовательное соединение", "Series connection", "I = const, R = R₁ + R₂, U = U₁ + U₂", "circuits"),
+            _row("Параллельное соединение", "Parallel connection", "U = const, 1/R = 1/R₁ + 1/R₂, I = I₁ + I₂", "circuits"),
+            _row("Работа и мощность тока", "Electric work and power", "A = UIt, P = UI = I²R = U²/R", "current-work"),
         ],
     },
     {
-        "id": "combinatorics",
-        "ru": "Комбинаторика и вероятность",
-        "en": "Combinatorics and probability",
+        "id": "magnetism", "ru": "Магнитное поле и индукция", "en": "Magnetic field and induction",
+        "lessons": ["magnetic-forces", "induction"],
         "items": [
-            {"ru": "Перестановки", "en": "Permutations", "f": "Pₙ = n!"},
-            {"ru": "Размещения", "en": "Arrangements", "f": "Aₙᵏ = n!/(n − k)!"},
-            {"ru": "Сочетания", "en": "Combinations", "f": "Cₙᵏ = n!/(k!(n − k)!)"},
-            {"ru": "Классическая вероятность", "en": "Classical probability", "f": "P = m/n — благоприятные исходы к общему числу равновозможных"},
-            {"ru": "Вероятность суммы несовместных", "en": "Sum of disjoint events", "f": "P(A ∪ B) = P(A) + P(B)"},
-            {"ru": "Вероятность произведения независимых", "en": "Product of independent events", "f": "P(A ∩ B) = P(A)·P(B)"},
-            {"ru": "Противоположное событие", "en": "Complement", "f": "P(Ā) = 1 − P(A)"},
-            {"ru": "Значения факториалов", "en": "Factorials", "f": "3! = 6, 4! = 24, 5! = 120, 6! = 720"},
+            _row("Сила Ампера", "Ampère force", "F = BIl·sin α", "magnetic-forces"),
+            _row("Сила Лоренца", "Lorentz force", "F = qvB·sin α (перпендикулярна скорости)", "magnetic-forces"),
+            _row("Магнитный поток", "Magnetic flux", "Φ = BS·cos α", "induction"),
+            _row("ЭДС индукции", "Induced EMF", "|ε| = ΔΦ/Δt", "induction"),
         ],
     },
     {
-        "id": "inequalities",
-        "ru": "Неравенства и метод интервалов",
-        "en": "Inequalities and the interval method",
+        "id": "waves", "ru": "Колебания, волны, звук", "en": "Oscillations, waves, sound",
+        "lessons": ["oscillations", "waves-sound"],
         "items": [
-            {"ru": "Смена знака", "en": "Sign change", "f": "при умножении или делении на отрицательное число знак неравенства меняется на противоположный"},
-            {"ru": "Метод интервалов", "en": "Interval method", "f": "корни на числовую прямую → знак на каждом интервале → ответ с учётом строгости"},
-            {"ru": "Квадратное неравенство", "en": "Quadratic inequality", "f": "при a ≠ 0, D > 0: знак трёхчлена совпадает со знаком a вне корней и противоположен между корнями"},
-            {"ru": "Модуль: |x| < a", "en": "Absolute value: |x| < a", "f": "|x| < a ⇔ −a < x < a (при a > 0)"},
-            {"ru": "Модуль: |x| > a", "en": "Absolute value: |x| > a", "f": "|x| > a ⇔ x < −a или x > a (при a > 0)"},
-            {"ru": "Дробное неравенство", "en": "Fractional inequality", "f": "знак дроби = знак произведения числителя и знаменателя; нули знаменателя всегда выколоты"},
+            _row("Период и частота", "Period and frequency", "ν = 1/T, ω = 2πν", "oscillations"),
+            _row("Маятники", "Pendulums", "T = 2π√(l/g); T = 2π√(m/k)", "oscillations"),
+            _row("Длина волны", "Wavelength", "λ = vT = v/ν", "waves-sound"),
+            _row("Звук и эхо", "Sound and echo", "2s = vt (сигнал идёт туда и обратно)", "waves-sound"),
         ],
     },
     {
-        "id": "functions",
-        "ru": "Функции и графики",
-        "en": "Functions and graphs",
+        "id": "optics", "ru": "Оптика", "en": "Optics",
+        "lessons": ["reflection-refraction", "lens"],
         "items": [
-            {"ru": "Область определения", "en": "Domain", "f": "знаменатель ≠ 0; под корнем чётной степени ≥ 0; под логарифмом > 0"},
-            {"ru": "Область значений", "en": "Range", "f": "−1 ≤ sin x ≤ 1 и −1 ≤ cos x ≤ 1; у a·f(x) + b границы умножаются на a и сдвигаются на b"},
-            {"ru": "Чётность", "en": "Parity", "f": "чётная: f(−x) = f(x) (график симметричен оси Oy); нечётная: f(−x) = −f(x)"},
-            {"ru": "Сдвиг графика", "en": "Shifting a graph", "f": "y = f(x − a) — вправо на a; y = f(x) + b — вверх на b"},
-            {"ru": "Растяжение графика", "en": "Stretching a graph", "f": "y = k·f(x) — растяжение от оси Ox в k раз; y = f(kx) — сжатие к оси Oy в k раз"},
-            {"ru": "Линейная функция", "en": "Linear function", "f": "y = kx + b: k — угловой коэффициент, b — точка пересечения с осью Oy"},
-            {"ru": "Обратная пропорциональность", "en": "Inverse proportion", "f": "y = k/x — гипербола, x ≠ 0"},
+            _row("Отражение", "Reflection", "угол падения равен углу отражения", "reflection-refraction"),
+            _row("Показатель преломления", "Refractive index", "n = sin α / sin γ = c/v", "reflection-refraction"),
+            _row("Формула тонкой линзы", "Thin lens", "1/F = 1/d + 1/f", "lens"),
+            _row("Оптическая сила", "Optical power", "D = 1/F (диоптрии), F в метрах", "lens"),
         ],
     },
     {
-        "id": "vectors",
-        "ru": "Векторы и координаты",
-        "en": "Vectors and coordinates",
+        "id": "quantum", "ru": "Квантовые явления и ядро", "en": "Quantum phenomena and nucleus",
+        "lessons": ["photoeffect", "atom-nucleus", "radioactivity"],
         "items": [
-            {"ru": "Координаты вектора", "en": "Vector coordinates", "f": "AB→ = (x₂ − x₁; y₂ − y₁)"},
-            {"ru": "Длина вектора", "en": "Length of a vector", "f": "|a| = √(x² + y²)"},
-            {"ru": "Скалярное произведение", "en": "Dot product", "f": "a·b = x₁x₂ + y₁y₂ = |a|·|b|·cos φ"},
-            {"ru": "Перпендикулярность", "en": "Perpendicularity", "f": "a ⊥ b ⇔ x₁x₂ + y₁y₂ = 0 (a, b ≠ 0)"},
-            {"ru": "Середина отрезка", "en": "Midpoint", "f": "M((x₁ + x₂)/2; (y₁ + y₂)/2)"},
-            {"ru": "Расстояние между точками", "en": "Distance between points", "f": "d = √((x₂ − x₁)² + (y₂ − y₁)²)"},
-        ],
-    },
-    {
-        "id": "numbers",
-        "ru": "Числа и делимость",
-        "en": "Numbers and divisibility",
-        "items": [
-            {"ru": "Признак делимости на 3 и 9", "en": "Divisible by 3 and 9", "f": "сумма цифр делится на 3 (на 9)"},
-            {"ru": "Признак делимости на 4", "en": "Divisible by 4", "f": "две последние цифры образуют число, кратное 4"},
-            {"ru": "Признак делимости на 11", "en": "Divisible by 11", "f": "разность сумм цифр на чётных и нечётных местах кратна 11"},
-            {"ru": "НОД и НОК", "en": "GCD and LCM", "f": "НОК(a, b) = a·b : НОД(a, b)"},
-            {"ru": "Деление с остатком", "en": "Division with remainder", "f": "a = b·q + r,  0 ≤ r < b (a, b, q, r ∈ Z; b > 0)"},
-            {"ru": "Простые числа до 50", "en": "Primes below 50", "f": "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47"},
-            {"ru": "Оценка корня", "en": "Estimating a root", "f": "√a между соседними целыми: n ≤ √a < n + 1 ⇔ n² ≤ a < (n + 1)²"},
+            _row("Энергия фотона", "Photon energy", "E = hν = hc/λ", "photoeffect"),
+            _row("Уравнение фотоэффекта", "Photoelectric equation", "hν = Aвых + Eк", "photoeffect"),
+            _row("Строение ядра", "Nucleus", "Z протонов, A − Z нейтронов; ᴬZ X", "atom-nucleus"),
+            _row("Закон радиоактивного распада", "Decay law", "N = N₀·2^(−t/T), α-распад: A − 4, Z − 2", "radioactivity"),
         ],
     },
 ]
 
 
 def groups() -> dict:
-    """The JSON body written to ``dist/content/formulas.json``.
-
-    Authoring uses the compact keys ``ru``/``en``/``f``; the exported shape is
-    ``name`` (bilingual) plus a plain-text ``formula`` body, which is what both
-    the interface and the schema test expect.
-    """
-    exported = []
+    ids = [group["id"] for group in GROUPS]
+    if len(set(ids)) != len(ids):
+        raise PhysicsError("идентификаторы разделов формул повторяются")
+    lessons = [lesson for group in GROUPS for lesson in group["lessons"]]
+    if len(set(lessons)) != len(lessons):
+        raise PhysicsError("урок теории попал в два раздела формул без нужды")
+    items = 0
     for group in GROUPS:
-        lesson_ids = FORMULA_LESSONS.get(group["id"], [])
-        if len(lesson_ids) != len(group["items"]):
-            raise ValueError(f"formula group {group['id']} needs one theory link per row")
-        items = [
-            {"name": {"ru": item["ru"], "en": item["en"]}, "formula": item["f"],
-             "lesson": lesson_id}
-            for item, lesson_id in zip(group["items"], lesson_ids)
-        ]
-        exported.append({"id": group["id"], "ru": group["ru"], "en": group["en"],
-                         "items": items, "lessons": list(dict.fromkeys(lesson_ids))})
-    total = sum(len(group["items"]) for group in exported)
-    return {"groups": exported, "counts": {"groups": len(exported), "items": total}}
-
-
-def tasks():
-    """No exam tasks here — the module is a reference, not a task bank."""
-    return []
+        if not group["lessons"]:
+            raise PhysicsError(f"раздел {group['id']} не связан с теорией")
+        for item in group["items"]:
+            if item["lesson"] not in group["lessons"]:
+                raise PhysicsError(f"{group['id']}: строка без урока теории")
+            items += 1
+    return {"groups": GROUPS, "counts": {"groups": len(GROUPS), "items": items}}

@@ -1,6 +1,9 @@
 {
- "contentVersion": "2026.10.5",
+ "contentVersion": "2026.10.1",
  "schema": 1,
+ "subject": "physics",
+ "package": "by.ziv.ctphysics",
+ "app": "CTPhysicsTutor",
  "years": [
   2021,
   2022,
@@ -11,14 +14,19 @@
  ],
  "counts": {
   "bank": 180,
-  "analogous": 552,
-  "choice": 108,
-  "short": 72
+  "analogous": 39,
+  "choice": 60,
+  "quantity": 120,
+  "lessons": 37,
+  "figures": 26
  },
  "author": "Zakharevich Igor",
- "email": "ziv@csl.by",
- "phone": "+3753371412",
  "repo": "https://github.com/zigorminsk-debug/mathematics",
+ "disclosure": {
+  "ru": "Авторские тренировочные варианты, составленные по программе и формату ЦТ по физике. Это не официальные задания РИКЗ.",
+  "en": "Authored practice papers written to the physics CT syllabus and format. They are not official RIKZ materials."
+ },
+ "structureSource": "Перечень РИКЗ: физика — 10 заданий части A, 20 заданий части B, всего 30, 210 минут (ЦТ/ЦЭ 2025). Проверено 2026-10-14.",
  "periods": [
   {
    "year": 2021,
@@ -27,10 +35,10 @@
     "en": "Variant 2021"
    },
    "parts": {
-    "A": 18,
-    "B": 12
+    "A": 10,
+    "B": 20
    },
-   "minutes": 180,
+   "minutes": 210,
    "tasks": 30
   },
   {
@@ -40,10 +48,10 @@
     "en": "Variant 2022"
    },
    "parts": {
-    "A": 18,
-    "B": 12
+    "A": 10,
+    "B": 20
    },
-   "minutes": 180,
+   "minutes": 210,
    "tasks": 30
   },
   {
@@ -53,10 +61,10 @@
     "en": "Variant 2023"
    },
    "parts": {
-    "A": 18,
-    "B": 12
+    "A": 10,
+    "B": 20
    },
-   "minutes": 180,
+   "minutes": 210,
    "tasks": 30
   },
   {
@@ -66,10 +74,10 @@
     "en": "Variant 2024"
    },
    "parts": {
-    "A": 18,
-    "B": 12
+    "A": 10,
+    "B": 20
    },
-   "minutes": 180,
+   "minutes": 210,
    "tasks": 30
   },
   {
@@ -79,10 +87,10 @@
     "en": "Variant 2025"
    },
    "parts": {
-    "A": 18,
-    "B": 12
+    "A": 10,
+    "B": 20
    },
-   "minutes": 180,
+   "minutes": 210,
    "tasks": 30
   },
   {
@@ -92,47 +100,48 @@
     "en": "Variant 2026"
    },
    "parts": {
-    "A": 18,
-    "B": 12
+    "A": 10,
+    "B": 20
    },
-   "minutes": 180,
+   "minutes": 210,
    "tasks": 30
   }
  ],
  "disclaimer": {
-  "ru": "Задания составлены по мотивам ЦТ соответствующего года и не являются официальными материалами РИКЗ.",
-  "en": "The tasks follow the format of the corresponding CT year and are not official RIKZ materials."
+  "ru": "Авторские тренировочные варианты, составленные по программе и формату ЦТ по физике. Это не официальные задания РИКЗ.",
+  "en": "Authored practice papers written to the physics CT syllabus and format. They are not official RIKZ materials."
  },
- "examMinutes": 180,
+ "examMinutes": 210,
+ "updatePolicy": "subject-scoped releases API; no global /latest/download",
+ "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/download/physics-v2026.10.1",
  "files": {
   "analogous.json": {
-   "sha256": "1fcd2e9ecd7e278e4119f954e64187a83cf4f76c36607005ca37e0f6d83b06c6",
-   "bytes": 558415
+   "sha256": "a465d9fd2c4a4b88b023336d015e4a038c38b71fa4e3f88de0e82561ba89f69f",
+   "bytes": 95162
   },
   "answer_vectors.json": {
-   "sha256": "1979abdff6f9d97554ef7b59836fb283221a233584ceeee8e6a4e01368082bd6",
-   "bytes": 3136
+   "sha256": "2d0a0d5eadbfa9329c16f3a1890af7be00d44dd5521f7211e1e254af27c7290c",
+   "bytes": 10134
   },
   "bank.json": {
-   "sha256": "b3ebc3ddd429c2a710baad0b5fd7a6d8b3038779c49e8d76092bdcd7204747e9",
-   "bytes": 246094
+   "sha256": "b4fe9cdfce65d8d81a32971a8a210a2fd8759b1834abf4a84ccceff6542f4a86",
+   "bytes": 463805
   },
   "formulas.json": {
-   "sha256": "55fb763ea1dbf0742ef82af1de4d24008ea2e28f3a75c1c4d119865ec33d404f",
-   "bytes": 28727
+   "sha256": "5fd1d4915a383193a14c26094e8dfcd83d95933f40cbf8c14665bd9f341d640d",
+   "bytes": 14673
   },
   "mistakes.json": {
-   "sha256": "99ed1109b535441ac7606b201e931e260d804dd1ffea55436fc749c9b27ed98e",
-   "bytes": 36224
+   "sha256": "5f1971b01379a1331c36e1f07220ba47a18986dc9a6b3824290f034535601f79",
+   "bytes": 23671
   },
   "topics.json": {
-   "sha256": "23872d4ddd07f22ffb725e248d6f3f529b57e6968b34879cbad581dbf1b46f2a",
-   "bytes": 601844
+   "sha256": "63e78761872d4859f889f5003b8b3e96374a7537d170819123213449ceb9d005",
+   "bytes": 281212
   },
   "ui_strings.json": {
-   "sha256": "79a8506dc5223890c5e8aa142e1f9474ce8bea04749b132de3b1400963749739",
-   "bytes": 21828
+   "sha256": "6d5138660784ce81b117a8d1ceb4e2216e5c8b9580df158b9f2b9745369dc799",
+   "bytes": 26887
   }
- },
- "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
+ }
 }

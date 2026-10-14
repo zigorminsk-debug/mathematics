@@ -1,841 +1,1329 @@
-"""Offline, bilingual definitions, rules/theorems and worked examples.
+"""theory.py — офлайн-уроки физики: определение, правила, разбор, бытовое объяснение.
 
-STUDY_LESSONS links each summary point in study.py to a detailed lesson.
-FORMULA_LESSONS links every formula row to the lesson that explains it. Keys
-are stable, language-neutral identifiers; the content pipeline validates all
-links and exports the catalogue inside topics.json (no new native endpoint).
+Каждый урок двуязычен, содержит точные определения и обозначения с единицами,
+условия применимости формул, хотя бы один разобранный пример и объяснение
+«через знакомую ситуацию» — с честными пределами модели. Уроки связаны с
+разделами сборника формул (formulas.py) и с разборами типичных ошибок, поэтому
+после неверного ответа ученик открывает именно тот материал, который объясняет
+его ошибку. Схемы (diagrams.py) подключаются по идентификаторам.
 """
 
 from __future__ import annotations
 
+from kit import PhysicsError
 
-def _bi(pair: tuple[str, str]) -> dict:
-    return {"ru": pair[0], "en": pair[1]}
-
-
-def _lines(pairs: list[tuple[str, str]]) -> dict:
-    return {"ru": [pair[0] for pair in pairs], "en": [pair[1] for pair in pairs]}
+LESSONS: dict[str, dict] = {}
 
 
-def _lesson(title, definitions, rules, example, steps) -> dict:
-    return {"title": _bi(title), "definitions": _lines(definitions),
-            "rules": _lines(rules),
-            "examples": [{"statement": _bi(example), "steps": _lines(steps)}]}
+def _lesson(key, title_ru, title_en, definitions, rules, examples, everyday, figures=()):
+    if key in LESSONS:
+        raise PhysicsError(f"урок {key!r} уже описан")
+    LESSONS[key] = {
+        "id": key,
+        "title": {"ru": title_ru, "en": title_en},
+        "definitions": {"ru": list(definitions[0]), "en": list(definitions[1])},
+        "rules": {"ru": list(rules[0]), "en": list(rules[1])},
+        "examples": [
+            {"statement": {"ru": statement[0], "en": statement[1]},
+             "steps": {"ru": list(steps[0]), "en": list(steps[1])}}
+            for statement, steps in examples
+        ],
+        "everyday": {"ru": list(everyday[0]), "en": list(everyday[1])},
+        "figures": list(figures),
+    }
 
 
-LESSONS = {
-    "order": _lesson(
-        ("Порядок действий и скобки", "Order of operations and brackets"),
-        [("Числовое выражение — запись из чисел, знаков действий и скобок. Его значение получается после выполнения всех допустимых действий.",
-          "A numerical expression consists of numbers, operations and brackets. Its value is obtained by carrying out all permitted operations.")],
-        [("Сначала выполняют действия в скобках, начиная с внутренних. Затем — степени и корни, умножение и деление, сложение и вычитание.",
-          "Evaluate brackets first, starting with the innermost ones. Then evaluate powers and roots, multiplication and division, addition and subtraction."),
-         ("Действия одной ступени выполняют слева направо: 18 : 3 · 2 = 12, а не 3. Знак минус перед степенью не заменяет скобки: −3² = −9, но (−3)² = 9.",
-          "Operations of equal precedence are evaluated from left to right: 18 / 3 × 2 = 12, not 3. A minus sign before a power is not a bracket: −3² = −9, whereas (−3)² = 9.")],
-        ("Вычислите 24 : (2 + 4) · 3 − 2².", "Evaluate 24 / (2 + 4) × 3 − 2²."),
-        [("Скобки: 2 + 4 = 6. Степень: 2² = 4.", "Brackets: 2 + 4 = 6. Power: 2² = 4."),
-         ("Деление и умножение слева направо: 24 : 6 · 3 = 4 · 3 = 12.", "Division and multiplication from left to right: 24 / 6 × 3 = 4 × 3 = 12."),
-         ("Вычитаем: 12 − 4 = 8.", "Subtract: 12 − 4 = 8.")]),
-    "fractions": _lesson(
-        ("Обыкновенные дроби", "Fractions"),
-        [("Дробь a/b обозначает частное a и b; b ≠ 0. Число a — числитель, b — знаменатель. Обратная дробь к a/b — b/a при a ≠ 0.",
-          "The fraction a/b is the quotient of a and b, with b ≠ 0. Here a is the numerator and b the denominator. Its reciprocal is b/a when a ≠ 0.")],
-        [("Основное свойство дроби: a/b = (ak)/(bk) при b ≠ 0 и k ≠ 0. Поэтому дробь можно расширять и сокращать на общий ненулевой множитель.",
-          "The fundamental property is a/b = (ak)/(bk) for b ≠ 0 and k ≠ 0. A fraction may therefore be expanded or reduced by a common non-zero factor."),
-         ("Для сложения нужен общий знаменатель: a/b + c/d = (ad + bc)/(bd). При умножении перемножают числители и знаменатели; при делении умножают на обратную дробь (делитель не равен нулю).",
-          "Addition requires a common denominator: a/b + c/d = (ad + bc)/(bd). Multiply numerators and denominators for a product; divide by multiplying by the reciprocal of a non-zero divisor.")],
-        ("Вычислите 1/6 + 3/4 и (5/6) : (2/3).", "Evaluate 1/6 + 3/4 and (5/6) / (2/3)."),
-        [("Общий знаменатель 6 и 4 — 12: 1/6 = 2/12, 3/4 = 9/12.", "A common denominator of 6 and 4 is 12: 1/6 = 2/12, 3/4 = 9/12."),
-         ("Сумма равна 11/12.", "The sum is 11/12."),
-         ("Деление: (5/6) · (3/2) = 15/12 = 5/4.", "Division: (5/6) × (3/2) = 15/12 = 5/4.")]),
-    "decimals": _lesson(
-        ("Десятичные дроби и оценка результата", "Decimals and estimating a result"),
-        [("Конечная десятичная дробь с k знаками после запятой — дробь со знаменателем 10ᵏ. Округление заменяет число близким числом с заданной точностью.",
-          "A terminating decimal with k decimal places is a fraction with denominator 10ᵏ. Rounding replaces a number by a nearby number of specified precision.")],
-        [("Чтобы получить обыкновенную дробь, уберите запятую из числителя, запишите знаменатель 10ᵏ и сократите: 0,125 = 125/1000 = 1/8.",
-          "To obtain a fraction, remove the decimal point in the numerator, use denominator 10ᵏ and reduce: 0.125 = 125/1000 = 1/8."),
-         ("При округлении смотрят на первый отброшенный разряд: 0–4 — оставляют, 5–9 — увеличивают сохраняемый разряд на один. До окончательного ответа лучше считать точно.",
-          "For rounding, inspect the first discarded digit: 0–4 leaves the retained digit unchanged, 5–9 increases it by one. Keep exact values until the final answer."),
-         ("Оценка порядка величины помогает заметить ошибку в запятой: умножение положительного числа на число от 0 до 1 уменьшает результат.",
-          "A size estimate helps detect a misplaced decimal point: multiplying a positive number by a number between 0 and 1 makes it smaller.")],
-        ("Вычислите 0,125 · 2,4 без округления.", "Evaluate 0.125 × 2.4 without rounding."),
-        [("Запишем 0,125 = 1/8 и 2,4 = 12/5.", "Write 0.125 = 1/8 and 2.4 = 12/5."),
-         ("Произведение: 12/40 = 3/10 = 0,3.", "The product is 12/40 = 3/10 = 0.3."),
-         ("Проверка: восьмая часть числа 2,4 действительно равна 0,3.", "Check: one eighth of 2.4 is indeed 0.3.")]),
-    "divisibility": _lesson(
-        ("Делимость, простые числа, НОД и НОК", "Divisibility, primes, GCD and LCM"),
-        [("Целое a делится на ненулевое целое b, если a = bq для некоторого целого q. Простое число — натуральное число больше 1 с ровно двумя положительными делителями: 1 и самим собой. Число 1 не простое.",
-          "An integer a is divisible by a non-zero integer b if a = bq for an integer q. A prime is a natural number greater than 1 with exactly two positive divisors: 1 and itself. The number 1 is not prime."),
-         ("НОД двух положительных целых — их наибольший общий делитель; НОК — наименьшее положительное общее кратное. При делении a на b > 0 остаток r удовлетворяет a = bq + r, 0 ≤ r < b.",
-          "The GCD of two positive integers is their greatest common divisor; the LCM is their least positive common multiple. Division by b > 0 gives a = bq + r with 0 ≤ r < b.")],
-        [("Число делится на 3 или 9 тогда и только тогда, когда сумма его цифр делится на 3 или 9. На 4 — когда число из двух последних цифр делится на 4. На 11 — когда разность сумм цифр на чередующихся местах делится на 11 (в том числе равна нулю).",
-          "A number is divisible by 3 or 9 exactly when its digit sum is. It is divisible by 4 when its last two digits form a multiple of 4, and by 11 when the alternating digit-sum difference is a multiple of 11, including zero."),
-         ("Для положительных целых a,b: НОД(a,b) · НОК(a,b) = ab. НОД находят разложением на простые множители или алгоритмом Евклида: НОД(a,b) = НОД(b,r).",
-          "For positive integers a,b: GCD(a,b) × LCM(a,b) = ab. Find the GCD using prime factors or Euclid's algorithm: GCD(a,b) = GCD(b,r)."),
-         ("Признаки делимости следуют из остатков степеней 10: 10 ≡ 1 по модулю 3 и 9, 100 делится на 4, а 10 ≡ −1 по модулю 11.",
-          "The tests follow from powers of 10: 10 ≡ 1 modulo 3 and 9, 100 is divisible by 4, and 10 ≡ −1 modulo 11.")],
-        ("Найдите НОД(18,24) и НОК(18,24).", "Find GCD(18,24) and LCM(18,24)."),
-        [("18 = 2 · 3², 24 = 2³ · 3.", "18 = 2 × 3², 24 = 2³ × 3."),
-         ("Общие множители с меньшими показателями дают НОД = 2 · 3 = 6.", "Common factors with the smaller exponents give GCD = 2 × 3 = 6."),
-         ("НОК = 18 · 24 / 6 = 72. Проверяем: 72 делится и на 18, и на 24.", "LCM = 18 × 24 / 6 = 72. Check: 72 is divisible by both 18 and 24.")]),
-    "powers": _lesson(
-        ("Степени и их свойства", "Powers and their properties"),
-        [("При натуральном n степень aⁿ — произведение n одинаковых множителей a. При a ≠ 0 определяют a⁰ = 1 и a⁻ⁿ = 1/aⁿ.",
-          "For a positive integer n, aⁿ is the product of n copies of a. For a ≠ 0 define a⁰ = 1 and a⁻ⁿ = 1/aⁿ."),
-         ("Дробную степень для a > 0 определяют через корень: a^(m/n) = ⁿ√(aᵐ), где m — целое, n — положительное целое.",
-          "For a > 0, a fractional power is defined by a^(m/n) = ⁿ√(aᵐ), where m is an integer and n a positive integer.")],
-        [("Для целых показателей и a ≠ 0: aᵐaⁿ = aᵐ⁺ⁿ, aᵐ/aⁿ = aᵐ⁻ⁿ, (aᵐ)ⁿ = aᵐⁿ. Для произвольных вещественных показателей эти правила используют при a > 0.",
-          "For integer exponents and a ≠ 0: aᵐaⁿ = aᵐ⁺ⁿ, aᵐ/aⁿ = aᵐ⁻ⁿ, (aᵐ)ⁿ = aᵐⁿ. For arbitrary real exponents use these rules with a > 0."),
-         ("Для целого n: (ab)ⁿ = aⁿbⁿ и (a/b)ⁿ = aⁿ/bⁿ там, где обе части определены. При натуральных показателях основания могут быть нулевыми, но знаменатель не может быть нулём.",
-          "For integer n: (ab)ⁿ = aⁿbⁿ and (a/b)ⁿ = aⁿ/bⁿ wherever both sides are defined. For positive integer exponents bases may be zero, but denominators cannot be zero.")],
-        ("Вычислите 2³ · 2⁻¹ и 27^(2/3).", "Evaluate 2³ × 2⁻¹ and 27^(2/3)."),
-        [("В произведении складываем показатели: 2^(3 − 1) = 2² = 4.", "Add exponents in the product: 2^(3 − 1) = 2² = 4."),
-         ("Кубический корень из 27 равен 3.", "The cube root of 27 is 3."),
-         ("Следовательно, 27^(2/3) = 3² = 9.", "Thus 27^(2/3) = 3² = 9.")]),
-    "roots-absolute": _lesson(
-        ("Корни и модуль", "Roots and absolute value"),
-        [("Арифметический квадратный корень √a при a ≥ 0 — единственное неотрицательное число, квадрат которого равен a.",
-          "The square root √a for a ≥ 0 is the unique non-negative number whose square is a."),
-         ("Модуль |x| — расстояние от x до нуля: |x| = x при x ≥ 0 и |x| = −x при x < 0. Поэтому модуль всегда неотрицателен.",
-          "The absolute value |x| is the distance from x to zero: |x| = x for x ≥ 0 and |x| = −x for x < 0. It is always non-negative.")],
-        [("(√a)² = a при a ≥ 0, но √(a²) = |a| для любого вещественного a. Модуль нельзя убирать без проверки знака.",
-          "(√a)² = a for a ≥ 0, but √(a²) = |a| for every real a. Do not drop the absolute value without checking the sign."),
-         ("√(ab) = √a√b при a,b ≥ 0; √(a/b) = √a/√b при a ≥ 0, b > 0. Из √(a²b) выносится |a|√b при b ≥ 0.",
-          "√(ab) = √a√b for a,b ≥ 0; √(a/b) = √a/√b for a ≥ 0, b > 0. Extracting a factor gives √(a²b) = |a|√b for b ≥ 0."),
-         ("|ab| = |a||b|; неравенство треугольника: |a + b| ≤ |a| + |b|. Для n ≥ 0: n ≤ √a < n + 1 равносильно n² ≤ a < (n + 1)².",
-          "|ab| = |a||b|; the triangle inequality is |a + b| ≤ |a| + |b|. For n ≥ 0: n ≤ √a < n + 1 is equivalent to n² ≤ a < (n + 1)².")],
-        ("Упростите √(x² · 12) при x = −2.", "Simplify √(x² × 12) for x = −2."),
-        [("√(x² · 12) = |x|√12 = 2|x|√3.", "√(x² × 12) = |x|√12 = 2|x|√3."),
-         ("При x = −2 модуль равен 2, а не −2.", "For x = −2 the absolute value is 2, not −2."),
-         ("Ответ: 4√3. Он положителен, как и арифметический корень.", "Answer: 4√3. It is positive, as a square root must be.")]),
-    "identities": _lesson(
-        ("Формулы сокращённого умножения", "Algebraic identities"),
-        [("Тождество — равенство, верное при всех допустимых значениях переменных. Формулы сокращённого умножения — тождества для раскрытия скобок и разложения на множители.",
-          "An identity is an equality true for every permitted value of its variables. Algebraic identities expand brackets or factor expressions.")],
-        [("(a ± b)² = a² ± 2ab + b²; a² − b² = (a − b)(a + b). Средний член 2ab обязателен: он возникает из ab + ba.",
-          "(a ± b)² = a² ± 2ab + b²; a² − b² = (a − b)(a + b). The middle term 2ab is essential: it comes from ab + ba."),
-         ("(a + b)³ = a³ + 3a²b + 3ab² + b³; (a − b)³ = a³ − 3a²b + 3ab² − b³.",
-          "(a + b)³ = a³ + 3a²b + 3ab² + b³; (a − b)³ = a³ − 3a²b + 3ab² − b³."),
-         ("a³ ± b³ = (a ± b)(a² ∓ ab + b²). Выделение полного квадрата при a ≠ 0: ax² + bx + c = a(x + b/(2a))² + c − b²/(4a).",
-          "a³ ± b³ = (a ± b)(a² ∓ ab + b²). Completing the square for a ≠ 0: ax² + bx + c = a(x + b/(2a))² + c − b²/(4a).")],
-        ("Упростите (x + 3)² − (x − 3)².", "Simplify (x + 3)² − (x − 3)²."),
-        [("Применим разность квадратов к a = x + 3, b = x − 3.", "Apply the difference of squares with a = x + 3, b = x − 3."),
-         ("Получаем ((x + 3) − (x − 3)) · ((x + 3) + (x − 3)).", "This gives ((x + 3) − (x − 3)) × ((x + 3) + (x − 3))."),
-         ("Произведение 6 · 2x = 12x.", "The product is 6 × 2x = 12x.")]),
-    "factoring": _lesson(
-        ("Разложение на множители и сокращение", "Factoring and cancellation"),
-        [("Множители — выражения, соединённые знаком умножения; слагаемые — части суммы. Сокращение дроби означает деление числителя и знаменателя на один ненулевой множитель.",
-          "Factors are expressions joined by multiplication; terms are parts of a sum. Cancelling a fraction means dividing its numerator and denominator by the same non-zero factor.")],
-        [("Сначала вынесите общий множитель, примените тождество или группировку. Сокращают множители, но не отдельные слагаемые: (ab + ac)/a = b + c при a ≠ 0.",
-          "First extract a common factor, apply an identity or group terms. Cancel factors, never individual terms: (ab + ac)/a = b + c for a ≠ 0."),
-         ("После сокращения сохраняют ограничения исходного знаменателя. Новая короткая запись не делает допустимой точку, где исходная дробь не определена.",
-          "Keep restrictions from the original denominator after cancelling. A shorter expression does not make a point valid when the original fraction was undefined.")],
-        ("Упростите (x² − 9)/(x − 3).", "Simplify (x² − 9)/(x − 3)."),
-        [("Исходная область допустимых значений: x ≠ 3.", "The original domain requires x ≠ 3."),
-         ("Разложим числитель: x² − 9 = (x − 3)(x + 3).", "Factor the numerator: x² − 9 = (x − 3)(x + 3)."),
-         ("Сокращаем общий ненулевой множитель: ответ x + 3 при x ≠ 3.", "Cancel the common non-zero factor: the answer is x + 3 for x ≠ 3.")]),
-    "linear-equations": _lesson(
-        ("Линейные уравнения и пропорции", "Linear equations and proportions"),
-        [("Корень уравнения — допустимое значение неизвестного, при котором обе части равны. Равносильные уравнения имеют одинаковое множество корней.",
-          "A root of an equation is a permitted value making its two sides equal. Equivalent equations have the same set of roots.")],
-        [("Прибавление одного выражения к обеим частям сохраняет равенство. Умножение или деление обеих частей на одно ненулевое число также сохраняет корни.",
-          "Adding the same expression to both sides preserves equality. Multiplying or dividing both sides by the same non-zero number preserves roots too."),
-         ("ax + b = 0: при a ≠ 0 корень x = −b/a; при a = 0, b = 0 подходит любое x, а при a = 0, b ≠ 0 корней нет.",
-          "For ax + b = 0: if a ≠ 0 the root is x = −b/a; if a = b = 0 every x works, while a = 0, b ≠ 0 gives no roots."),
-         ("Пропорция a/b = c/d при b,d ≠ 0 равносильна ad = bc. При переменных знаменателях ограничения сохраняют.",
-          "The proportion a/b = c/d for b,d ≠ 0 is equivalent to ad = bc. Keep restrictions when denominators contain variables.")],
-        ("Решите 3(x − 2) = 2x + 5.", "Solve 3(x − 2) = 2x + 5."),
-        [("Раскрываем скобки: 3x − 6 = 2x + 5.", "Expand: 3x − 6 = 2x + 5."),
-         ("Вычитаем 2x и прибавляем 6: x = 11.", "Subtract 2x and add 6: x = 11."),
-         ("Проверка: 3 · 9 = 22 + 5 = 27.", "Check: 3 × 9 = 22 + 5 = 27.")]),
-    "quadratic": _lesson(
-        ("Квадратное уравнение, теорема Виета и парабола", "Quadratics, Vieta's theorem and the parabola"),
-        [("Квадратное уравнение имеет вид ax² + bx + c = 0, где a ≠ 0. Дискриминант D = b² − 4ac определяет число его вещественных корней.",
-          "A quadratic equation has the form ax² + bx + c = 0 with a ≠ 0. Its discriminant D = b² − 4ac determines the number of real roots."),
-         ("График y = ax² + bx + c — парабола. Её ось симметрии проходит через вершину с абсциссой x₀ = −b/(2a).",
-          "The graph y = ax² + bx + c is a parabola. Its symmetry axis passes through the vertex at x₀ = −b/(2a).")],
-        [("При D > 0 корни x₁,₂ = (−b ± √D)/(2a); при D = 0 один корень −b/(2a); при D < 0 вещественных корней нет. Если b чётно, можно использовать D/4 = b²/4 − ac.",
-          "For D > 0 the roots are x₁,₂ = (−b ± √D)/(2a); for D = 0 there is one root −b/(2a); for D < 0 there are no real roots. For even b one may use D/4 = b²/4 − ac."),
-         ("Теорема Виета: x₁ + x₂ = −b/a, x₁x₂ = c/a. При существующих корнях ax² + bx + c = a(x − x₁)(x − x₂).",
-          "Vieta's theorem: x₁ + x₂ = −b/a and x₁x₂ = c/a. When roots exist, ax² + bx + c = a(x − x₁)(x − x₂)."),
-         ("Вершина: y₀ = c − b²/(4a). При a > 0 ветви направлены вверх, при a < 0 — вниз. Равенство x = 2c/(−b ∓ √D) применимо только при ненулевом знаменателе.",
-          "The vertex has y₀ = c − b²/(4a). The branches point up for a > 0 and down for a < 0. The alternative root form x = 2c/(−b ∓ √D) requires a non-zero denominator.")],
-        ("Решите x² − 5x + 6 = 0 и проверьте теорему Виета.", "Solve x² − 5x + 6 = 0 and check Vieta's theorem."),
-        [("D = 25 − 24 = 1.", "D = 25 − 24 = 1."),
-         ("Корни: (5 − 1)/2 = 2 и (5 + 1)/2 = 3.", "The roots are (5 − 1)/2 = 2 and (5 + 1)/2 = 3."),
-         ("Сумма 2 + 3 = 5 = −b/a, произведение 2 · 3 = 6 = c/a.", "The sum is 2 + 3 = 5 = −b/a; the product is 2 × 3 = 6 = c/a.")]),
-    "equation-domain": _lesson(
-        ("ОДЗ и посторонние корни", "Domain restrictions and extraneous roots"),
-        [("Область допустимых значений (ОДЗ) — значения, при которых все выражения исходного уравнения определены. Посторонний корень удовлетворяет преобразованному, но не исходному уравнению.",
-          "Domain restrictions are the values for which every expression in the original equation is defined. An extraneous root solves a transformed equation but not the original one.")],
-        [("Знаменатели не равны нулю; под корнем чётной степени выражение неотрицательно; аргумент логарифма положителен, основание положительно и не равно 1.",
-          "Denominators must be non-zero; even roots need non-negative radicands; logarithm arguments and bases must be positive, and a base cannot be 1."),
-         ("Возведение в квадрат может добавить корни, а деление на выражение с переменной — потерять его нули. Поэтому после таких шагов проверяют кандидатов в исходном уравнении.",
-          "Squaring may add roots, while division by an expression containing a variable may lose its zeros. Check candidates in the original equation after such steps.")],
-        ("Решите √(x + 2) = x.", "Solve √(x + 2) = x."),
-        [("ОДЗ: x ≥ −2; поскольку корень неотрицателен, дополнительно x ≥ 0.", "The domain gives x ≥ −2; since a square root is non-negative, also require x ≥ 0."),
-         ("После возведения в квадрат: x² − x − 2 = 0, кандидаты −1 и 2.", "Squaring gives x² − x − 2 = 0, with candidates −1 and 2."),
-         ("−1 не подходит: √1 ≠ −1. Для 2 получаем √4 = 2. Ответ: 2.", "−1 fails because √1 ≠ −1. For 2 we have √4 = 2. Answer: 2.")]),
-    "linear-inequalities": _lesson(
-        ("Линейные неравенства и модуль", "Linear inequalities and absolute value"),
-        [("Решение неравенства — множество допустимых значений, при которых сравнение верно. Строгое неравенство (< или >) не включает точку равенства.",
-          "The solution of an inequality is the set of permitted values making the comparison true. A strict inequality (< or >) excludes equality.")],
-        [("При сложении с одним числом знак сохраняется. При умножении или делении на положительное число он сохраняется, на отрицательное — меняется на противоположный.",
-          "Adding the same number preserves the sign. Multiplication or division by a positive number preserves it; by a negative number it reverses it."),
-         ("При a > 0: |x| < a ⇔ −a < x < a; |x| > a ⇔ x < −a или x > a. Для ≤ и ≥ включают границы. При a ≤ 0 случай нужно разобрать отдельно по |x| ≥ 0.",
-          "For a > 0: |x| < a ⇔ −a < x < a; |x| > a ⇔ x < −a or x > a. Include boundaries for ≤ and ≥. For a ≤ 0 examine the case separately using |x| ≥ 0.")],
-        ("Решите −2x + 3 > 7.", "Solve −2x + 3 > 7."),
-        [("Вычитаем 3: −2x > 4.", "Subtract 3: −2x > 4."),
-         ("Делим на −2 и меняем знак: x < −2.", "Divide by −2 and reverse the sign: x < −2."),
-         ("Точка −2 не входит в ответ: (−∞; −2).", "The point −2 is excluded: (−∞, −2).")]),
-    "intervals": _lesson(
-        ("Метод интервалов для дробных неравенств", "The interval method for rational inequalities"),
-        [("Нули числителя и знаменателя делят числовую прямую на интервалы. Между соседними такими точками знак произведения или дроби из линейных множителей постоянен.",
-          "Zeros of the numerator and denominator divide the number line into intervals. Between consecutive zeros the sign of a product or quotient of linear factors is constant.")],
-        [("Разложите выражение на множители, отметьте все нули и определите знак на каждом интервале подстановкой пробной точки. Нули знаменателя всегда исключены.",
-          "Factor the expression, mark all zeros and determine the sign on each interval using a test point. Denominator zeros are always excluded."),
-         ("При проходе через корень нечётной кратности знак меняется, чётной — нет. Нельзя механически чередовать знаки у повторяющихся множителей.",
-          "The sign changes across a root of odd multiplicity but not even multiplicity. Do not alternate signs blindly when factors repeat."),
-         ("В нестрогом неравенстве нули числителя включают, только если исходный знаменатель там не равен нулю. Умножать на знаменатель неизвестного знака без разбора случаев нельзя.",
-          "In a non-strict inequality include numerator zeros only where the original denominator is non-zero. Do not multiply by a denominator of unknown sign without splitting cases.")],
-        ("Решите (x − 1)/(x + 2) ≤ 0.", "Solve (x − 1)/(x + 2) ≤ 0."),
-        [("Критические для знака точки: −2 (исключена) и 1.", "The sign boundaries are −2 (excluded) and 1."),
-         ("На интервалах (−∞; −2), (−2; 1), (1; +∞) знаки соответственно +, −, +.", "On (−∞, −2), (−2, 1), (1, +∞) the signs are respectively +, −, +."),
-         ("Берём отрицательный интервал и допустимый нуль: (−2; 1].", "Take the negative interval and the permitted zero: (−2, 1].")]),
-    "quadratic-inequalities": _lesson(
-        ("Квадратные неравенства", "Quadratic inequalities"),
-        [("Квадратное неравенство сравнивает трёхчлен ax² + bx + c с нулём при a ≠ 0. Его знак читают по положению параболы относительно оси Ox.",
-          "A quadratic inequality compares ax² + bx + c with zero, with a ≠ 0. Its sign is read from the parabola's position relative to the x-axis.")],
-        [("При D > 0 и x₁ < x₂ знак трёхчлена совпадает со знаком a вне [x₁; x₂] и противоположен между корнями. В корнях значение равно нулю.",
-          "For D > 0 and x₁ < x₂, the sign matches a outside [x₁, x₂] and is opposite between the roots. At the roots the value is zero."),
-         ("При D = 0 выражение равно a(x − x₀)²: имеет знак a везде, кроме нуля x₀. При D < 0 оно имеет знак a на всей прямой.",
-          "For D = 0 the expression is a(x − x₀)²: its sign is a except at the zero x₀. For D < 0 its sign is a everywhere."),
-         ("Строгое неравенство исключает корни; нестрогое включает подходящие точки равенства.",
-          "Strict inequalities exclude roots; non-strict inequalities include the appropriate equality points.")],
-        ("Решите x² − 5x + 6 < 0.", "Solve x² − 5x + 6 < 0."),
-        [("Разложение: (x − 2)(x − 3). Корни 2 и 3.", "Factor: (x − 2)(x − 3). The roots are 2 and 3."),
-         ("a = 1 > 0, поэтому между корнями трёхчлен отрицателен.", "a = 1 > 0, so the quadratic is negative between its roots."),
-         ("Корни исключены: ответ (2; 3).", "The roots are excluded: answer (2, 3).")]),
-    "function-domain-range": _lesson(
-        ("Функция, область определения и область значений", "Functions, domain and range"),
-        [("Функция сопоставляет каждому x из области определения D ровно одно значение y. Область значений E — все значения y, которые функция действительно принимает.",
-          "A function assigns exactly one value y to each x in its domain D. Its range E contains all values y that it actually attains.")],
-        [("Для области определения одновременно выполняют все ограничения: знаменатель ≠ 0, под чётным корнем ≥ 0, под логарифмом > 0; основание логарифма > 0 и ≠ 1.",
-          "For the domain impose all restrictions together: denominators ≠ 0, even-root radicands ≥ 0, logarithm arguments > 0, and logarithm bases > 0 and ≠ 1."),
-         ("Если m ≤ f(x) ≤ M, то у af(x) + b границы — min(am + b, aM + b) и max(am + b, aM + b). При a < 0 порядок границ меняется.",
-          "If m ≤ f(x) ≤ M, the bounds of af(x) + b are min(am + b, aM + b) and max(am + b, aM + b). For a < 0 their order reverses."),
-         ("−1 ≤ sin x, cos x ≤ 1. При поиске области значений учитывают заданную область x: ограничение аргумента может сузить результат.",
-          "−1 ≤ sin x, cos x ≤ 1. When finding a range, account for any restriction on x: it may narrow the result.")],
-        ("Найдите область определения и значений y = √(4 − x²).", "Find the domain and range of y = √(4 − x²)."),
-        [("4 − x² ≥ 0 ⇔ −2 ≤ x ≤ 2. Область определения [−2; 2].", "4 − x² ≥ 0 ⇔ −2 ≤ x ≤ 2. The domain is [−2, 2]."),
-         ("Корень неотрицателен; максимум √4 = 2 достигается при x = 0.", "The root is non-negative; its maximum √4 = 2 occurs at x = 0."),
-         ("Минимум 0 достигается при x = ±2. Область значений [0; 2].", "The minimum 0 occurs at x = ±2. The range is [0, 2].")]),
-    "graph-transformations": _lesson(
-        ("Преобразования графиков", "Graph transformations"),
-        [("Преобразование графика строит новую функцию из известной: меняют аргумент x или значение y. Горизонтальные изменения действуют на аргумент, вертикальные — на значение функции.",
-          "A graph transformation constructs a new function from a known one by changing x or y. Horizontal changes act on the argument; vertical changes act on the function value.")],
-        [("y = f(x − a) сдвигает график вправо на a (при a < 0 — влево); y = f(x) + b — вверх на b (при b < 0 — вниз).",
-          "y = f(x − a) shifts the graph right by a (left when a < 0); y = f(x) + b shifts it up by b (down when b < 0)."),
-         ("Для k > 1: y = kf(x) растягивает по вертикали в k раз, y = f(kx) сжимает по горизонтали в k раз. При 0 < k < 1 эффекты обратные.",
-          "For k > 1, y = kf(x) stretches vertically by k and y = f(kx) compresses horizontally by k. For 0 < k < 1 these effects are reversed."),
-         ("y = −f(x) отражает относительно Ox, y = f(−x) — относительно Oy. Отрицательный коэффициент сочетает масштабирование с отражением.",
-          "y = −f(x) reflects in the x-axis, y = f(−x) in the y-axis. A negative scale factor combines scaling and reflection.")],
-        ("Опишите график y = −2(x − 3)² + 1.", "Describe the graph y = −2(x − 3)² + 1."),
-        [("Начинаем с y = x² и сдвигаем вправо на 3.", "Start with y = x² and shift right by 3."),
-         ("Умножение на −2 растягивает вдвое и отражает относительно Ox; затем сдвиг вверх на 1.", "Multiplication by −2 stretches vertically by 2 and reflects in the x-axis; then shift up by 1."),
-         ("Вершина (3; 1), ветви вниз, область значений (−∞; 1].", "The vertex is (3, 1), the branches point down, and the range is (−∞, 1].")]),
-    "function-properties": _lesson(
-        ("Чётность, прямая и гипербола", "Parity, lines and hyperbolas"),
-        [("Чётная функция удовлетворяет f(−x) = f(x), нечётная — f(−x) = −f(x). В обоих определениях область должна быть симметрична относительно нуля.",
-          "An even function satisfies f(−x) = f(x); an odd one satisfies f(−x) = −f(x). In either definition the domain must be symmetric about zero."),
-         ("Линейная функция y = kx + b имеет график-прямую; k — угловой коэффициент, b — ордината пересечения с Oy. Обратная пропорциональность y = k/x при k ≠ 0 имеет график-гиперболу.",
-          "The linear function y = kx + b has a straight-line graph; k is its slope and b its y-intercept. Inverse proportion y = k/x for k ≠ 0 has a hyperbola as its graph.")],
-        [("График чётной функции симметричен относительно Oy, нечётной — относительно начала координат. Если нечётная функция определена в нуле, f(0) = 0.",
-          "An even graph is symmetric in the y-axis; an odd graph is symmetric about the origin. If an odd function is defined at zero, f(0) = 0."),
-         ("Для прямой k = (y₂ − y₁)/(x₂ − x₁) при x₂ ≠ x₁. У y = k/x область определения x ≠ 0, оси являются асимптотами.",
-          "For a line k = (y₂ − y₁)/(x₂ − x₁) when x₂ ≠ x₁. The domain of y = k/x excludes zero and the axes are asymptotes.")],
-        ("Определите чётность f(x) = x³ − x.", "Determine the parity of f(x) = x³ − x."),
-        [("Область определения — вся числовая прямая, она симметрична.", "The domain is the entire real line, which is symmetric."),
-         ("f(−x) = −x³ + x = −(x³ − x) = −f(x).", "f(−x) = −x³ + x = −(x³ − x) = −f(x)."),
-         ("Функция нечётная, её график симметричен относительно начала координат.", "The function is odd, so its graph is symmetric about the origin.")]),
-    "arithmetic-progression": _lesson(
-        ("Арифметическая прогрессия", "Arithmetic progressions"),
-        [("Арифметическая прогрессия — последовательность, в которой каждый следующий член получается прибавлением одного и того же числа d: aₙ₊₁ = aₙ + d.",
-          "An arithmetic progression is a sequence in which each next term is obtained by adding the same number d: aₙ₊₁ = aₙ + d.")],
-        [("aₙ = a₁ + (n − 1)d, где n — положительное целое. Между первым и n-м членом ровно n − 1 переходов.",
-          "aₙ = a₁ + (n − 1)d, where n is a positive integer. There are exactly n − 1 steps from the first term to the n-th."),
-         ("Для внутреннего члена aₙ = (aₙ₋₁ + aₙ₊₁)/2. Сумма первых n членов: Sₙ = n(a₁ + aₙ)/2.",
-          "An interior term satisfies aₙ = (aₙ₋₁ + aₙ₊₁)/2. The sum of the first n terms is Sₙ = n(a₁ + aₙ)/2.")],
-        ("В прогрессии a₁ = 4, d = 3. Найдите a₇.", "A progression has a₁ = 4 and d = 3. Find a₇."),
-        [("От первого до седьмого члена 6 переходов.", "There are 6 steps from the first to the seventh term."),
-         ("a₇ = 4 + 6 · 3 = 22.", "a₇ = 4 + 6 × 3 = 22."),
-         ("Проверка по последовательности: 4, 7, 10, 13, 16, 19, 22.", "Check the sequence: 4, 7, 10, 13, 16, 19, 22.")]),
-    "geometric-progression": _lesson(
-        ("Геометрическая прогрессия", "Geometric progressions"),
-        [("Геометрическая прогрессия — последовательность ненулевых чисел, у которой bₙ₊₁/bₙ = q постоянно. Число q ≠ 0 называется знаменателем прогрессии.",
-          "A geometric progression is a sequence of non-zero numbers with a constant ratio bₙ₊₁/bₙ = q. This non-zero q is the common ratio.")],
-        [("bₙ = b₁qⁿ⁻¹. Если известны b₁ и b₃, то q² = b₃/b₁: знак q нельзя выбирать без дополнительных условий.",
-          "bₙ = b₁qⁿ⁻¹. Knowing b₁ and b₃ gives q² = b₃/b₁: additional conditions are needed to determine the sign of q."),
-         ("При q ≠ 1 сумма Sₙ = b₁(qⁿ − 1)/(q − 1), при q = 1 сумма равна nb₁. Для |q| < 1 сумма бесконечной прогрессии равна b₁/(1 − q).",
-          "For q ≠ 1, Sₙ = b₁(qⁿ − 1)/(q − 1); for q = 1 the sum is nb₁. If |q| < 1, the infinite sum is b₁/(1 − q).")],
-        ("Дано b₁ = 3, b₃ = 12, все члены положительны. Найдите b₄.", "Given b₁ = 3 and b₃ = 12, with all terms positive, find b₄."),
-        [("q² = 12/3 = 4, поэтому q = 2 или −2.", "q² = 12/3 = 4, so q is 2 or −2."),
-         ("Из положительности всех членов следует q = 2.", "Since all terms are positive, q = 2."),
-         ("b₄ = 3 · 2³ = 24.", "b₄ = 3 × 2³ = 24.")]),
-    "progression-sums": _lesson(
-        ("Суммы прогрессий", "Sums of progressions"),
-        [("Частичная сумма Sₙ — сумма первых n членов последовательности. Бесконечная сумма — предел частичных сумм, если он существует.",
-          "A partial sum Sₙ is the sum of the first n terms of a sequence. An infinite sum is the limit of partial sums, if it exists.")],
-        [("Для арифметической прогрессии: 2Sₙ = n(a₁ + aₙ), потому что пары равноудалённых от концов членов имеют одинаковую сумму. В частности, 1 + … + n = n(n + 1)/2.",
-          "For an arithmetic progression, 2Sₙ = n(a₁ + aₙ), since equally spaced terms from opposite ends have the same sum. In particular, 1 + … + n = n(n + 1)/2."),
-         ("В геометрической прогрессии вычитание Sₙ из qSₙ даёт (q − 1)Sₙ = b₁(qⁿ − 1). Формула с делением на q − 1 требует q ≠ 1; при q = 1 считают nb₁.",
-          "For a geometric progression, subtracting Sₙ from qSₙ gives (q − 1)Sₙ = b₁(qⁿ − 1). Division by q − 1 requires q ≠ 1; for q = 1 use nb₁."),
-         ("Бесконечная геометрическая сумма b₁/(1 − q) существует при |q| < 1, так как qⁿ стремится к нулю.",
-          "The infinite geometric sum b₁/(1 − q) exists for |q| < 1, because qⁿ tends to zero.")],
-        ("Найдите 2 + 4 + 6 + … + 20.", "Find 2 + 4 + 6 + … + 20."),
-        [("Это арифметическая прогрессия с a₁ = 2, d = 2.", "This is an arithmetic progression with a₁ = 2 and d = 2."),
-         ("20 = 2 + (n − 1) · 2, откуда n = 10.", "20 = 2 + (n − 1) × 2, giving n = 10."),
-         ("S₁₀ = (2 + 20) · 10/2 = 110.", "S₁₀ = (2 + 20) × 10/2 = 110.")]),
-    "modeling": _lesson(
-        ("Как составить уравнение текстовой задачи", "Modelling a word problem"),
-        [("Математическая модель — уравнение или система, выражающая связи величин из условия. Неизвестную обозначают вместе с её смыслом и единицами измерения.",
-          "A mathematical model is an equation or system expressing the relationships in a problem. Define the unknown together with its meaning and units.")],
-        [("Выберите x, выразите через него остальные величины и запишите, что равно, что суммируется или отличается на заданную величину. Полезна таблица «ситуация — величины — связь».",
-          "Choose x, express other quantities in terms of it, and identify what is equal, added or differs by a specified amount. A table of situations, quantities and relationships is useful."),
-         ("Стоимость = цена · количество; путь = скорость · время; работа = производительность · время. В одном равенстве единицы должны быть согласованы.",
-          "Cost = price × quantity; distance = speed × time; work = rate × time. Units must be consistent within an equation."),
-         ("После решения проверьте ограничения смысла задачи: длины и времена положительны, количество предметов — целое, найденное значение отвечает именно на вопрос.",
-          "After solving, check the context: lengths and times are positive, item counts are integers, and the value answers the actual question.")],
-        ("Два числа в сумме дают 34; одно на 8 больше другого. Найдите меньшее.", "Two numbers sum to 34, and one is 8 greater than the other. Find the smaller one."),
-        [("Пусть x — меньшее число, тогда большее x + 8.", "Let x be the smaller number; the larger is x + 8."),
-         ("x + (x + 8) = 34 ⇒ 2x = 26 ⇒ x = 13.", "x + (x + 8) = 34 ⇒ 2x = 26 ⇒ x = 13."),
-         ("Проверка: 13 + 21 = 34, 21 − 13 = 8. Ответ: 13.", "Check: 13 + 21 = 34 and 21 − 13 = 8. Answer: 13.")]),
-    "motion-work": _lesson(
-        ("Движение и совместная работа", "Motion and combined work"),
-        [("При равномерном движении скорость v — путь за единицу времени: v = s/t. Производительность — объём работы за единицу времени.",
-          "For uniform motion, speed v is distance per unit time: v = s/t. A work rate is the amount of work completed per unit time.")],
-        [("s = vt. При движении навстречу скорость сближения v₁ + v₂; при движении в одном направлении — разность скоростей. Средняя скорость — весь путь, делённый на всё время.",
-          "s = vt. Towards each other the closing speed is v₁ + v₂; in the same direction it is the difference. Average speed is total distance divided by total time."),
-         ("На реке: по течению v + u, против течения v − u, где v — собственная скорость, u — скорость течения; для движения против течения нужно v > u.",
-          "On a river, downstream speed is v + u and upstream speed v − u, where v is still-water speed and u the current speed; upstream motion requires v > u."),
-         ("Если весь объём работы принят за 1, то при времени T производительность 1/T. При совместной независимой работе производительности складываются, а не времена.",
-          "Taking the whole job as 1, completion time T gives rate 1/T. For independent workers their rates add, not their completion times.")],
-        ("Первый выполняет работу за 6 ч, второй — за 3 ч. За сколько часов они выполнят её вместе?", "One worker takes 6 hours and another 3 hours. How long do they take together?"),
-        [("Производительности: 1/6 и 1/3 работы в час.", "Their rates are 1/6 and 1/3 of the job per hour."),
-         ("Вместе: 1/6 + 1/3 = 1/2 работы в час.", "Together: 1/6 + 1/3 = 1/2 of the job per hour."),
-         ("Время: 1 : (1/2) = 2 ч.", "Time: 1 / (1/2) = 2 hours.")]),
-    "percentages": _lesson(
-        ("Проценты и последовательные изменения", "Percentages and successive changes"),
-        [("Один процент — одна сотая величины. p% от A равно A · p/100. База процента — величина, от которой этот процент берётся.",
-          "One percent is one hundredth of a quantity. p% of A is A × p/100. The percentage base is the quantity to which the percentage applies.")],
-        [("Рост на p% даёт A(1 + p/100), снижение на p% — A(1 − p/100). При нескольких изменениях множители перемножают.",
-          "An increase by p% gives A(1 + p/100), and a decrease gives A(1 − p/100). Multiply the factors for successive changes."),
-         ("Проценты нельзя просто складывать, если меняется база. Рост и затем снижение на одинаковый процент обычно не возвращают исходную величину.",
-          "Do not simply add percentages when their base changes. An increase followed by the same percentage decrease generally does not restore the original value.")],
-        ("Цену 200 руб. снизили на 10%, затем повысили на 10%. Найдите новую цену.", "A price of 200 is reduced by 10% and then increased by 10%. Find the new price."),
-        [("После снижения: 200 · 0,9 = 180.", "After the reduction: 200 × 0.9 = 180."),
-         ("Повышение берётся от 180: 180 · 1,1 = 198.", "The increase applies to 180: 180 × 1.1 = 198."),
-         ("Итого 198 руб., это на 1% ниже исходной цены.", "The final price is 198, which is 1% below the original.")]),
-    "trig-identities": _lesson(
-        ("Тригонометрические функции и тождества", "Trigonometric functions and identities"),
-        [("На единичной окружности точка угла α имеет координаты (cos α; sin α). Тангенс tg α = sin α/cos α определён при cos α ≠ 0, котангенс ctg α = cos α/sin α — при sin α ≠ 0.",
-          "On the unit circle the point at angle α has coordinates (cos α, sin α). The tangent tg α = sin α/cos α requires cos α ≠ 0, and cotangent ctg α = cos α/sin α requires sin α ≠ 0.")],
-        [("Основное тождество sin²α + cos²α = 1 следует из уравнения единичной окружности x² + y² = 1.",
-          "The identity sin²α + cos²α = 1 follows from the unit-circle equation x² + y² = 1."),
-         ("1 + tg²α = 1/cos²α при cos α ≠ 0; 1 + ctg²α = 1/sin²α при sin α ≠ 0. Равенство ctg α = 1/tg α требует одновременно sin α ≠ 0 и cos α ≠ 0.",
-          "1 + tg²α = 1/cos²α for cos α ≠ 0; 1 + ctg²α = 1/sin²α for sin α ≠ 0. The equality ctg α = 1/tg α requires both sin α and cos α to be non-zero."),
-         ("Из известного квадрата функции нельзя определить её знак: при извлечении корня учитывают четверть угла.",
-          "Knowing the square of a function does not fix its sign: use the quadrant when taking the square root.")],
-        ("sin α = 3/5, угол во II четверти. Найдите cos α.", "sin α = 3/5 and α is in quadrant II. Find cos α."),
-        [("cos²α = 1 − 9/25 = 16/25.", "cos²α = 1 − 9/25 = 16/25."),
-         ("Во II четверти косинус отрицателен.", "Cosine is negative in quadrant II."),
-         ("cos α = −4/5.", "cos α = −4/5.")]),
-    "trig-values": _lesson(
-        ("Радианы, табличные углы и знаки", "Radians, standard angles and signs"),
-        [("Радианная мера угла — отношение длины дуги к радиусу. Полный оборот равен 2π радиан или 360°, поэтому 180° = π радиан.",
-          "An angle in radians is arc length divided by radius. A full turn is 2π radians or 360°, so 180° = π radians.")],
-        [("Для 30°, 45°, 60° значения sin равны 1/2, √2/2, √3/2; значения cos — √3/2, √2/2, 1/2. Для 0°: sin = 0, cos = 1; для 90°: sin = 1, cos = 0.",
-          "At 30°, 45°, 60°, sine is 1/2, √2/2, √3/2 and cosine is √3/2, √2/2, 1/2. At 0°: sin = 0, cos = 1; at 90°: sin = 1, cos = 0."),
-         ("Знаки по четвертям I–IV: sin (+,+,−,−), cos (+,−,−,+), tg (+,−,+,−). На границах четвертей значения проверяют отдельно.",
-          "Signs in quadrants I–IV: sin (+,+,−,−), cos (+,−,−,+), tg (+,−,+,−). Check values separately on quadrant boundaries.")],
-        ("Найдите sin 150° и cos 150°.", "Find sin 150° and cos 150°."),
-        [("150° = 180° − 30°, это II четверть.", "150° = 180° − 30°, in quadrant II."),
-         ("sin 150° = sin 30° = 1/2.", "sin 150° = sin 30° = 1/2."),
-         ("cos 150° = −cos 30° = −√3/2.", "cos 150° = −cos 30° = −√3/2.")]),
-    "trig-formulas": _lesson(
-        ("Сложение углов и двойной угол", "Angle addition and double angles"),
-        [("Формулы сложения выражают функцию суммы углов через функции отдельных углов. Формулы двойного угла получаются при равных слагаемых α + α.",
-          "Angle-addition formulas express a function of a sum using functions of the individual angles. Double-angle formulas use α + α.")],
-        [("sin(α ± β) = sin α cos β ± cos α sin β; cos(α ± β) = cos α cos β ∓ sin α sin β. Знаки у косинуса противоположны знаку между углами.",
-          "sin(α ± β) = sin α cos β ± cos α sin β; cos(α ± β) = cos α cos β ∓ sin α sin β. The cosine formula uses the opposite sign."),
-         ("sin 2α = 2sin α cos α; cos 2α = cos²α − sin²α = 1 − 2sin²α = 2cos²α − 1.",
-          "sin 2α = 2sin α cos α; cos 2α = cos²α − sin²α = 1 − 2sin²α = 2cos²α − 1."),
-         ("sin²α = (1 − cos 2α)/2, cos²α = (1 + cos 2α)/2. Чётность: cos(−α) = cos α, sin(−α) = −sin α, tg(−α) = −tg α там, где тангенс определён.",
-          "sin²α = (1 − cos 2α)/2 and cos²α = (1 + cos 2α)/2. Parity: cos(−α) = cos α, sin(−α) = −sin α, tg(−α) = −tg α wherever tangent is defined.")],
-        ("Найдите sin 75°.", "Find sin 75°."),
-        [("75° = 45° + 30°.", "75° = 45° + 30°."),
-         ("sin 75° = (√2/2)(√3/2) + (√2/2)(1/2).", "sin 75° = (√2/2)(√3/2) + (√2/2)(1/2)."),
-         ("Ответ: (√6 + √2)/4.", "Answer: (√6 + √2)/4.")]),
-    "trig-equations": _lesson(
-        ("Простейшие тригонометрические уравнения", "Basic trigonometric equations"),
-        [("Общее решение тригонометрического уравнения перечисляет все его корни с помощью целого параметра n. arcsin a лежит в [−π/2; π/2], arccos a — в [0; π].",
-          "A general trigonometric solution lists all roots using an integer parameter n. arcsin a lies in [−π/2, π/2] and arccos a in [0, π].")],
-        [("Для |a| ≤ 1: sin x = a ⇔ x = (−1)ⁿ arcsin a + πn; cos x = a ⇔ x = ±arccos a + 2πn, n ∈ Z. Если |a| > 1, корней нет.",
-          "For |a| ≤ 1: sin x = a ⇔ x = (−1)ⁿ arcsin a + πn; cos x = a ⇔ x = ±arccos a + 2πn, n ∈ Z. If |a| > 1 there are no roots."),
-         ("tg x = a ⇔ x = arctg a + πn для любого вещественного a. Для sin x = a также удобны две серии: arcsin a + 2πn и π − arcsin a + 2πn.",
-          "tg x = a ⇔ x = arctg a + πn for every real a. For sin x = a one can also use two families: arcsin a + 2πn and π − arcsin a + 2πn."),
-         ("Если аргумент равен kx + b, общую формулу записывают для всего аргумента, а затем решают линейное уравнение относительно x.",
-          "If the argument is kx + b, write the general formula for the whole argument and then solve the resulting linear equation for x.")],
-        ("Решите sin x = 1/2.", "Solve sin x = 1/2."),
-        [("arcsin(1/2) = π/6.", "arcsin(1/2) = π/6."),
-         ("На одном обороте корни π/6 и 5π/6.", "In one full turn the roots are π/6 and 5π/6."),
-         ("Общее решение: x = π/6 + 2πn или x = 5π/6 + 2πn, n ∈ Z.", "The general solution is x = π/6 + 2πn or x = 5π/6 + 2πn, n ∈ Z.")]),
-    "trig-selection": _lesson(
-        ("Отбор тригонометрических корней", "Selecting trigonometric roots"),
-        [("Отбор корней — пересечение общего решения с заданным промежутком или условием (например, x > 0). Целый параметр n ограничивают отдельно в каждой серии.",
-          "Selecting roots means intersecting the general solution with the required interval or condition, such as x > 0. Restrict the integer n separately in each family.")],
-        [("Для серии x = c + Tn, T > 0, на [A; B] решают A ≤ c + Tn ≤ B и выбирают все целые n. При открытых концах неравенства соответствующих границ строгие.",
-          "For a family x = c + Tn with T > 0 on [A, B], solve A ≤ c + Tn ≤ B and take all integer n. Open endpoints require strict inequalities."),
-         ("Проверяйте все серии, границы и повторяющиеся корни. Для наименьшего положительного корня нуль не подходит.",
-          "Check every family, the endpoints and duplicate roots. Zero is not a smallest positive root.")],
-        ("Решите sin x = 1/2 на отрезке [0; 2π].", "Solve sin x = 1/2 on [0, 2π]."),
-        [("Серии: π/6 + 2πn и 5π/6 + 2πn.", "The families are π/6 + 2πn and 5π/6 + 2πn."),
-         ("В обеих сериях отрезку соответствует только n = 0.", "In both families only n = 0 lies in the interval."),
-         ("Ответ: π/6 и 5π/6. Концы 0 и 2π не удовлетворяют уравнению.", "Answer: π/6 and 5π/6. The endpoints 0 and 2π do not solve the equation.")]),
-    "log-definition": _lesson(
-        ("Определение логарифма", "The definition of a logarithm"),
-        [("Логарифм log_a b — показатель степени, в которую нужно возвести a, чтобы получить b: log_a b = c ⇔ aᶜ = b. Требуется a > 0, a ≠ 1, b > 0.",
-          "The logarithm log_a b is the exponent to which a must be raised to obtain b: log_a b = c ⇔ aᶜ = b. It requires a > 0, a ≠ 1 and b > 0."),
-         ("lg b — логарифм по основанию 10; ln b — по основанию e.",
-          "lg b is the base-10 logarithm; ln b is the logarithm with base e.")],
-        [("log_a a = 1, log_a 1 = 0 и a^(log_a b) = b при допустимых a,b. Эти равенства непосредственно следуют из определения.",
-          "log_a a = 1, log_a 1 = 0 and a^(log_a b) = b for valid a,b. These equalities follow directly from the definition."),
-         ("Логарифм нуля или отрицательного числа в вещественных числах не определён. Основание 1 не годится, поскольку 1ᶜ не различает показатели.",
-          "The real logarithm of zero or a negative number is undefined. Base 1 is invalid because 1ᶜ cannot distinguish exponents.")],
-        ("Найдите log₂ 8 и log₃(1/9).", "Find log₂ 8 and log₃(1/9)."),
-        [("2³ = 8, поэтому log₂ 8 = 3.", "2³ = 8, so log₂ 8 = 3."),
-         ("3⁻² = 1/9, поэтому log₃(1/9) = −2.", "3⁻² = 1/9, so log₃(1/9) = −2."),
-         ("Оба основания допустимы, оба аргумента положительны.", "Both bases are valid and both arguments are positive.")]),
-    "log-properties": _lesson(
-        ("Свойства логарифмов", "Properties of logarithms"),
-        [("Свойства логарифмов преобразуют произведения, частные и степени аргументов. Во всех формулах a > 0, a ≠ 1; аргументы положительны.",
-          "Logarithm properties transform products, quotients and powers of arguments. In every formula a > 0, a ≠ 1 and the arguments are positive.")],
-        [("log_a(bc) = log_a b + log_a c; log_a(b/c) = log_a b − log_a c при b,c > 0. Логарифм суммы таким способом не раскрывается.",
-          "log_a(bc) = log_a b + log_a c; log_a(b/c) = log_a b − log_a c for b,c > 0. There is no corresponding rule for a sum."),
-         ("log_a(bᵏ) = k log_a b при b > 0. Переход к основанию c: log_a b = log_c b / log_c a, где c > 0, c ≠ 1.",
-          "log_a(bᵏ) = k log_a b for b > 0. Change of base: log_a b = log_c b / log_c a, where c > 0 and c ≠ 1."),
-         ("Правило произведения следует из aᵘaᵛ = aᵘ⁺ᵛ: если b = aᵘ и c = aᵛ, то bc = aᵘ⁺ᵛ.",
-          "The product rule follows from aᵘaᵛ = aᵘ⁺ᵛ: if b = aᵘ and c = aᵛ, then bc = aᵘ⁺ᵛ.")],
-        ("Вычислите log₂ 12 − log₂ 3.", "Evaluate log₂ 12 − log₂ 3."),
-        [("Аргументы 12 и 3 положительны, основание 2 допустимо.", "The arguments 12 and 3 are positive and base 2 is valid."),
-         ("Разность логарифмов равна log₂(12/3) = log₂ 4.", "The difference is log₂(12/3) = log₂ 4."),
-         ("2² = 4, поэтому ответ 2.", "2² = 4, so the answer is 2.")]),
-    "exponential-equations": _lesson(
-        ("Показательные и логарифмические уравнения", "Exponential and logarithmic equations"),
-        [("Показательное уравнение содержит неизвестную в показателе степени, логарифмическое — в аргументе или основании логарифма.",
-          "An exponential equation contains the unknown in an exponent; a logarithmic equation contains it in a logarithm's argument or base.")],
-        [("Функция aˣ при a > 0, a ≠ 1 строго монотонна, поэтому aᵘ = aᵛ ⇔ u = v. Уравнение aˣ = b имеет решение x = log_a b при b > 0.",
-          "For a > 0, a ≠ 1, aˣ is strictly monotone, so aᵘ = aᵛ ⇔ u = v. The equation aˣ = b has solution x = log_a b when b > 0."),
-         ("Равенство log_a u = log_a v равносильно u = v только при допустимом основании и u,v > 0. Сначала записывают ОДЗ, затем решают и проверяют.",
-          "log_a u = log_a v is equivalent to u = v only for a valid base and u,v > 0. Write the domain first, then solve and check."),
-         ("При 0 < a < 1 функция убывает: в показательных и логарифмических неравенствах переход к аргументам меняет знак.",
-          "For 0 < a < 1 the function decreases: removing the exponential or logarithm from an inequality reverses its sign.")],
-        ("Решите 3^(2x − 1) = 27.", "Solve 3^(2x − 1) = 27."),
-        [("27 = 3³: приводим обе части к основанию 3.", "27 = 3³: write both sides with base 3."),
-         ("Основание допустимо, поэтому 2x − 1 = 3.", "The base is valid, so 2x − 1 = 3."),
-         ("x = 2; проверка: 3³ = 27.", "x = 2; check: 3³ = 27.")]),
-    "plane-figures": _lesson(
-        ("Основные определения планиметрии", "Basic definitions in plane geometry"),
-        [("Высота треугольника — перпендикуляр из вершины к прямой противоположной стороны; медиана соединяет вершину с серединой противоположной стороны; биссектриса делит угол пополам.",
-          "A triangle's altitude is the perpendicular from a vertex to the opposite side's line; a median joins a vertex to the midpoint of the opposite side; an angle bisector divides an angle in half."),
-         ("Параллелограмм имеет попарно параллельные противоположные стороны; ромб — параллелограмм с равными сторонами; трапеция имеет пару параллельных сторон-оснований. Диагональ соединяет несоседние вершины.",
-          "A parallelogram has opposite sides parallel; a rhombus is a parallelogram with equal sides; a trapezoid has a pair of parallel base sides. A diagonal joins non-adjacent vertices.")],
-        [("Сумма углов треугольника 180°. Внешний угол равен сумме двух внутренних, не смежных с ним. Сумма углов выпуклого четырёхугольника 360°.",
-          "A triangle's angles sum to 180°. An exterior angle equals the sum of the two non-adjacent interior angles. A convex quadrilateral's angles sum to 360°."),
-         ("В параллелограмме противоположные стороны и углы равны, диагонали делятся точкой пересечения пополам. У ромба диагонали перпендикулярны и делят углы пополам.",
-          "In a parallelogram opposite sides and angles are equal and diagonals bisect each other. A rhombus has perpendicular diagonals that bisect its angles."),
-         ("Чертёж помогает выбрать теорему, но равенство длин, прямой угол и параллельность нельзя считать данными только по внешнему виду рисунка.",
-          "A drawing helps select a theorem, but equal lengths, right angles and parallel lines cannot be assumed from appearance alone.")],
-        ("Углы треугольника равны 2x, 3x и 4x. Найдите больший угол.", "A triangle has angles 2x, 3x and 4x. Find the largest angle."),
-        [("2x + 3x + 4x = 180°.", "2x + 3x + 4x = 180°."),
-         ("9x = 180°, значит x = 20°.", "9x = 180°, so x = 20°."),
-         ("Больший угол 4x = 80°.", "The largest angle is 4x = 80°.")]),
-    "right-triangle": _lesson(
-        ("Прямоугольный треугольник и теорема Пифагора", "Right triangles and the Pythagorean theorem"),
-        [("В прямоугольном треугольнике один угол равен 90°. Прилежащие к нему стороны — катеты a,b; противоположная и самая длинная сторона — гипотенуза c.",
-          "A right triangle has one 90° angle. Its adjacent sides a,b are the legs; the opposite and longest side c is the hypotenuse.")],
-        [("Теорема Пифагора: c² = a² + b². Обратная теорема: если квадрат наибольшей стороны равен сумме квадратов двух других, треугольник прямоугольный.",
-          "The Pythagorean theorem states c² = a² + b². Conversely, if the square of the longest side equals the sum of the other two squares, the triangle is right-angled."),
-         ("Медиана к гипотенузе равна c/2. Центр описанной окружности — середина гипотенузы, поэтому R = c/2. Радиус вписанной окружности r = (a + b − c)/2.",
-          "The median to the hypotenuse is c/2. The circumcentre is its midpoint, so R = c/2. The inradius is r = (a + b − c)/2."),
-         ("Для острого угла sin = противолежащий катет / c, cos = прилежащий катет / c, tg = противолежащий / прилежащий катет.",
-          "For an acute angle, sin = opposite leg / c, cos = adjacent leg / c, tg = opposite leg / adjacent leg.")],
-        ("Катеты равны 3 и 4. Найдите гипотенузу и медиану к ней.", "The legs are 3 and 4. Find the hypotenuse and the median to it."),
-        [("c² = 3² + 4² = 25.", "c² = 3² + 4² = 25."),
-         ("Длина положительна, поэтому c = 5.", "A length is positive, so c = 5."),
-         ("Медиана равна c/2 = 2,5.", "The median is c/2 = 2.5.")]),
-    "plane-areas": _lesson(
-        ("Площади, теоремы синусов и косинусов", "Areas and the laws of sines and cosines"),
-        [("Площадь измеряет размер плоской фигуры в квадратных единицах. Высота h к основанию a перпендикулярна прямой основания. Полупериметр треугольника p = (a + b + c)/2.",
-          "Area measures a plane figure in square units. The altitude h to base a is perpendicular to its line. A triangle's semiperimeter is p = (a + b + c)/2.")],
-        [("Треугольник: S = ah/2 = ab sin C/2 = pr = abc/(4R); формула Герона S = √(p(p − a)(p − b)(p − c)). Здесь C — угол между сторонами a,b, r и R — радиусы вписанной и описанной окружностей.",
-          "For a triangle S = ah/2 = ab sin C/2 = pr = abc/(4R); Heron's formula is S = √(p(p − a)(p − b)(p − c)). Here C is between sides a,b and r,R are the inradius and circumradius."),
-         ("Параллелограмм: S = ah = ab sin α; трапеция: S = (a + b)h/2, средняя линия (a + b)/2; ромб: S = d₁d₂/2. В трапеции a,b — основания.",
-          "A parallelogram has S = ah = ab sin α; a trapezoid has S = (a + b)h/2 and midline (a + b)/2; a rhombus has S = d₁d₂/2. In the trapezoid a,b are its bases."),
-         ("Теорема синусов: a/sin A = b/sin B = c/sin C = 2R. Теорема косинусов: c² = a² + b² − 2ab cos C. Сторона и одноимённый угол лежат друг напротив друга.",
-          "The sine rule is a/sin A = b/sin B = c/sin C = 2R. The cosine rule is c² = a² + b² − 2ab cos C. Each named side is opposite the correspondingly named angle.")],
-        ("Две стороны треугольника равны 5 и 8, угол между ними 30°. Найдите площадь.", "Two triangle sides are 5 and 8 and their included angle is 30°. Find its area."),
-        [("Известны две стороны и угол между ними, выбираем S = ab sin C/2.", "Two sides and their included angle are known, so use S = ab sin C/2."),
-         ("sin 30° = 1/2.", "sin 30° = 1/2."),
-         ("S = 5 · 8 · (1/2)/2 = 10 квадратных единиц.", "S = 5 × 8 × (1/2)/2 = 10 square units.")]),
-    "circle-theorems": _lesson(
-        ("Окружность: углы, касательные и секущие", "Circles: angles, tangents and secants"),
-        [("Окружность — точки на расстоянии R от центра; круг включает также внутренние точки. Хорда соединяет две точки окружности, секущая пересекает её в двух точках, касательная — в одной.",
-          "A circle's circumference consists of points at distance R from its centre; the disk also contains the interior. A chord joins two circle points, a secant meets the circle twice, and a tangent once."),
-         ("Центральный угол имеет вершину в центре, вписанный — на окружности; стороны вписанного угла пересекают окружность.",
-          "A central angle has its vertex at the centre; an inscribed angle has its vertex on the circle and its sides intersect the circle.")],
-        [("Вписанный угол равен половине центрального угла, опирающегося на ту же дугу. Касательная перпендикулярна радиусу в точке касания.",
-          "An inscribed angle is half the central angle subtending the same arc. A tangent is perpendicular to the radius at the contact point."),
-         ("Из внешней точки P: PA² = PB · PC, где PA — касательная, B,C — точки пересечения секущей, PB — внешняя часть, PC — вся секущая.",
-          "From an external point P: PA² = PB × PC, where PA is a tangent, B,C are the secant intersections, PB the external part and PC the full secant."),
-         ("Длина окружности 2πR, площадь круга πR². Дуга центрального угла α° имеет длину πRα/180; для α в радианах — Rα.",
-          "Circumference is 2πR and disk area πR². An arc with central angle α° has length πRα/180; when α is in radians its length is Rα.")],
-        ("Радиус 6, центральный угол дуги 60°. Найдите длину дуги.", "The radius is 6 and an arc's central angle is 60°. Find its length."),
-        [("60° составляет 1/6 полного оборота.", "60° is 1/6 of a full turn."),
-         ("Длина всей окружности 2π · 6 = 12π.", "The full circumference is 2π × 6 = 12π."),
-         ("Длина дуги 12π/6 = 2π.", "The arc length is 12π/6 = 2π.")]),
-    "similarity": _lesson(
-        ("Подобие треугольников и отношение площадей", "Triangle similarity and area ratios"),
-        [("Подобные треугольники имеют равные соответствующие углы и пропорциональные соответствующие стороны. Коэффициент подобия k > 0 — отношение соответствующих длин второго треугольника к первому.",
-          "Similar triangles have equal corresponding angles and proportional corresponding sides. The scale factor k > 0 is the ratio of a length in the second triangle to the corresponding first length.")],
-        [("Признаки подобия: по двум углам; по двум пропорциональным сторонам и равному углу между ними; по трём пропорциональным сторонам.",
-          "Similarity tests: two equal angles; two proportional sides with equal included angles; or three proportional sides."),
-         ("Соответствующие высоты и периметры относятся как k, площади — как k². Это следует из S = ah/2: и основание, и высота умножаются на k.",
-          "Corresponding altitudes and perimeters have ratio k, and areas ratio k². In S = ah/2 both the base and altitude are multiplied by k.")],
-        ("Стороны подобного треугольника в 3 раза больше. Во сколько раз больше площадь?", "A similar triangle has sides 3 times larger. How much larger is its area?"),
-        [("Коэффициент подобия k = 3.", "The scale factor is k = 3."),
-         ("Площадь меняется в k² = 9 раз.", "The area changes by k² = 9."),
-         ("Если первая площадь 4, вторая равна 36, а не 12.", "If the first area is 4, the second is 36, not 12.")]),
-    "prism-cylinder": _lesson(
-        ("Призма и цилиндр", "Prisms and cylinders"),
-        [("Призма имеет два равных параллельных многоугольных основания. Высота — перпендикулярное расстояние между плоскостями оснований; у прямой призмы боковые рёбра перпендикулярны основаниям.",
-          "A prism has two congruent parallel polygonal bases. Its height is the perpendicular distance between the base planes; a right prism has lateral edges perpendicular to its bases."),
-         ("Прямой круговой цилиндр имеет основания-круги радиуса R, а высота h перпендикулярна основаниям.",
-          "A right circular cylinder has disk bases of radius R and height h perpendicular to them.")],
-        [("Объём любой призмы V = Sоснh. Формула боковой поверхности Sбок = Pоснh применима к прямой призме, а не к произвольной наклонной.",
-          "Every prism has volume V = Sbaseh. The lateral-area formula Slateral = Pbaseh applies to a right prism, not an arbitrary oblique prism."),
-         ("Для прямого цилиндра V = πR²h, Sбок = 2πRh, Sполн = 2πR² + 2πRh. Объём измеряют в кубических единицах, поверхность — в квадратных.",
-          "For a right cylinder V = πR²h, Slateral = 2πRh and Stotal = 2πR² + 2πRh. Volume uses cubic units and surface area square units.")],
-        ("Цилиндр имеет R = 2, h = 5. Найдите объём.", "A cylinder has R = 2 and h = 5. Find its volume."),
-        [("Площадь основания πR² = 4π.", "The base area is πR² = 4π."),
-         ("Умножаем на высоту: V = 4π · 5 = 20π.", "Multiply by height: V = 4π × 5 = 20π."),
-         ("Коэффициент при π равен 20; число π подставлять не нужно.", "The coefficient of π is 20; there is no need to replace π numerically.")]),
-    "pyramid-cone": _lesson(
-        ("Пирамида, конус и коэффициент при π", "Pyramids, cones and coefficients of π"),
-        [("Пирамида имеет многоугольное основание и общую вершину боковых граней. Высота — перпендикуляр от вершины к плоскости основания.",
-          "A pyramid has a polygonal base and a common apex for its lateral faces. Its height is perpendicular from the apex to the base plane."),
-         ("У прямого кругового конуса основание — круг радиуса R, вершина над его центром. Образующая l соединяет вершину с точкой окружности основания; она не равна высоте h.",
-          "A right circular cone has a disk base of radius R with its apex above the centre. Its slant height l joins the apex to the base circumference and is not the perpendicular height h.")],
-        [("Пирамида: V = Sоснh/3. Конус: V = πR²h/3. По сравнению с призмой или цилиндром с тем же основанием и высотой объём втрое меньше.",
-          "A pyramid has V = Sbaseh/3 and a cone V = πR²h/3. Each has one third the volume of a prism or cylinder with the same base and height."),
-         ("Для прямого конуса l² = R² + h², Sбок = πRl, Sполн = πR² + πRl. Если ответ записан kπ, коэффициент при π — число k, без π.",
-          "For a right cone l² = R² + h², Slateral = πRl and Stotal = πR² + πRl. If an answer is kπ, its coefficient of π is k, without π.")],
-        ("У конуса R = 3, h = 4. Найдите коэффициент при π в объёме.", "A cone has R = 3 and h = 4. Find the coefficient of π in its volume."),
-        [("V = π · 3² · 4/3.", "V = π × 3² × 4/3."),
-         ("V = 12π; коэффициент равен 12.", "V = 12π; the coefficient is 12."),
-         ("Для боковой поверхности понадобилась бы образующая l = √(9 + 16) = 5, а не высота 4.", "For lateral area one would need the slant height l = √(9 + 16) = 5, not the height 4.")]),
-    "sphere-cube": _lesson(
-        ("Шар, сфера и куб", "Balls, spheres and cubes"),
-        [("Сфера — поверхность точек на расстоянии R от центра; шар включает также внутренние точки. Куб — прямоугольный параллелепипед с шестью квадратными гранями и равными рёбрами a.",
-          "A sphere is the surface of points at distance R from its centre; a ball also includes its interior. A cube is a rectangular solid with six square faces and equal edges a.")],
-        [("Объём шара V = 4πR³/3, площадь сферы S = 4πR². Куб: V = a³, Sполн = 6a².",
-          "A ball has volume V = 4πR³/3 and its sphere has area S = 4πR². For a cube V = a³ and Stotal = 6a²."),
-         ("Диагональ грани куба a√2, пространственная диагональ a√3: дважды применяют теорему Пифагора.",
-          "A cube's face diagonal is a√2 and its space diagonal a√3, by applying the Pythagorean theorem twice.")],
-        ("Ребро куба равно 2. Найдите объём и пространственную диагональ.", "A cube has edge length 2. Find its volume and space diagonal."),
-        [("V = 2³ = 8.", "V = 2³ = 8."),
-         ("Диагональ грани равна 2√2.", "The face diagonal is 2√2."),
-         ("Пространственная диагональ √((2√2)² + 2²) = √12 = 2√3.", "The space diagonal is √((2√2)² + 2²) = √12 = 2√3.")]),
-    "solid-perpendiculars": _lesson(
-        ("Проекции и теорема о трёх перпендикулярах", "Projections and the three-perpendiculars theorem"),
-        [("Если A вне плоскости α, H — основание перпендикуляра из A, B лежит в α и B ≠ H, то AB — наклонная, HB — её ортогональная проекция на α.",
-          "If A is outside plane α, H is the perpendicular foot from A and B lies in α with B ≠ H, then AB is an oblique segment and HB its orthogonal projection onto α."),
-         ("Угол между неперпендикулярной прямой и плоскостью — острый угол (или 0°) между прямой и её проекцией. Для перпендикулярной прямой угол равен 90°.",
-          "The angle between a non-perpendicular line and a plane is the acute angle, or 0°, between the line and its projection. A perpendicular line makes angle 90°.")],
-        [("Теорема о трёх перпендикулярах: прямая l в α, проходящая через B, перпендикулярна HB тогда и только тогда, когда она перпендикулярна AB.",
-          "The three-perpendiculars theorem: a line l in α through B is perpendicular to HB if and only if it is perpendicular to AB."),
-         ("В прямоугольном треугольнике AHB: AB² = AH² + HB²; для угла φ между AB и плоскостью sin φ = AH/AB и tg φ = AH/HB.",
-          "In right triangle AHB, AB² = AH² + HB²; for the angle φ between AB and the plane, sin φ = AH/AB and tg φ = AH/HB.")],
-        ("Перпендикуляр к плоскости равен 3, проекция наклонной — 4. Найдите наклонную и синус её угла с плоскостью.", "The perpendicular is 3 and an oblique segment's projection is 4. Find the segment and the sine of its angle with the plane."),
-        [("Получаем прямоугольный треугольник с катетами 3 и 4.", "This forms a right triangle with legs 3 and 4."),
-         ("Наклонная AB = √(9 + 16) = 5.", "The oblique segment AB = √(9 + 16) = 5."),
-         ("sin φ = 3/5.", "sin φ = 3/5.")]),
-    "derivative-table": _lesson(
-        ("Определение производной и таблица", "The derivative definition and table"),
-        [("Производная f′(x₀) — предел (f(x₀ + h) − f(x₀))/h при h → 0, если он существует и конечен. Она показывает мгновенную скорость изменения функции.",
-          "The derivative f′(x₀) is the limit of (f(x₀ + h) − f(x₀))/h as h → 0, if the limit exists and is finite. It gives the function's instantaneous rate of change.")],
-        [("(C)′ = 0; (kx + b)′ = k; (xⁿ)′ = nxⁿ⁻¹. Для натурального n правило степени действует на всей прямой; для произвольного вещественного n его используют при x > 0.",
-          "(C)′ = 0; (kx + b)′ = k; (xⁿ)′ = nxⁿ⁻¹. For positive integer n the power rule holds on the real line; for arbitrary real n use it on x > 0."),
-         ("При измерении угла в радианах: (sin x)′ = cos x, (cos x)′ = −sin x. Также (eˣ)′ = eˣ, (ln x)′ = 1/x при x > 0.",
-          "With angles in radians, (sin x)′ = cos x and (cos x)′ = −sin x. Also (eˣ)′ = eˣ and (ln x)′ = 1/x for x > 0.")],
-        ("Найдите производную f(x) = x³ − 4x + 7.", "Differentiate f(x) = x³ − 4x + 7."),
-        [("Производная x³ равна 3x².", "The derivative of x³ is 3x²."),
-         ("Производная −4x равна −4, постоянной 7 — нулю.", "The derivative of −4x is −4 and of the constant 7 is zero."),
-         ("f′(x) = 3x² − 4.", "f′(x) = 3x² − 4.")]),
-    "derivative-rules": _lesson(
-        ("Правила дифференцирования", "Differentiation rules"),
-        [("Дифференцировать функцию — найти её производную. Правила суммы, произведения и частного применяют там, где составляющие функции u,v дифференцируемы.",
-          "To differentiate is to find a derivative. Sum, product and quotient rules apply where their component functions u,v are differentiable.")],
-        [("(u + v)′ = u′ + v′, (cu)′ = cu′ для постоянной c. (uv)′ = u′v + uv′: производная произведения не равна произведению производных.",
-          "(u + v)′ = u′ + v′ and (cu)′ = cu′ for constant c. (uv)′ = u′v + uv′: the derivative of a product is not the product of derivatives."),
-         ("(u/v)′ = (u′v − uv′)/v² при v ≠ 0. В числителе важны порядок множителей и знак минус.",
-          "(u/v)′ = (u′v − uv′)/v² for v ≠ 0. The order of factors and the minus sign in the numerator matter.")],
-        ("Найдите производную f(x) = x² sin x.", "Differentiate f(x) = x² sin x."),
-        [("u = x², v = sin x; u′ = 2x, v′ = cos x.", "u = x², v = sin x; u′ = 2x, v′ = cos x."),
-         ("Применяем правило произведения u′v + uv′.", "Apply the product rule u′v + uv′."),
-         ("f′(x) = 2x sin x + x² cos x.", "f′(x) = 2x sin x + x² cos x.")]),
-    "chain-rule": _lesson(
-        ("Производная сложной функции", "The chain rule"),
-        [("Сложная функция f(g(x)) сначала вычисляет внутреннюю g(x), затем внешнюю f. Например, в (3x − 1)⁴ внешняя функция — четвёртая степень, внутренняя — 3x − 1.",
-          "A composite function f(g(x)) first evaluates the inner function g(x), then the outer f. In (3x − 1)⁴ the outer function is the fourth power and the inner one 3x − 1.")],
-        [("Если g дифференцируема в x, а f — в g(x), то (f(g(x)))′ = f′(g(x)) · g′(x). Производную внутренней функции нельзя пропускать.",
-          "If g is differentiable at x and f at g(x), then (f(g(x)))′ = f′(g(x)) × g′(x). Do not omit the inner derivative."),
-         ("Частные случаи: (uⁿ)′ = nuⁿ⁻¹u′; (sin u)′ = cos u · u′; (ln u)′ = u′/u при u > 0.",
-          "Special cases: (uⁿ)′ = nuⁿ⁻¹u′; (sin u)′ = cos u × u′; (ln u)′ = u′/u for u > 0.")],
-        ("Найдите производную (3x − 1)⁴.", "Differentiate (3x − 1)⁴."),
-        [("Внешняя производная: 4(3x − 1)³.", "The outer derivative is 4(3x − 1)³."),
-         ("Внутренняя производная (3x − 1)′ = 3.", "The inner derivative is (3x − 1)′ = 3."),
-         ("Ответ: 12(3x − 1)³.", "Answer: 12(3x − 1)³.")]),
-    "derivative-point": _lesson(
-        ("Производная в точке и касательная", "Derivatives at a point and tangents"),
-        [("Значение f′(x₀) — число, получаемое подстановкой x₀ в найденную производную. Оно обычно отличается от значения самой функции f(x₀).",
-          "The value f′(x₀) is obtained by substituting x₀ into the derivative. It generally differs from the function value f(x₀)."),
-         ("Касательная к графику дифференцируемой функции в (x₀; f(x₀)) имеет угловой коэффициент f′(x₀).",
-          "The tangent to a differentiable function at (x₀, f(x₀)) has slope f′(x₀).")],
-        [("Уравнение касательной: y = f(x₀) + f′(x₀)(x − x₀). Если α — угол наклона касательной к положительному направлению Ox, то tg α = f′(x₀).",
-          "The tangent equation is y = f(x₀) + f′(x₀)(x − x₀). If α is its inclination to the positive x-axis, tg α = f′(x₀)."),
-         ("Сначала дифференцируют, затем подставляют точку. Для касательной нужны два отдельных значения: f(x₀) и f′(x₀).",
-          "Differentiate first, then substitute the point. A tangent needs two separate values: f(x₀) and f′(x₀).")],
-        ("Найдите касательную к y = x² при x₀ = 2.", "Find the tangent to y = x² at x₀ = 2."),
-        [("f′(x) = 2x, поэтому f′(2) = 4.", "f′(x) = 2x, so f′(2) = 4."),
-         ("f(2) = 4, точка касания (2; 4).", "f(2) = 4, so the contact point is (2, 4)."),
-         ("y = 4 + 4(x − 2) = 4x − 4.", "y = 4 + 4(x − 2) = 4x − 4.")]),
-    "extrema": _lesson(
-        ("Критические точки, монотонность и экстремумы", "Critical points, monotonicity and extrema"),
-        [("Точка локального минимума (максимума) — внутренняя точка области определения, в окрестности которой значение функции не больше (не меньше) соседних значений.",
-          "A local minimum (maximum) is an interior domain point whose value is no greater (no smaller) than nearby values."),
-         ("Критические точки — внутренние точки области определения, где f′ = 0 или производная не существует. Точки, где сама функция не определена, не являются её экстремумами.",
-          "Critical points are interior domain points where f′ = 0 or the derivative does not exist. Points where the function itself is undefined are not its extrema.")],
-        [("На интервале f′ > 0 означает возрастание, f′ < 0 — убывание. Теорема Ферма: в дифференцируемой точке внутреннего экстремума f′ = 0, но одного равенства недостаточно (например, x³ в нуле).",
-          "On an interval f′ > 0 implies increase and f′ < 0 decrease. Fermat's theorem: at a differentiable interior extremum f′ = 0, but this equality alone is insufficient, as x³ at zero shows."),
-         ("Для непрерывной в точке функции смена знака производной с − на + даёт минимум, с + на − — максимум. Если знак не меняется, экстремума по этому признаку нет.",
-          "For a function continuous at the point, a derivative sign change − to + gives a minimum, + to − a maximum. Without a sign change this test gives no extremum.")],
-        ("Найдите экстремум f(x) = x² − 4x + 1.", "Find the extremum of f(x) = x² − 4x + 1."),
-        [("f′(x) = 2x − 4, критическая точка x = 2.", "f′(x) = 2x − 4, so the critical point is x = 2."),
-         ("Слева производная отрицательна, справа положительна: это минимум.", "The derivative is negative on the left and positive on the right: this is a minimum."),
-         ("f(2) = 4 − 8 + 1 = −3. Точка минимума (2; −3).", "f(2) = 4 − 8 + 1 = −3. The minimum point is (2, −3).")]),
-    "segment-extrema": _lesson(
-        ("Наибольшее и наименьшее значения на отрезке", "Maximum and minimum on a closed interval"),
-        [("Наибольшее и наименьшее значения на множестве сравнивают со всеми его точками, а не только с соседними. Значение функции и аргумент, где оно достигается, — разные ответы.",
-          "An absolute maximum or minimum compares with every point of the set, not just nearby points. The function value and the argument attaining it are different answers.")],
-        [("Теорема Вейерштрасса: непрерывная на замкнутом ограниченном отрезке функция достигает на нём наибольшего и наименьшего значений.",
-          "The extreme value theorem states that a function continuous on a closed bounded interval attains its maximum and minimum there."),
-         ("Для обычных заданий ЦТ находят внутренние критические точки (нули f′ и точки недифференцируемости), вычисляют значения в них и на обоих концах, затем сравнивают. На открытом промежутке крайнее значение может не достигаться.",
-          "For typical CT tasks, find interior critical points, including derivative zeros and non-differentiable points, evaluate there and at both endpoints, then compare. An open interval may not attain an extreme value.")],
-        ("Найдите максимум и минимум f(x) = x³ − 3x на [−2; 2].", "Find the maximum and minimum of f(x) = x³ − 3x on [−2, 2]."),
-        [("f′ = 3x² − 3 = 0 ⇒ x = −1 и 1; обе точки внутри отрезка.", "f′ = 3x² − 3 = 0 gives x = −1 and 1, both inside the interval."),
-         ("f(−2) = −2, f(−1) = 2, f(1) = −2, f(2) = 2.", "f(−2) = −2, f(−1) = 2, f(1) = −2, f(2) = 2."),
-         ("Максимум 2, минимум −2. Концы отрезка исключать нельзя.", "The maximum is 2 and the minimum −2. Do not omit the endpoints.")]),
-    "counting": _lesson(
-        ("Перестановки, размещения и сочетания", "Permutations, arrangements and combinations"),
-        [("Перестановка упорядочивает все n различных объектов; размещение выбирает и упорядочивает k из n; сочетание выбирает k из n без учёта порядка. Ниже объекты не повторяются, 0 ≤ k ≤ n.",
-          "A permutation orders all n distinct objects; an arrangement selects and orders k of n; a combination selects k of n without order. The formulas below use no repetition and 0 ≤ k ≤ n.")],
-        [("Pₙ = n!; Aₙᵏ = n!/(n − k)!; Cₙᵏ = n!/(k!(n − k)!). Деление на k! убирает разные порядки одной и той же выбранной группы.",
-          "Pₙ = n!; Aₙᵏ = n!/(n − k)!; Cₙᵏ = n!/(k!(n − k)!). Dividing by k! removes the different orders of the same selected group."),
-         ("Правило произведения: если первый выбор можно сделать m способами, а второй после каждого первого — n способами, пару можно выбрать mn способами. Для k мест с повторением из n объектов — nᵏ вариантов.",
-          "The product rule: if a first choice has m options and a second has n options after each first choice, there are mn pairs. For k positions chosen from n objects with repetition there are nᵏ possibilities.")],
-        ("Из 5 учеников выбирают двух дежурных без разных ролей. Сколько способов?", "Choose two pupils out of 5 for identical duties. How many ways are there?"),
-        [("Порядок не важен, поэтому нужны сочетания.", "Order does not matter, so use combinations."),
-         ("C₅² = 5!/(2! · 3!) = 5 · 4/2.", "C₅² = 5!/(2! × 3!) = 5 × 4/2."),
-         ("Ответ: 10. При различных ролях было бы 5 · 4 = 20.", "Answer: 10. Different roles would instead give 5 × 4 = 20.")]),
-    "probability": _lesson(
-        ("Вероятность и действия с событиями", "Probability and operations on events"),
-        [("Событие — множество исходов опыта. Несовместные события не могут произойти вместе. Независимые события не меняют вероятности друг друга; это другое условие.",
-          "An event is a set of outcomes. Disjoint events cannot occur together. Independent events do not change each other's probabilities; this is a different condition.")],
-        [("В конечной модели с равновозможными исходами P(A) = m/n, где m — число благоприятных исходов, n > 0 — число всех. Если исходы не равновозможны, одного подсчёта недостаточно.",
-          "In a finite model of equally likely outcomes, P(A) = m/n, where m is the favourable count and n > 0 the total. Counts alone are insufficient if outcomes are not equally likely."),
-         ("P(A ∪ B) = P(A) + P(B) − P(A ∩ B). Для несовместных событий пересечение пусто, и вероятности складываются.",
-          "P(A ∪ B) = P(A) + P(B) − P(A ∩ B). For disjoint events the intersection is empty and the probabilities add."),
-         ("Для независимых событий P(A ∩ B) = P(A)P(B). Противоположное событие имеет вероятность P(Ā) = 1 − P(A). Всегда 0 ≤ P(A) ≤ 1.",
-          "For independent events P(A ∩ B) = P(A)P(B). The complement has P(Ā) = 1 − P(A). Always 0 ≤ P(A) ≤ 1.")],
-        ("Бросают два независимых правильных кубика. Найдите вероятность двух шестёрок.", "Roll two independent fair dice. Find the probability of two sixes."),
-        [("У каждого кубика 6 равновозможных исходов, P(шестёрка) = 1/6.", "Each die has 6 equally likely outcomes, so P(six) = 1/6."),
-         ("События независимы, перемножаем: (1/6) · (1/6) = 1/36.", "The events are independent, so multiply: (1/6) × (1/6) = 1/36."),
-         ("Или считаем пары: из 36 упорядоченных пар благоприятна одна (6; 6).", "Alternatively count pairs: among 36 ordered pairs only (6, 6) is favourable.")]),
-    "factorials": _lesson(
-        ("Факториал и сокращение сочетаний", "Factorials and simplifying combinations"),
-        [("Для натурального n факториал n! = 1 · 2 · … · n. По определению 0! = 1. Факториал относится к неотрицательным целым числам в школьной комбинаторике.",
-          "For a positive integer n, n! = 1 × 2 × … × n. By definition 0! = 1. School combinatorics uses factorials of non-negative integers.")],
-        [("n! = n(n − 1)! при n ≥ 1. Сначала сокращают одинаковые произведения, а не вычисляют большие факториалы целиком.",
-          "n! = n(n − 1)! for n ≥ 1. Cancel common products before evaluating large factorials."),
-         ("Cₙ² = n(n − 1)/2 при n ≥ 2; Cₙ⁰ = Cₙⁿ = 1; Cₙᵏ = Cₙⁿ⁻ᵏ. Последнее равенство соответствует выбору группы или её дополнения.",
-          "Cₙ² = n(n − 1)/2 for n ≥ 2; Cₙ⁰ = Cₙⁿ = 1; Cₙᵏ = Cₙⁿ⁻ᵏ. The last equality corresponds to choosing a group or its complement.")],
-        ("Вычислите C₈².", "Evaluate C₈²."),
-        [("C₈² = 8!/(2! · 6!).", "C₈² = 8!/(2! × 6!)."),
-         ("Сокращаем 6!: остаётся 8 · 7/(2 · 1).", "Cancel 6!: this leaves 8 × 7/(2 × 1)."),
-         ("Ответ: 28.", "Answer: 28.")]),
-    "vector-coordinates": _lesson(
-        ("Векторы, координаты и длина", "Vectors, coordinates and length"),
-        [("Вектор — направленный отрезок, заданный длиной и направлением. Координаты AB→ получают вычитанием координат начала A из координат конца B.",
-          "A vector is a directed segment specified by magnitude and direction. The coordinates of AB→ are the end coordinates B minus the start coordinates A.")],
-        [("Если A(x₁; y₁), B(x₂; y₂), то AB→ = (x₂ − x₁; y₂ − y₁). Сумма векторов и умножение на число выполняются по координатам.",
-          "For A(x₁, y₁) and B(x₂, y₂), AB→ = (x₂ − x₁, y₂ − y₁). Add vectors or multiply by a scalar coordinate by coordinate."),
-         ("Длина (x; y) равна √(x² + y²), в пространстве (x; y; z) — √(x² + y² + z²). Расстояние между точками равно длине соединяющего их вектора.",
-          "The length of (x, y) is √(x² + y²); in space (x, y, z) it is √(x² + y² + z²). Distance between points is the length of their joining vector.")],
-        ("A(1; −2), B(4; 2). Найдите AB→ и его длину.", "A(1, −2), B(4, 2). Find AB→ and its length."),
-        [("AB→ = (4 − 1; 2 − (−2)) = (3; 4).", "AB→ = (4 − 1, 2 − (−2)) = (3, 4)."),
-         ("Длина √(3² + 4²) = 5.", "Its length is √(3² + 4²) = 5."),
-         ("Для BA→ координаты противоположны, но длина та же.", "BA→ has opposite coordinates but the same length.")]),
-    "dot-product": _lesson(
-        ("Скалярное произведение и перпендикулярность", "Dot products and perpendicularity"),
-        [("Скалярное произведение двух векторов — число a·b = x₁x₂ + y₁y₂ (в пространстве добавляют z₁z₂). Для ненулевых векторов оно равно |a||b| cos φ.",
-          "The dot product is the number a·b = x₁x₂ + y₁y₂, adding z₁z₂ in space. For non-zero vectors it also equals |a||b| cos φ.")],
-        [("Ненулевые векторы перпендикулярны тогда и только тогда, когда a·b = 0. При поиске угла cos φ = (a·b)/(|a||b|), поэтому нулевой вектор нужно исключить.",
-          "Non-zero vectors are perpendicular if and only if a·b = 0. To find an angle use cos φ = (a·b)/(|a||b|), so exclude zero vectors."),
-         ("a·a = |a|²; скалярное произведение симметрично и распределяется по сумме: a·(b + c) = a·b + a·c.",
-          "a·a = |a|²; the dot product is symmetric and distributes over addition: a·(b + c) = a·b + a·c.")],
-        ("Проверьте перпендикулярность a = (2; 3), b = (3; −2).", "Check whether a = (2, 3) and b = (3, −2) are perpendicular."),
-        [("a·b = 2 · 3 + 3 · (−2).", "a·b = 2 × 3 + 3 × (−2)."),
-         ("Скалярное произведение равно 0, оба вектора ненулевые.", "The dot product is zero and both vectors are non-zero."),
-         ("Следовательно, угол между ними 90°.", "Therefore their angle is 90°.")]),
-    "midpoint-collinearity": _lesson(
-        ("Середина отрезка и коллинеарность", "Midpoints and collinearity"),
-        [("Середина отрезка делит его на две равные части. Ненулевые коллинеарные векторы лежат на одной или параллельных прямых; один является числовым множителем другого.",
-          "A midpoint divides a segment into two equal parts. Non-zero collinear vectors lie on the same or parallel lines; one is a scalar multiple of the other.")],
-        [("Середина A(x₁; y₁), B(x₂; y₂): M((x₁ + x₂)/2; (y₁ + y₂)/2). В пространстве так же усредняют z.",
-          "The midpoint of A(x₁, y₁), B(x₂, y₂) is M((x₁ + x₂)/2, (y₁ + y₂)/2). In space average z in the same way."),
-         ("Для ненулевых векторов (x₁; y₁), (x₂; y₂) коллинеарность равносильна x₁y₂ − y₁x₂ = 0. Это надёжнее отношений координат, в которых возможен нулевой знаменатель.",
-          "For non-zero vectors (x₁, y₁), (x₂, y₂), collinearity is equivalent to x₁y₂ − y₁x₂ = 0. This is safer than coordinate ratios with possible zero denominators.")],
-        ("Найдите середину A(−2; 5), B(4; −1).", "Find the midpoint of A(−2, 5) and B(4, −1)."),
-        [("Абсцисса: (−2 + 4)/2 = 1.", "The x-coordinate is (−2 + 4)/2 = 1."),
-         ("Ордината: (5 − 1)/2 = 2.", "The y-coordinate is (5 − 1)/2 = 2."),
-         ("Ответ: M(1; 2).", "Answer: M(1, 2).")]),
-    "parameters": _lesson(
-        ("Уравнения с параметром: число и условия на корни", "Parameters: root counts and root conditions"),
-        [("Параметр — число, от значения которого меняются коэффициенты или условия задачи. Неизвестную решают для каждого допустимого значения параметра.",
-          "A parameter is a number whose value changes coefficients or conditions. Solve for the unknown at each permitted parameter value.")],
-        [("В ax² + bx + c = 0 сначала отдельно рассматривают значения параметра, при которых a = 0. Для a ≠ 0 число вещественных корней задаётся D: два при D > 0, один при D = 0, ни одного при D < 0.",
-          "In ax² + bx + c = 0 first split off parameter values with a = 0. For a ≠ 0, D gives two real roots if D > 0, one if D = 0 and none if D < 0."),
-         ("Условия на знаки корней переводят через Виета, но учитывают существование корней. Два различных положительных корня требуют D > 0, −b/a > 0 и c/a > 0.",
-          "Use Vieta for root signs, but also require roots to exist. Two distinct positive roots require D > 0, −b/a > 0 and c/a > 0."),
-         ("В конце пересекают все ограничения и выбирают требуемое значение: целое, наибольшее или наименьшее. У открытого множества наибольшего значения может не быть.",
-          "Finally intersect all restrictions and choose the requested value: integer, largest or smallest. An open set may have no largest value.")],
-        ("При каких m у x² − (m + 1)x + m = 0 два различных положительных корня?", "For which m does x² − (m + 1)x + m = 0 have two distinct positive roots?"),
-        [("Разложим: (x − 1)(x − m) = 0, корни 1 и m.", "Factor: (x − 1)(x − m) = 0, so the roots are 1 and m."),
-         ("Положительность обоих требует m > 0; различность — m ≠ 1.", "Both are positive if m > 0, and distinct if m ≠ 1."),
-         ("Ответ: (0; 1) ∪ (1; +∞). Одного условия D ≥ 0 было бы недостаточно.", "Answer: (0, 1) ∪ (1, +∞). D ≥ 0 alone would be insufficient.")]),
-    "parameter-tangency": _lesson(
-        ("Касание прямой и параболы", "Tangency between a line and a parabola"),
-        [("Общие точки двух графиков удовлетворяют обоим уравнениям. Для неперерождённой параболы и невертикальной прямой касание означает один двукратный корень уравнения пересечения.",
-          "Intersection points satisfy both graph equations. For a non-degenerate parabola and a non-vertical line, tangency means a double root of the intersection equation.")],
-        [("Приравняйте значения y, приведите к квадратному уравнению с ненулевым старшим коэффициентом и потребуйте D = 0. Координату касания затем находят по x₀ = −b/(2a).",
-          "Equate the y-values, obtain a quadratic with non-zero leading coefficient and require D = 0. Then find the contact x-coordinate using x₀ = −b/(2a)."),
-         ("В точке касания угловой коэффициент прямой равен производной параболы. Этот способ даёт независимую проверку.",
-          "At the contact point the line's slope equals the parabola's derivative. This gives an independent check.")],
-        ("Найдите k, при котором y = 2x + k касается y = x².", "Find k such that y = 2x + k is tangent to y = x²."),
-        [("x² = 2x + k ⇒ x² − 2x − k = 0.", "x² = 2x + k ⇒ x² − 2x − k = 0."),
-         ("D = 4 + 4k = 0 ⇒ k = −1.", "D = 4 + 4k = 0 ⇒ k = −1."),
-         ("Касание в (1; 1); производная 2x при x = 1 равна 2, как и наклон прямой.", "The contact is (1, 1); the derivative 2x at x = 1 is 2, matching the line's slope.")]),
-    "sequences": _lesson(
-        ("Последовательности и проверка закономерности", "Sequences and checking a pattern"),
-        [("Последовательность задаёт член aₙ для каждого натурального номера n. Её можно определить формулой aₙ или начальным значением и рекуррентным правилом.",
-          "A sequence assigns a term aₙ to each positive integer n. It can be defined by a formula or by an initial value and recurrence.")],
-        [("Исследуйте разности соседних членов, отношения, чередование и зависимость от n. Найденное правило должно согласоваться со всеми данными, а не только с первыми двумя числами.",
-          "Inspect consecutive differences, ratios, alternation and dependence on n. A proposed rule must agree with all given terms, not only the first two."),
-         ("Конечный список сам по себе не определяет единственную бесконечную последовательность. Если дано рекуррентное правило, общую формулу доказывают, например, индукцией: база и переход от n к n + 1.",
-          "A finite list alone does not uniquely determine an infinite sequence. If a recurrence is given, prove a formula, for example by induction: a base case and the step from n to n + 1.")],
-        ("Дано a₁ = 2, aₙ₊₁ = aₙ + 2(n + 1). Найдите формулу и a₅.", "Given a₁ = 2 and aₙ₊₁ = aₙ + 2(n + 1), find a formula and a₅."),
-        [("Предполагаем aₙ = n(n + 1); при n = 1 получаем 2.", "Propose aₙ = n(n + 1); at n = 1 this gives 2."),
-         ("Переход: n(n + 1) + 2(n + 1) = (n + 1)(n + 2), формула согласуется с рекурсией.", "The step gives n(n + 1) + 2(n + 1) = (n + 1)(n + 2), agreeing with the recurrence."),
-         ("Поэтому a₅ = 5 · 6 = 30.", "Thus a₅ = 5 × 6 = 30.")]),
-    "modular-cycles": _lesson(
-        ("Остатки и циклы степеней", "Remainders and power cycles"),
-        [("a ≡ b (mod m), m > 0, означает, что a − b делится на m. Остаток выбирают от 0 до m − 1; последняя цифра числа — остаток при делении на 10.",
-          "a ≡ b (mod m), with m > 0, means a − b is divisible by m. Choose a remainder from 0 to m − 1; a number's last digit is its remainder modulo 10.")],
-        [("Остатки можно складывать и перемножать: если a ≡ b и c ≡ d, то a + c ≡ b + d и ac ≡ bd по одному модулю. Это позволяет не вычислять большие степени целиком.",
-          "Remainders can be added and multiplied: if a ≡ b and c ≡ d, then a + c ≡ b + d and ac ≡ bd for the same modulus. Large powers need not be evaluated in full."),
-         ("Последовательность остатков степеней в итоге повторяется, поскольку остатков конечное число. При взаимно простых основании и модуле цикл начинается сразу; иначе возможна начальная непериодическая часть.",
-          "Power remainders eventually repeat because only finitely many remainders exist. If base and modulus are coprime the cycle starts immediately; otherwise there may be an initial non-periodic part."),
-         ("Сначала выпишите цикл и его начало, затем найдите позицию показателя. Остаток 0 при делении показателя на длину чистого цикла соответствует последнему элементу, а не первому.",
-          "Write the cycle and its starting point, then locate the exponent. Remainder 0 modulo a pure cycle's length corresponds to its last element, not its first.")],
-        ("Найдите последнюю цифру 7²⁰²⁶.", "Find the last digit of 7²⁰²⁶."),
-        [("Последние цифры 7¹, 7², 7³, 7⁴: 7, 9, 3, 1; далее цикл повторяется.", "The last digits of 7¹, 7², 7³, 7⁴ are 7, 9, 3, 1; the cycle then repeats."),
-         ("Длина цикла 4, 2026 = 4 · 506 + 2.", "The cycle length is 4, and 2026 = 4 × 506 + 2."),
-         ("Вторая позиция цикла — 9. Ответ: 9.", "The second cycle entry is 9. Answer: 9.")]),
-}
+# --------------------------------------------------------------------------- #
+#  1. Измерения и единицы
+# --------------------------------------------------------------------------- #
 
-STUDY_LESSONS = {
-    "numbers": ["order", "fractions", "decimals"],
-    "expressions": ["powers", "identities", "factoring"],
-    "equations": ["linear-equations", "quadratic", "equation-domain"],
-    "inequalities": ["linear-inequalities", "intervals", "quadratic-inequalities"],
-    "functions": ["function-domain-range", "function-domain-range", "graph-transformations"],
-    "progressions": ["arithmetic-progression", "geometric-progression", "progression-sums"],
-    "wordproblems": ["modeling", "motion-work", "percentages"],
-    "trig": ["trig-identities", "trig-values", "trig-formulas"],
-    "trigequations": ["trig-equations", "trig-selection", "trig-equations"],
-    "logexp": ["log-definition", "log-properties", "exponential-equations"],
-    "planimetry": ["plane-figures", "right-triangle", "plane-areas"],
-    "stereometry": ["prism-cylinder", "pyramid-cone", "pyramid-cone"],
-    "derivative": ["derivative-table", "chain-rule", "derivative-point"],
-    "research": ["extrema", "extrema", "segment-extrema"],
-    "combinatorics": ["counting", "probability", "factorials"],
-    "vectors": ["vector-coordinates", "dot-product", "midpoint-collinearity"],
-    "param": ["parameters", "parameter-tangency", "parameters"],
-    "logic": ["sequences", "modular-cycles", "sequences"],
-}
+_lesson(
+    "units-si", "Система СИ и приставки", "SI units and prefixes",
+    (["Международная система единиц (СИ) содержит семь основных единиц: метр (м), "
+      "килограмм (кг), секунда (с), ампер (А), кельвин (К), моль (моль) и кандела (кд). "
+      "Все остальные единицы — производные, например ньютон: 1 Н = 1 кг·м/с².",
+      "Кратные и дольные приставки — это множители: 1 км = 10³ м, 1 см = 10⁻² м, "
+      "1 мм = 10⁻³ м, 1 мкм = 10⁻⁶ м, 1 т = 10³ кг, 1 мН = 10⁻³ Н."],
+     ["The SI contains seven base units: metre (m), kilogram (kg), second (s), ampere (A), "
+      "kelvin (K), mole (mol) and candela (cd). Other units are derived, for example "
+      "1 N = 1 kg·m/s².",
+      "Prefixes are factors: 1 km = 10³ m, 1 cm = 10⁻² m, 1 mm = 10⁻³ m, 1 µm = 10⁻⁶ m, "
+      "1 t = 10³ kg, 1 mN = 10⁻³ N."]),
+    (["Прежде чем подставлять числа в формулу, переведите все величины в единицы СИ "
+      "одной строки приставок — обычно в основные единицы.",
+      "Приставка относится только к своей единице: 1 кВт·ч — это 1000 Вт × 3600 с, "
+      "а не 1000 × 3600 Вт·ч.",
+      "Не путайте массу и вес: масса в килограммах, вес (сила) в ньютонах."],
+     ["Convert every value to SI, usually to the base units, before substituting numbers "
+      "into a formula.",
+      "A prefix belongs to its own unit only: 1 kWh is 1000 W × 3600 s, not 1000 × 3600 Wh.",
+      "Do not mix up mass and weight: mass in kilograms, weight (a force) in newtons."]),
+    [(("Переведите 72 км/ч в м/с.", "Convert 72 km/h to m/s."),
+      (["1 км = 1000 м, 1 ч = 3600 с.", "72 км/ч = 72 000 м / 3600 с = 20 м/с.",
+        "Ответ: 20 м/с."],
+       ["1 km = 1000 m and 1 h = 3600 s.", "72 km/h = 72 000 m / 3600 s = 20 m/s.",
+        "Answer: 20 m/s."])),
+     (("Выразите 2,5 л в кубических метрах.", "Express 2.5 litres in cubic metres."),
+      (["1 л = 1 дм³ = 10⁻³ м³.", "2,5 л = 2,5 · 10⁻³ м³ = 0,0025 м³.", "Ответ: 0,0025 м³."],
+       ["1 l = 1 dm³ = 10⁻³ m³.", "2.5 l = 2.5 · 10⁻³ m³ = 0.0025 m³.", "Answer: 0.0025 m³."]))],
+    (["Спидометр автомобиля показывает км/ч, а в формулах нужны м/с: разделите показание "
+      "на 3,6. 36 км/ч — это ровно 10 м/с.",
+      "Прейскурант электроэнергии считает киловатт-часы, а физика — джоули: "
+      "1 кВт·ч = 3,6·10⁶ Дж. Модель «идеального» прибора без потерь здесь не работает: "
+      "в реальном нагревателе часть энергии уходит в среду."],
+     ["A car speedometer shows km/h while formulas want m/s: divide by 3.6. "
+      "36 km/h is exactly 10 m/s.",
+      "Electricity bills use kilowatt-hours while physics uses joules: 1 kWh = 3.6·10⁶ J. "
+      "The lossless-appliance model is an approximation: part of the energy heats the room."]),
+)
 
-# Same order as the authoring rows of each formula group. A row can share a
-# lesson with another row, but it must never point to an unrelated summary.
-FORMULA_LESSONS = {
-    "powers": ["powers"] * 4 + ["roots-absolute"] * 6,
-    "multiplication": ["identities"] * 8,
-    "quadratic": ["quadratic"] * 7,
-    "progressions": ["arithmetic-progression", "progression-sums", "arithmetic-progression",
-                     "geometric-progression", "progression-sums", "geometric-progression",
-                     "progression-sums", "percentages"],
-    "trig": ["trig-identities", "trig-identities", "trig-formulas", "trig-formulas",
-             "trig-formulas", "trig-values", "trig-formulas", "trig-equations",
-             "trig-equations", "trig-equations", "plane-areas", "plane-areas"],
-    "logexp": ["log-definition", "log-properties", "log-properties", "log-properties",
-               "log-properties", "log-definition", "powers", "powers", "exponential-equations"],
-    "derivative": ["derivative-table", "derivative-table", "derivative-rules", "derivative-rules",
-                   "derivative-rules", "derivative-point", "derivative-point", "extrema",
-                   "extrema", "segment-extrema"],
-    "planimetry": ["plane-areas", "plane-areas", "right-triangle", "plane-areas",
-                   "plane-areas", "plane-areas", "circle-theorems", "circle-theorems",
-                   "circle-theorems", "similarity"],
-    "stereometry": ["prism-cylinder", "pyramid-cone", "prism-cylinder", "pyramid-cone",
-                    "sphere-cube", "sphere-cube", "solid-perpendiculars", "solid-perpendiculars"],
-    "combinatorics": ["counting", "counting", "counting", "probability", "probability",
-                      "probability", "probability", "factorials"],
-    "inequalities": ["linear-inequalities", "intervals", "quadratic-inequalities",
-                     "linear-inequalities", "linear-inequalities", "intervals"],
-    "functions": ["function-domain-range", "function-domain-range", "function-properties",
-                  "graph-transformations", "graph-transformations", "function-properties",
-                  "function-properties"],
-    "vectors": ["vector-coordinates", "vector-coordinates", "dot-product", "dot-product",
-                "midpoint-collinearity", "vector-coordinates"],
-    "numbers": ["divisibility"] * 6 + ["roots-absolute"],
-}
+_lesson(
+    "dimensions-check", "Размерность как проверка формулы", "Dimensions check a formula",
+    (["Размерность величины — выражение через основные единицы СИ: скорость — м/с, "
+      "ускорение — м/с², сила — кг·м/с² = Н, энергия — кг·м²/с² = Дж.",
+      "Складывать и сравнивать можно только величины одинаковой размерности; "
+      "под модулем (абсолютным значением) смысл имеет лишь разность координат."],
+     ["The dimension of a quantity is its expression in base SI units: speed m/s, acceleration "
+      "m/s², force kg·m/s² = N, energy kg·m²/s² = J.",
+      "Only quantities of the same dimension may be added or compared."]),
+    (["Проверка размерности отсекает неверные формулы: если справа получается м/с², "
+      "а слева требуется м, формула выбрана неправильно.",
+      "Аргумент синуса, косинуса, логарифма и экспоненты обязан быть безразмерным.",
+      "Число с размерностью не «прибавляется» к безразмерному: sin(5 м) не имеет смысла."],
+     ["A dimension check rejects wrong formulas: if the right side gives m/s² where metres are "
+      "needed, the formula is wrong.",
+      "Arguments of sine, cosine, logarithm and exponential must be dimensionless.",
+      "A dimensional quantity cannot be added to a plain number: sin(5 m) is meaningless."]),
+    [(("Проверьте по размерности формулу пути s = v·t + a·t.", "Check the formula s = v·t + a·t."),
+      (["Второе слагаемое: (м/с²)·с = м/с.", "Первое слагаемое: (м/с)·с = м; размерности не совпадают.",
+        "Верно s = v·t + a·t²/2: (м/с²)·с² = м."],
+       ["The second term: (m/s²)·s = m/s.", "The first term is (m/s)·s = m; the dimensions differ.",
+        "The correct formula is s = v·t + a·t²/2: (m/s²)·s² = m."]))],
+    (["Покупая обои, площадь стен считают в м², а рулон продают «ширина × длина» в метрах — "
+      "перемножать можно, потому что м·м даёт м².",
+      "Ошибка «сложить метры с секундами» встречается и в быту: сравнивать время поездки "
+      "с расстоянием нельзя без скорости — именно её и связывает формула."],
+     ["Buying wallpaper you measure wall area in m² while a roll is sold as width × length in "
+      "metres; the product gives m², so the units match.",
+      "Adding metres to seconds is nonsense in everyday life too: distance and time can only be "
+      "compared through speed, which is exactly what a formula does."]),
+)
+
+_lesson(
+    "measure-accuracy", "Цена деления и погрешность измерения", "Scale division and uncertainty",
+    (["Цена деления — разность двух соседних подписанных значений, делённая на число "
+      "промежутков между ними.",
+      "Погрешность отсчёта по прибору принимают равной половине цены деления; "
+      "результат записывают с той же точностью, что и измерение."],
+     ["The scale division is the difference between two neighbouring labelled values divided "
+      "by the number of gaps between them.",
+      "The reading uncertainty is half a scale division; the result is reported with the same "
+      "precision as the measurement."]),
+    (["Прибор не становится точнее от того, что вычисления сделаны с пятью знаками: "
+      "точность результата ограничена измерением.",
+      "Округлять промежуточные результаты рано нельзя: погрешность накапливается, "
+      "округляйте ответ в конце.",
+      "Прибор с нониусом (штангенциркуль) имеет цену деления, указанную в паспорте; "
+      "на глаз половина деления не угадывается."],
+     ["A device does not become more accurate because the arithmetic carries five digits: the "
+      "result is limited by the measurement.",
+      "Do not round intermediate results: the error accumulates — round the final answer.",
+      "A vernier calliper has a documented division; half of it cannot be guessed."]),
+    [(("Между подписями 20 и 40 мл на мензурке четыре промежутка. Найдите цену деления.",
+       "Between the 20 ml and 40 ml marks a beaker has four gaps. Find the division."),
+      (["Разность подписей: 40 − 20 = 20 мл.", "20 мл / 4 = 5 мл.", "Цена деления 5 мл; "
+        "погрешность отсчёта не меньше 2,5 мл."],
+       ["Difference of labels: 40 − 20 = 20 ml.", "20 ml / 4 = 5 ml.", "The division is 5 ml and "
+        "the reading uncertainty is at least 2.5 ml."]))],
+    (["Кухонные весы с шагом 5 г не покажут «127,3 г»: честный результат — "
+      "(125 ± 2,5) г, и это нормально.",
+      "Модель «прибор идеален» годится только для оценок: в реальном опыте всегда есть "
+      "трение, теплообмен и неточность отсчёта."],
+     ["Kitchen scales with a 5 g step cannot show 127.3 g: the honest reading is (125 ± 2.5) g.",
+      "The ideal-instrument model is only an estimate: real experiments always have friction, "
+      "heat exchange and reading error."]),
+    figures=("scale-ruler",),
+)
+
+# --------------------------------------------------------------------------- #
+#  2. Кинематика
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "motion-terms", "Путь, перемещение, средняя скорость", "Distance, displacement, average speed",
+    (["Путь s — длина траектории, величина неотрицательная. Перемещение — вектор из "
+      "начального положения в конечное; при возврате в начальную точку оно равно нулю.",
+      "Средняя скорость — весь путь, делённый на всё время движения: vср = s/t. "
+      "Средняя путевая скорость и модуль средней скорости совпадают только при движении без поворотов."],
+     ["Distance s is the length of the trajectory, never negative. Displacement is the vector "
+      "from start to finish; returning to the start makes it zero.",
+      "Average speed is total distance over total time: v = s/t."]),
+    (["Скорость — вектор: одинаковые по модулю скорости с разными направлениями — разные скорости.",
+      "Складывать скорости участков можно только при равных временах; иначе делите "
+      "суммарный путь на суммарное время.",
+      "В системе СИ путь измеряется в метрах, время в секундах, скорость в м/с."],
+     ["Velocity is a vector: equal magnitudes with different directions are different velocities.",
+      "Section speeds may be averaged only for equal time intervals; otherwise divide the total "
+      "distance by the total time.",
+      "In SI, distance is in metres, time in seconds and speed in m/s."]),
+    [(("Турист прошёл 6 км за 2 ч и вернулся тем же путём за 1 ч. Найдите путь, "
+       "перемещение и среднюю скорость.", "A hiker walks 6 km in 2 h and returns in 1 h. Find "
+       "distance, displacement and average speed."),
+      (["Путь = 6 + 6 = 12 км.", "Перемещение = 0, так как турист вернулся в начало.",
+        "Средняя скорость = 12 км / 3 ч = 4 км/ч."],
+       ["Distance = 6 + 6 = 12 km.", "Displacement = 0 because the hiker returned to the start.",
+        "Average speed = 12 km / 3 h = 4 km/h."]))],
+    (["Такси по навигатору показывает путь 7 км, а по прямой до цели 5 км: счётчик берёт "
+      "деньги за путь, а перемещение — только прямая.",
+      "Модель постоянной скорости на участке: в реальной поездке скорость меняется, "
+      "поэтому средняя скорость — не «скорость в каждый момент»."],
+     ["A taxi meter charges for the 7 km route while the displacement to the destination is "
+      "5 km in a straight line.",
+      "The constant-speed model holds only piecewise: in a real trip the speed changes, so the "
+      "average is not the instantaneous speed."]),
+    figures=("motion-route",),
+)
+
+_lesson(
+    "uniform-motion", "Равномерное прямолинейное движение", "Uniform motion",
+    (["Равномерное движение — движение по прямой с постоянной скоростью: за любые равные "
+      "промежутки времени тело проходит одинаковые пути.",
+      "Уравнение движения: x = x₀ + v·t, где x₀ — начальная координата, v — проекция скорости "
+      "на ось (может быть отрицательной)."],
+     ["Uniform motion is motion along a straight line at constant speed: equal time intervals "
+      "give equal distances.",
+      "Equation of motion: x = x₀ + v·t, where v is the velocity projection (may be negative)."]),
+    (["Путь при равномерном движении s = v·t; график x(t) — прямая, наклон которой равен "
+      "скорости.",
+      "Знак проекции скорости говорит о направлении движения по выбранной оси.",
+      "При равномерном движении ускорение равно нулю и равнодействующая сил тоже нулю."],
+     ["Distance s = v·t; the x(t) graph is a straight line whose slope is the speed.",
+      "The sign of the velocity projection shows the direction along the chosen axis.",
+      "In uniform motion the acceleration is zero, hence so is the net force."]),
+    [(("Поезд идёт со скоростью 15 м/с. Какой путь он пройдёт за 4 мин?",
+       "A train moves at 15 m/s. What distance does it cover in 4 minutes?"),
+      (["Переведём время: 4 мин = 240 с.", "s = v·t = 15 · 240 = 3600 м.", "Ответ: 3600 м = 3,6 км."],
+       ["Convert time: 4 min = 240 s.", "s = v·t = 15 · 240 = 3600 m.", "Answer: 3600 m = 3.6 km."])),
+     (("Два велосипедиста едут навстречу: 5 м/с и 3 м/с, расстояние 160 м. Через сколько "
+       "встретятся?", "Two cyclists approach at 5 m/s and 3 m/s from 160 m apart. When do they meet?"),
+      (["Скорость сближения при встречном движении: 5 + 3 = 8 м/с.",
+        "t = s/v = 160 / 8 = 20 с.", "Ответ: через 20 с."],
+       ["Approach speed: 5 + 3 = 8 m/s.", "t = 160 / 8 = 20 s.", "Answer: after 20 s."]))],
+    (["Курьерский поезд и электричка: чтобы узнать время встречи, складывают скорости, "
+      "а чтобы догнать — вычитают. Это одна и та же формула x₁ = x₂.",
+      "Модель «скорость постоянна» для поезда годится только на перегоне без разгона и "
+      "торможения."],
+     ["An express and a commuter train: meeting uses the sum of speeds, catching up uses the "
+      "difference — both follow from x₁ = x₂.",
+      "The constant-speed model works only between acceleration and braking."]),
+    figures=("graph-x-t",),
+)
+
+_lesson(
+    "accelerated-motion", "Равноускоренное движение", "Uniformly accelerated motion",
+    (["Равноускоренное движение — движение с постоянным ускорением a. Скорость меняется "
+      "по закону v = v₀ + a·t, координата — по закону x = x₀ + v₀·t + a·t²/2.",
+      "Ускорение — векторная величина: a = Δv/Δt, единица измерения 1 м/с². "
+      "При торможении проекция ускорения отрицательна."],
+     ["Uniformly accelerated motion has constant acceleration a with v = v₀ + a·t and "
+      "x = x₀ + v₀·t + a·t²/2.",
+      "Acceleration is a vector, a = Δv/Δt, measured in m/s². Braking gives a negative projection."]),
+    (["Множитель ½ относится только к слагаемому ускорения: s = v₀t + at²/2.",
+      "Полезные формулы без времени: s = (v₀ + v)·t/2 и s = (v² − v₀²)/(2a) — последняя "
+      "работает и при торможении (a < 0).",
+      "При равноускоренном движении из состояния покоя путь растёт как t²: в первые две "
+      "секунды путь вчетверо больше, чем в первую."],
+     ["The factor ½ belongs to the acceleration term only: s = v₀t + at²/2.",
+      "Time-free formulas: s = (v₀ + v)t/2 and s = (v² − v₀²)/(2a), the latter also for braking.",
+      "From rest the distance grows as t²: the first two seconds give four times the first one."]),
+    [(("Автомобиль разгоняется с 10 м/с до 25 м/с за 5 с. Найдите ускорение и путь.",
+       "A car speeds up from 10 m/s to 25 m/s in 5 s. Find acceleration and distance."),
+      (["a = (v − v₀)/t = (25 − 10)/5 = 3 м/с².",
+        "s = (v₀ + v)·t/2 = (10 + 25)·5/2 = 87,5 м.", "Ответ: 3 м/с² и 87,5 м."],
+       ["a = (v − v₀)/t = (25 − 10)/5 = 3 m/s².",
+        "s = (v₀ + v)·t/2 = (10 + 25)·5/2 = 87.5 m.", "Answer: 3 m/s² and 87.5 m."])),
+     (("Поезд при торможении с 20 м/с остановился за 25 с. Найдите тормозной путь.",
+       "A train braking from 20 m/s stops in 25 s. Find the braking distance."),
+      (["Конечная скорость 0, значит a = (0 − 20)/25 = −0,8 м/с².",
+        "s = (v₀ + v)·t/2 = (20 + 0)·25/2 = 250 м.", "Ответ: 250 м."],
+       ["Final speed is 0, so a = (0 − 20)/25 = −0.8 m/s².",
+        "s = (v₀ + v)·t/2 = (20 + 0)·25/2 = 250 m.", "Answer: 250 m."]))],
+    (["Разгон метро от станции: в первую секунду вагон проходит около метра, а за десять "
+      "секунд — уже десятки метров, потому что путь растёт как квадрат времени.",
+      "Модель «ускорение постоянно» ломается у реального автомобиля после переключения "
+      "передачи: там уже важно, как меняется тяга."],
+     ["A metro train leaving a station covers about a metre in the first second but dozens of "
+      "metres in ten, because distance grows as the square of time.",
+      "The constant-acceleration model breaks for a real car after a gear shift, where the "
+      "traction varies."]),
+    figures=("graph-v-t",),
+)
+
+_lesson(
+    "kinematics-graphs", "Чтение графиков движения", "Reading motion graphs",
+    (["На графике x(t) наклон прямой равен проекции скорости; чем круче прямая, тем больше "
+      "скорость. Горизонтальная линия означает покой.",
+      "На графике v(t) наклон равен ускорению, а площадь между графиком и осью времени "
+      "равна пути (с учётом знака)."],
+     ["On an x(t) graph the slope equals the velocity projection; a horizontal line means rest.",
+      "On a v(t) graph the slope is the acceleration and the area under the graph is the "
+      "distance (with sign)."]),
+    (["Физический смысл имеют только оси с подписями и единицами: «наклон 2» без осей "
+      "не означает 2 м/с.",
+      "Площадь под осью времени (v < 0) считается со знаком минус — это перемещение назад.",
+      "Постоянная скорость — прямая на v(t); постоянное ускорение — прямая на графике "
+      "скорости и парабола на графике координаты."],
+     ["Only labelled axes with units carry physical meaning: a slope of 2 without axes is not 2 m/s.",
+      "Area below the time axis (v < 0) counts negative: displacement backwards.",
+      "Constant speed is a horizontal v(t); constant acceleration is a straight v(t) and a "
+      "parabolic x(t)."]),
+    [(("По графику v(t): 0–2 с скорость 4 м/с, 2–5 с скорость 0. Найдите путь.",
+       "From a v(t) graph: 4 m/s for 0–2 s and 0 m/s for 2–5 s. Find the distance."),
+      (["Путь — площадь под графиком: 4·2 = 8 м на первом участке.",
+        "На втором участке тело стоит: вклад 0.", "Ответ: 8 м."],
+       ["Area under the graph: 4·2 = 8 m in the first section.",
+        "The body is at rest afterwards: contribution 0.", "Answer: 8 m."]))],
+    (["Спидометр рисует мгновенную скорость, а пройденный путь — площадь под её графиком: "
+      "именно поэтому «средняя по времени» скорость не равна среднему показанию спидометра "
+      "при резких разгонах.",
+      "Радар на дороге измеряет модуль скорости в одной точке, а не среднюю скорость за "
+      "поездку — это разные физические величины."],
+     ["A speedometer shows instantaneous speed while the travelled distance is the area under "
+      "its graph, so the time-average differs from the mean reading during hard acceleration.",
+      "A traffic radar measures the instantaneous speed at one point, not the trip average."]),
+    figures=("graph-v-t",),
+)
+
+_lesson(
+    "free-fall", "Свободное падение", "Free fall",
+    (["Свободное падение — движение только под действием силы тяжести: у поверхности Земли "
+      "ускорение g ≈ 9,8 м/с² направлено вниз.",
+      "Формулы получаются из равноускоренного движения при v₀ = 0: h = g·t²/2, v = g·t, "
+      "v = √(2gh)."],
+     ["Free fall happens under gravity alone: near the Earth g ≈ 9.8 m/s² directed downwards.",
+      "With v₀ = 0 the uniformly accelerated formulas give h = g·t²/2, v = g·t and v = √(2gh)."]),
+    (["Без сопротивления воздуха время падения не зависит от массы: перо и молоток падают "
+      "одинаково (это проверено в вакуумной камере).",
+      "Если тело брошено вертикально вверх, в верхней точке скорость равна нулю, "
+      "а ускорение по-прежнему g, направленное вниз.",
+      "Движение вверх и вниз до одной высоты занимает одинаковое время."],
+     ["Without air drag the falling time does not depend on mass: a feather and a hammer fall "
+      "alike in a vacuum chamber.",
+      "At the highest point of a vertical throw the speed is zero while the acceleration is "
+      "still g directed downwards.",
+      "Going up and coming back to the same height takes equal times."]),
+    [(("Камень отпустили с высоты 45 м. Сколько он падает и с какой скоростью упадёт?",
+       "A stone is dropped from 45 m. How long does it fall and how fast does it land?"),
+      (["h = g·t²/2, значит t = √(2h/g) = √(90/9,8) ≈ 3,03 с.",
+        "v = g·t ≈ 9,8·3,03 ≈ 29,7 м/с (или v = √(2gh)).", "Ответ: ≈ 3 с и ≈ 30 м/с."],
+       ["h = g·t²/2 gives t = √(2h/g) = √(90/9.8) ≈ 3.03 s.",
+        "v = g·t ≈ 9.8·3.03 ≈ 29.7 m/s (or v = √(2gh)).", "Answer: ≈ 3 s and ≈ 30 m/s."]))],
+    (["Капли с карниза падают по одинаковому закону: за первую секунду ≈ 5 м, за вторую "
+      "ещё ≈ 15 м — интервалы растут.",
+      "Модель без сопротивления хороша для тяжёлого плотного тела на небольшой высоте; "
+      "для парашюта и листа бумаги уже нужно учитывать сопротивление воздуха."],
+     ["Roof drips fall the same way: about 5 m in the first second and 15 m more in the second.",
+      "The drag-free model suits a heavy dense body over a short drop; a parachute or a sheet "
+      "of paper needs air resistance."]),
+    figures=("free-fall",),
+)
+
+# --------------------------------------------------------------------------- #
+#  3. Динамика
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "newton-laws", "Законы Ньютона", "Newton's laws",
+    (["Первый закон: существуют системы отсчёта, в которых тело без внешних сил движется "
+      "равномерно и прямолинейно или покоится (инерция).",
+      "Второй закон: ускорение пропорционально равнодействующей всех сил и обратно "
+      "пропорционально массе: a = F/m, то есть F = m·a.",
+      "Третий закон: тела действуют друг на друга силами равными по модулю и "
+      "противоположными по направлению, приложенными к разным телам."],
+     ["First law: in an inertial frame a body with no net force stays at rest or moves "
+      "uniformly along a straight line.",
+      "Second law: the acceleration is proportional to the net force and inversely "
+      "proportional to the mass: a = F/m.",
+      "Third law: interacting bodies exert equal and opposite forces on each other."]),
+    (["В F = m·a стоит равнодействующая всех сил: тяжесть, реакция опоры, тяга, трение, "
+      "сила упругости — складывать нужно всё.",
+      "Силы действия и противодействия приложены к разным телам, поэтому они не сокращаются "
+      "в уравнении одного тела.",
+      "Первый закон выполняется только в инерциальных системах: в разгоняющемся автобусе "
+      "без внешней силы тело «уезжает» назад."],
+     ["In F = m·a the force is the net force: gravity, normal reaction, pull, friction and "
+      "elasticity all count.",
+      "Action and reaction act on different bodies, so they never cancel in one body's equation.",
+      "The first law holds only in inertial frames: in a braking bus a free object seems to move."]),
+    [(("Тело массой 2 кг движется с ускорением 3 м/с². Найдите равнодействующую.",
+       "A 2 kg body accelerates at 3 m/s². Find the net force."),
+      (["F = m·a.", "F = 2 · 3 = 6 Н.", "Ответ: 6 Н в сторону ускорения."],
+       ["F = m·a.", "F = 2 · 3 = 6 N.", "Answer: 6 N in the direction of the acceleration."])),
+     (("На груз 5 кг действуют вверх 30 Н и вниз 40 Н. Найдите ускорение.",
+       "A 5 kg load has 30 N up and 40 N down. Find the acceleration."),
+      (["Равнодействующая: 30 − 40 = −10 Н (вниз).", "a = F/m = −10/5 = −2 м/с².",
+        "Ответ: 2 м/с², направлено вниз."],
+       ["Net force: 30 − 40 = −10 N (downwards).", "a = −10/5 = −2 m/s².",
+        "Answer: 2 m/s², directed downwards."]))],
+    (["Ремень в машине: при резком торможении тело продолжает двигаться по инерции — "
+      "первый закон спасает жизнь именно в этой ситуации.",
+      "Модель «масса точки в центре» подходит для коротких примеров; для вращающегося "
+      "тела уже нужны момент силы и распределение массы."],
+     ["A seat belt works through inertia: during hard braking the body keeps moving — the "
+      "first law is exactly what the belt handles.",
+      "The point-mass model suffices for simple problems; a rotating body needs torques and "
+      "mass distribution."]),
+    figures=("force-diagram",),
+)
+
+_lesson(
+    "forces-weight", "Сила тяжести и вес", "Gravity and weight",
+    (["Сила тяжести F = m·g приложена к самому телу и направлена к центру Земли.",
+      "Вес — сила, с которой тело действует на опору или подвес; в покое на горизонтальной "
+      "опоре вес равен m·g, но это разные силы, приложенные к разным телам."],
+     ["Gravity F = m·g acts on the body itself and points to the Earth's centre.",
+      "Weight is the force the body exerts on its support; at rest on a horizontal support it "
+      "equals m·g, yet gravity and weight act on different bodies."]),
+    (["В лифте, движущемся с ускорением вверх, вес растёт: P = m(g + a); при ускорении "
+      "вниз — уменьшается: P = m(g − a).",
+      "В состоянии невесомости (свободное падение) вес равен нулю, а масса сохраняется.",
+      "Единицы измерения: масса — килограммы, сила и вес — ньютоны."],
+     ["In an accelerating lift the weight changes: P = m(g + a) upwards and P = m(g − a) "
+      "downwards.",
+      "In weightlessness (free fall) the weight is zero while the mass remains.",
+      "Units: mass in kilograms, force and weight in newtons."]),
+    [(("Найдите вес груза 12 кг, стоящего на полу. g = 9,8 м/с².",
+       "Find the weight of a 12 kg load standing on the floor. g = 9.8 m/s²."),
+      (["P = m·g.", "P = 12 · 9,8 = 117,6 Н.", "Ответ: ≈ 118 Н (масса остаётся 12 кг)."],
+       ["P = m·g.", "P = 12 · 9.8 = 117.6 N.", "Answer: ≈ 118 N (the mass stays 12 kg)."]))],
+    (["В магазине «весят» на самом деле измеряют массу в килограммах: настоящий вес "
+      "12 кг груза — около 118 Н, просто весы заранее поделили на g.",
+      "Модель P = mg верна для покоя; в падающем лифте вес исчезает, поэтому ремень "
+      "безопасности нужен и в вертикальном движении."],
+     ["Shop scales actually measure mass in kilograms: the true weight of 12 kg is about 118 N, "
+      "the device simply divided by g.",
+      "P = mg holds at rest; in a falling lift the weight vanishes, which matters for safety "
+      "belts."]),
+)
+
+_lesson(
+    "friction-elasticity", "Силы трения и упругости", "Friction and elasticity",
+    (["Сила трения скольжения Fтр = μ·N, где μ — коэффициент трения, N — сила нормального "
+      "давления. Трение направлено против относительного движения.",
+      "Сила упругости подчиняется закону Гука F = k·x в пределах упругости; x — деформация "
+      "(удлинение или сжатие), k — жёсткость в Н/м."],
+     ["Sliding friction is F = μ·N with μ the friction coefficient and N the normal force; it "
+      "opposes relative motion.",
+      "Within the elastic limit the elastic force obeys Hooke's law F = k·x, where x is the "
+      "deformation and k the stiffness in N/m."]),
+    (["На наклонной плоскости N = m·g·cos α, поэтому N меньше веса: подставлять m·g "
+      "вместо N — типичная ошибка.",
+      "Трение покоя принимает любое значение до μN и только при предельном значении "
+      "начинается скольжение.",
+      "Закон Гука работает только до предела упругости: за ним график F(x) становится "
+      "нелинейным, а деформация — остаточной."],
+     ["On an incline N = m·g·cos α, so N is smaller than the weight; substituting m·g for N is "
+      "a classic mistake.",
+      "Static friction can be anything up to μN; sliding starts at the limit.",
+      "Hooke's law holds up to the elastic limit; beyond it the graph bends and the deformation "
+      "becomes permanent."]),
+    [(("Брусок 4 кг тянут по горизонтальному столу, μ = 0,25. Найдите силу трения.",
+       "A 4 kg block is pulled across a table with μ = 0.25. Find the friction force."),
+      (["N = m·g = 4 · 9,8 = 39,2 Н.", "Fтр = μ·N = 0,25 · 39,2 = 9,8 Н.",
+        "Ответ: ≈ 9,8 Н (направлена против движения)."],
+       ["N = m·g = 4 · 9.8 = 39.2 N.", "F = μ·N = 0.25 · 39.2 = 9.8 N.",
+        "Answer: ≈ 9.8 N against the motion."])),
+     (("Пружину жёсткостью 200 Н/м растянули на 4 см. Найдите силу упругости.",
+       "A spring of stiffness 200 N/m is stretched by 4 cm. Find the elastic force."),
+      (["Переведём: 4 см = 0,04 м.", "F = k·x = 200 · 0,04 = 8 Н.",
+        "Ответ: 8 Н, направлена к положению равновесия."],
+       ["Convert: 4 cm = 0.04 m.", "F = k·x = 200 · 0.04 = 8 N.",
+        "Answer: 8 N towards the equilibrium."]))],
+    (["Тормозной путь на льду в разы больше, чем на асфальте, потому что μ отличается "
+      "в несколько раз — сила трения при той же массе разная.",
+      "Модель «трение не зависит от площади контакта» верна для сухого трения скольжения; "
+      "для широких шин важнее давление и материал, и это уже за рамками школьной модели."],
+     ["Braking distances on ice are far longer than on asphalt because μ differs severalfold at "
+      "the same mass.",
+      "Independent-of-area dry friction is the school model; real tyres also depend on pressure "
+      "and material."]),
+    figures=("incline-forces", "spring-hooke"),
+)
+
+_lesson(
+    "force-diagram", "Свободная диаграмма сил", "Free-body diagram",
+    (["Свободная диаграмма сил — рисунок, на котором показано только рассматриваемое тело "
+      "и все силы, действующие на него со стороны других тел.",
+      "Порядок работы: выбрать тело, указать систему отсчёта, нарисовать все силы, "
+      "выбрать оси и записать второй закон Ньютона в проекциях."],
+     ["A free-body diagram shows the chosen body and every force acting on it from other bodies.",
+      "Procedure: choose the body, state the frame, draw all forces, choose axes and write "
+      "Newton's second law in projections."]),
+    (["Одна стрелка — одна сила: если на тело действуют две силы со стороны одного тела, "
+      "рисуют две стрелки (или одну равнодействующую, но тогда её и подписывают).",
+      "Реакция опоры перпендикулярна поверхности; сила трения — вдоль поверхности.",
+      "Силы, приложенные к другим телам, на диаграмму не переносятся."],
+     ["One arrow per force: two forces from one body are drawn as two arrows (or as one "
+      "resultant, labelled as such).",
+      "A normal reaction is perpendicular to the surface; friction runs along the surface.",
+      "Forces acting on other bodies are not transferred to this diagram."]),
+    [(("Составьте уравнение движения для бруска, тянутого по столу с силой F.",
+       "Write the equation of motion for a block pulled along a table by F."),
+      (["По горизонтали: F − Fтр = m·a.", "По вертикали: N − m·g = 0, значит N = m·g.",
+        "Отсюда a = (F − μmg)/m."],
+       ["Horizontally: F − F_fr = m·a.", "Vertically: N − m·g = 0, so N = m·g.",
+        "Therefore a = (F − μmg)/m."]))],
+    (["Разбирая «почему санки не едут», полезно нарисовать силы: тяга, трение, тяжесть и "
+      "реакция — тогда видно, какая из них слишком мала.",
+      "Модель без сопротивления воздуха годится для медленных тел; для велосипедиста "
+      "на спуске сопротивление уже сравнимо с тягой."],
+     ["When a sledge will not move, a force sketch shows which of pull, friction, gravity or "
+      "reaction is too small.",
+      "Ignoring air drag is fine for slow bodies; for a cyclist downhill it is comparable to "
+      "the drive."]),
+    figures=("force-diagram", "incline-forces"),
+)
+
+# --------------------------------------------------------------------------- #
+#  4. Работа, энергия, импульс
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "work-power", "Работа, мощность, КПД", "Work, power, efficiency",
+    (["Механическая работа A = F·s·cos α, где α — угол между силой и перемещением; "
+      "измеряется в джоулях: 1 Дж = 1 Н·м.",
+      "Мощность P = A/t — скорость совершения работы, измеряется в ваттах: 1 Вт = 1 Дж/с.",
+      "КПД — отношение полезной работы ко всей затраченной: η = Aполез/Aзатр, обычно в процентах."],
+     ["Work A = F·s·cos α with α the angle between force and displacement, measured in joules.",
+      "Power P = A/t is the rate of work, measured in watts.",
+      "Efficiency η = A_useful/A_total, usually given in percent."]),
+    (["Если сила перпендикулярна перемещению (cos 90° = 0), работа равна нулю: сила тяжести "
+      "не совершает работы при движении по горизонтали.",
+      "При равномерном движении работа тяги равна работе против трения, а полезная "
+      "работа меньше затраченной из-за потерь.",
+      "КПД всегда меньше 100 %: часть энергии уходит в тепло и звук."],
+     ["A force perpendicular to the displacement does no work: gravity does none in horizontal "
+      "motion.",
+      "In uniform motion the drive work balances friction, and useful work is less than total "
+      "work because of losses.",
+      "Efficiency is always below 100 %: part of the energy becomes heat and sound."]),
+    [(("Ящик тянут силой 60 Н на 5 м под углом 60° к перемещению. Найдите работу.",
+       "A crate is pulled with 60 N over 5 m at 60° to the displacement. Find the work."),
+      (["A = F·s·cos α.", "cos 60° = 0,5.", "A = 60 · 5 · 0,5 = 150 Дж."],
+       ["A = F·s·cos α.", "cos 60° = 0.5.", "A = 60 · 5 · 0.5 = 150 J."])),
+     (("Подъёмник поднимает 200 кг на 6 м за 20 с. Найдите полезную мощность.",
+       "A hoist lifts 200 kg by 6 m in 20 s. Find the useful power."),
+      (["A = m·g·h = 200 · 9,8 · 6 = 11 760 Дж.", "P = A/t = 11 760 / 20 = 588 Вт.",
+        "Ответ: ≈ 588 Вт (двигатель потребляет больше)."],
+       ["A = m·g·h = 200 · 9.8 · 6 = 11 760 J.", "P = A/t = 11 760 / 20 = 588 W.",
+        "Answer: ≈ 588 W (the motor draws more)."]))],
+    (["Человек несёт чемодан по горизонтали: тяжесть не совершает работы, хотя руки "
+      "устают — усталость не равна совершённой работе.",
+      "Модель «КПД постоянен» верна для узкого диапазона нагрузки: у реального двигателя "
+      "с ростом мощности КПД меняется."],
+     ["Carrying a suitcase horizontally involves no work by gravity, although the arm tires — "
+      "fatigue is not work.",
+      "Constant efficiency holds only in a narrow load range; a real motor changes efficiency "
+      "with load."]),
+)
+
+_lesson(
+    "energy-conservation", "Закон сохранения энергии", "Conservation of energy",
+    (["Кинетическая энергия Eк = m·v²/2; потенциальная энергия в поле тяжести Eп = m·g·h; "
+      "энергия упругой деформации E = k·x²/2.",
+      "Полная механическая энергия сохраняется, если действуют только консервативные силы "
+      "(тяжесть, упругость) и нет трения и других потерь."],
+     ["Kinetic energy E = m·v²/2, gravitational potential energy E = m·g·h, elastic energy "
+      "E = k·x²/2.",
+      "The total mechanical energy is conserved when only conservative forces act and losses "
+      "are absent."]),
+    (["С трением механическая энергия уменьшается, но полная энергия системы сохраняется: "
+      "потерянное превращается во внутреннюю энергию.",
+      "Энергию удобно считать от выбранного нулевого уровня: физический смысл имеет только "
+      "изменение энергии.",
+      "Скорость из закона сохранения: m·g·h = m·v²/2, откуда v = √(2gh) — масса сокращается."],
+     ["With friction the mechanical energy decreases while the total energy of the system is "
+      "conserved as internal energy.",
+      "Energy is counted from a chosen zero level; only its change is physical.",
+      "From m·g·h = m·v²/2 the speed is v = √(2gh): the mass cancels."]),
+    [(("Санки скатываются с горки высотой 5 м без трения. Найдите скорость у подножия.",
+       "A sledge slides down a 5 m hill without friction. Find the speed at the bottom."),
+      (["m·g·h = m·v²/2.", "v = √(2gh) = √(2 · 9,8 · 5) = √98 ≈ 9,9 м/с.",
+        "Ответ: ≈ 9,9 м/с независимо от массы."],
+       ["m·g·h = m·v²/2.", "v = √(2gh) = √(2 · 9.8 · 5) = √98 ≈ 9.9 m/s.",
+        "Answer: ≈ 9.9 m/s independent of mass."])),
+     (("Найдите энергию пружины k = 400 Н/м, сжатой на 5 см.",
+       "Find the energy of a spring k = 400 N/m compressed by 5 cm."),
+      (["x = 0,05 м.", "E = k·x²/2 = 400 · 0,0025 / 2 = 0,5 Дж.",
+        "Ответ: 0,5 Дж."],
+       ["x = 0.05 m.", "E = 400 · 0.0025 / 2 = 0.5 J.", "Answer: 0.5 J."]))],
+    (["Велосипедист на спуске разгоняется, а на подъёме замедляется: высота и скорость "
+      "обмениваются, пока трение и сопротивление не «съедят» часть энергии.",
+      "Модель без потерь завышает скорость и высоту подъёма: в реальности всегда есть "
+      "трение в цепи и сопротивление воздуха."],
+     ["A cyclist speeds up downhill and slows uphill: height and speed trade, until friction "
+      "and drag take their share.",
+      "The lossless model overestimates speed and climb: real chains and air always take energy."]),
+)
+
+_lesson(
+    "momentum", "Импульс и закон сохранения импульса", "Momentum and its conservation",
+    (["Импульс тела p = m·v — вектор, измеряется в кг·м/с. Импульс силы F·t равен "
+      "изменению импульса тела.",
+      "Импульс системы сохраняется, если внешние силы пренебрежимо малы или скомпенсированы."],
+     ["Momentum p = m·v is a vector measured in kg·m/s; the impulse F·t equals its change.",
+      "The momentum of a system is conserved when external forces are negligible or balanced."]),
+    (["При абсолютно упругом ударе сохраняются и импульс, и кинетическая энергия; "
+      "при неупругом — только импульс, тела движутся вместе.",
+      "Импульс векторный: уравнения записывают в проекциях на выбранную ось.",
+      "Реактивное движение и отдача — следствие сохранения импульса, а не «толчка воздуха»."],
+     ["An elastic collision conserves both momentum and kinetic energy; a perfectly inelastic "
+      "one keeps only momentum and the bodies move together.",
+      "Momentum is a vector: write the equations in projections.",
+      "Jet propulsion and recoil follow from momentum conservation."]),
+    [(("Тело 2 кг со скоростью 3 м/с сцепляется с покоящимся телом 4 кг. Найдите общую скорость.",
+       "A 2 kg body at 3 m/s sticks to a stationary 4 kg body. Find their common speed."),
+      (["m₁v₁ = (m₁ + m₂)u.", "u = 2·3/(2+4) = 1 м/с.", "Ответ: 1 м/с в сторону движения."],
+       ["m₁v₁ = (m₁ + m₂)u.", "u = 2·3/(2+4) = 1 m/s.", "Answer: 1 m/s in the original direction."])),
+     (("Из ружья 4 кг вылетает пуля 10 г со скоростью 400 м/с. Найдите скорость отдачи.",
+       "A 10 g bullet leaves a 4 kg rifle at 400 m/s. Find the recoil speed."),
+      (["Импульсы равны по модулю: M·V = m·v.", "V = 0,01 · 400 / 4 = 1 м/с.",
+        "Ответ: 1 м/с в сторону, противоположную пуле."],
+       ["Equal momenta: M·V = m·v.", "V = 0.01 · 400 / 4 = 1 m/s.",
+        "Answer: 1 m/s opposite to the bullet."]))],
+    (["При столкновении двух машин импульс всей системы до и после примерно один и тот же — "
+      "именно поэтому удар «сминает» лёгкую машину сильнее.",
+      "Модель замкнутой системы годится для короткого удара: за время удара внешние "
+      "силы не успевают изменить суммарный импульс."],
+     ["In a car crash the momentum of the pair is nearly the same before and after; that is why "
+      "the lighter car crumples more.",
+      "The closed-system model works for a short impact, when external forces barely change the "
+      "total momentum."]),
+)
+
+# --------------------------------------------------------------------------- #
+#  5. Статика, давление, гидростатика
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "torque", "Момент силы и равновесие", "Torque and equilibrium",
+    (["Момент силы относительно оси M = F·d, где d — плечо: расстояние по перпендикуляру "
+      "от оси вращения до линии действия силы; измеряется в Н·м.",
+      "Тело в равновесии, когда равны нулю и сумма сил, и сумма моментов относительно "
+      "любой оси: твёрдое тело не может «уехать» и не может «закрутиться»."],
+     ["Torque about an axis M = F·d with d the perpendicular distance from the axis to the "
+      "line of action, measured in N·m.",
+      "Equilibrium needs zero net force and zero net torque about any axis."]),
+    (["Плечо — перпендикуляр, а не длина рычага и не расстояние по наклонной линии действия.",
+      "Момент вращает по часовой стрелке или против: у моментов есть знак, их складывают "
+      "алгебраически.",
+      "Правило рычага F₁·d₁ = F₂·d₂ — следствие равенства моментов."],
+     ["The lever arm is the perpendicular distance, not the length of the lever.",
+      "Torques have signs: clockwise and counter-clockwise torques add algebraically.",
+      "The lever rule F₁d₁ = F₂d₂ follows from equal torques."]),
+    [(("На рычаге плечо 0,2 м и груз 30 Н. Какую силу приложить к плечу 0,6 м для равновесия?",
+       "A lever has a 30 N load on a 0.2 m arm. What force balances it on a 0.6 m arm?"),
+      (["F₁·d₁ = F₂·d₂.", "30 · 0,2 = F · 0,6.", "F = 6 / 0,6 = 10 Н."],
+       ["F₁·d₁ = F₂·d₂.", "30 · 0.2 = F · 0.6.", "F = 6 / 0.6 = 10 N."]))],
+    (["Дверная ручка стоит далеко от петель именно чтобы плечо было больше и момент "
+      "при меньшей силе — это и есть физика рычага.",
+      "Модель «рычаг невесом» годится для школьных задач; у реального рычага есть "
+      "собственный вес, и его момент тоже нужно учитывать."],
+     ["A door handle sits far from the hinges to enlarge the lever arm and reduce the needed "
+      "force.",
+      "The weightless-lever model is fine for school problems; a real lever also has its own "
+      "weight moment."]),
+    figures=("lever-torque",),
+)
+
+_lesson(
+    "pressure-hydrostatics", "Давление и гидростатика", "Pressure and hydrostatics",
+    (["Давление p = F/S — сила, действующая перпендикулярно поверхности, делённая на "
+      "площадь; измеряется в паскалях: 1 Па = 1 Н/м².",
+      "Давление жидкости на глубине h: p = ρ·g·h, где ρ — плотность жидкости; "
+      "добавочное давление зависит только от глубины."],
+     ["Pressure p = F/S is the perpendicular force per unit area, measured in pascals.",
+      "Liquid pressure at depth h is p = ρ·g·h, depending only on depth and density."]),
+    (["Давление на одной глубине одинаково во всех направлениях: закон Паскаля.",
+      "Форма и объём сосуда не входят в p = ρgh: узкий и широкий сосуды одинаковой высоты "
+      "дают одинаковое давление на дне.",
+      "Давление на дно больше атмосферного на ρgh; атмосферу добавляют, только если "
+      "о ней спрашивают или требуется полное давление."],
+     ["At a given depth the pressure is the same in all directions (Pascal's law).",
+      "Vessel shape and volume do not enter p = ρgh: wide and narrow vessels of equal height "
+      "give the same bottom pressure.",
+      "Gauge pressure is ρgh above atmospheric; add the atmosphere only when the total pressure "
+      "is requested."]),
+    [(("Найдите давление воды на глубине 10 м. ρ = 1000 кг/м³, g = 9,8 м/с².",
+       "Find the water pressure at 10 m. ρ = 1000 kg/m³, g = 9.8 m/s²."),
+      (["p = ρ·g·h.", "p = 1000 · 9,8 · 10 = 98 000 Па.", "Ответ: ≈ 98 кПа добавочного давления."],
+       ["p = ρ·g·h.", "p = 1000 · 9.8 · 10 = 98 000 Pa.", "Answer: ≈ 98 kPa of gauge pressure."])),
+     (("Лыжник 70 кг стоит на лыжах площадью 0,2 м². Найдите давление на снег.",
+       "A 70 kg skier stands on 0.2 m² skis. Find the pressure on the snow."),
+      (["F = m·g = 70 · 9,8 = 686 Н.", "p = F/S = 686 / 0,2 = 3430 Па.",
+        "Ответ: ≈ 3,4 кПа."],
+       ["F = m·g = 70 · 9.8 = 686 N.", "p = F/S = 686 / 0.2 = 3430 Pa.", "Answer: ≈ 3.4 kPa."]))],
+    (["Широкие лыжи снижают давление и человек не проваливается; тот же вес на узких "
+      "ботинках давит в разы сильнее.",
+      "Модель несжимаемой жидкости: вода почти не сжимается, поэтому p = ρgh работает "
+      "хорошо; для газа она не применяется."],
+     ["Wide skis spread the same weight over more area, so the pressure drops.",
+      "The incompressible-liquid model suits water well; it does not apply to gases."]),
+    figures=("pressure-depth",),
+)
+
+_lesson(
+    "archimedes", "Сила Архимеда и плавание", "Buoyancy and floating",
+    (["На тело, погружённое в жидкость, действует архимедова сила FА = ρж·Vпогр·g, "
+      "направленная вертикально вверх и равная весу вытесненной жидкости.",
+      "Условие плавания: FА = m·g, то есть ρж·Vпогр = ρтела·Vтела. Тело плавает, если его "
+      "средняя плотность меньше плотности жидкости."],
+     ["Buoyancy F = ρ_liquid·V_submerged·g points upwards and equals the weight of the "
+      "displaced liquid.",
+      "Floating needs ρ_liquid·V_submerged = ρ_body·V_body."]),
+    (["В формуле стоит объём погружённой части, а не всего тела: у плавающего айсберга "
+      "под водой примерно 90 % объёма.",
+      "Если тело тонет, FА < m·g; если всплывает — FА > m·g.",
+      "Сила Архимеда есть и в воздухе, но для бытовых тел она в сотни раз меньше веса."],
+     ["The formula uses the submerged volume, not the whole body: about 90 % of an iceberg is "
+      "under water.",
+      "Sinking means F < mg; rising means F > mg.",
+      "Buoyancy exists in air too, but is hundreds of times smaller than weight."]),
+    [(("Брусок объёмом 0,002 м³ полностью погружён в воду. Найдите силу Архимеда.",
+       "A 0.002 m³ block is fully submerged in water. Find the buoyant force."),
+      (["FА = ρж·V·g.", "FА = 1000 · 0,002 · 9,8 = 19,6 Н.", "Ответ: 19,6 Н вверх."],
+       ["F = ρ·V·g.", "F = 1000 · 0.002 · 9.8 = 19.6 N.", "Answer: 19.6 N upwards."])),
+     (("Тело массой 1,2 кг и объёмом 0,001 м³ опустили в воду. Утонет ли оно?",
+       "A 1.2 kg body of volume 0.001 m³ is put into water. Will it sink?"),
+      (["FА = 1000 · 0,001 · 9,8 = 9,8 Н.", "mg = 1,2 · 9,8 = 11,76 Н.",
+        "FА < mg, значит тело утонет."],
+       ["F = 1000 · 0.001 · 9.8 = 9.8 N.", "mg = 1.2 · 9.8 = 11.76 N.",
+        "F < mg, so the body sinks."]))],
+    (["Корабль не тонет, потому что его средняя плотность с воздухом внутри меньше "
+      "плотности воды, хотя сталь тяжелее воды.",
+      "Модель «жидкость покоится» не учитывает волны и течение; в шторм плавучесть "
+      "оценивают уже другими методами."],
+     ["A ship floats because its average density including air is below that of water, although "
+      "steel itself is denser.",
+      "The still-liquid model ignores waves and currents."]),
+    figures=("buoyancy",),
+)
+
+# --------------------------------------------------------------------------- #
+#  6. Молекулярная физика
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "amount-substance", "Количество вещества и молярная масса", "Amount of substance and molar mass",
+    (["Количество вещества ν = m/M измеряется в молях, где M — молярная масса в г/моль. "
+      "В одном моле содержится число Авогадро Nₐ ≈ 6,02·10²³ частиц.",
+      "Число молекул N = ν·Nₐ = (m/M)·Nₐ."],
+     ["Amount of substance ν = m/M is measured in moles with M the molar mass in g/mol; one "
+      "mole contains Avogadro's number Nₐ ≈ 6.02·10²³ particles.",
+      "The number of molecules is N = ν·Nₐ = (m/M)·Nₐ."]),
+    (["Молярная масса численно равна относительной молекулярной массе: у воды M = 18 г/моль.",
+      "Масса одной молекулы m₀ = M/Nₐ — очень маленькая величина порядка 10⁻²⁶ кг.",
+      "При нормальных условиях один моль любого газа занимает ≈ 22,4 л."],
+     ["Molar mass equals the relative molecular mass numerically: water has M = 18 g/mol.",
+      "One molecule's mass m₀ = M/Nₐ is of the order of 10⁻²⁶ kg.",
+      "At standard conditions one mole of any gas occupies ≈ 22.4 l."]),
+    [(("Сколько молей в 90 г воды?", "How many moles are in 90 g of water?"),
+      (["M(H₂O) = 2·1 + 16 = 18 г/моль.", "ν = 90/18 = 5 моль.",
+        "Ответ: 5 моль, то есть ≈ 3·10²⁴ молекул."],
+       ["M(H₂O) = 2·1 + 16 = 18 g/mol.", "ν = 90/18 = 5 mol.",
+        "Answer: 5 mol, about 3·10²⁴ molecules."]))],
+    (["«Моль» на кухне — это просто порция: 18 г воды, 44 г углекислого газа — по одному "
+      "молю, хотя объёмы разные.",
+      "Модель «молекулы — маленькие шарики» помогает считать, но не описывает химические "
+      "связи; для реакций нужна уже химия."],
+     ["A mole is a fixed portion: 18 g of water and 44 g of CO₂ are one mole each, though their "
+      "volumes differ.",
+      "The little-spheres model counts particles but does not describe chemical bonds."]),
+)
+
+_lesson(
+    "ideal-gas", "Уравнение состояния идеального газа", "Ideal gas law",
+    (["Уравнение состояния: p·V = ν·R·T, где R ≈ 8,31 Дж/(моль·К), T — абсолютная "
+      "температура в кельвинах.",
+      "Для одной и той же порции газа p₁V₁/T₁ = p₂V₂/T₂ — объединённый газовый закон."],
+     ["Equation of state: p·V = ν·R·T with R ≈ 8.31 J/(mol·K) and T in kelvin.",
+      "For one gas sample p₁V₁/T₁ = p₂V₂/T₂."]),
+    (["Температура в газовых законах обязательно в кельвинах: T = t + 273.",
+      "Идеальный газ — модель: молекулы не взаимодействуют, кроме упругих столкновений, "
+      "а их размеры малы по сравнению с расстояниями.",
+      "Из pV = νRT видно: при постоянном объёме рост температуры повышает давление."],
+     ["Gas laws always use kelvin: T = t + 273.",
+      "An ideal gas is a model: molecules interact only in elastic collisions and are small "
+      "compared with the distances between them.",
+      "At constant volume a higher temperature raises the pressure."]),
+    [(("Газ занимает 2 л при 27 °C. Каким станет объём при 127 °C, если давление постоянное?",
+       "A gas occupies 2 l at 27 °C. What volume does it take at 127 °C at constant pressure?"),
+      (["Переведём: T₁ = 300 К, T₂ = 400 К.", "V₂ = V₁·T₂/T₁ = 2 · 400/300 ≈ 2,67 л.",
+        "Ответ: ≈ 2,67 л (закон Гей-Люссака)."],
+       ["Convert: T₁ = 300 K, T₂ = 400 K.", "V₂ = V₁·T₂/T₁ = 2 · 400/300 ≈ 2.67 l.",
+        "Answer: ≈ 2.67 l (Gay-Lussac's law)."]))],
+    (["Надувной мяч на морозе сжимается: при постоянном давлении объём пропорционален "
+      "температуре в кельвинах, а не в градусах Цельсия.",
+      "Модель идеального газа хороша при обычных давлениях; при высоком давлении и "
+      "близко к сжижению она уже не подходит."],
+     ["A ball shrinks in the cold because volume follows kelvin, not Celsius.",
+      "The ideal-gas model works at ordinary pressures and fails near liquefaction."]),
+)
+
+_lesson(
+    "isoprocesses", "Изопроцессы", "Isoprocesses",
+    (["Изотермический процесс (T = const): p·V = const — закон Бойля–Мариотта, график — "
+      "гипербола в координатах p(V).",
+      "Изобарный (p = const): V/T = const — закон Гей-Люссака; изохорный (V = const): "
+      "p/T = const — закон Шарля."],
+     ["Isothermal (T = const): p·V = const, a hyperbola on the p(V) plane.",
+      "Isobaric (p = const): V/T = const; isochoric (V = const): p/T = const."]),
+    (["Выбор закона определяется тем, какая величина постоянна по условию задачи.",
+      "В изотермическом процессе внутренняя энергия не меняется, но газ совершает работу: "
+      "теплота подводится.",
+      "Графики изопроцессов строят в координатах с правильными осями: «гипербола» без "
+      "подписей физического смысла не имеет."],
+     ["The law is chosen by the quantity that stays constant.",
+      "In an isothermal process the internal energy is constant while the gas does work and "
+      "absorbs heat.",
+      "Isoprocess graphs need labelled axes to carry physical meaning."]),
+    [(("Газ при 100 кПа занимает 4 л. Каким станет давление при 2 л, если T постоянна?",
+       "A gas at 100 kPa occupies 4 l. Find the pressure at 2 l at constant T."),
+      (["p₁V₁ = p₂V₂.", "p₂ = p₁V₁/V₂ = 100 · 4/2 = 200 кПа.", "Ответ: 200 кПа."],
+       ["p₁V₁ = p₂V₂.", "p₂ = 100 · 4/2 = 200 kPa.", "Answer: 200 kPa."]))],
+    (["Насос для велосипеда: при сжатии объём уменьшается и давление растёт — это "
+      "изотермический процесс, если воздух не успевает нагреться.",
+      "Модель изотермичности ломается при быстром сжатии: воздух заметно нагревается, "
+      "и тогда нужен уже адиабатный подход."],
+     ["A bicycle pump shows Boyle's law: less volume, more pressure, if the air stays cool.",
+      "Fast compression heats the air, so the isothermal model breaks."]),
+    figures=("gas-isotherm",),
+)
+
+# --------------------------------------------------------------------------- #
+#  7. Теплота и термодинамика
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "heat-capacity", "Количество теплоты и теплоёмкость", "Heat and specific heat",
+    (["При нагревании Q = c·m·Δt, где c — удельная теплоёмкость, Δt — изменение температуры "
+      "(в °C или К — численно одинаково).",
+      "При сгорании топлива Q = q·m, где q — удельная теплота сгорания; при плавлении и "
+      "парообразовании Q = λ·m и Q = L·m."],
+     ["Heating: Q = c·m·Δt with c the specific heat and Δt the temperature change.",
+      "Combustion gives Q = q·m; melting and boiling give Q = λ·m and Q = L·m."]),
+    (["Уравнение теплового баланса: теплота, отданная горячими телами, равна теплоте, "
+      "полученной холодными (без потерь).",
+      "ΔT в кельвинах и Δt в градусах Цельсия равны численно; сами температуры "
+      "переводить нужно, а разность — нет.",
+      "Удельная теплоёмкость воды 4200 Дж/(кг·°C) — одна из самых больших у жидкостей."],
+     ["Heat balance: the heat given by hot bodies equals the heat taken by cold ones (without "
+      "losses).",
+      "A difference of 1 °C equals 1 K numerically.",
+      "Water's specific heat, 4200 J/(kg·°C), is unusually large."]),
+    [(("Сколько теплоты нужно, чтобы нагреть 2 кг воды от 20 °C до 70 °C?",
+       "How much heat warms 2 kg of water from 20 °C to 70 °C?"),
+      (["Δt = 70 − 20 = 50 °C.", "Q = 4200 · 2 · 50 = 420 000 Дж.",
+        "Ответ: 420 кДж."],
+       ["Δt = 70 − 20 = 50 °C.", "Q = 4200 · 2 · 50 = 420 000 J.", "Answer: 420 kJ."])),
+     (("В 1 кг воды при 20 °C долили 2 кг воды при 80 °C. Найдите конечную температуру.",
+       "1 kg of water at 20 °C is mixed with 2 kg at 80 °C. Find the final temperature."),
+      (["Тепловой баланс: 1·(t − 20) = 2·(80 − t).", "t + 2t = 160 + 20, значит t = 60 °C.",
+        "Ответ: 60 °C."],
+       ["Balance: 1·(t − 20) = 2·(80 − t).", "t + 2t = 160 + 20, so t = 60 °C.",
+        "Answer: 60 °C."]))],
+    (["Чайник нагревается долго именно из-за большой теплоёмкости воды: чтобы вскипятить "
+      "литр, нужно около 3,4·10⁵ Дж.",
+      "Модель «вся теплота идёт в воду» без потерь завышает итог: часть тепла уходит в "
+      "воздух и сам чайник."],
+     ["A kettle takes time because water's heat capacity is large: boiling a litre needs about "
+      "3.4·10⁵ J.",
+      "The lossless model overestimates: part of the heat warms the air and the kettle body."]),
+)
+
+_lesson(
+    "phase-first-law", "Фазовые переходы и первый закон термодинамики", "Phase transitions and the first law",
+    (["Во время плавления и кипения температура постоянна: подводимая теплота идёт на "
+      "разрушение связей, Q = λ·m при плавлении и Q = L·m при парообразовании.",
+      "Первый закон термодинамики: ΔU = Q + Aвнешн — изменение внутренней энергии равно "
+      "сумме теплоты и работы внешних сил."],
+     ["During melting and boiling the temperature stays constant: the heat breaks bonds, "
+      "Q = λ·m and Q = L·m.",
+      "First law: ΔU = Q + A_external."]),
+    (["График нагрева-плавления имеет горизонтальные площадки; их длина показывает, сколько "
+      "теплоты уходит на фазовый переход.",
+      "Работа самого газа при расширении противоположна работе внешних сил: Aгаза = −Aвнешн.",
+      "Внутренняя энергия идеального газа зависит только от температуры; при изотермическом "
+      "процессе ΔU = 0, значит Q = −Aвнешн."],
+     ["The heating graph has horizontal plateaus whose length shows the latent heat.",
+      "The gas's own work on expansion is minus the work of external forces.",
+      "For an ideal gas the internal energy depends only on temperature."]),
+    [(("Сколько теплоты нужно, чтобы расплавить 2 кг льда при 0 °C? λ = 3,4·10⁵ Дж/кг.",
+       "How much heat melts 2 kg of ice at 0 °C? λ = 3.4·10⁵ J/kg."),
+      (["Q = λ·m.", "Q = 3,4·10⁵ · 2 = 6,8·10⁵ Дж.", "Ответ: 680 кДж, температура при этом не меняется."],
+       ["Q = λ·m.", "Q = 3.4·10⁵ · 2 = 6.8·10⁵ J.", "Answer: 680 kJ with no temperature change."]))],
+    (["Кипящая вода не становится горячее 100 °C при обычном давлении: вся подводимая "
+      "энергия уходит на превращение в пар.",
+      "Модель постоянных λ и L верна при данном давлении; в горах температура кипения "
+      "ниже, и это уже другая точка фазового перехода."],
+     ["Boiling water stays at 100 °C at normal pressure: the energy becomes vapour.",
+      "λ and L hold at a given pressure; in the mountains water boils cooler."]),
+    figures=("heating-curve",),
+)
+
+# --------------------------------------------------------------------------- #
+#  8. Электростатика
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "coulomb-field", "Закон Кулона и напряжённость поля", "Coulomb's law and field strength",
+    (["Сила взаимодействия двух точечных зарядов F = k·|q₁q₂|/r², где k ≈ 9·10⁹ Н·м²/Кл²; "
+      "одноимённые заряды отталкиваются, разноимённые притягиваются.",
+      "Напряжённость электрического поля E = F/q — силовая характеристика, измеряется "
+      "в В/м (или Н/Кл)."],
+     ["Coulomb force F = k·|q₁q₂|/r² with k ≈ 9·10⁹ N·m²/C²; like charges repel.",
+      "Field strength E = F/q is measured in V/m."]),
+    (["Закон Кулона применим к точечным зарядам; при увеличении расстояния вдвое сила "
+      "уменьшается вчетверо (обратный квадрат).",
+      "Линии напряжённости выходят из положительных зарядов и входят в отрицательные; "
+      "густота линий показывает величину поля.",
+      "Сила Кулона направлена вдоль прямой, соединяющей заряды."],
+     ["Coulomb's law holds for point charges; doubling the distance quarters the force.",
+      "Field lines leave positive charges and enter negative ones; their density shows the "
+      "field magnitude.",
+      "The Coulomb force acts along the line joining the charges."]),
+    [(("Два заряда по 2·10⁻⁶ Кл на расстоянии 0,1 м. Найдите силу взаимодействия.",
+       "Two charges of 2·10⁻⁶ C are 0.1 m apart. Find the force."),
+      (["F = k·q₁q₂/r².", "F = 9·10⁹ · (2·10⁻⁶)² / 0,01 = 3,6 Н.", "Ответ: 3,6 Н."],
+       ["F = k·q₁q₂/r².", "F = 9·10⁹ · (2·10⁻⁶)² / 0.01 = 3.6 N.", "Answer: 3.6 N."]))],
+    (["Статическое электричество на одежде: заряды разделились трением, а притягиваются "
+      "они уже по закону Кулона — искра в темноте это разряд.",
+      "Модель точечных зарядов не подходит для протяжённых тел: у реального заряженного "
+      "шара поле снаружи такое же, как у точечного заряда в центре, но внутри — другое."],
+     ["Static cling comes from charges separated by friction and then attracting by Coulomb's "
+      "law.",
+      "The point-charge model fails inside extended bodies."]),
+    figures=("field-lines",),
+)
+
+_lesson(
+    "potential-capacitance", "Потенциал, напряжение, конденсатор", "Potential, voltage, capacitor",
+    (["Потенциал φ — энергетическая характеристика поля: работа по переносу заряда "
+      "A = q·(φ₁ − φ₂) = q·U; напряжение измеряется в вольтах.",
+      "Электроёмкость C = q/U измеряется в фарадах; для плоского конденсатора "
+      "C = ε·ε₀·S/d."],
+     ["Potential φ is the energy characteristic: A = q·(φ₁ − φ₂) = q·U, in volts.",
+      "Capacitance C = q/U in farads; for a flat capacitor C = ε·ε₀·S/d."]),
+    (["Напряжение — разность потенциалов, а не «заряд» и не «поток вещества».",
+      "В однородном поле E = U/d: чем меньше расстояние между пластинами, тем сильнее поле "
+      "при том же напряжении.",
+      "Ёмкость увеличивают, сближая пластины и увеличивая площадь: C ~ S/d."],
+     ["Voltage is a potential difference, not a charge or a flow of substance.",
+      "In a uniform field E = U/d.",
+      "Capacitance grows with area and shrinks with the gap: C ~ S/d."]),
+    [(("Заряд 4·10⁻⁶ Кл перенесён между точками с напряжением 200 В. Найдите работу поля.",
+       "A 4·10⁻⁶ C charge moves across 200 V. Find the work of the field."),
+      (["A = q·U.", "A = 4·10⁻⁶ · 200 = 8·10⁻⁴ Дж.", "Ответ: 8·10⁻⁴ Дж."],
+       ["A = q·U.", "A = 4·10⁻⁶ · 200 = 8·10⁻⁴ J.", "Answer: 8·10⁻⁴ J."]))],
+    (["Батарейка «1,5 В» — это не «1,5 заряда», а разность потенциалов: она задаёт, какую "
+      "работу совершит каждый кулон заряда.",
+      "Модель однородного поля годится между плоскими пластинами; у точечного заряда "
+      "потенциал убывает как 1/r."],
+     ["A 1.5 V battery sets a potential difference, not an amount of charge.",
+      "The uniform-field model fits flat plates; a point charge has φ ~ 1/r."]),
+)
+
+# --------------------------------------------------------------------------- #
+#  9. Постоянный ток
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "ohm-law", "Закон Ома и сопротивление", "Ohm's law and resistance",
+    (["Сила тока I = q/t — заряд, проходящий через сечение за единицу времени; "
+      "измеряется в амперах.",
+      "Закон Ома для участка цепи: I = U/R, где R — сопротивление в омах. "
+      "Сопротивление проводника R = ρ·l/S."],
+     ["Current I = q/t, measured in amperes.",
+      "Ohm's law: I = U/R, with resistance in ohms; R = ρ·l/S for a wire."]),
+    (["Ток не «расходуется» в лампе: сила тока одинакова до и после неё, меняется "
+      "напряжение (и нагрев).",
+      "Сопротивление зависит от материала, длины и площади: длиннее — больше, толще — меньше.",
+      "Закон Ома в виде I = U/R справедлив для металлов и резисторов при постоянной "
+      "температуре."],
+     ["Current is not consumed by a lamp: the same current flows before and after it.",
+      "Resistance grows with length and falls with thickness.",
+      "I = U/R holds for metals and resistors at constant temperature."]),
+    [(("Напряжение на резисторе 12 В, сопротивление 4 Ом. Найдите ток и мощность.",
+       "A resistor has 12 V across 4 Ω. Find current and power."),
+      (["I = U/R = 12/4 = 3 А.", "P = U·I = 12 · 3 = 36 Вт.", "Ответ: 3 А и 36 Вт."],
+       ["I = U/R = 12/4 = 3 A.", "P = U·I = 12 · 3 = 36 W.", "Answer: 3 A and 36 W."]))],
+    (["Удлинитель на 20 метров добавляет сопротивление: при той же нагрузке нагреватель "
+      "получит меньше напряжения, чем у короткого шнура.",
+      "Модель «R постоянно» ломается при нагреве спирали: сопротивление нити лампы накала "
+      "в холодном состоянии в разы меньше."],
+     ["A long extension cord adds resistance, so the appliance receives less voltage.",
+      "Constant R fails for a lamp filament: its cold resistance is several times smaller."]),
+)
+
+_lesson(
+    "circuits", "Соединения проводников", "Series and parallel connections",
+    (["Последовательное соединение: сила тока одинакова во всех элементах, напряжения "
+      "складываются: R = R₁ + R₂ + …",
+      "Параллельное соединение: напряжение одинаково, токи складываются, "
+      "1/R = 1/R₁ + 1/R₂; общее сопротивление меньше наименьшего."],
+     ["Series: the current is the same and voltages add, R = R₁ + R₂ + …",
+      "Parallel: the voltage is the same and currents add, 1/R = 1/R₁ + 1/R₂."]),
+    (["Амперметр включают последовательно (через него идёт измеряемый ток), вольтметр — "
+      "параллельно участку; идеальные приборы не меняют цепь.",
+      "Для двух параллельных резисторов удобна формула R = R₁·R₂/(R₁ + R₂), "
+      "для двух последовательных — сумма.",
+      "Лампы в гирлянде при последовательном соединении гаснут все, при параллельном — "
+      "только одна."],
+     ["An ammeter goes in series, a voltmeter in parallel.",
+      "Two parallel resistors: R = R₁R₂/(R₁ + R₂).",
+      "Series bulbs all go out together; parallel ones do not."]),
+    [(("Резисторы 6 Ом и 3 Ом соединены параллельно. Найдите общее сопротивление.",
+       "Resistors of 6 Ω and 3 Ω are in parallel. Find the total resistance."),
+      (["1/R = 1/6 + 1/3 = 1/6 + 2/6 = 3/6.", "R = 2 Ом.",
+        "Ответ: 2 Ом — меньше самого маленького."],
+       ["1/R = 1/6 + 1/3 = 3/6.", "R = 2 Ω.", "Answer: 2 Ω, below the smallest resistor."])),
+     (("Два резистора 2 Ом и 3 Ом соединены последовательно, напряжение 10 В. Найдите ток.",
+       "Resistors 2 Ω and 3 Ω are in series across 10 V. Find the current."),
+      (["R = 2 + 3 = 5 Ом.", "I = U/R = 10/5 = 2 А.", "Ответ: 2 А (через оба резистора один ток)."],
+       ["R = 2 + 3 = 5 Ω.", "I = 10/5 = 2 A.", "Answer: 2 A through both resistors."]))],
+    (["Лампочки в ёлочной гирлянде, соединённые последовательно, гаснут все сразу — "
+      "это прямое следствие одинакового тока в цепи.",
+      "Модель идеальных приборов: реальный вольтметр имеет большое, но конечное "
+      "сопротивление и слегка «подгружает» цепь."],
+     ["Series fairy lights all go out at once because the current is shared.",
+      "Ideal meters have infinite and zero resistance; real ones slightly disturb the circuit."]),
+    figures=("circuit-series", "circuit-parallel"),
+)
+
+_lesson(
+    "current-work", "Работа и мощность тока", "Electric work and power",
+    (["Работа тока A = U·I·t = I²·R·t = U²·t/R, мощность P = U·I измеряется в ваттах.",
+      "Бытовая энергия измеряется в киловатт-часах: 1 кВт·ч = 3,6·10⁶ Дж."],
+     ["Electric work A = UIt = I²Rt = U²t/R and power P = UI in watts.",
+      "Domestic energy uses kilowatt-hours: 1 kWh = 3.6·10⁶ J."]),
+    (["Из трёх записей мощности выбирают ту, где известны величины: P = I²R удобна при "
+      "последовательном соединении, P = U²/R — при параллельном.",
+      "Провода рассчитывают по допустимому току: нагрев пропорционален I²R, и тонкий "
+      "провод перегревается.",
+      "Счётчик электроэнергии фиксирует работу, а не мощность: важно, сколько времени "
+      "прибор включён."],
+     ["Pick the power form matching known values: P = I²R for series, P = U²/R for parallel.",
+      "Wires are rated by current because heating goes as I²R.",
+      "A meter counts work, not power: the time matters."]),
+    [(("Чайник 2000 Вт работал 5 минут. Найдите работу тока в кВт·ч.",
+       "A 2000 W kettle runs for 5 minutes. Find the electric work in kWh."),
+      (["Переведём: 5 мин = 1/12 ч.", "A = P·t = 2 кВт · 1/12 ч ≈ 0,167 кВт·ч.",
+        "Ответ: ≈ 0,17 кВт·ч = 6·10⁵ Дж."],
+       ["Convert: 5 min = 1/12 h.", "A = 2 kW · 1/12 h ≈ 0.167 kWh.", "Answer: ≈ 0.17 kWh."])),
+     (("Лампа 100 Вт при 220 В. Найдите ток и сопротивление.",
+       "A 100 W lamp at 220 V. Find current and resistance."),
+      (["I = P/U = 100/220 ≈ 0,45 А.", "R = U²/P = 220²/100 = 484 Ом.", "Ответ: ≈ 0,45 А и 484 Ом."],
+       ["I = 100/220 ≈ 0.45 A.", "R = U²/P = 484 Ω.", "Answer: ≈ 0.45 A and 484 Ω."]))],
+    (["Нагреватель и холодильник: мощность показывает скорость потребления, а счёт "
+      "учитывает и мощность, и время работы.",
+      "Модель «сопротивление постоянно» приближённая: у нити накала оно меняется при "
+      "нагреве, поэтому реальный ток чуть отличается от расчётного."],
+     ["A heater and a fridge differ in power, but the bill counts power multiplied by time.",
+      "Filament resistance changes with temperature, so the real current differs slightly."]),
+)
+
+# --------------------------------------------------------------------------- #
+#  10. Магнитное поле и индукция
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "magnetic-forces", "Сила Ампера и сила Лоренца", "Ampère and Lorentz forces",
+    (["На проводник с током I длиной l в магнитном поле B действует сила Ампера "
+      "F = B·I·l·sin α, где α — угол между проводником и линиями поля.",
+      "На заряд, движущийся в поле, действует сила Лоренца F = q·v·B·sin α; она "
+      "перпендикулярна скорости и магнитному полю."],
+     ["Ampère force on a wire: F = B·I·l·sin α.",
+      "Lorentz force on a moving charge: F = q·v·B·sin α, perpendicular to velocity and field."]),
+    (["Сила максимальна при α = 90° и равна нулю, когда проводник параллелен линиям поля.",
+      "Сила Лоренца не совершает работы: она перпендикулярна перемещению, поэтому меняет "
+      "направление скорости, но не её модуль.",
+      "Направление определяют по правилу левой руки (для тока) или по правилу для "
+      "положительного заряда (для отрицательного знак меняется)."],
+     ["The force is maximal at α = 90° and zero when parallel to the field lines.",
+      "The Lorentz force does no work: it turns the velocity without changing its magnitude.",
+      "Direction follows the left-hand rule."]),
+    [(("Проводник длиной 0,5 м с током 4 А в поле 0,2 Тл перпендикулярен линиям. "
+       "Найдите силу.", "A 0.5 m wire with 4 A is perpendicular to a 0.2 T field. Find the force."),
+      (["α = 90°, sin α = 1.", "F = B·I·l = 0,2 · 4 · 0,5 = 0,4 Н.", "Ответ: 0,4 Н."],
+       ["α = 90°, sin α = 1.", "F = 0.2 · 4 · 0.5 = 0.4 N.", "Answer: 0.4 N."]))],
+    (["Электродвигатель и динамик работают на силе Ампера: ток в поле создаёт движение — "
+      "энергия электричества превращается в механическую.",
+      "Модель однородного поля годится в пределах магнита; у реального магнита поле "
+      "на краях слабее и неоднородно."],
+     ["Motors and loudspeakers use the Ampère force to turn current into motion.",
+      "The uniform-field model works inside a magnet; real fields weaken at the edges."]),
+    figures=("magnetic-wire",),
+)
+
+_lesson(
+    "induction", "Электромагнитная индукция", "Electromagnetic induction",
+    (["Магнитный поток Φ = B·S·cos α через контур измеряется в веберах.",
+      "ЭДС индукции |ε| = ΔΦ/Δt: она возникает только при изменении магнитного потока."],
+     ["Magnetic flux Φ = B·S·cos α is measured in webers.",
+      "Induced EMF |ε| = ΔΦ/Δt appears only while the flux changes."]),
+    (["Поток меняется при изменении поля, площади контура или его ориентации.",
+      "Правило Ленца: индукционный ток противодействует причине, его вызвавшей; именно "
+      "поэтому вращать генератор приходится с усилием.",
+      "Если поток постоянен, ЭДС нет: неподвижный магнит вблизи замкнутого контура "
+      "ничего не создаёт."],
+     ["The flux changes with the field, the loop area or its orientation.",
+      "Lenz's rule: the induced current opposes the change that produced it.",
+      "A steady flux produces no EMF."]),
+    [(("Поток через контур вырос с 0,2 Вб до 1 Вб за 0,4 с. Найдите ЭДС индукции.",
+       "The flux through a loop grows from 0.2 Wb to 1 Wb in 0.4 s. Find the induced EMF."),
+      (["ΔΦ = 1 − 0,2 = 0,8 Вб.", "|ε| = 0,8/0,4 = 2 В.", "Ответ: 2 В."],
+       ["ΔΦ = 0.8 Wb.", "|ε| = 0.8/0.4 = 2 V.", "Answer: 2 V."]))],
+    (["Беспроводная зарядка телефона — это индукция: переменное поле катушки создаёт "
+      "ЭДС в катушке телефона.",
+      "Модель «идеальный контур» без сопротивления: в реальной катушке часть энергии "
+      "уходит в нагрев проводов."],
+     ["Wireless phone charging is induction: a changing field in the pad drives an EMF in the "
+      "phone coil.",
+      "Real coils heat up, so part of the energy is lost."]),
+    figures=("induction-flux",),
+)
+
+# --------------------------------------------------------------------------- #
+#  11. Колебания, волны, звук
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "oscillations", "Механические колебания", "Mechanical oscillations",
+    (["Колебания — повторяющееся движение около положения равновесия; период T — время "
+      "одного полного колебания, частота ν = 1/T измеряется в герцах.",
+      "Период математического маятника T = 2π√(l/g), пружинного T = 2π√(m/k)."],
+     ["Oscillations repeat about equilibrium; period T and frequency ν = 1/T in hertz.",
+      "Pendulums: T = 2π√(l/g) and T = 2π√(m/k)."]),
+    (["Период нитяного маятника не зависит от массы груза; пружинного — от массы, "
+      "но при малых колебаниях не зависит от амплитуды.",
+      "Круговая частота ω = 2πν связана с периодом как ω = 2π/T.",
+      "Резонанс — резкий рост амплитуды, когда частота внешней силы совпадает с "
+      "собственной частотой системы."],
+     ["A pendulum's period is independent of the bob mass; a spring's depends on the mass.",
+      "Angular frequency ω = 2πν = 2π/T.",
+      "Resonance happens when the drive frequency matches the natural one."]),
+    [(("Маятник на нити 1 м. Найдите период. g = 9,8 м/с².",
+       "A pendulum on a 1 m string. Find the period. g = 9.8 m/s²."),
+      (["T = 2π√(l/g).", "T = 2π√(1/9,8) ≈ 2 · 3,14 · 0,32 ≈ 2 с.", "Ответ: ≈ 2 с."],
+       ["T = 2π√(l/g).", "T = 2π√(1/9.8) ≈ 2 s.", "Answer: ≈ 2 s."])),
+     (("Тело на пружине k = 100 Н/м массой 4 кг. Найдите период.",
+       "A 4 kg body on a 100 N/m spring. Find the period."),
+      (["T = 2π√(m/k).", "T = 2π√(4/100) = 2π·0,2 ≈ 1,26 с.", "Ответ: ≈ 1,26 с."],
+       ["T = 2π√(m/k).", "T = 2π√(0.04) ≈ 1.26 s.", "Answer: ≈ 1.26 s."]))],
+    (["Качели: чтобы раскачать их сильнее, толкать нужно в такт собственному периоду — "
+      "иначе толчки гасят друг друга.",
+      "Модель малых колебаний: при больших углах период нитяного маятника начинает "
+      "зависеть от амплитуды, и формула 2π√(l/g) даёт уже неточный результат."],
+     ["A swing is pumped at its natural period; mistimed pushes cancel each other.",
+      "For large angles the pendulum formula breaks down and the amplitude starts to matter."]),
+    figures=("pendulum",),
+)
+
+_lesson(
+    "waves-sound", "Волны и звук", "Waves and sound",
+    (["Волна — распространение колебаний в среде; длина волны λ = v·T = v/ν — расстояние, "
+      "которое волна проходит за период.",
+      "Скорость звука в воздухе ≈ 340 м/с; при эхе и работе эхолота сигнал идёт туда и "
+      "обратно, поэтому 2s = v·t."],
+     ["A wave transports oscillations through a medium; λ = v·T = v/ν.",
+      "Sound travels about 340 m/s in air; echo and sonar use the doubled path 2s = v·t."]),
+    (["Частота задаётся источником и при переходе в другую среду не меняется; скорость "
+      "и длина волны меняются вместе.",
+      "Громкость связана с амплитудой, высота тона — с частотой: это разные характеристики.",
+      "Звук не распространяется в вакууме: нужна среда."],
+     ["The source sets the frequency; entering another medium changes speed and wavelength.",
+      "Loudness relates to amplitude and pitch to frequency.",
+      "Sound cannot travel through a vacuum."]),
+    [(("За 5 с лодка услышала эхо от скалы. Найдите расстояние до скалы. v = 340 м/с.",
+       "A boat hears an echo from a cliff after 5 s. Find the distance. v = 340 m/s."),
+      (["Сигнал прошёл туда и обратно: 2s = v·t.", "s = 340 · 5/2 = 850 м.",
+        "Ответ: 850 м."],
+       ["The pulse went there and back: 2s = v·t.", "s = 340 · 5/2 = 850 m.", "Answer: 850 m."])),
+     (("Найдите длину волны звука частотой 680 Гц. v = 340 м/с.",
+       "Find the wavelength of a 680 Hz sound. v = 340 m/s."),
+      (["λ = v/ν.", "λ = 340/680 = 0,5 м.", "Ответ: 0,5 м."],
+       ["λ = v/ν.", "λ = 340/680 = 0.5 m.", "Answer: 0.5 m."]))],
+    (["Гром гремит позже вспышки молнии: свет приходит почти мгновенно, а звуку нужно "
+      "время — по задержке оценивают расстояние, считая 3 с ≈ 1 км.",
+      "Модель «звук идёт по прямой с постоянной скоростью» ломается при ветре и "
+      "температурных слоях: скорость звука зависит от среды."],
+     ["Thunder follows lightning because sound needs time: 3 seconds ≈ 1 km.",
+      "Wind and temperature layers change the speed of sound."]),
+    figures=("wave-profile", "echo-path"),
+)
+
+# --------------------------------------------------------------------------- #
+#  12. Оптика
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "reflection-refraction", "Отражение и преломление света", "Reflection and refraction",
+    (["Угол падения равен углу отражения; оба угла отсчитываются от перпендикуляра "
+      "к поверхности в точке падения.",
+      "Показатель преломления n = sin α / sin γ = c/v: при переходе в оптически более "
+      "плотную среду луч идёт ближе к перпендикуляру."],
+     ["The angle of incidence equals the angle of reflection, both measured from the normal.",
+      "Refractive index n = sin α / sin γ = c/v; entering a denser medium the ray bends towards "
+      "the normal."]),
+    (["Отражение бывает зеркальным и рассеянным: на шероховатой поверхности лучи уходят "
+      "в разные стороны, поэтому мы видим предметы, а не отражения.",
+      "В воде скорость света меньше, чем в воздухе, а частота не меняется.",
+      "Полное внутреннее отражение возникает при переходе из плотной среды в менее "
+      "плотную под большим углом."],
+     ["Reflection is specular on smooth surfaces and diffuse on rough ones.",
+      "Light slows down in water while its frequency stays the same.",
+      "Total internal reflection occurs from dense to less dense media."]),
+    [(("Луч падает на зеркало под 25° к перпендикуляру. Каков угол отражения?",
+       "A ray reaches a mirror at 25° from the normal. What is the reflection angle?"),
+      (["Угол падения равен углу отражения.", "Ответ: 25° от того же перпендикуляра.",
+        "Между падающим и отражённым лучом тогда 50°."],
+       ["The angles are equal.", "Answer: 25° from the same normal.",
+       "The angle between the incident and reflected rays is then 50°."]))],
+    (["Ложка в стакане воды «переламывается» на границе — это преломление; глаз "
+      "продолжает лучи по прямой и видит смещённое изображение.",
+      "Модель лучевой оптики не объясняет цвета радуги: там нужна уже волновая модель "
+      "и зависимость n от длины волны."],
+     ["A spoon in a glass looks broken because the eye extends refracted rays straight ahead.",
+      "Ray optics cannot explain rainbow colours; the wave model is needed."]),
+    figures=("reflection-mirror", "refraction-ray"),
+)
+
+_lesson(
+    "lens", "Линзы и изображения", "Lenses and images",
+    (["Формула тонкой линзы: 1/F = 1/d + 1/f, где F — фокусное расстояние, d — расстояние "
+      "до предмета, f — до изображения.",
+      "Оптическая сила D = 1/F измеряется в диоптриях; F берётся в метрах."],
+     ["Thin lens equation: 1/F = 1/d + 1/f.",
+      "Optical power D = 1/F in dioptres with F in metres."]),
+    (["Собирающая линза при d > F даёт действительное перевёрнутое изображение; при d < F — "
+      "мнимое прямое, для которого f < 0.",
+      "Увеличение Γ = |f|/d: чем ближе предмет к фокусу, тем крупнее изображение.",
+      "Действительное изображение можно поймать на экран, мнимое — нет."],
+     ["A converging lens gives a real inverted image for d > F and a virtual one for d < F.",
+      "Magnification Γ = |f|/d.",
+      "A real image can be projected on a screen; a virtual one cannot."]),
+    [(("Предмет на 0,3 м от линзы с F = 0,2 м. Найдите изображение.",
+       "An object is 0.3 m from a lens with F = 0.2 m. Find the image."),
+      (["1/f = 1/F − 1/d = 1/0,2 − 1/0,3 = (3 − 2)/0,6.", "f = 0,6 м.",
+        "Ответ: действительное изображение на 0,6 м, увеличение 2."],
+       ["1/f = 1/0.2 − 1/0.3 = 1/0.6.", "f = 0.6 m.",
+        "Answer: a real image 0.6 m away, doubled."]))],
+    (["Очки для близорукости — рассеивающие (мнимый фокус), для дальнозоркости — "
+      "собирающие: диоптрии в рецепте указывают D = 1/F.",
+      "Модель тонкой линзы не учитывает толщину стекла и аберрации реального объектива."],
+     ["Glasses for short sight are diverging and for far sight converging; the prescription "
+      "lists D = 1/F.",
+      "The thin-lens model ignores thickness and aberrations."]),
+    figures=("lens-image",),
+)
+
+# --------------------------------------------------------------------------- #
+#  13. Квантовые явления, атом и ядро
+# --------------------------------------------------------------------------- #
+
+_lesson(
+    "photoeffect", "Фотоэффект", "Photoelectric effect",
+    (["Энергия фотона E = hν = h·c/λ, где h ≈ 6,63·10⁻³⁴ Дж·с.",
+      "Уравнение Эйнштейна для фотоэффекта: hν = Aвых + Eк — энергия фотона расходуется "
+      "на работу выхода и кинетическую энергию электрона."],
+     ["Photon energy E = hν = hc/λ with h ≈ 6.63·10⁻³⁴ J·s.",
+      "Einstein's equation: hν = A_escape + E_kinetic."]),
+    (["Красная граница определена работой выхода: фотоэффект начинается, когда hν минимально "
+      "превышает Aвых.",
+      "Яркость света увеличивает число вылетающих электронов, но не энергию каждого — "
+      "её задаёт частота.",
+      "Работа выхода измеряется в электрон-вольтах: 1 эВ = 1,6·10⁻¹⁹ Дж."],
+     ["The red threshold follows from the work function.",
+      "Brightness changes the number of electrons, not the energy of one.",
+      "Work functions are quoted in electronvolts: 1 eV = 1.6·10⁻¹⁹ J."]),
+    [(("Найдите энергию фотона света с частотой 6·10¹⁴ Гц.",
+       "Find the energy of a photon at 6·10¹⁴ Hz."),
+      (["E = hν.", "E = 6,63·10⁻³⁴ · 6·10¹⁴ ≈ 4·10⁻¹⁹ Дж.", "Ответ: ≈ 4·10⁻¹⁹ Дж ≈ 2,5 эВ."],
+       ["E = hν.", "E = 6.63·10⁻³⁴ · 6·10¹⁴ ≈ 4·10⁻¹⁹ J.", "Answer: ≈ 4·10⁻¹⁹ J ≈ 2.5 eV."]))],
+    (["Солнечная батарея на калькуляторе работает фотоэффектом: свет выбивает электроны "
+      "в полупроводнике, и появляется ток.",
+      "Модель фотона как «порции энергии» нужна там, где волновая модель бессильна; "
+      "для интерференции, наоборот, нужна волна."],
+     ["A solar-powered calculator works through the photoelectric effect.",
+      "The photon model is required where the wave model fails, and vice versa."]),
+    figures=("photoeffect-scheme",),
+)
+
+_lesson(
+    "atom-nucleus", "Атом и атомное ядро", "Atom and nucleus",
+    (["Атом состоит из ядра (протоны и нейтроны) и электронов; заряд ядра равен числу "
+      "протонов Z и совпадает с номером элемента в таблице Менделеева.",
+      "Массовое число A — число нуклонов: A = Z + N, где N — число нейтронов."],
+     ["An atom has a nucleus of protons and neutrons surrounded by electrons; Z equals the "
+      "element number.",
+      "Mass number A = Z + N counts nucleons."]),
+    (["Изотопы различаются числом нейтронов при одинаковом Z.",
+      "Размер ядра порядка 10⁻¹⁵ м, атома — 10⁻¹⁰ м: ядро в атоме занимает ничтожную часть "
+      "объёма, но содержит почти всю массу.",
+      "Энергия связи нуклонов в ядре огромна по сравнению с химическими энергиями: "
+      "именно поэтому ядерная энергетика так эффективна."],
+     ["Isotopes differ in neutron number at the same Z.",
+      "A nucleus is about 10⁻¹⁵ m across inside an atom of 10⁻¹⁰ m.",
+      "Nuclear binding energies far exceed chemical ones."]),
+    [(("Для ядра ²³⁵U укажите число протонов и нейтронов.",
+       "For the nucleus ²³⁵U give the numbers of protons and neutrons."),
+      (["Z = 92 (номер урана).", "N = 235 − 92 = 143.", "Ответ: 92 протона, 143 нейтрона."],
+       ["Z = 92 for uranium.", "N = 235 − 92 = 143.", "Answer: 92 protons and 143 neutrons."]))],
+    (["Рентгеновский снимок возможен потому, что электронные оболочки тяжёлых атомов "
+      "поглощают излучение по-разному — это уже атомная, а не ядерная физика.",
+      "Модель «ядро как шарик» достаточна для школьных задач, но не объясняет деление "
+      "ядер и энергию связи без дополнительных моделей."],
+     ["X-rays work because heavy atoms absorb differently — atomic, not nuclear, physics.",
+      "The ball-nucleus model suits school problems but not fission."]),
+)
+
+_lesson(
+    "radioactivity", "Радиоактивность", "Radioactivity",
+    (["α-распад уменьшает массовое число на 4 и заряд на 2; β-распад повышает заряд на 1 "
+      "при неизменном массовом числе.",
+      "Закон радиоактивного распада: N = N₀·2^(−t/T), где T — период полураспада."],
+     ["Alpha decay lowers A by 4 and Z by 2; beta decay raises Z by 1.",
+      "Decay law: N = N₀·2^(−t/T) with T the half-life."]),
+    (["Число ядер убывает относительно, а не линейно: за каждый период распадается "
+      "половина имеющихся.",
+      "Период полураспада не зависит от температуры, давления и химического состояния.",
+      "Активность пропорциональна числу оставшихся ядер, поэтому убывает по тому же закону."],
+     ["The count halves each half-life rather than falling linearly.",
+      "The half-life is independent of temperature, pressure and chemistry.",
+      "Activity is proportional to the remaining nuclei."]),
+    [(("Период полураспада 5 суток. Какая доля ядер останется через 15 суток?",
+       "The half-life is 5 days. What fraction remains after 15 days?"),
+      (["15 суток — это 3 периода: 15/5 = 3.", "N/N₀ = 2⁻³ = 1/8.",
+        "Ответ: останется 1/8 ядер (распалось 7/8)."],
+       ["15 days = three half-lives.", "N/N₀ = 2⁻³ = 1/8.", "Answer: one eighth remains."])),
+     (("Ядро ²³⁸U испытало α-распад. Какое ядро получилось?",
+       "A ²³⁸U nucleus underwent alpha decay. Which nucleus results?"),
+      (["A: 238 − 4 = 234, Z: 92 − 2 = 90.", "Элемент с Z = 90 — торий.",
+        "Ответ: ²³⁴Th."],
+       ["A: 238 − 4 = 234, Z: 92 − 2 = 90.",
+       "The element with Z = 90 is thorium.", "Answer: ²³⁴Th."]))],
+    (["Дозиметр на экране показывает активность: фон можно измерять, но нельзя «ускорить» "
+      "распад нагревом — период полураспада задан ядром.",
+      "Модель статистическая: для малого числа ядер выводы о распаде вероятностные, "
+      "точный закон N = N₀·2^(−t/T) работает для больших количеств."],
+     ["A dosimeter shows activity; heating cannot speed up decay.",
+      "The law is statistical: it holds for large numbers of nuclei."]),
+    figures=("decay-graph",),
+)
 
 
 def payload() -> dict:
-    from intuition import payload as everyday_payload
-    from diagrams import LESSON_FIGURES
-    everyday = everyday_payload()
-    if set(everyday) != set(LESSONS) or set(LESSON_FIGURES) - set(LESSONS):
-        raise ValueError("everyday/diagram links must match the lesson catalogue")
-    return {key: {"id": key, **entry, "everyday": everyday[key],
-                  "figures": list(LESSON_FIGURES.get(key, []))}
-            for key, entry in LESSONS.items()}
+    """Уроки для topics.json: ключ → двуязычная запись."""
+    if not LESSONS:
+        raise PhysicsError("каталог уроков пуст")
+    return LESSONS

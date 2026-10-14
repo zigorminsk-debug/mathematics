@@ -1,1106 +1,634 @@
 {
  "groups": [
   {
-   "id": "powers",
-   "ru": "Степени, корни, модуль",
-   "en": "Powers, roots, absolute value",
+   "id": "units",
+   "ru": "Измерения, единицы, размерность",
+   "en": "Measurement, units, dimensions",
+   "lessons": [
+    "units-si",
+    "dimensions-check",
+    "measure-accuracy"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Произведение степеней",
-      "en": "Product of powers"
+      "ru": "Скорость из единиц",
+      "en": "Speed from units"
      },
-     "formula": "aᵐ · aⁿ = aᵐ⁺ⁿ",
-     "lesson": "powers"
+     "formula": "1 км/ч = 5/18 м/с ≈ 0,278 м/с",
+     "lesson": "dimensions-check"
     },
     {
      "name": {
-      "ru": "Частное степеней",
-      "en": "Quotient of powers"
+      "ru": "Приставки СИ",
+      "en": "SI prefixes"
      },
-     "formula": "aᵐ : aⁿ = aᵐ⁻ⁿ",
-     "lesson": "powers"
+     "formula": "мк = 10⁻⁶, м = 10⁻³, с = 10⁻², к = 10³, М = 10⁶",
+     "lesson": "units-si"
     },
     {
      "name": {
-      "ru": "Степень степени",
-      "en": "Power of a power"
+      "ru": "Мощность и энергия",
+      "en": "Power and energy"
      },
-     "formula": "(aᵐ)ⁿ = aᵐⁿ",
-     "lesson": "powers"
+     "formula": "1 кВт·ч = 3,6·10⁶ Дж; 1 кВт = 1000 Вт",
+     "lesson": "units-si"
     },
     {
      "name": {
-      "ru": "Дробный показатель",
-      "en": "Fractional exponent"
+      "ru": "Цена деления",
+      "en": "Scale division"
      },
-     "formula": "a^(1/n) = ⁿ√a,  a^(m/n) = ⁿ√(aᵐ)",
-     "lesson": "powers"
-    },
-    {
-     "name": {
-      "ru": "Корень из произведения",
-      "en": "Root of a product"
-     },
-     "formula": "√(a·b) = √a · √b  (a, b ≥ 0)",
-     "lesson": "roots-absolute"
-    },
-    {
-     "name": {
-      "ru": "Корень из частного",
-      "en": "Root of a quotient"
-     },
-     "formula": "√(a : b) = √a : √b  (a ≥ 0, b > 0)",
-     "lesson": "roots-absolute"
-    },
-    {
-     "name": {
-      "ru": "Квадрат корня",
-      "en": "Square of a root"
-     },
-     "formula": "(√a)² = a (a ≥ 0);  √(a²) = |a|",
-     "lesson": "roots-absolute"
-    },
-    {
-     "name": {
-      "ru": "Вынесение множителя",
-      "en": "Extracting a factor"
-     },
-     "formula": "√(a²b) = |a|·√b (b ≥ 0)",
-     "lesson": "roots-absolute"
-    },
-    {
-     "name": {
-      "ru": "Модуль",
-      "en": "Absolute value"
-     },
-     "formula": "|x| = x при x ≥ 0;  |x| = −x при x < 0",
-     "lesson": "roots-absolute"
-    },
-    {
-     "name": {
-      "ru": "Свойства модуля",
-      "en": "Properties of |x|"
-     },
-     "formula": "|a·b| = |a|·|b|,  |a + b| ≤ |a| + |b|",
-     "lesson": "roots-absolute"
+     "formula": "c = (a₂ − a₁)/n — разность соседних подписей на число промежутков",
+     "lesson": "measure-accuracy"
     }
-   ],
-   "lessons": [
-    "powers",
-    "roots-absolute"
    ]
   },
   {
-   "id": "multiplication",
-   "ru": "Формулы сокращённого умножения",
-   "en": "Algebraic identities",
+   "id": "kinematics",
+   "ru": "Кинематика",
+   "en": "Kinematics",
+   "lessons": [
+    "motion-terms",
+    "uniform-motion",
+    "accelerated-motion",
+    "kinematics-graphs",
+    "free-fall"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Квадрат суммы",
-      "en": "Square of a sum"
+      "ru": "Средняя скорость",
+      "en": "Average speed"
      },
-     "formula": "(a + b)² = a² + 2ab + b²",
-     "lesson": "identities"
+     "formula": "vср = s/t (весь путь на всё время)",
+     "lesson": "motion-terms"
     },
     {
      "name": {
-      "ru": "Квадрат разности",
-      "en": "Square of a difference"
+      "ru": "Равномерное движение",
+      "en": "Uniform motion"
      },
-     "formula": "(a − b)² = a² − 2ab + b²",
-     "lesson": "identities"
+     "formula": "s = vt, x = x₀ + vt",
+     "lesson": "uniform-motion"
     },
     {
      "name": {
-      "ru": "Разность квадратов",
-      "en": "Difference of squares"
+      "ru": "Скорость при разгоне",
+      "en": "Velocity under acceleration"
      },
-     "formula": "a² − b² = (a − b)(a + b)",
-     "lesson": "identities"
+     "formula": "v = v₀ + at",
+     "lesson": "accelerated-motion"
     },
     {
      "name": {
-      "ru": "Куб суммы",
-      "en": "Cube of a sum"
+      "ru": "Путь при разгоне",
+      "en": "Distance under acceleration"
      },
-     "formula": "(a + b)³ = a³ + 3a²b + 3ab² + b³",
-     "lesson": "identities"
+     "formula": "s = v₀t + at²/2, s = (v₀ + v)t/2",
+     "lesson": "accelerated-motion"
     },
     {
      "name": {
-      "ru": "Куб разности",
-      "en": "Cube of a difference"
+      "ru": "Путь без времени",
+      "en": "Distance without time"
      },
-     "formula": "(a − b)³ = a³ − 3a²b + 3ab² − b³",
-     "lesson": "identities"
+     "formula": "s = (v² − v₀²)/(2a)",
+     "lesson": "accelerated-motion"
     },
     {
      "name": {
-      "ru": "Сумма кубов",
-      "en": "Sum of cubes"
+      "ru": "Свободное падение",
+      "en": "Free fall"
      },
-     "formula": "a³ + b³ = (a + b)(a² − ab + b²)",
-     "lesson": "identities"
+     "formula": "h = gt²/2, v = gt (при v₀ = 0, без сопротивления)",
+     "lesson": "free-fall"
     },
     {
      "name": {
-      "ru": "Разность кубов",
-      "en": "Difference of cubes"
+      "ru": "Наклон на графике v(t)",
+      "en": "Slope of v(t)"
      },
-     "formula": "a³ − b³ = (a − b)(a² + ab + b²)",
-     "lesson": "identities"
-    },
-    {
-     "name": {
-      "ru": "Полный квадрат",
-      "en": "Completing the square"
-     },
-     "formula": "ax² + bx + c = a(x + b/(2a))² − (b² − 4ac)/(4a)",
-     "lesson": "identities"
+     "formula": "a = Δv/Δt, путь = площадь под графиком",
+     "lesson": "kinematics-graphs"
     }
-   ],
-   "lessons": [
-    "identities"
    ]
   },
   {
-   "id": "quadratic",
-   "ru": "Квадратное уравнение и парабола",
-   "en": "Quadratic equation and parabola",
+   "id": "dynamics",
+   "ru": "Динамика",
+   "en": "Dynamics",
+   "lessons": [
+    "newton-laws",
+    "forces-weight",
+    "friction-elasticity",
+    "force-diagram"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Корни квадратного уравнения",
-      "en": "Roots of ax² + bx + c = 0"
+      "ru": "Второй закон Ньютона",
+      "en": "Second law"
      },
-     "formula": "x = (−b ± √D) : (2a),  D = b² − 4ac",
-     "lesson": "quadratic"
+     "formula": "a = F/m, F = ma (равнодействующая)",
+     "lesson": "newton-laws"
     },
     {
      "name": {
-      "ru": "Чётный коэффициент b",
-      "en": "Even middle coefficient"
+      "ru": "Третий закон",
+      "en": "Third law"
      },
-     "formula": "x = (−b/2 ± √(b²/4 − ac)) : a",
-     "lesson": "quadratic"
+     "formula": "F₁₂ = −F₂₁: силы приложены к разным телам",
+     "lesson": "newton-laws"
     },
     {
      "name": {
-      "ru": "Теорема Виета",
-      "en": "Vieta's theorem"
+      "ru": "Сила тяжести и вес",
+      "en": "Weight"
      },
-     "formula": "x₁ + x₂ = −b/a,  x₁·x₂ = c/a",
-     "lesson": "quadratic"
+     "formula": "F = mg; P = mg при покое на горизонтальной опоре",
+     "lesson": "forces-weight"
     },
     {
      "name": {
-      "ru": "Разложение на множители",
-      "en": "Factored form"
+      "ru": "Трение скольжения",
+      "en": "Sliding friction"
      },
-     "formula": "ax² + bx + c = a(x − x₁)(x − x₂)",
-     "lesson": "quadratic"
+     "formula": "Fтр = μN",
+     "lesson": "friction-elasticity"
     },
     {
      "name": {
-      "ru": "Вершина параболы",
-      "en": "Vertex of a parabola"
+      "ru": "Закон Гука",
+      "en": "Hooke's law"
      },
-     "formula": "x₀ = −b/(2a),  y₀ = c − b²/(4a)",
-     "lesson": "quadratic"
-    },
-    {
-     "name": {
-      "ru": "Знаки D",
-      "en": "Signs of the discriminant"
-     },
-     "formula": "D > 0 — два корня, D = 0 — один, D < 0 — нет",
-     "lesson": "quadratic"
-    },
-    {
-     "name": {
-      "ru": "Формула для корня при D > 0",
-      "en": "Simplified root formula"
-     },
-     "formula": "x = (2c) : (−b ∓ √D) (знаменатель ≠ 0 / denominator ≠ 0)",
-     "lesson": "quadratic"
+     "formula": "F = kx (в пределах упругости)",
+     "lesson": "friction-elasticity"
     }
-   ],
-   "lessons": [
-    "quadratic"
    ]
   },
   {
-   "id": "progressions",
-   "ru": "Прогрессии",
-   "en": "Progressions",
+   "id": "energy",
+   "ru": "Работа, энергия, импульс",
+   "en": "Work, energy, momentum",
+   "lessons": [
+    "work-power",
+    "energy-conservation",
+    "momentum"
+   ],
    "items": [
     {
      "name": {
-      "ru": "n-й член арифметической",
-      "en": "n-th term, arithmetic"
+      "ru": "Механическая работа",
+      "en": "Work"
      },
-     "formula": "aₙ = a₁ + (n − 1)d",
-     "lesson": "arithmetic-progression"
+     "formula": "A = Fs·cos α",
+     "lesson": "work-power"
     },
     {
      "name": {
-      "ru": "Сумма арифметической",
-      "en": "Sum, arithmetic"
+      "ru": "Мощность и КПД",
+      "en": "Power and efficiency"
      },
-     "formula": "Sₙ = (a₁ + aₙ)·n/2 = (2a₁ + (n − 1)d)·n/2",
-     "lesson": "progression-sums"
+     "formula": "P = A/t, η = Aполез/Aзатр",
+     "lesson": "work-power"
     },
     {
      "name": {
-      "ru": "Свойство арифметической",
-      "en": "Arithmetic mean property"
+      "ru": "Кинетическая энергия",
+      "en": "Kinetic energy"
      },
-     "formula": "aₙ = (aₙ₋₁ + aₙ₊₁)/2",
-     "lesson": "arithmetic-progression"
+     "formula": "Eк = mv²/2",
+     "lesson": "energy-conservation"
     },
     {
      "name": {
-      "ru": "n-й член геометрической",
-      "en": "n-th term, geometric"
+      "ru": "Потенциальная энергия",
+      "en": "Potential energy"
      },
-     "formula": "bₙ = b₁·qⁿ⁻¹",
-     "lesson": "geometric-progression"
+     "formula": "Eп = mgh, Eупр = kx²/2",
+     "lesson": "energy-conservation"
     },
     {
      "name": {
-      "ru": "Сумма геометрической",
-      "en": "Sum, geometric"
+      "ru": "Импульс и сохранение",
+      "en": "Momentum"
      },
-     "formula": "Sₙ = b₁(qⁿ − 1)/(q − 1),  q ≠ 1",
-     "lesson": "progression-sums"
-    },
-    {
-     "name": {
-      "ru": "Бесконечная геометрическая",
-      "en": "Infinite geometric series"
-     },
-     "formula": "S = b₁/(1 − q),  |q| < 1",
-     "lesson": "geometric-progression"
-    },
-    {
-     "name": {
-      "ru": "Сумма натуральных чисел",
-      "en": "Sum of integers"
-     },
-     "formula": "1 + 2 + … + n = n(n + 1)/2",
-     "lesson": "progression-sums"
-    },
-    {
-     "name": {
-      "ru": "Проценты",
-      "en": "Percentages"
-     },
-     "formula": "на p% → умножить на (1 + p/100); снижение на p% → (1 − p/100)",
-     "lesson": "percentages"
+     "formula": "p = mv; m₁v₁ + m₂v₂ = m₁v₁′ + m₂v₂′",
+     "lesson": "momentum"
     }
-   ],
-   "lessons": [
-    "arithmetic-progression",
-    "progression-sums",
-    "geometric-progression",
-    "percentages"
    ]
   },
   {
-   "id": "trig",
-   "ru": "Тригонометрия",
-   "en": "Trigonometry",
+   "id": "statics",
+   "ru": "Статика, давление, гидростатика",
+   "en": "Statics, pressure, hydrostatics",
+   "lessons": [
+    "torque",
+    "pressure-hydrostatics",
+    "archimedes"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Основное тождество",
-      "en": "Pythagorean identity"
+      "ru": "Момент силы",
+      "en": "Torque"
      },
-     "formula": "sin²α + cos²α = 1",
-     "lesson": "trig-identities"
+     "formula": "M = Fd, где d — плечо (перпендикуляр от оси)",
+     "lesson": "torque"
     },
     {
      "name": {
-      "ru": "Тангенс и котангенс",
-      "en": "Tangent and cotangent"
+      "ru": "Правило рычага",
+      "en": "Lever rule"
      },
-     "formula": "tg α = sin α / cos α,  ctg α = cos α / sin α",
-     "lesson": "trig-identities"
+     "formula": "F₁d₁ = F₂d₂",
+     "lesson": "torque"
     },
     {
      "name": {
-      "ru": "Формула сложения",
-      "en": "Addition formulas"
+      "ru": "Давление",
+      "en": "Pressure"
      },
-     "formula": "sin(α ± β) = sin α cos β ± cos α sin β;  cos(α ± β) = cos α cos β ∓ sin α sin β",
-     "lesson": "trig-formulas"
+     "formula": "p = F/S; 1 Па = 1 Н/м²",
+     "lesson": "pressure-hydrostatics"
     },
     {
      "name": {
-      "ru": "Двойной угол",
-      "en": "Double angle"
+      "ru": "Давление жидкости",
+      "en": "Liquid pressure"
      },
-     "formula": "sin 2α = 2 sin α cos α;  cos 2α = cos²α − sin²α",
-     "lesson": "trig-formulas"
+     "formula": "p = ρgh (глубина, не объём)",
+     "lesson": "pressure-hydrostatics"
     },
     {
      "name": {
-      "ru": "Понижение степени",
-      "en": "Reduction of powers"
+      "ru": "Сила Архимеда",
+      "en": "Buoyancy"
      },
-     "formula": "sin²α = (1 − cos 2α)/2;  cos²α = (1 + cos 2α)/2",
-     "lesson": "trig-formulas"
-    },
-    {
-     "name": {
-      "ru": "Таблица значений",
-      "en": "Table of values"
-     },
-     "formula": "sin 30° = 1/2, sin 45° = √2/2, sin 60° = √3/2, sin 90° = 1",
-     "lesson": "trig-values"
-    },
-    {
-     "name": {
-      "ru": "Чётность",
-      "en": "Parity"
-     },
-     "formula": "cos(−α) = cos α (чётная), sin(−α) = −sin α, tg(−α) = −tg α",
-     "lesson": "trig-formulas"
-    },
-    {
-     "name": {
-      "ru": "Решение sin x = a",
-      "en": "Solution of sin x = a"
-     },
-     "formula": "x = (−1)ⁿ arcsin a + πn",
-     "lesson": "trig-equations"
-    },
-    {
-     "name": {
-      "ru": "Решение cos x = a",
-      "en": "Solution of cos x = a"
-     },
-     "formula": "x = ± arccos a + 2πn",
-     "lesson": "trig-equations"
-    },
-    {
-     "name": {
-      "ru": "Решение tg x = a",
-      "en": "Solution of tg x = a"
-     },
-     "formula": "x = arctg a + πn",
-     "lesson": "trig-equations"
-    },
-    {
-     "name": {
-      "ru": "Теорема синусов",
-      "en": "Law of sines"
-     },
-     "formula": "a / sin A = b / sin B = c / sin C = 2R",
-     "lesson": "plane-areas"
-    },
-    {
-     "name": {
-      "ru": "Теорема косинусов",
-      "en": "Law of cosines"
-     },
-     "formula": "c² = a² + b² − 2ab·cos C",
-     "lesson": "plane-areas"
+     "formula": "FА = ρжVпогрg; условие плавания FА = mg",
+     "lesson": "archimedes"
     }
-   ],
-   "lessons": [
-    "trig-identities",
-    "trig-formulas",
-    "trig-values",
-    "trig-equations",
-    "plane-areas"
    ]
   },
   {
-   "id": "logexp",
-   "ru": "Логарифмы и показательные",
-   "en": "Logarithms and exponentials",
+   "id": "molecular",
+   "ru": "Молекулярная физика",
+   "en": "Molecular physics",
+   "lessons": [
+    "amount-substance",
+    "ideal-gas",
+    "isoprocesses"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Определение логарифма",
-      "en": "Definition"
+      "ru": "Количество вещества",
+      "en": "Amount of substance"
      },
-     "formula": "log_a b = c ⇔ aᶜ = b  (a > 0, a ≠ 1, b > 0)",
-     "lesson": "log-definition"
+     "formula": "ν = m/M; N = νNₐ",
+     "lesson": "amount-substance"
     },
     {
      "name": {
-      "ru": "Логарифм произведения",
-      "en": "Logarithm of a product"
+      "ru": "Уравнение состояния",
+      "en": "Ideal gas law"
      },
-     "formula": "log_a(b·c) = log_a b + log_a c",
-     "lesson": "log-properties"
+     "formula": "pV = νRT, T = t + 273",
+     "lesson": "ideal-gas"
     },
     {
      "name": {
-      "ru": "Логарифм частного",
-      "en": "Logarithm of a quotient"
+      "ru": "Объединённый газовый закон",
+      "en": "Combined gas law"
      },
-     "formula": "log_a(b/c) = log_a b − log_a c",
-     "lesson": "log-properties"
+     "formula": "p₁V₁/T₁ = p₂V₂/T₂",
+     "lesson": "ideal-gas"
     },
     {
      "name": {
-      "ru": "Логарифм степени",
-      "en": "Logarithm of a power"
+      "ru": "Изопроцессы",
+      "en": "Isoprocesses"
      },
-     "formula": "log_a bᵏ = k·log_a b",
-     "lesson": "log-properties"
-    },
-    {
-     "name": {
-      "ru": "Переход к новому основанию",
-      "en": "Change of base"
-     },
-     "formula": "log_a b = log_c b / log_c a",
-     "lesson": "log-properties"
-    },
-    {
-     "name": {
-      "ru": "Следствия",
-      "en": "Immediate consequences"
-     },
-     "formula": "log_a a = 1,  log_a 1 = 0,  a^(log_a b) = b",
-     "lesson": "log-definition"
-    },
-    {
-     "name": {
-      "ru": "Степени двойки",
-      "en": "Powers of two"
-     },
-     "formula": "2³ = 8, 2⁴ = 16, 2⁵ = 32, 2⁶ = 64, 2⁷ = 128, 2⁸ = 256, 2¹⁰ = 1024",
-     "lesson": "powers"
-    },
-    {
-     "name": {
-      "ru": "Степени тройки",
-      "en": "Powers of three"
-     },
-     "formula": "3³ = 27, 3⁴ = 81, 3⁵ = 243",
-     "lesson": "powers"
-    },
-    {
-     "name": {
-      "ru": "Решение a^x = b",
-      "en": "Solving aˣ = b"
-     },
-     "formula": "x = log_a b (приводим обе части к одному основанию)",
-     "lesson": "exponential-equations"
+     "formula": "T = const: pV = const; p = const: V/T = const; V = const: p/T = const",
+     "lesson": "isoprocesses"
     }
-   ],
-   "lessons": [
-    "log-definition",
-    "log-properties",
-    "powers",
-    "exponential-equations"
    ]
   },
   {
-   "id": "derivative",
-   "ru": "Производная и исследование функции",
-   "en": "Derivative and function study",
+   "id": "thermo",
+   "ru": "Теплота и термодинамика",
+   "en": "Heat and thermodynamics",
+   "lessons": [
+    "heat-capacity",
+    "phase-first-law"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Степень",
-      "en": "Power rule"
+      "ru": "Нагревание",
+      "en": "Heating"
      },
-     "formula": "(xⁿ)′ = n·xⁿ⁻¹",
-     "lesson": "derivative-table"
+     "formula": "Q = cm(t₂ − t₁)",
+     "lesson": "heat-capacity"
     },
     {
      "name": {
-      "ru": "Постоянная и линейная",
-      "en": "Constant and linear"
+      "ru": "Сгорание топлива",
+      "en": "Fuel combustion"
      },
-     "formula": "(C)′ = 0,  (kx + b)′ = k",
-     "lesson": "derivative-table"
+     "formula": "Q = qm",
+     "lesson": "heat-capacity"
     },
     {
      "name": {
-      "ru": "Сумма",
-      "en": "Sum"
+      "ru": "Плавление и парообразование",
+      "en": "Phase change"
      },
-     "formula": "(u + v)′ = u′ + v′",
-     "lesson": "derivative-rules"
+     "formula": "Q = λm (плавление), Q = Lm (кипение)",
+     "lesson": "phase-first-law"
     },
     {
      "name": {
-      "ru": "Произведение",
-      "en": "Product"
+      "ru": "Первый закон термодинамики",
+      "en": "First law"
      },
-     "formula": "(u·v)′ = u′v + uv′",
-     "lesson": "derivative-rules"
-    },
-    {
-     "name": {
-      "ru": "Частное",
-      "en": "Quotient"
-     },
-     "formula": "(u/v)′ = (u′v − uv′)/v²",
-     "lesson": "derivative-rules"
-    },
-    {
-     "name": {
-      "ru": "Геометрический смысл",
-      "en": "Geometric meaning"
-     },
-     "formula": "f′(x₀) = tg α — угловой коэффициент касательной",
-     "lesson": "derivative-point"
-    },
-    {
-     "name": {
-      "ru": "Уравнение касательной",
-      "en": "Tangent line"
-     },
-     "formula": "y = f(x₀) + f′(x₀)(x − x₀)",
-     "lesson": "derivative-point"
-    },
-    {
-     "name": {
-      "ru": "Монотонность",
-      "en": "Monotonicity"
-     },
-     "formula": "f′ > 0 — возрастает, f′ < 0 — убывает",
-     "lesson": "extrema"
-    },
-    {
-     "name": {
-      "ru": "Экстремум",
-      "en": "Extremum"
-     },
-     "formula": "f′(x₀) = 0 и смена знака: − на + минимум, + на − максимум",
-     "lesson": "extrema"
-    },
-    {
-     "name": {
-      "ru": "Наибольшее значение",
-      "en": "Maximum on a segment"
-     },
-     "formula": "сравниваем значения в критических точках и на концах отрезка",
-     "lesson": "segment-extrema"
+     "formula": "ΔU = Q + Aвнешн",
+     "lesson": "phase-first-law"
     }
-   ],
-   "lessons": [
-    "derivative-table",
-    "derivative-rules",
-    "derivative-point",
-    "extrema",
-    "segment-extrema"
    ]
   },
   {
-   "id": "planimetry",
-   "ru": "Планиметрия",
-   "en": "Plane geometry",
+   "id": "electrostatics",
+   "ru": "Электростатика",
+   "en": "Electrostatics",
+   "lessons": [
+    "coulomb-field",
+    "potential-capacitance"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Площадь треугольника",
-      "en": "Area of a triangle"
+      "ru": "Закон Кулона",
+      "en": "Coulomb's law"
      },
-     "formula": "S = a·h/2 = (a·b·sin C)/2 = p·r = abc/(4R)",
-     "lesson": "plane-areas"
+     "formula": "F = k|q₁q₂|/r²",
+     "lesson": "coulomb-field"
     },
     {
      "name": {
-      "ru": "Формула Герона",
-      "en": "Heron's formula"
+      "ru": "Напряжённость поля",
+      "en": "Field strength"
      },
-     "formula": "S = √(p(p − a)(p − b)(p − c)),  p = (a + b + c)/2",
-     "lesson": "plane-areas"
+     "formula": "E = F/q, E = U/d для однородного поля",
+     "lesson": "coulomb-field"
     },
     {
      "name": {
-      "ru": "Прямоугольный треугольник",
-      "en": "Right triangle"
+      "ru": "Работа поля и напряжение",
+      "en": "Field work"
      },
-     "formula": "c² = a² + b²;  r = (a + b − c)/2;  R = c/2",
-     "lesson": "right-triangle"
+     "formula": "A = qU = q(φ₁ − φ₂)",
+     "lesson": "potential-capacitance"
     },
     {
      "name": {
-      "ru": "Параллелограмм",
-      "en": "Parallelogram"
+      "ru": "Электроёмкость",
+      "en": "Capacitance"
      },
-     "formula": "S = a·h = a·b·sin α",
-     "lesson": "plane-areas"
-    },
-    {
-     "name": {
-      "ru": "Трапеция",
-      "en": "Trapezoid"
-     },
-     "formula": "S = (a + b)·h/2,  средняя линия m = (a + b)/2",
-     "lesson": "plane-areas"
-    },
-    {
-     "name": {
-      "ru": "Ромб",
-      "en": "Rhombus"
-     },
-     "formula": "S = d₁·d₂/2 = a²·sin α",
-     "lesson": "plane-areas"
-    },
-    {
-     "name": {
-      "ru": "Круг и окружность",
-      "en": "Circle"
-     },
-     "formula": "S = πR²,  C = 2πR,  длина дуги l = πR·α°/180°",
-     "lesson": "circle-theorems"
-    },
-    {
-     "name": {
-      "ru": "Вписанный угол",
-      "en": "Inscribed angle"
-     },
-     "formula": "вписанный угол равен половине центрального, опирающегося на ту же дугу",
-     "lesson": "circle-theorems"
-    },
-    {
-     "name": {
-      "ru": "Касательная и секущая",
-      "en": "Tangent and secant"
-     },
-     "formula": "квадрат касательной = произведение секущей на её внешнюю часть",
-     "lesson": "circle-theorems"
-    },
-    {
-     "name": {
-      "ru": "Подобие",
-      "en": "Similarity"
-     },
-     "formula": "площади относятся как квадрат коэффициента подобия: S₂/S₁ = k²",
-     "lesson": "similarity"
+     "formula": "C = q/U; для плоского конденсатора C = εε₀S/d",
+     "lesson": "potential-capacitance"
     }
-   ],
-   "lessons": [
-    "plane-areas",
-    "right-triangle",
-    "circle-theorems",
-    "similarity"
    ]
   },
   {
-   "id": "stereometry",
-   "ru": "Стереометрия",
-   "en": "Solid geometry",
+   "id": "dc",
+   "ru": "Постоянный ток",
+   "en": "Direct current",
+   "lessons": [
+    "ohm-law",
+    "circuits",
+    "current-work"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Призма",
-      "en": "Prism"
+      "ru": "Закон Ома",
+      "en": "Ohm's law"
      },
-     "formula": "V = Sосн · h;  Sбок = Pосн · h (для прямой призмы / right prism)",
-     "lesson": "prism-cylinder"
+     "formula": "I = U/R",
+     "lesson": "ohm-law"
     },
     {
      "name": {
-      "ru": "Пирамида",
-      "en": "Pyramid"
+      "ru": "Сопротивление проводника",
+      "en": "Wire resistance"
      },
-     "formula": "V = Sосн · h / 3",
-     "lesson": "pyramid-cone"
+     "formula": "R = ρl/S",
+     "lesson": "ohm-law"
     },
     {
      "name": {
-      "ru": "Цилиндр",
-      "en": "Cylinder"
+      "ru": "Последовательное соединение",
+      "en": "Series connection"
      },
-     "formula": "V = πR²h,  Sбок = 2πRh",
-     "lesson": "prism-cylinder"
+     "formula": "I = const, R = R₁ + R₂, U = U₁ + U₂",
+     "lesson": "circuits"
     },
     {
      "name": {
-      "ru": "Конус",
-      "en": "Cone"
+      "ru": "Параллельное соединение",
+      "en": "Parallel connection"
      },
-     "formula": "V = πR²h/3,  Sбок = πRl,  l = √(R² + h²)",
-     "lesson": "pyramid-cone"
+     "formula": "U = const, 1/R = 1/R₁ + 1/R₂, I = I₁ + I₂",
+     "lesson": "circuits"
     },
     {
      "name": {
-      "ru": "Шар и сфера",
-      "en": "Sphere and ball"
+      "ru": "Работа и мощность тока",
+      "en": "Electric work and power"
      },
-     "formula": "V = 4πR³/3,  S = 4πR²",
-     "lesson": "sphere-cube"
-    },
-    {
-     "name": {
-      "ru": "Куб",
-      "en": "Cube"
-     },
-     "formula": "V = a³,  S = 6a²,  d = a√3",
-     "lesson": "sphere-cube"
-    },
-    {
-     "name": {
-      "ru": "Теорема о трёх перпендикулярах",
-      "en": "Theorem of three perpendiculars"
-     },
-     "formula": "проекция наклонной ⟂ прямой ⇔ наклонная ⟂ прямой",
-     "lesson": "solid-perpendiculars"
-    },
-    {
-     "name": {
-      "ru": "Угол между прямой и плоскостью",
-      "en": "Angle between a line and a plane"
-     },
-     "formula": "угол между прямой и её проекцией",
-     "lesson": "solid-perpendiculars"
+     "formula": "A = UIt, P = UI = I²R = U²/R",
+     "lesson": "current-work"
     }
-   ],
-   "lessons": [
-    "prism-cylinder",
-    "pyramid-cone",
-    "sphere-cube",
-    "solid-perpendiculars"
    ]
   },
   {
-   "id": "combinatorics",
-   "ru": "Комбинаторика и вероятность",
-   "en": "Combinatorics and probability",
+   "id": "magnetism",
+   "ru": "Магнитное поле и индукция",
+   "en": "Magnetic field and induction",
+   "lessons": [
+    "magnetic-forces",
+    "induction"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Перестановки",
-      "en": "Permutations"
+      "ru": "Сила Ампера",
+      "en": "Ampère force"
      },
-     "formula": "Pₙ = n!",
-     "lesson": "counting"
+     "formula": "F = BIl·sin α",
+     "lesson": "magnetic-forces"
     },
     {
      "name": {
-      "ru": "Размещения",
-      "en": "Arrangements"
+      "ru": "Сила Лоренца",
+      "en": "Lorentz force"
      },
-     "formula": "Aₙᵏ = n!/(n − k)!",
-     "lesson": "counting"
+     "formula": "F = qvB·sin α (перпендикулярна скорости)",
+     "lesson": "magnetic-forces"
     },
     {
      "name": {
-      "ru": "Сочетания",
-      "en": "Combinations"
+      "ru": "Магнитный поток",
+      "en": "Magnetic flux"
      },
-     "formula": "Cₙᵏ = n!/(k!(n − k)!)",
-     "lesson": "counting"
+     "formula": "Φ = BS·cos α",
+     "lesson": "induction"
     },
     {
      "name": {
-      "ru": "Классическая вероятность",
-      "en": "Classical probability"
+      "ru": "ЭДС индукции",
+      "en": "Induced EMF"
      },
-     "formula": "P = m/n — благоприятные исходы к общему числу равновозможных",
-     "lesson": "probability"
-    },
-    {
-     "name": {
-      "ru": "Вероятность суммы несовместных",
-      "en": "Sum of disjoint events"
-     },
-     "formula": "P(A ∪ B) = P(A) + P(B)",
-     "lesson": "probability"
-    },
-    {
-     "name": {
-      "ru": "Вероятность произведения независимых",
-      "en": "Product of independent events"
-     },
-     "formula": "P(A ∩ B) = P(A)·P(B)",
-     "lesson": "probability"
-    },
-    {
-     "name": {
-      "ru": "Противоположное событие",
-      "en": "Complement"
-     },
-     "formula": "P(Ā) = 1 − P(A)",
-     "lesson": "probability"
-    },
-    {
-     "name": {
-      "ru": "Значения факториалов",
-      "en": "Factorials"
-     },
-     "formula": "3! = 6, 4! = 24, 5! = 120, 6! = 720",
-     "lesson": "factorials"
+     "formula": "|ε| = ΔΦ/Δt",
+     "lesson": "induction"
     }
-   ],
-   "lessons": [
-    "counting",
-    "probability",
-    "factorials"
    ]
   },
   {
-   "id": "inequalities",
-   "ru": "Неравенства и метод интервалов",
-   "en": "Inequalities and the interval method",
+   "id": "waves",
+   "ru": "Колебания, волны, звук",
+   "en": "Oscillations, waves, sound",
+   "lessons": [
+    "oscillations",
+    "waves-sound"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Смена знака",
-      "en": "Sign change"
+      "ru": "Период и частота",
+      "en": "Period and frequency"
      },
-     "formula": "при умножении или делении на отрицательное число знак неравенства меняется на противоположный",
-     "lesson": "linear-inequalities"
+     "formula": "ν = 1/T, ω = 2πν",
+     "lesson": "oscillations"
     },
     {
      "name": {
-      "ru": "Метод интервалов",
-      "en": "Interval method"
+      "ru": "Маятники",
+      "en": "Pendulums"
      },
-     "formula": "корни на числовую прямую → знак на каждом интервале → ответ с учётом строгости",
-     "lesson": "intervals"
+     "formula": "T = 2π√(l/g); T = 2π√(m/k)",
+     "lesson": "oscillations"
     },
     {
      "name": {
-      "ru": "Квадратное неравенство",
-      "en": "Quadratic inequality"
+      "ru": "Длина волны",
+      "en": "Wavelength"
      },
-     "formula": "при a ≠ 0, D > 0: знак трёхчлена совпадает со знаком a вне корней и противоположен между корнями",
-     "lesson": "quadratic-inequalities"
+     "formula": "λ = vT = v/ν",
+     "lesson": "waves-sound"
     },
     {
      "name": {
-      "ru": "Модуль: |x| < a",
-      "en": "Absolute value: |x| < a"
+      "ru": "Звук и эхо",
+      "en": "Sound and echo"
      },
-     "formula": "|x| < a ⇔ −a < x < a (при a > 0)",
-     "lesson": "linear-inequalities"
-    },
-    {
-     "name": {
-      "ru": "Модуль: |x| > a",
-      "en": "Absolute value: |x| > a"
-     },
-     "formula": "|x| > a ⇔ x < −a или x > a (при a > 0)",
-     "lesson": "linear-inequalities"
-    },
-    {
-     "name": {
-      "ru": "Дробное неравенство",
-      "en": "Fractional inequality"
-     },
-     "formula": "знак дроби = знак произведения числителя и знаменателя; нули знаменателя всегда выколоты",
-     "lesson": "intervals"
+     "formula": "2s = vt (сигнал идёт туда и обратно)",
+     "lesson": "waves-sound"
     }
-   ],
-   "lessons": [
-    "linear-inequalities",
-    "intervals",
-    "quadratic-inequalities"
    ]
   },
   {
-   "id": "functions",
-   "ru": "Функции и графики",
-   "en": "Functions and graphs",
+   "id": "optics",
+   "ru": "Оптика",
+   "en": "Optics",
+   "lessons": [
+    "reflection-refraction",
+    "lens"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Область определения",
-      "en": "Domain"
+      "ru": "Отражение",
+      "en": "Reflection"
      },
-     "formula": "знаменатель ≠ 0; под корнем чётной степени ≥ 0; под логарифмом > 0",
-     "lesson": "function-domain-range"
+     "formula": "угол падения равен углу отражения",
+     "lesson": "reflection-refraction"
     },
     {
      "name": {
-      "ru": "Область значений",
-      "en": "Range"
+      "ru": "Показатель преломления",
+      "en": "Refractive index"
      },
-     "formula": "−1 ≤ sin x ≤ 1 и −1 ≤ cos x ≤ 1; у a·f(x) + b границы умножаются на a и сдвигаются на b",
-     "lesson": "function-domain-range"
+     "formula": "n = sin α / sin γ = c/v",
+     "lesson": "reflection-refraction"
     },
     {
      "name": {
-      "ru": "Чётность",
-      "en": "Parity"
+      "ru": "Формула тонкой линзы",
+      "en": "Thin lens"
      },
-     "formula": "чётная: f(−x) = f(x) (график симметричен оси Oy); нечётная: f(−x) = −f(x)",
-     "lesson": "function-properties"
+     "formula": "1/F = 1/d + 1/f",
+     "lesson": "lens"
     },
     {
      "name": {
-      "ru": "Сдвиг графика",
-      "en": "Shifting a graph"
+      "ru": "Оптическая сила",
+      "en": "Optical power"
      },
-     "formula": "y = f(x − a) — вправо на a; y = f(x) + b — вверх на b",
-     "lesson": "graph-transformations"
-    },
-    {
-     "name": {
-      "ru": "Растяжение графика",
-      "en": "Stretching a graph"
-     },
-     "formula": "y = k·f(x) — растяжение от оси Ox в k раз; y = f(kx) — сжатие к оси Oy в k раз",
-     "lesson": "graph-transformations"
-    },
-    {
-     "name": {
-      "ru": "Линейная функция",
-      "en": "Linear function"
-     },
-     "formula": "y = kx + b: k — угловой коэффициент, b — точка пересечения с осью Oy",
-     "lesson": "function-properties"
-    },
-    {
-     "name": {
-      "ru": "Обратная пропорциональность",
-      "en": "Inverse proportion"
-     },
-     "formula": "y = k/x — гипербола, x ≠ 0",
-     "lesson": "function-properties"
+     "formula": "D = 1/F (диоптрии), F в метрах",
+     "lesson": "lens"
     }
-   ],
-   "lessons": [
-    "function-domain-range",
-    "function-properties",
-    "graph-transformations"
    ]
   },
   {
-   "id": "vectors",
-   "ru": "Векторы и координаты",
-   "en": "Vectors and coordinates",
+   "id": "quantum",
+   "ru": "Квантовые явления и ядро",
+   "en": "Quantum phenomena and nucleus",
+   "lessons": [
+    "photoeffect",
+    "atom-nucleus",
+    "radioactivity"
+   ],
    "items": [
     {
      "name": {
-      "ru": "Координаты вектора",
-      "en": "Vector coordinates"
+      "ru": "Энергия фотона",
+      "en": "Photon energy"
      },
-     "formula": "AB→ = (x₂ − x₁; y₂ − y₁)",
-     "lesson": "vector-coordinates"
+     "formula": "E = hν = hc/λ",
+     "lesson": "photoeffect"
     },
     {
      "name": {
-      "ru": "Длина вектора",
-      "en": "Length of a vector"
+      "ru": "Уравнение фотоэффекта",
+      "en": "Photoelectric equation"
      },
-     "formula": "|a| = √(x² + y²)",
-     "lesson": "vector-coordinates"
+     "formula": "hν = Aвых + Eк",
+     "lesson": "photoeffect"
     },
     {
      "name": {
-      "ru": "Скалярное произведение",
-      "en": "Dot product"
+      "ru": "Строение ядра",
+      "en": "Nucleus"
      },
-     "formula": "a·b = x₁x₂ + y₁y₂ = |a|·|b|·cos φ",
-     "lesson": "dot-product"
+     "formula": "Z протонов, A − Z нейтронов; ᴬZ X",
+     "lesson": "atom-nucleus"
     },
     {
      "name": {
-      "ru": "Перпендикулярность",
-      "en": "Perpendicularity"
+      "ru": "Закон радиоактивного распада",
+      "en": "Decay law"
      },
-     "formula": "a ⊥ b ⇔ x₁x₂ + y₁y₂ = 0 (a, b ≠ 0)",
-     "lesson": "dot-product"
-    },
-    {
-     "name": {
-      "ru": "Середина отрезка",
-      "en": "Midpoint"
-     },
-     "formula": "M((x₁ + x₂)/2; (y₁ + y₂)/2)",
-     "lesson": "midpoint-collinearity"
-    },
-    {
-     "name": {
-      "ru": "Расстояние между точками",
-      "en": "Distance between points"
-     },
-     "formula": "d = √((x₂ − x₁)² + (y₂ − y₁)²)",
-     "lesson": "vector-coordinates"
+     "formula": "N = N₀·2^(−t/T), α-распад: A − 4, Z − 2",
+     "lesson": "radioactivity"
     }
-   ],
-   "lessons": [
-    "vector-coordinates",
-    "dot-product",
-    "midpoint-collinearity"
-   ]
-  },
-  {
-   "id": "numbers",
-   "ru": "Числа и делимость",
-   "en": "Numbers and divisibility",
-   "items": [
-    {
-     "name": {
-      "ru": "Признак делимости на 3 и 9",
-      "en": "Divisible by 3 and 9"
-     },
-     "formula": "сумма цифр делится на 3 (на 9)",
-     "lesson": "divisibility"
-    },
-    {
-     "name": {
-      "ru": "Признак делимости на 4",
-      "en": "Divisible by 4"
-     },
-     "formula": "две последние цифры образуют число, кратное 4",
-     "lesson": "divisibility"
-    },
-    {
-     "name": {
-      "ru": "Признак делимости на 11",
-      "en": "Divisible by 11"
-     },
-     "formula": "разность сумм цифр на чётных и нечётных местах кратна 11",
-     "lesson": "divisibility"
-    },
-    {
-     "name": {
-      "ru": "НОД и НОК",
-      "en": "GCD and LCM"
-     },
-     "formula": "НОК(a, b) = a·b : НОД(a, b)",
-     "lesson": "divisibility"
-    },
-    {
-     "name": {
-      "ru": "Деление с остатком",
-      "en": "Division with remainder"
-     },
-     "formula": "a = b·q + r,  0 ≤ r < b (a, b, q, r ∈ Z; b > 0)",
-     "lesson": "divisibility"
-    },
-    {
-     "name": {
-      "ru": "Простые числа до 50",
-      "en": "Primes below 50"
-     },
-     "formula": "2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47",
-     "lesson": "divisibility"
-    },
-    {
-     "name": {
-      "ru": "Оценка корня",
-      "en": "Estimating a root"
-     },
-     "formula": "√a между соседними целыми: n ≤ √a < n + 1 ⇔ n² ≤ a < (n + 1)²",
-     "lesson": "roots-absolute"
-    }
-   ],
-   "lessons": [
-    "divisibility",
-    "roots-absolute"
    ]
   }
  ],
  "counts": {
-  "groups": 14,
-  "items": 116
+  "groups": 13,
+  "items": 59
  }
 }

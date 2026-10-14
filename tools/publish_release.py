@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 """Publish ONLY the verified APK/EXEs/content artifacts of the current CI run.
 
+Physics isolation (see ``tools/subject.py``): the release is created under the
+``physics-vYYYY.M.P`` tag with **make_latest=false**, so the repository-wide
+`releases/latest` keeps serving mathematics. The publisher additionally records
+the global latest release before and after publication and fails the build if it
+changed. The content feed gets tag-specific immutable URLs — physics clients
+never read ``releases/latest/download``.
+
 Assets are assembled and checked in a draft. Published releases and tags are
-never overwritten; latest changes only after the complete draft is verified.
-Run through .github/workflows/publish.yml, not as a shortcut around CI.
+never overwritten. Run through .github/workflows/publish.yml, not as a shortcut
+around CI.
 """
 from __future__ import annotations
 
@@ -17,6 +24,7 @@ import shutil
 import subprocess
 import sys
 
+import subject
 from release_plan import (ROOT, BUILD_JOBS, CONTENT_FILES, INSTALLERS, RELEASE_FILES,
                           canonical, check_lineage, gh, gh_json, gh_pages,
                           git_commit, stable_releases, validate_repo, version_code)
@@ -64,8 +72,8 @@ def exact_files(directory: Path, expected: set[str]) -> None:
 
 def assemble(staging: Path, output: Path, version: str, repo: str) -> dict:
     exact_files(staging / "content", CONTENT_FILES | {"version.json"})
-    exact_files(staging / "windows", INSTALLERS - {"app-release.apk"})
-    exact_files(staging / "android", {"app-release.apk"})
+    exact_files(staging / "windows", INSTALLERS - {subject.APK_ASSET})
+    exact_files(staging / "android", {subject.APK_ASSET})
     if output.exists() and any(output.iterdir()):
         raise ValueError("release output directory must be empty")
     output.mkdir(parents=True, exist_ok=True)
@@ -75,9 +83,11 @@ def assemble(staging: Path, output: Path, version: str, repo: str) -> dict:
     manifest = json.loads((output / "version.json").read_text(encoding="utf-8"))
     if manifest.get("contentVersion") != version or manifest.get("appVersion", version) != version:
         raise ValueError("content artifact version is not the allocated APK/EXE version")
+    if manifest.get("subject") != subject.SUBJECT or manifest.get("package") != subject.ANDROID_PACKAGE:
+        raise ValueError("content artifact does not carry this subject's identity")
     if set(manifest.get("files", {})) != CONTENT_FILES:
         raise ValueError("content manifest does not describe all and only content JSON files")
-    base = f"https://github.com/{repo}/releases/download/v{version}"
+    base = subject.content_base_url(repo, version)
     for name in sorted(CONTENT_FILES):
         path = output / name
         json.loads(path.read_text(encoding="utf-8"))  # invalid/truncated JSON cannot be published
@@ -88,6 +98,10 @@ def assemble(staging: Path, output: Path, version: str, repo: str) -> dict:
         manifest["files"][name] = {"url": f"{base}/{name}", **actual}
     manifest["baseUrl"] = base
     manifest["appVersion"] = version
+    manifest["tag"] = subject.tag(version)
+    manifest["subject"] = subject.SUBJECT
+    manifest["package"] = subject.ANDROID_PACKAGE
+    manifest["updatePolicy"] = "immutable version-specific URLs; no repository latest"
     write_json(output / "version.json", manifest)
     return manifest
 
@@ -123,23 +137,28 @@ def tag_commit(repo: str, tag: str) -> str | None:
 
 
 def release_notes(version: str, sha: str, run_url: str, code: int) -> str:
-    return f"""## CT Maths Tutor {version}
+    return f"""## {subject.TITLE['ru']} {version}
 
 Автоматическая публикация после успешных проверок контента и интерфейса, Windows и Android.
 Source: `{sha}` · [Проверки и журнал сборки]({run_url}).
 
 ### Скачать / Download
-- **Android:** `app-release.apk`, пакет `by.ziv.ctmaths`, versionCode **{code}**.
+- **Android:** `{subject.APK_ASSET}`, пакет `{subject.ANDROID_PACKAGE}`, versionCode **{code}**.
   Установите **поверх** существующей release-версии; **не удаляйте приложение** — это удалит статистику.
-- **Windows:** `CTMathsTutor-amd64.exe` или `CTMathsTutor-arm64.exe`.
-- **Банк заданий:** приложение получает `version.json` и проверенные JSON из стабильного канала `releases/latest/download`.
+  Это **не обновление математики**: пакет, статистика и банк у физики свои.
+- **Windows:** `{subject.WINDOWS_BINARY}-amd64.exe` или `{subject.WINDOWS_BINARY}-arm64.exe`.
+- **Банк заданий:** приложение получает `version.json` и проверенные JSON по
+  неизменяемым ссылкам **этого** выпуска (`{subject.TAG_PREFIX}{version}`); общий
+  `/releases/latest/download` не используется.
 
 Встроенная база и RU/EN-материалы работают офлайн. Задания авторские, не официальные материалы РИКЗ.
+Этот релиз не помечается как repository latest намеренно: математика продолжает отдаваться по своей ссылке.
 Debug APK остаётся отдельным артефактом разработки и в этот релиз не входит.
 
 ### Аудит / Agent handoff
-`release-info.json` содержит commit, run/attempt, effective/source version, результаты трёх обязательных jobs,
-отпечаток постоянного сертификата и SHA-256/размеры файлов. `SHA256SUMS.txt` проверяет также сам журнал.
+`release-info.json` содержит subject/package, commit, run/attempt, effective/source version, результаты
+трёх обязательных jobs, отпечаток постоянного сертификата и SHA-256/размеры файлов.
+`SHA256SUMS.txt` проверяет также сам журнал.
 Инструкции продолжения: `AGENTS.md`, `docs/WORKLOG.md`, `docs/RELEASE.md` в исходниках этого тега.
 """
 
@@ -147,7 +166,7 @@ Debug APK остаётся отдельным артефактом разраб�
 def publish(args) -> dict:
     validate_repo(args.repo)
     version = canonical(args.version)
-    tag = "v" + version
+    tag = subject.tag(version)
     sha = git_commit("HEAD")
     source_version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
     if args.source_version != source_version or version_code(version) < version_code(source_version):
@@ -160,8 +179,12 @@ def publish(args) -> dict:
     releases = gh_pages(f"repos/{args.repo}/releases?per_page=100")
     stable = stable_releases(releases)
     previous = stable[-1] if stable else None
-    if previous and version_code(version) <= version_code(previous["tag_name"][1:]):
+    if previous and version_code(version) <= version_code(subject.release_version(previous["tag_name"])):
         raise ValueError("a newer/equal stable version already exists; rerun CI to re-plan, never overwrite it")
+    # Снимок общерепозиторного latest до публикации: физика обязана его не сдвинуть.
+    latest_before = gh_json(f"repos/{args.repo}/releases/latest", allow_404=True)
+    latest_before_id = latest_before["id"] if latest_before else None
+    latest_before_tag = latest_before["tag_name"] if latest_before else None
     check_lineage(previous, sha)
     existing_tag_sha = tag_commit(args.repo, tag)
     if existing_tag_sha and existing_tag_sha != sha:
@@ -174,18 +197,23 @@ def publish(args) -> dict:
     run_url = f"https://github.com/{args.repo}/actions/runs/{args.run_id}"
     payloads = {name: metadata(args.output / name) for name in sorted(CONTENT_FILES | INSTALLERS | {"version.json"})}
     info = {
-        "schemaVersion": 1, "repository": args.repo, "tag": tag, "version": version,
+        "schemaVersion": 2, "repository": args.repo, "subject": subject.SUBJECT,
+        "package": subject.ANDROID_PACKAGE, "app": subject.WINDOWS_BINARY,
+        "tag": tag, "version": version,
         "sourceVersion": source_version, "sourceCommit": sha,
         "verifiedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "run": {"id": int(args.run_id), "attempt": int(os.environ.get("GITHUB_RUN_ATTEMPT", "1")),
                 "url": run_url, "event": run["event"], "ref": os.environ["GITHUB_REF"]},
         "checks": verified, "previousStableTag": previous["tag_name"] if previous else None,
-        "android": {"applicationId": "by.ziv.ctmaths", "versionName": version, "versionCode": code,
-                    "certificateSha256": (ROOT / "android/keystore/expected-cert-sha256.txt").read_text().strip(),
+        "android": {"applicationId": subject.ANDROID_PACKAGE, "versionName": version, "versionCode": code,
+                    "certificateSha256": (ROOT / subject.EXPECTED_CERT).read_text().strip(),
                     "signatureAndPreviousApkGate": "passed"},
         "content": {"version": manifest["contentVersion"], "files": sorted(CONTENT_FILES)},
         "assets": payloads,
-        "publication": {"strategy": "verified draft, then publish and make latest", "overwritePublishedAssets": False},
+        "publication": {"strategy": "verified draft, then publish with make_latest=false",
+                        "overwritePublishedAssets": False,
+                        "repositoryLatestBefore": latest_before_tag,
+                        "repositoryLatestMustRemain": latest_before_tag},
     }
     write_json(args.output / "release-info.json", info)
     (args.output / "SHA256SUMS.txt").write_text("".join(
@@ -224,11 +252,18 @@ def publish(args) -> dict:
     if tag_commit(args.repo, tag) != sha:
         raise ValueError("tag changed during publication; refusing to switch latest")
     release = gh_json(f"repos/{args.repo}/releases/{release['id']}", method="PATCH",
-                      fields={"draft": False, "prerelease": False, "make_latest": "true"})
+                      fields={"draft": False, "prerelease": False, "make_latest": "false"})
     validate_inventory(release, args.output)
-    latest = gh_json(f"repos/{args.repo}/releases/latest")
-    if release["draft"] or latest["id"] != release["id"]:
-        raise ValueError("GitHub did not confirm complete published latest release")
+    published = gh_json(f"repos/{args.repo}/releases/{release['id']}")
+    if published["draft"] or published.get("prerelease"):
+        raise ValueError("GitHub did not confirm the physics release as published stable")
+    if published["tag_name"] != tag:
+        raise ValueError("published release tag mismatch")
+    # Общий latest обязан остаться математическим (или прежним, если математики нет).
+    latest_after = gh_json(f"repos/{args.repo}/releases/latest", allow_404=True)
+    latest_after_id = latest_after["id"] if latest_after else None
+    if latest_after_id != latest_before_id:
+        raise ValueError("repository latest changed during physics publication — isolation violated")
     print("Published:", release["html_url"])
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:

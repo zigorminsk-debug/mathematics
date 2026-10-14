@@ -1,7 +1,9 @@
 name: CI
 
-# Every repository push builds, verifies, and automatically publishes the
-# release APK, both Windows EXEs and the content feed. PR/fork runs only test.
+# Subject: PHYSICS (tools/subject.py). Every push builds, verifies and publishes
+# the CTPhysicsTutor APK/EXEs plus the content feed under physics-v* tags with
+# make_latest=false, so the repository-wide latest keeps serving mathematics.
+# PR/fork runs only test; the shared math pipeline uses its own lock name.
 # queue:max preserves up to 100 pending runs; ordinary single-slot concurrency
 # would silently cancel intermediate pushes. A shared lock covers planning
 # through publication. Reusable Release calls use a DIFFERENT child lock.
@@ -41,7 +43,7 @@ defaults:
     shell: bash  # explicit bash enables -e -o pipefail, including go vet | sed
 
 concurrency:
-  group: ${{ inputs.release_request && format('ci-release-child-{0}', github.run_id) || (github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && github.ref_type == 'branch') && 'ctmaths-release-pipeline' || format('ci-{0}-{1}', github.repository, github.ref) }}
+  group: ${{ inputs.release_request && format('ci-release-child-{0}', github.run_id) || (github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && github.ref_type == 'branch') && 'ctphysics-release-pipeline' || format('ci-{0}-{1}', github.repository, github.ref) }}
   queue: max
   cancel-in-progress: false
 
@@ -67,7 +69,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REQUESTED_TAG: ${{ inputs.tag }}
-          ALLOW_PUBLICATION: ${{ github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && (github.ref_type == 'branch' || (inputs.release_request && startsWith(github.ref, 'refs/tags/v'))) && (github.event_name == 'push' || inputs.publish == true) }}
+          ALLOW_PUBLICATION: ${{ github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && (github.ref_type == 'branch' || (inputs.release_request && startsWith(github.ref, 'refs/tags/physics-v'))) && (github.event_name == 'push' || inputs.publish == true) }}
         run: |
           if [ "$ALLOW_PUBLICATION" = "true" ]; then
             python3 tools/release_plan.py --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
@@ -196,14 +198,14 @@ jobs:
         run: |
           CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath \
             -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u -d @${SOURCE_DATE_EPOCH} +%Y%m%d%H%M)" \
-            -o ../dist/CTMathsTutor-amd64.exe .
+            -o ../dist/CTPhysicsTutor-amd64.exe .
 
       - name: Build (windows/arm64)
         working-directory: windows
         run: |
           CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -trimpath \
             -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u -d @${SOURCE_DATE_EPOCH} +%Y%m%d%H%M)" \
-            -o ../dist/CTMathsTutor-arm64.exe .
+            -o ../dist/CTPhysicsTutor-arm64.exe .
 
       - uses: actions/upload-artifact@v4
         with:
@@ -247,7 +249,7 @@ jobs:
           python3 tools/sync_assets.py
 
       - name: The permanent signing key still matches the committed fingerprint
-        run: python3 tools/check_signature.py --require --keystore android/keystore/ctmaths-release.p12
+        run: python3 tools/check_signature.py --require --keystore android/keystore/ctphysics-release.p12
 
       - name: Unit tests (answer checker parity, Kotlin)
         working-directory: android
@@ -300,11 +302,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release download "$PREVIOUS_TAG" --repo "$GITHUB_REPOSITORY" \
-            --pattern app-release.apk --dir previous-release
-          python3 tools/check_signature.py --require --apk previous-release/app-release.apk \
+            --pattern phyzics.apk --dir previous-release
+          python3 tools/check_signature.py --require --apk previous-release/phyzics.apk \
             --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
           python3 tools/check_apk_update.py --apk android/app/build/outputs/apk/release/app-release.apk \
-            --previous previous-release/app-release.apk --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2"
+            --previous previous-release/phyzics.apk --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2"
 
       - uses: actions/upload-artifact@v4
         with:

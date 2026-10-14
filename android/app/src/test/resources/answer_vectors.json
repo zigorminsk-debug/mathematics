@@ -1,244 +1,583 @@
 {
  "cases": [
   {
-   "user": "  − 7 ",
-   "accept": [
-    "-7"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "unit-kmh",
+   "note": "36 км/ч = 10 м/с — принимается наравне с 10 м/с",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "10",
+    "dimension": "m/s",
+    "unitPolicy": "named",
+    "unit": "м/с",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.5"
+    }
+   },
+   "cases": [
+    {
+     "input": "10",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "10 м/с",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "36 км/ч",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "36",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "10 км/ч",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   },
   {
-   "user": "X = 12",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "unit-cm",
+   "note": "10 см — это 0,1 м, а не 10 м",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "10",
+    "dimension": "m",
+    "unitPolicy": "named",
+    "unit": "м",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.5"
+    }
+   },
+   "cases": [
+    {
+     "input": "10 м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "1000 см",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "10 см",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "0,1 м",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   },
   {
-   "user": "х = 12",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "dim-newton",
+   "note": "10 Н нельзя принять за 10 кг",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "10",
+    "dimension": "kg",
+    "unitPolicy": "named",
+    "unit": "кг",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.1"
+    }
+   },
+   "cases": [
+    {
+     "input": "10 кг",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "10000 г",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "10 Н",
+     "ok": false,
+     "reason": "dimension"
+    },
+    {
+     "input": "10",
+     "ok": true,
+     "reason": ""
+    }
+   ]
   },
   {
-   "user": "ответ: 12",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "unit-required",
+   "note": "Единицу обязали указать — «10» не ответ",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "10",
+    "dimension": "m/s",
+    "unitPolicy": "required",
+    "unit": "м/с",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.5"
+    }
+   },
+   "cases": [
+    {
+     "input": "10 м/с",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "36 км/ч",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "10",
+     "ok": false,
+     "reason": "missing_unit"
+    }
+   ]
   },
   {
-   "user": "(12)",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "rounding-boundary",
+   "note": "Границы округления считаются точно",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "0.05",
+    "dimension": "m",
+    "unitPolicy": "named",
+    "unit": "м",
+    "rounding": 2
+   },
+   "cases": [
+    {
+     "input": "0,05",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "0,054",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "0,06",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "0,044",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   },
   {
-   "user": "1 000",
-   "accept": [
-    "1000"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "scientific",
+   "note": "1,5·10⁻³ проверяется как 1,5*10^-3",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "0.0015",
+    "dimension": "m",
+    "unitPolicy": "named",
+    "unit": "м",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.0005"
+    }
+   },
+   "cases": [
+    {
+     "input": "1,5·10⁻³ м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "1,5*10^-3 м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "1.5e-3 м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "1,5·10⁻² м",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "0,0015",
+     "ok": true,
+     "reason": ""
+    }
+   ]
   },
   {
-   "user": "-1/3",
-   "accept": [
-    "−1/3"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "celsius",
+   "note": "Температура: 27 °C = 300,15 К, «27» К — грубая ошибка",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "300.15",
+    "dimension": "K",
+    "unitPolicy": "named",
+    "unit": "К",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.5"
+    }
+   },
+   "cases": [
+    {
+     "input": "300,15 К",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "27 °C",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "300",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "27",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "300 °C",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   },
   {
-   "user": "6√2",
-   "accept": [
-    "6√2"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "mass-units",
+   "note": "Тонны и граммы переводятся, а не подставляются как числа",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "2500",
+    "dimension": "kg",
+    "unitPolicy": "named",
+    "unit": "кг",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "1"
+    }
+   },
+   "cases": [
+    {
+     "input": "2,5 т",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "2500 кг",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "2500000 г",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "2,5 кг",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "2,5",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   },
   {
-   "user": "6√2",
-   "accept": [
-    "6√3"
-   ],
-   "answerType": "short",
-   "expect": false
+   "id": "volume-litres",
+   "note": "1 л = 0,001 м³",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "0.002",
+    "dimension": "m^3",
+    "unitPolicy": "named",
+    "unit": "м^3",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.0005"
+    }
+   },
+   "cases": [
+    {
+     "input": "2 л",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "0,002 м^3",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "2 м^3",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "2",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   },
   {
-   "user": "",
-   "accept": [
-    "4"
-   ],
-   "answerType": "short",
-   "expect": false
+   "id": "energy-scientific",
+   "note": "Большие числа: 4,6·10⁷ Дж",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "46000000",
+    "dimension": "kg·m^2/s^2",
+    "unitPolicy": "named",
+    "unit": "Дж",
+    "tolerance": {
+     "kind": "relative",
+     "value": "0.01"
+    }
+   },
+   "cases": [
+    {
+     "input": "4,6·10⁷ Дж",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "46 МДж",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "46000000",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "4,6·10⁶ Дж",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "4,6·10⁷ Дж/кг",
+     "ok": false,
+     "reason": "dimension"
+    }
+   ]
   },
   {
-   "user": "4",
-   "accept": [
-    "4"
-   ],
-   "answerType": "choice",
-   "expect": true
+   "id": "speed-light",
+   "note": "Допуск по доле задаётся самим заданием",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "300000000",
+    "dimension": "m/s",
+    "unitPolicy": "named",
+    "unit": "м/с",
+    "tolerance": {
+     "kind": "relative",
+     "value": "0.01"
+    }
+   },
+   "cases": [
+    {
+     "input": "3·10⁸ м/с",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "3,01·10⁸ м/с",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "3,1·10⁸ м/с",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "3·10⁸",
+     "ok": true,
+     "reason": ""
+    }
+   ]
   },
   {
-   "user": "3",
-   "accept": [
-    "4"
-   ],
-   "answerType": "choice",
-   "expect": false
+   "id": "unknown-unit",
+   "note": "Неизвестная единица отвергается, а не игнорируется",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "10",
+    "dimension": "kg·m/s^2",
+    "unitPolicy": "named",
+    "unit": "Н",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.1"
+    }
+   },
+   "cases": [
+    {
+     "input": "10 Н",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "10 фунтов",
+     "ok": false,
+     "reason": "unit"
+    },
+    {
+     "input": "10",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "10,5 Н",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   },
   {
-   "user": "8/2",
-   "accept": [
-    "4"
-   ],
-   "answerType": "choice",
-   "expect": false
+   "id": "empty-and-junk",
+   "note": "Пустой и мусорный ввод не считаются ответом",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "5",
+    "dimension": "m",
+    "unitPolicy": "named",
+    "unit": "м",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.1"
+    }
+   },
+   "cases": [
+    {
+     "input": "",
+     "ok": false,
+     "reason": "empty"
+    },
+    {
+     "input": "   ",
+     "ok": false,
+     "reason": "empty"
+    },
+    {
+     "input": "пять",
+     "ok": false,
+     "reason": "empty"
+    },
+    {
+     "input": "5 м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "5,0 м",
+     "ok": true,
+     "reason": ""
+    }
+   ]
   },
   {
-   "user": "0,8",
-   "accept": [
-    "4/5"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "temperature-celsius-neg",
+   "note": "Отрицательные температуры по Цельсию",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "263.15",
+    "dimension": "K",
+    "unitPolicy": "named",
+    "unit": "К",
+    "tolerance": {
+     "kind": "absolute",
+     "value": "0.5"
+    }
+   },
+   "cases": [
+    {
+     "input": "-10 °C",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "263,15 К",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "-10 К",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   },
   {
-   "user": "0.80",
-   "accept": [
-    "4/5"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "8/10",
-   "accept": [
-    "0,8"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "12,0",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "12.",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "2,5",
-   "accept": [
-    "5/2"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "2,51",
-   "accept": [
-    "5/2"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "0,833",
-   "accept": [
-    "5/6"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "0,8",
-   "accept": [
-    "5/6"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "0,333",
-   "accept": [
-    "1/3"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "0,33",
-   "accept": [
-    "1/3"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "1000,5",
-   "accept": [
-    "1000"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "0,707",
-   "accept": [
-    "√2/2"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "0,7",
-   "accept": [
-    "√2/2"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "√2/2",
-   "accept": [
-    "0,707"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "6,28",
-   "accept": [
-    "2π"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "8,49",
-   "accept": [
-    "6√2"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "choice-format",
+   "note": "Вариант ответа сравнивается с точностью до записи",
+   "spec": {
+    "answerType": "choice",
+    "answer": "2,5 м",
+    "accept": [
+     "2,5 м"
+    ]
+   },
+   "cases": [
+    {
+     "input": "2,5 м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "2.5 м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "ответ: 2,5 м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "б) 2,5 м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "2,5м",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "2,5 км",
+     "ok": false,
+     "reason": "value"
+    }
+   ]
   }
- ]
+ ],
+ "count": 15
 }

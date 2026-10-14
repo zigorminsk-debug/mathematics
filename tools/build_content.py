@@ -1,25 +1,36 @@
 #!/usr/bin/env python3
-"""tools/build_content.py — the single content pipeline of the project.
+"""tools/build_content.py — единственный конвейер контента физики.
 
     content_src/*.py  ──►  dist/content/*.json  ──►  Android assets
-                                                └─►  Windows embedded web app
-                                                └─►  generated Android strings.xml
+                                                └─►  Windows web
+                                                └─►  сгенерированный strings.xml
 
-Steps
------
-1. import every authoring module (``task_bank_2021``…``task_bank_2026``,
-   ``templates``, ``templates_extra``, …);
-2. run the exact-arithmetic ``check()`` of **every** item — the build fails if a
-   single answer is wrong, a task has no solution, or part A is malformed;
-3. serialise language-neutral banks (ru + en side by side);
-4. write update manifests (version + SHA-256) used by the in-app updater of both
-   platforms to download newer banks on top of the installed one;
-5. copy everything into the Android asset folder and the Windows web folder.
+Что здесь проверяется (сборка падает, а не «предупреждает»)
+----------------------------------------------------------
+1. **Каждое задание** банка и генератора проходит ``Task.verify()``: ответ
+   выводится из физической модели точной арифметикой, размерность формулы
+   сходится, единицы данных и ответа совместимы, данные встречаются в тексте,
+   у неверных вариантов части A есть объяснения типичных ошибок.
+2. **Все шесть вариантов** 2021–2026 годов на месте: ``periods.py`` — источник
+   правды о составе варианта.
+3. **Теория**: у каждого урока есть определения, правила, разобранный пример,
+   бытовое объяснение в двух абзацах и ссылки только на существующие схемы; ни
+   одна схема не остаётся недостижимой.
+4. **Конспекты и формулы**: у каждой темы есть конспект со ссылками на теорию и
+   группы формул; каждая строка сборника формул ссылается на существующий урок.
+5. **Покрытие тем**: каждая из 13 областей программы встречается и в варианте, и
+   среди аналогичных заданий.
+6. **Векторы ответов**: общий набор пограничных случаев (единицы, размерности,
+   округление, °C, научная запись) обязан быть оценён ядром так, как записано.
+7. **Строки интерфейса**: ключ, который использует ``webapp/*.js``, обязан быть в
+   ``ui_strings.py``; у ключей ``*_fmt`` число подстановок совпадает в ru и en.
+8. **Никаких математических остатков**: тексты заданий и надписи не содержат
+   названий чужого предмета — это физика, а не переименованная математика.
 
-Usage::
+Использование::
 
-    python3 tools/build_content.py            # build + verify
-    python3 tools/build_content.py --check    # verify only (used by CI)
+    python3 tools/build_content.py            # собрать и проверить
+    python3 tools/build_content.py --check    # только проверить (CI)
 """
 
 from __future__ import annotations
@@ -28,215 +39,293 @@ import argparse
 import hashlib
 import importlib
 import json
-import os
 import re
 import shutil
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "content_src"
 DIST = ROOT / "dist" / "content"
+TOOLS = ROOT / "tools"
+VERSION_FILE = ROOT / "VERSION"
 
 sys.path.insert(0, str(SRC))
+sys.path.insert(0, str(TOOLS))
 
-import periods  # noqa: E402  (лежит рядом, подключается после sys.path)
+import periods  # noqa: E402
+import subject  # noqa: E402
 
 YEAR_MODULES = periods.modules()
-EXTRA_MODULES = ["templates", "templates_extra", "formulas", "ui_strings", "mistakes"]
+#: все модули, без которых релиз физики неполон
+REQUIRED_MODULES = ["templates", "formulas", "study", "theory", "diagrams", "mistakes",
+                    "ui_strings"]
 
-CONTENT_VERSION_FILE = ROOT / "VERSION"
+#: признаки чужого предмета: их не должно быть в заданиях и надписях интерфейса.
+#: Учебная проза теории может упоминать логарифм или геометрию по делу (синус
+#: безразмерного аргумента, построение изображения), поэтому здесь только прямые
+#: названия чужого приложения и предмета.
+FOREIGN_WORDS = ("математик", "mathemat", "ctmaths", "ctmathstutor")
 
 
-def load(mod: str):
+def load(name: str):
+    """Импортировать модуль автора; отсутствие обязательного модуля — ошибка."""
     try:
-        return importlib.import_module(mod)
-    except ModuleNotFoundError as exc:
-        if exc.name == mod:
+        return importlib.import_module(name)
+    except ModuleNotFoundError as error:
+        if error.name == name:
             return None
         raise
 
 
 def collect_tasks() -> tuple[list, list]:
-    """Return (bank_tasks, analogous_tasks) as serialised dicts, fully verified."""
+    """Банк и аналогичные задания: каждое проверено ядром."""
     bank, analogous = [], []
-    seen_ids: set[str] = set()
-    total_checks = 0
+    seen: set[str] = set()
+    checks = 0
+
+    mistakes = load("mistakes")
+    if mistakes is None:
+        raise SystemExit("content_src/mistakes.py отсутствует — каталог типичных ошибок "
+                         "обязателен для разбора неверных ответов")
+    mistakes.register()
 
     for name in YEAR_MODULES:
-        mod = load(name)
-        if mod is None:
-            print(f"  · {name}: not present yet (skipped)")
-            continue
-        tasks = mod.tasks()
-        for t in tasks:
-            t.verify()
-            total_checks += 1
-            if t.id in seen_ids:
-                raise SystemExit(f"duplicate task id: {t.id}")
-            seen_ids.add(t.id)
-            bank.append(t.to_json())
-        print(f"  · {name}: {len(tasks)} items verified")
+        module = load(name)
+        if module is None:
+            raise SystemExit(f"нет модуля варианта: content_src/{name}.py — "
+                             f"варианты 2021–2026 обязательны (periods.py)")
+        items = module.tasks()
+        expected = periods.PARTS["A"] + periods.PARTS["B"]
+        if len(items) != expected:
+            raise SystemExit(f"{name}: собрано {len(items)} заданий вместо {expected}")
+        parts = {part: sum(1 for item in items if item.part == part) for part in ("A", "B")}
+        if parts != periods.PARTS:
+            raise SystemExit(f"{name}: части варианта не совпадают с periods.PARTS — {parts}")
+        for task in items:
+            task.verify()
+            checks += 1
+            if task.id in seen:
+                raise SystemExit(f"повторяющийся идентификатор задания: {task.id}")
+            seen.add(task.id)
+            bank.append(task.to_json())
+        print(f"  · {name}: {len(items)} заданий проверено "
+              f"(A {parts['A']} + B {parts['B']})")
 
-    tmod = load("templates")
-    if tmod is not None:
-        items = list(tmod.generate())
-        emod = load("templates_extra")
-        if emod is not None:
-            items += list(emod.generate_extra())
-        seen_text = set()
-        unique = []
-        for t in items:
-            key = (t.topic, t.ru.strip(), t.en.strip())
-            if key in seen_text:
-                continue
-            seen_text.add(key)
-            unique.append(t)
-        items = unique
-        for t in items:
-            t.verify()
-            total_checks += 1
-            if t.id in seen_ids:
-                raise SystemExit(f"duplicate task id: {t.id}")
-            seen_ids.add(t.id)
-            analogous.append(t.to_json())
-        print(f"  · templates: {len(items)} analogous items verified")
+    templates = load("templates")
+    if templates is None:
+        raise SystemExit("content_src/templates.py отсутствует — без генератора "
+                         "аналогичных заданий разбор ошибки пуст")
+    items = templates.generate()
+    for task in items:
+        task.verify()
+        checks += 1
+        if task.id in seen:
+            raise SystemExit(f"повторяющийся идентификатор задания: {task.id}")
+        seen.add(task.id)
+        analogous.append(task.to_json())
+    print(f"  · templates: {len(items)} аналогичных заданий проверено")
 
-    print(f"  ✓ {total_checks} exact-arithmetic checks passed")
-    missing = [year for year in periods.years() if not (SRC / f"task_bank_{year}.py").exists()]
+    coverage = {task["topic"] for task in bank} | {task["topic"] for task in analogous}
+    missing = [topic for topic in periods.__dict__.get("TOPIC_ORDER", TOPIC_ORDER)
+               if topic not in coverage]
     if missing:
-        # periods.py — единственный источник правды: год без модуля означает, что в
-        # манифест попал вариант, которого нет в банке
-        raise SystemExit("нет модулей для периодов: " + ", ".join(str(year) for year in missing))
+        raise SystemExit("темы без заданий: " + ", ".join(missing))
+    print(f"  ✓ {checks} заданий проверено точной арифметикой; тем покрыто: {len(coverage)}")
     return bank, analogous
 
 
-def build_topics() -> dict:
-    from kit import TOPICS, TOPIC_ORDER, TOOLS
-    counts: dict[str, int] = {}
-    by_year: dict[str, int] = {}
-    figures = build_diagrams()
-    lessons = build_theory(figures)
-    study = build_study(TOPIC_ORDER, lessons)
-    return {"topics": TOPICS, "order": TOPIC_ORDER, "tools": TOOLS,
-            "counts": counts, "byYear": by_year, "study": study, "lessons": lessons, "figures": figures}
+def check_foreign_words(bank: list, analogous: list, lessons: dict, ui: dict) -> None:
+    """Ни один текст физики не должен называть чужой предмет."""
+    def scan(text: str, where: str) -> None:
+        lowered = text.lower()
+        for word in FOREIGN_WORDS:
+            if word in lowered:
+                raise SystemExit(f"{where}: текст похож на математический ({word!r}): "
+                                 f"{text[:80]}…")
+
+    for task in bank + analogous:
+        for field in ("text", "solution", "hints"):
+            value = task.get(field)
+            if isinstance(value, dict):
+                for lang in ("ru", "en"):
+                    for line in value.get(lang) or []:
+                        scan(str(line), task["id"] + f".{field}")
+            elif isinstance(value, dict) is False and isinstance(value, str):
+                scan(value, task["id"] + f".{field}")
+    for key, entry in ui.items():
+        for lang in ("ru", "en"):
+            scan(str(entry.get(lang, "")), f"ui:{key}")
+    for key, entry in lessons.items():
+        for lang in ("ru", "en"):
+            for group in ("definitions", "rules", "everyday"):
+                for line in (entry.get(group) or {}).get(lang) or []:
+                    scan(str(line), f"lesson {key}.{group}")
+            for example in entry.get("examples") or []:
+                scan(str((example.get("statement") or {}).get(lang, "")),
+                     f"lesson {key}.example")
+    print("  ✓ тексты не содержат чужих предметных названий")
+
+
+def _bilingual_text(value, where: str) -> None:
+    for lang in ("ru", "en"):
+        if not isinstance(value, dict) or not isinstance(value.get(lang), str) \
+                or not value[lang].strip():
+            raise SystemExit(f"{where}: нет текста ({lang})")
+
+
+def _bilingual_lines(value, where: str, minimum: int = 1) -> None:
+    for lang in ("ru", "en"):
+        lines = value.get(lang) if isinstance(value, dict) else None
+        if not isinstance(lines, list) or len(lines) < minimum or any(
+                not isinstance(line, str) or not line.strip() for line in lines):
+            raise SystemExit(f"{where}: неполный список ({lang})")
+    if len(value["ru"]) != len(value["en"]):
+        raise SystemExit(f"{where}: разное число абзацев ru/en")
 
 
 def build_diagrams() -> dict:
-    mod = load("diagrams")
-    if mod is None:
-        raise SystemExit("content_src/diagrams.py is missing")
+    module = load("diagrams")
+    if module is None:
+        raise SystemExit("content_src/diagrams.py отсутствует — офлайн-схемы обязательны "
+                         "(без них уроки показывают только текст)")
     try:
-        figures = mod.validate(mod.payload())
+        figures = module.validate(module.payload())
     except (TypeError, ValueError, KeyError) as error:
-        raise SystemExit("invalid mathematical diagram: " + str(error)) from error
-    print(f"  · diagrams: {len(figures)} bilingual offline figures verified")
+        raise SystemExit("некорректная схема: " + str(error)) from error
+    if not figures:
+        raise SystemExit("каталог схем пуст")
+    print(f"  · diagrams: {len(figures)} схем проверено (типизированный SVG, 420×280)")
     return figures
 
 
-def build_theory(figures=None) -> dict:
-    """Fail closed on incomplete definitions, theorems or worked examples."""
-    mod = load("theory")
-    if mod is None:
-        raise SystemExit("content_src/theory.py is missing")
-    lessons = mod.payload()
-    figures = build_diagrams() if figures is None else figures
+def build_theory(figures: dict) -> dict:
+    module = load("theory")
+    if module is None:
+        raise SystemExit("content_src/theory.py отсутствует — офлайн-теория обязательна")
+    lessons = module.payload()
     if not lessons:
-        raise SystemExit("the theory catalogue is empty")
-
-    def bilingual_text(value, where):
-        for lang in ("ru", "en"):
-            if not isinstance(value, dict) or not isinstance(value.get(lang), str) or not value[lang].strip():
-                raise SystemExit(f"{where} has no text ({lang})")
-
-    def bilingual_lines(value, where, minimum=1):
-        for lang in ("ru", "en"):
-            lines = value.get(lang) if isinstance(value, dict) else None
-            if not isinstance(lines, list) or len(lines) < minimum or any(
-                    not isinstance(line, str) or not line.strip() for line in lines):
-                raise SystemExit(f"{where} is incomplete ({lang})")
-        if len(value["ru"]) != len(value["en"]):
-            raise SystemExit(f"{where} has different numbers of RU/EN paragraphs")
-
-    used_figures = set()
+        raise SystemExit("каталог уроков пуст")
+    used = set()
     for key, entry in lessons.items():
         if not re.fullmatch(r"[a-z][a-z0-9-]*", key) or entry.get("id") != key:
-            raise SystemExit(f"invalid theory lesson id: {key}")
-        bilingual_text(entry.get("title"), f"lesson {key} title")
-        bilingual_lines(entry.get("everyday"), f"lesson {key} everyday explanation", minimum=2)
+            raise SystemExit(f"неверный идентификатор урока: {key}")
+        _bilingual_text(entry.get("title"), f"урок {key}: заголовок")
+        _bilingual_lines(entry.get("everyday"), f"урок {key}: бытовое объяснение", 2)
+        _bilingual_lines(entry.get("definitions"), f"урок {key}: определения")
+        _bilingual_lines(entry.get("rules"), f"урок {key}: правила и условия")
         refs = entry.get("figures")
-        if not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in figures for ref in refs) or len(refs) != len(set(refs)):
-            raise SystemExit(f"lesson {key} has missing/duplicate diagram links")
-        used_figures.update(refs)
-        for field in ("definitions", "rules"):
-            bilingual_lines(entry.get(field), f"lesson {key} {field}")
-        if not isinstance(entry.get("examples"), list) or not entry["examples"]:
-            raise SystemExit(f"lesson {key} has no worked example")
+        if not isinstance(refs, list) or len(refs) != len(set(refs)) or any(
+                ref not in figures for ref in refs):
+            raise SystemExit(f"урок {key}: ссылки на схемы отсутствуют или дублируются")
+        used.update(refs)
+        if not entry.get("examples"):
+            raise SystemExit(f"урок {key}: нет разобранного примера")
         for example in entry["examples"]:
-            bilingual_text(example.get("statement"), f"lesson {key} example")
-            bilingual_lines(example.get("steps"), f"lesson {key} solution", minimum=2)
-    if set(figures) - used_figures:
-        raise SystemExit("unreachable mathematical figures: " + ", ".join(sorted(set(figures)-used_figures)))
-    print(f"  · theory: {len(lessons)} bilingual lessons + everyday explanations verified")
+            _bilingual_text(example.get("statement"), f"урок {key}: условие примера")
+            _bilingual_lines(example.get("steps"), f"урок {key}: решение примера", 2)
+    unreachable = set(figures) - used
+    if unreachable:
+        raise SystemExit("схемы, недостижимые из уроков: " + ", ".join(sorted(unreachable)))
+    print(f"  · theory: {len(lessons)} двуязычных уроков + бытовые объяснения проверены")
     return lessons
 
 
-def build_study(topic_order: list[str], lessons: dict) -> dict:
-    """Конспекты «что изучить по теме» (content_src/study.py) для topics.json.
-
-    Проверка при сборке: тема без конспекта или ссылка на несуществующий
-    раздел сборника формул означают, что при неверном ответе приложению
-    нечего будет открыть ученику, — такой банк не публикуется.
-    """
-    smod = load("study")
-    if smod is None:
-        raise SystemExit("content_src/study.py is missing — no study notes to open on a wrong answer")
-    study = smod.payload()
-    fmod = load("formulas")
-    groups = fmod.groups()["groups"] if fmod else []
+def build_study(topic_order: list, lessons: dict) -> dict:
+    module = load("study")
+    if module is None:
+        raise SystemExit("content_src/study.py отсутствует — при неверном ответе "
+                         "приложению нечего открыть ученику")
+    study = module.payload()
+    formulas = load("formulas")
+    groups = formulas.groups()["groups"] if formulas else []
     group_ids = {group["id"] for group in groups}
     used_lessons = set()
     for group in groups:
         group_lessons = group.get("lessons") or []
         if not group_lessons or any(key not in lessons for key in group_lessons):
-            raise SystemExit(f"formula group {group['id']} references missing theory")
+            raise SystemExit(f"группа формул {group['id']} ссылается на несуществующий урок")
         for item in group["items"]:
             key = item.get("lesson")
             if key not in lessons or key not in group_lessons:
-                raise SystemExit(f"formula row in {group['id']} references missing theory: {key}")
+                raise SystemExit(f"строка формул в {group['id']} ссылается на урок {key!r}, "
+                                 f"которого нет в группе")
             used_lessons.add(key)
     missing = [topic for topic in topic_order if topic not in study]
     if missing:
-        raise SystemExit("study notes are missing for topics: " + ", ".join(missing))
+        raise SystemExit("нет конспекта для тем: " + ", ".join(missing))
     for topic, entry in study.items():
         if topic not in topic_order:
-            raise SystemExit(f"study notes for an unknown topic: {topic}")
+            raise SystemExit(f"конспект для неизвестной темы: {topic}")
         for lang in ("ru", "en"):
             if len(entry.get(lang) or []) < 2:
-                raise SystemExit(f"study notes for {topic} are too short ({lang})")
+                raise SystemExit(f"конспект {topic} слишком короткий ({lang})")
         lesson_ids = entry.get("lessons") or []
         if len(lesson_ids) != len(entry["ru"]) or len(lesson_ids) != len(entry["en"]):
-            raise SystemExit(f"study notes for {topic} need one theory link per point in both languages")
+            raise SystemExit(f"конспект {topic}: на каждый пункт нужна ссылка на урок "
+                             f"в обоих языках")
         if any(key not in lessons for key in lesson_ids):
-            raise SystemExit(f"study notes for {topic} reference missing theory")
+            raise SystemExit(f"конспект {topic} ссылается на несуществующий урок")
         used_lessons.update(lesson_ids)
         unknown = [group for group in entry.get("formulas") or [] if group not in group_ids]
         if unknown:
-            raise SystemExit(f"study notes for {topic} reference unknown formula groups: "
+            raise SystemExit(f"конспект {topic} ссылается на неизвестные группы формул: "
                              + ", ".join(unknown))
         if not entry.get("formulas"):
-            raise SystemExit(f"study notes for {topic} reference no formula group")
+            raise SystemExit(f"конспект {topic} не ссылается на сборник формул")
     unreachable = set(lessons) - used_lessons
     if unreachable:
-        raise SystemExit("unreachable theory lessons: " + ", ".join(sorted(unreachable)))
-    print(f"  · study: notes and theory links for {len(study)} topics verified")
+        raise SystemExit("уроки, недостижимые из конспектов: " + ", ".join(sorted(unreachable)))
+    print(f"  · study: конспекты и ссылки на теорию для {len(study)} тем проверены")
     return study
 
 
+def check_ui_strings() -> dict:
+    module = load("ui_strings")
+    if module is None:
+        raise SystemExit("content_src/ui_strings.py отсутствует — интерфейс без строк")
+    strings = module.STRINGS
+    for key, entry in strings.items():
+        for lang in ("ru", "en"):
+            if not str(entry.get(lang, "")).strip():
+                raise SystemExit(f"строка {key}: пустой {lang}")
+        if key.endswith("_fmt"):
+            if entry["ru"].count("%s") != entry["en"].count("%s") \
+                    or entry["ru"].count("%s") < 1:
+                raise SystemExit(f"строка {key}: подстановок %s разное число в ru/en")
+    used = set()
+    for path in sorted((ROOT / "webapp").glob("*.js")):
+        for match in re.finditer(r"\bt\(\s*'([a-z0-9_]+)'", path.read_text(encoding="utf-8")):
+            used.add(match.group(1))
+    missing = sorted(used - set(strings))
+    if missing:
+        raise SystemExit("в интерфейсе используются строки, которых нет в ui_strings.py: "
+                         + ", ".join(missing))
+    print(f"  · ui_strings: {len(strings)} надписей; ключей интерфейса без строки нет "
+          f"({len(used)} используется)")
+    return strings
+
+
+def check_vectors() -> dict:
+    kit = load("kit")
+    from quantities import check_answer
+    payload = kit.vectors_payload()
+    for case in payload["cases"]:
+        spec = case["spec"]
+        for item in case["cases"]:
+            result = check_answer(item["input"], spec)
+            if bool(result.ok) != bool(item["ok"]):
+                raise SystemExit(f"вектор {case['id']}: запись {item['input']!r} оценена "
+                                 f"{result.ok!r} вместо {item['ok']!r}")
+            if not item["ok"] and item.get("reason") and result.reason != item["reason"]:
+                raise SystemExit(f"вектор {case['id']}: причина для {item['input']!r} — "
+                                 f"{result.reason!r}, ожидалась {item['reason']!r}")
+    print(f"  · answer vectors: {payload['count']} векторов оценено ядром эталонно")
+    return payload
+
+
 def sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    h.update(path.read_bytes())
-    return h.hexdigest()
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def write_json(path: Path, payload) -> None:
@@ -247,14 +336,10 @@ def write_json(path: Path, payload) -> None:
 
 
 def android_strings_xml(strings: dict, lang: str) -> str:
-    """Render the shared string catalogue as Android resources.
-
-    Keys ending in ``_fmt`` keep their ``%s`` placeholder: it is rewritten to the
-    positional form ``%1$s`` and the escape of ``%`` is skipped for them.
-    """
-    def esc(s: str, fmt: bool) -> str:
-        s = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-        s = s.replace("'", "\\'").replace('"', '\\"').replace("\n", "\\n")
+    """Каталог строк → resources Android (``%s`` → ``%1$s``, ``%2$s`` …)."""
+    def esc(value: str, fmt: bool) -> str:
+        value = value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        value = value.replace("'", "\\'").replace('"', '\\"').replace("\n", "\\n")
         if fmt:
             counter = 0
 
@@ -263,181 +348,126 @@ def android_strings_xml(strings: dict, lang: str) -> str:
                 counter += 1
                 return "%%%d$s" % counter
 
-            s = re.sub(r"%s", number_argument, s)
+            value = re.sub(r"%s", number_argument, value)
         else:
-            s = s.replace("%", "%%")
-        return s
+            value = value.replace("%", "%%")
+        return value
 
     lines = ['<?xml version="1.0" encoding="utf-8"?>',
-             '<!-- GENERATED by tools/build_content.py from content_src/ui_strings.py - do not edit -->',
-             '<resources>']
+             '<!-- GENERATED by tools/build_content.py from content_src/ui_strings.py '
+             '- do not edit -->',
+             "<resources>"]
     for key in sorted(strings):
         entry = strings[key]
-        val = entry.get(lang) or entry.get("en") or entry.get("ru") or ""
-        fmt = key.endswith("_fmt")
-        lines.append('    <string name="%s">%s</string>' % (key, esc(val, fmt)))
+        value = entry.get(lang) or entry.get("en") or ""
+        lines.append('    <string name="%s">%s</string>' % (key, esc(value, key.endswith("_fmt"))))
     lines.append("</resources>")
     return "\n".join(lines) + "\n"
 
 
+TOPIC_ORDER = ["measurements", "kinematics", "dynamics", "workenergy", "statics",
+               "molecular", "thermo", "electrostatics", "current", "magnetism",
+               "oscillations", "optics", "quantum"]
+
+
 def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--check", action="store_true",
-                    help="verify the bank without writing any file")
-    args = ap.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--check", action="store_true",
+                        help="проверить банк, ничего не записывая (используется в CI)")
+    args = parser.parse_args()
 
-    print("Content pipeline")
+    print("Конвейер контента физики")
+    if not VERSION_FILE.exists():
+        raise SystemExit("нет файла VERSION — нечего публиковать")
+    content_version = VERSION_FILE.read_text(encoding="utf-8").strip()
+
     bank, analogous = collect_tasks()
-    if not bank and not analogous:
-        print("nothing to build — authoring modules are missing", file=sys.stderr)
-        return 1
+    vectors = check_vectors()
+    ui = check_ui_strings()
+    figures = build_diagrams()
+    lessons = build_theory(figures)
+    study = build_study(TOPIC_ORDER, lessons)
+    check_foreign_words(bank, analogous, lessons, ui)
 
-    # Ни отметок времени, ни других «плавающих» полей: банк обязан собираться
-    # байт в байт одинаково на любой машине и в любой момент времени, иначе
-    # проверка «копии не разъехались» зависела бы от момента запуска сборки.
-    # Время публикации релиза добавляет сам workflow (поле `released`).
+    kit = load("kit")
+    topics = {"topics": kit.TOPICS, "order": kit.TOPIC_ORDER, "tools": kit.TOOLS,
+              "counts": {}, "byYear": {}, "study": study, "lessons": lessons,
+              "figures": figures}
+    for task in bank:
+        topics["counts"][task["topic"]] = topics["counts"].get(task["topic"], 0) + 1
+        if task["year"]:
+            key = str(task["year"])
+            topics["byYear"][key] = topics["byYear"].get(key, 0) + 1
+    for task in analogous:
+        topics["counts"][task["topic"]] = topics["counts"].get(task["topic"], 0) + 1
+
+    mistakes = load("mistakes").payload()
+
     meta = {
-        "contentVersion": CONTENT_VERSION_FILE.read_text(encoding="utf-8").strip()
-        if CONTENT_VERSION_FILE.exists() else "1.0.0",
+        "contentVersion": content_version,
         "schema": 1,
-        "years": sorted({t["year"] for t in bank if t["year"]}),
+        "subject": subject.SUBJECT,
+        "package": subject.ANDROID_PACKAGE,
+        "app": subject.WINDOWS_BINARY,
+        "years": sorted({task["year"] for task in bank if task["year"]}),
         "counts": {
             "bank": len(bank),
             "analogous": len(analogous),
-            "choice": sum(1 for t in bank if t["answerType"] == "choice"),
-            "short": sum(1 for t in bank if t["answerType"] == "short"),
+            "choice": sum(1 for task in bank if task["answerType"] == "choice"),
+            "quantity": sum(1 for task in bank if task["answerType"] != "choice"),
+            "lessons": len(lessons),
+            "figures": len(figures),
         },
         "author": "Zakharevich Igor",
-        "email": "ziv@csl.by",
-        "phone": "+3753371412",
         "repo": "https://github.com/zigorminsk-debug/mathematics",
+        "disclosure": periods.DISCLAIMER,
+        "structureSource": periods.SOURCE,
     }
 
-    topics = build_topics()
-    for t in bank:
-        topics["counts"][t["topic"]] = topics["counts"].get(t["topic"], 0) + 1
-        if t["year"]:
-            topics["byYear"][str(t["year"])] = topics["byYear"].get(str(t["year"]), 0) + 1
-    for t in analogous:
-        topics["counts"][t["topic"]] = topics["counts"].get(t["topic"], 0) + 1
-
-    fmod = load("formulas")
-    formulas = fmod.groups() if fmod else {"groups": []}
-    umod = load("ui_strings")
-    ui = umod.STRINGS if umod else {}
-    mmod = load("mistakes")
-    mistake_help = mmod.payload() if mmod else {"errors": {}, "checklist": []}
-
-    from kit import ANSWER_VECTORS, check_answer
-    vectors = ANSWER_VECTORS or default_vectors()
-    for index, vector in enumerate(vectors):
-        graded = check_answer(vector["user"], {"accept": vector["accept"],
-                                               "answerType": vector.get("answerType", "short")})
-        if graded != bool(vector["expect"]):
-            raise SystemExit(f"answer vector #{index} ({vector['user']!r} vs {vector['accept']}) "
-                             f"graded {graded}, expected {vector['expect']}")
-    print(f"  ✓ {len(vectors)} answer vectors graded by the Python implementation")
-
     if args.check:
-        print("check-only mode: no files written")
+        print("режим --check: файлы не записаны")
         return 0
 
-    print("Writing banks")
+    print("Запись банка")
     write_json(DIST / "bank.json", {"meta": meta, "tasks": bank})
     write_json(DIST / "analogous.json", {"meta": meta, "tasks": analogous})
     write_json(DIST / "topics.json", topics)
-    write_json(DIST / "formulas.json", formulas)
+    write_json(DIST / "formulas.json", load("formulas").groups())
+    write_json(DIST / "mistakes.json", mistakes)
     write_json(DIST / "ui_strings.json", {"strings": ui, "meta": meta})
-    write_json(DIST / "answer_vectors.json", {"cases": vectors})
-    write_json(DIST / "mistakes.json", mistake_help)
+    write_json(DIST / "answer_vectors.json", vectors)
 
     version = {
         **meta,
         **periods.payload(),
-        "files": {p.name: {"sha256": sha256(p), "bytes": p.stat().st_size}
-                  for p in sorted(DIST.glob("*.json")) if p.name != "version.json"},
-        "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/latest/download",
+        "updatePolicy": "subject-scoped releases API; no global /latest/download",
+        "baseUrl": subject.content_base_url("zigorminsk-debug/mathematics", content_version),
+        "files": {path.name: {"sha256": sha256(path), "bytes": path.stat().st_size}
+                  for path in sorted(DIST.glob("*.json")) if path.name != "version.json"},
     }
     write_json(DIST / "version.json", version)
 
-    print("Copying into the applications")
-    targets = [
-        (ROOT / "android" / "app" / "src" / "main" / "assets" / "content", DIST),
-        (ROOT / "windows" / "web" / "content", DIST),
-    ]
-    for dst, src in targets:
-        if not dst.parent.exists():
-            print(f"    · skipped {dst.relative_to(ROOT)} (app not scaffolded yet)")
+    print("Копирование в приложения")
+    for target in (ROOT / "android" / "app" / "src" / "main" / "assets" / "content",
+                   ROOT / "windows" / "web" / "content"):
+        if not target.parent.exists():
+            print(f"    · пропущено {target.relative_to(ROOT)} (приложение ещё не собрано)")
             continue
-        if dst.exists():
-            shutil.rmtree(dst)
-        shutil.copytree(src, dst)
-        print(f"    → {dst.relative_to(ROOT)}/")
+        if target.exists():
+            shutil.rmtree(target)
+        shutil.copytree(DIST, target)
+        print(f"    → {target.relative_to(ROOT)}/")
 
-    if ui:
-        print("Generating Android string resources")
-        for lang, folder in (("en", "values"), ("ru", "values-ru")):
-            out = ROOT / "android" / "app" / "src" / "main" / "res" / folder / "strings.xml"
-            if out.parent.parent.exists():
-                out.parent.mkdir(parents=True, exist_ok=True)
-                out.write_text(android_strings_xml(ui, lang), encoding="utf-8")
-                print(f"    → {out.relative_to(ROOT)}")
+    print("Генерация строк Android")
+    for lang, folder in (("en", "values"), ("ru", "values-ru")):
+        out = ROOT / "android" / "app" / "src" / "main" / "res" / folder / "strings.xml"
+        if out.parent.parent.exists():
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(android_strings_xml(ui, lang), encoding="utf-8")
+            print(f"    → {out.relative_to(ROOT)}")
 
-    print("Done.")
+    print("Готово.")
     return 0
-
-
-def default_vectors() -> list[dict]:
-    """The shared contract of the portable answer checker.
-
-    Every row is graded by **all three implementations** — Python
-    (:func:`kit.check_answer`), JavaScript (``webapp/core.js`` → ``CT.answer``,
-    checked by ``tests/answer_parity.js``) and Kotlin (``AnswerChecker.kt``,
-    checked by ``AnswerCheckerTest.kt``) — and the builds fail when any of them
-    disagrees.  Four tiers are covered: canonical string match, choice tasks
-    (never graded numerically), exact numbers with a rounding band for
-    fractions, and expressions with roots or π that at least one side wrote as an
-    expression.
-    """
-    return [
-        # 1. каноническая строка / canonical string forms
-        {"user": "  − 7 ", "accept": ["-7"], "answerType": "short", "expect": True},
-        {"user": "X = 12", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "х = 12", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "ответ: 12", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "(12)", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "1 000", "accept": ["1000"], "answerType": "short", "expect": True},
-        {"user": "-1/3", "accept": ["−1/3"], "answerType": "short", "expect": True},
-        {"user": "6√2", "accept": ["6√2"], "answerType": "short", "expect": True},
-        {"user": "6√2", "accept": ["6√3"], "answerType": "short", "expect": False},
-        {"user": "", "accept": ["4"], "answerType": "short", "expect": False},
-
-        # 2. выбор варианта: «повезло с числом» — не ответ
-        {"user": "4", "accept": ["4"], "answerType": "choice", "expect": True},
-        {"user": "3", "accept": ["4"], "answerType": "choice", "expect": False},
-        {"user": "8/2", "accept": ["4"], "answerType": "choice", "expect": False},
-
-        # 3. точные числа и округления, написанные рукой
-        {"user": "0,8", "accept": ["4/5"], "answerType": "short", "expect": True},
-        {"user": "0.80", "accept": ["4/5"], "answerType": "short", "expect": True},
-        {"user": "8/10", "accept": ["0,8"], "answerType": "short", "expect": True},
-        {"user": "12,0", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "12.", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "2,5", "accept": ["5/2"], "answerType": "short", "expect": True},
-        {"user": "2,51", "accept": ["5/2"], "answerType": "short", "expect": False},
-        {"user": "0,833", "accept": ["5/6"], "answerType": "short", "expect": True},
-        {"user": "0,8", "accept": ["5/6"], "answerType": "short", "expect": False},
-        {"user": "0,333", "accept": ["1/3"], "answerType": "short", "expect": True},
-        {"user": "0,33", "accept": ["1/3"], "answerType": "short", "expect": False},
-        {"user": "1000,5", "accept": ["1000"], "answerType": "short", "expect": False},
-
-        # 4. ответы, записанные выражением (корни, π)
-        {"user": "0,707", "accept": ["√2/2"], "answerType": "short", "expect": True},
-        {"user": "0,7", "accept": ["√2/2"], "answerType": "short", "expect": False},
-        {"user": "√2/2", "accept": ["0,707"], "answerType": "short", "expect": True},
-        {"user": "6,28", "accept": ["2π"], "answerType": "short", "expect": True},
-        {"user": "8,49", "accept": ["6√2"], "answerType": "short", "expect": True},
-    ]
 
 
 if __name__ == "__main__":

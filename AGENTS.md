@@ -1,155 +1,120 @@
-# Agent handoff — CT Maths Tutor
+# AGENTS.md — «Репетитор ЦТ: Физика» (ветка физики репозитория `zigorminsk-debug/mathematics`)
 
-Read this file, `docs/WORKLOG.md` and `docs/RELEASE.md` before changing the project.
-The worklog is a dated human record, not a live release-status database. The
-actual source is Git; the actual publication state is GitHub Actions/Releases.
+Это **отдельное приложение по физике** для подготовки к ЦТ (Беларусь): Android APK
+и два Windows-EXE (amd64/arm64), офлайн-теория, авторские тренировочные варианты,
+проверка физических величин с единицами и размерностями, автопубликация релизов.
 
-## Standing user requirements (2026-10-14)
+Читать в этом порядке: **AGENTS.md → docs/WORKLOG.md → docs/CONTENT.md →
+docs/RELEASE.md → docs/ARCHITECTURE.md → docs/subjects/PHYSICS.md** (техзадание
+пользователя) и `docs/subjects/README.md` (условия изоляции от математики).
 
-> «публикуй автоматически все сборки сразу после внесения изменений, и
-> документируй все действия чтобы любой агент продолжил работу»
+## 1. Идентичность предмета (не менять без явной просьбы)
 
-- After a trusted push to `zigorminsk-debug/mathematics`, CI must automatically
-  publish the signed release APK, **both** Windows EXEs, and the content feed
-  **after all checks pass**. Do not revert to artifact-only/manual publication.
-- Record material changes, commands, validation results, failures, commit/PR/run
-  identities, publication outcome and remaining uncertainties in
-  `docs/WORKLOG.md`. Keep this handoff/runbook accurate when architecture changes.
-- Every published release automatically carries `release-info.json` and
-  `SHA256SUMS.txt`; Actions also keeps `release-audit` and step summaries.
-  The same JSON ledger is also mirrored in Release body (API-readable even when
-  binary asset redirects are blocked). These immutable records avoid an endless bot-commit → release → bot-commit loop.
-- A new documentation-only push also produces a release. A rerun of an already
-  published source is idempotent: never replace public assets or move a version tag.
+Один источник правды — `tools/subject.py`:
 
-## Repository and source of truth
+| Свойство | Значение физики | Математика (чужая, не трогать) |
+|---|---|---|
+| subject | `physics` | `mathematics` |
+| теги релизов | `physics-vYYYY.M.P` | `vYYYY.M.P` |
+| Android package | `by.ziv.ctphysics` (+ `.debug`) | `by.ziv.ctmaths` |
+| Windows EXE | `CTPhysicsTutor-{amd64,arm64}.exe` | `CTMathsTutor-…` |
+| Windows данные | `%APPDATA%\CTPhysicsTutor`, профиль Edge `ctphysics-window` | `CTMathsTutor` |
+| APK в релизе | **`phyzics.apk`** (имя, которое просил пользователь; сборка Gradle остаётся `app-release.apk`, переименование делает шаг публикации) | `app-release.apk` |
+| подпись | `android/keystore/ctphysics-release.p12`, отпечаток в `android/keystore/expected-cert-sha256.txt` | `ctmaths-release.p12` |
+| очередь CI | `ctphysics-release-pipeline` | `ctmaths-release-pipeline` |
+| канал обновления | `https://github.com/<repo>/releases/download/physics-v<version>` (через Releases API), **без** `/releases/latest/download` | глобальный `latest` |
 
-- Android: `android/`, Kotlin/Gradle; Windows: `windows/`, Go.
-- Shared UI: **edit `webapp/`**, then regenerate/sync platform copies.
-- Authored RU/EN content: **edit `content_src/`**, not generated JSON/resources.
-- `tools/build_content.py` verifies all task answers with exact arithmetic;
-  `tools/sync_assets.py` distributes the shared interface and data.
-- `VERSION` is the **minimum source/build version**, not necessarily the latest
-  published version. CI allocates a higher effective version automatically,
-  applies it to runner checkouts only, and uses it for all three artifacts.
-  Never commit CI-generated release output or bump a version merely to log a run.
-- `dist/`, `release/`, `staging/`, native builds, `.venv/`, `node_modules/`,
-  `scratch/` are disposable/ignored. Do not commit binaries, caches or credentials.
-- Honour the branch fixed by the active Arena session. This session is
-  `arena/d7e34c80-mathematics`, PR #4 against `main`. Do not switch/create/push
-  another branch here; do not merge/close a PR unless the user asks. Until PR #4
-  is merged, old main does not contain these workflows/handoff documents; start
-  from this working branch or integrate its published history before continuing.
+Правила, которые нельзя нарушать:
 
-## Future Physics/Russian work (user decision 2026-10-14)
+1. Физика публикуется **только** как `make_latest=false`. Глобальный latest
+   репозитория обязан оставаться математическим (`tools/publish_release.py`
+   падает, если id `releases/latest` изменился во время публикации физики).
+2. Ни одна команда не пишет в математические ветки/теги/пакеты и не переиспользует
+   математический сертификат. Установленные приложения сосуществуют; статистика,
+   настройки, профили WebView/Edge и загруженный банк — раздельные.
+3. Авторские задания не выдаются за материалы РИКЗ: дисклеймер лежит в
+   `content_src/periods.py`, попадает в `version.json` и в экран «О программе».
+4. Формат варианта (не наследуется от математики!): **часть A — 10 заданий с
+   выбором ответа, часть B — 20 заданий с кратким ответом, 210 минут** — перечень
+   РИКЗ (см. `content_src/periods.py`, проверено 2026-10-14).
+5. Не объявлять успех по одной проверке синтаксиса: релиз подтверждается реальным
+   запуском CI и фактическим Release (tag, SHA, инвентарь, digests, math latest).
 
-The user requested separate Physics and Russian tutor branches, then selected
-**separate Arena sessions with their own working branches**, not two app folders
-in this Mathematics branch. Handoff/specifications/prompts live in
-`docs/subjects/README.md`, `PHYSICS.md`, `RUSSIAN.md`. **No subject branch, APK,
-EXE or subject release has been created by this handoff.** Do not mistake the
-specifications or a Mathematics documentation release for a finished tutor.
+## 2. Состояние на 2026-10-14 (честно, проверено запуском команд)
 
-A new subject session must begin from this updated history (old main lacks it),
-honour its own assigned branch, and establish package/storage/update/publication
-isolation **before its first subject push**. Repository Releases/latest is
-shared across branches: never publish a renamed subject APK through the inherited
-math latest pipeline. The handoff describes namespaced tags, subject manifests,
-subject-scoped planner/resolver/upgrade checks and `make_latest=false` promotion.
-Do not create a new repository, change main, merge PR #4 or launch sibling branches
-without an explicit authorised task/environment.
+| Часть | Состояние | Чем проверено |
+|---|---|---|
+| Контент-ядро (`content_src/quantities.py`, `kit.py`, `mistakes.py`) | **готово** | `python3 -m unittest tests.test_quantities` → 32 теста OK |
+| Варианты 2021–2026 (по 30 заданий) | **готово**, 180/180 заданий | `python3 tools/build_content.py --check` |
+| Генератор аналогичных заданий | **готово**, 39 заданий, 13 тем | там же |
+| Теория (37 уроков RU/EN, бытовые объяснения и границы модели) | **готово** | `tools/build_content.py` проверяет структуру и ссылки на схемы |
+| Схемы (26 типизированных SVG) | **готово** | `content_src/diagrams.py` + проверка в сборке |
+| Конспекты, формулы, типичные ошибки | **готово** | проверки ссылок в `tools/build_content.py` |
+| Контент-фид `dist/content/*.json` (8 файлов) | **собирается** | `python3 tools/build_content.py` (bank 180, analogous 39) |
+| Изоляция релизов (planner/publisher/update resolver, workflow) | **готово в коде** | `tools/subject.py` + патчи в `release_plan.py`, `publish_release.py`, `check_apk_update.py`, `.github/workflows/*` |
+| Подпись Android | **готова**: PKCS12, отпечаток `A3:55:CB:12:F5:22:E9:A7:F6:FE:E3:A6:6C:E9:15:1D:73:23:40:58:A9:85:FA:57:19:CD:28:3E:63:21:35:83` | `tools/check_signature.py --require --keystore android/keystore/ctphysics-release.p12` |
+| **webapp (JS-интерфейс + проверка ответов)** | **НЕ портирован**: в `webapp/` лежит математический интерфейс (математический чекер, математические экраны) | `node --check` проходит, но логика чужая |
+| **Android (Kotlin)** | **НЕ портирован**: `android/app/src/main/java/by/ziv/ctmaths/*` — математический пакет и математический `AnswerChecker` | `tests/test_android_build.py` ещё проверяет `ctmaths` |
+| **Windows (Go)** | **НЕ портирован**: `windows/*.go` — `CTMathsTutor` и математические каталоги данных | `go` в песочнице отсутствует, проверка будет в CI |
+| Тесты | портирован только `tests/test_quantities.py`; `test_release.py`, `test_theory.py`, `test_diagrams.py`, `test_android_build.py`, JS-смоуки — ещё математические | — |
+| Релиз физики | **нет** (ни одного `physics-v*` тега) | — |
 
-## Invariants — do not regress
+**Вывод для следующего агента:** контент и правила релиза готовы, приложения — нет.
+CI на первом push физики пройдёт шаг `prepare` и большую часть `content`, но упадёт
+на `node tests/answer_parity.js` / смоуках / нативных шагах, пока `webapp/`,
+`android/`, `windows/` не переписаны под физику.
 
-1. Stable Android package: **`by.ziv.ctmaths`**. Permanent certificate:
-   **`B2:BD:B4:D1:26:B8:88:C7:D8:AF:50:80:F6:7E:CF:E1:E4:3F:EB:F2:8E:5D:1A:E6:61:D6:D7:AE:70:C5:14:65`**.
-   Keep `android/keystore/ctmaths-release.p12` and the expected certificate unchanged.
-   It is a public/demo key; do not substitute a private key for this installed app.
-2. Effective version `YYYY.month.patch` has patch 0–99. APK code is
-   `(year-2000)*10000 + month*100 + patch`. New public codes must strictly increase
-   and both APK signatures/package IDs must match the previous stable APK.
-3. Debug APK is development-only, package `by.ziv.ctmaths.debug`, and is **not**
-   a phone update or a public Release asset. It remains a separate CI artifact.
-4. Never suggest uninstalling to fix an update: that removes local statistics.
-   Diagnose installed package, certificate and code first. Do not claim a physical
-   phone installation was tested when only CI/browser checks were run.
-5. Six **authored practice**, not official RIKZ papers, cover 2021–2026; 2026 has
-   18 A + 12 B tasks. Keep RU/EN statements, hints, worked solutions and checks.
-6. Wrong practice/analogous answers open relevant study; exam remediation happens
-   after finishing. Revision points, formula groups and rows must open offline
-   definitions/rules/theorems/examples. Back/language changes preserve session,
-   answer, search, scroll and focus. Study has 56 lessons/18 topics; every lesson
-   includes bilingual everyday explanations, with 52 offline SVG figures in 51
-   lessons. Keep `intuition.py`/`diagrams.py` typed primitives, captions, units and
-   math checks; no raw SVG/HTML/eval/external images. Zoom/pan/Back/language must
-   not alter answers/progress and must preserve parent scroll/focus.
-7. Preserve atomic/checksummed content updates and protection against older
-   downloaded banks hiding newer built-in content. Settings/statistics must survive.
-8. Do not publish from a PR/fork or bypass any failed/skipped build/check job.
-   Publication must reuse **same-run checked artifacts**, not rebuild separately.
-   `BUILD_JOBS` in `tools/release_plan.py` must match CI job names if renamed.
-
-## Start / check / finish
+## 3. Команды (локально, всё выполнимо в песочнице без Go/JDK)
 
 ```bash
-pwd; git branch --show-current; git status --short; git log -5 --oneline
-# Actual publication and Actions state, not stale prose/VERSION:
-gh api repos/zigorminsk-debug/mathematics/releases/latest \
-  --jq '{tag: .tag_name, url: .html_url, source: .target_commitish, assets: [.assets[].name]}'
-gh run list --workflow ci.yml --branch arena/d7e34c80-mathematics --limit 8 \
-  --json databaseId,headSha,event,status,conclusion,url
-
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-dev.txt
-python3 tools/build_content.py
-python3 tools/sync_assets.py
-python3 tools/sync_assets.py --check
+python3 tools/build_content.py            # собрать и проверить весь контент
+python3 tools/build_content.py --check    # только проверить (режим CI)
+python3 -m unittest discover -s tests -p 'test_*.py'
+python3 tools/check_signature.py --require --keystore android/keystore/ctphysics-release.p12
 node --check webapp/core.js && node --check webapp/app.js
-node tests/answer_parity.js
-node tests/content_schema.js
-.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
-.venv/bin/python tools/check_syntax.py --require
-npm install --no-save jsdom
-node tests/ui_smoke.js && node tests/native_smoke.js && node tests/theory_smoke.js
-git diff --check
-# Also go vet/test and Gradle/Kotlin/APK gates when local toolchains exist;
-# regardless, wait for actual native CI checks and publication before claiming success.
 ```
 
-After editing, update the worklog with what actually ran (distinguish local/CI,
-planned/completed, device/browser). Commit/push only the session branch. A push
-starts publication automatically: watch the run and verify latest contains all
-13 expected assets, its tag targets the pushed SHA, and its audit reports the
-same effective version/code. Report stable user download links, not expiring
-Actions artifacts, when publication is confirmed. A failed run is not a release.
+Чего в песочнице **нет** и что проверяется только CI: `go`, `java`, `gradle`,
+`keytool`, `apksigner`, `aapt2`. Никогда не писать «собрано/протестировано
+локально» про нативные артефакты: их собирает GitHub Actions.
 
-To continue after failure: follow `docs/RELEASE.md` recovery; query checks and
-annotations rather than repeatedly downloading unavailable full logs. Never
-force-publish an incomplete draft, weaken certificate/code gates, repoint a tag,
-or bypass a stale-history error. A publishing branch must descend from the most
-recent public release; integrate that history on the allowed working branch.
+## 4. Карта репозитория
 
-## Known Arena/environment limitations (dated 2026-10-14)
+```
+content_src/            авторские модули (источник правды контента)
+  quantities.py         единицы, размерности, парсер чисел, проверка ответа, модели
+  kit.py                конструкторы заданий Task/calc_task/calc_choice_task + векторы ответов
+  variants.py           движок вариантов 2022–2026 (рецепты + числа по годам)
+  task_bank_2021.py …   шесть вариантов (2021 — руками, 2022–2026 — движок)
+  templates.py          генератор аналогичных заданий (39, все 13 тем)
+  theory.py             37 уроков: определения, условия, пример, «бытовое» + границы модели
+  diagrams.py           26 схем: типизированный SVG (без raw SVG/eval/CDN)
+  formulas.py, study.py, mistakes.py, periods.py, ui_strings.py
+tools/
+  subject.py            идентичность предмета (см. §1)
+  build_content.py      конвейер: проверки → dist/content/*.json → ассеты приложений
+  release_plan.py       версия/тег/lineage только physics-v*
+  publish_release.py    публикация draft → Release с make_latest=false
+  check_apk_update.py   пакет/versionCode/обновление поверх прошлого APK
+  check_signature.py, check_syntax.py, sync_assets.py
+dist/content/           собранный фид (в git не хранится; копируется в приложения)
+webapp/ android/ windows/  интерфейс и нативные оболочки (ожидают портирования)
+docs/                   WORKLOG.md, CONTENT.md, RELEASE.md, ARCHITECTURE.md, subjects/
+```
 
-- `gh workflow run release.yml ...` returned **403 Resource not accessible by
-  integration** (manual Actions-dispatch permission missing). Push-triggered CI
-  does not need this permission and publishes with its own scoped `GITHUB_TOKEN`.
-  If required GitHub operations still fail auth/permissions, tell the user to
-  reconnect GitHub in Arena; never request/store passwords, PATs, OAuth or 2FA.
-- Old local `gh pr edit` hits deprecated GraphQL Projects(classic). Update PR #4
-  with REST instead: `gh api --method PATCH repos/zigorminsk-debug/mathematics/pulls/4 -F body=@scratch/pr-body.md`.
-- Old `gh run list` lacks `--commit`: query `headSha` JSON and filter it.
-- Artifact/APK/full-log redirects and binary tool downloads may be blocked by
-  sandbox egress; GitHub-hosted runners and user-browser download links work.
-  Local Go/JDK/Gradle were unavailable. Do not silently label native tests local.
-- An Arena checkout may be shallow. If a known published ancestor appears
-  unrelated, first `git rev-parse --is-shallow-repository`; when true, run
-  `git fetch --unshallow origin`, then retry ancestry/plan. Do not merge an
-  actually related tag or weaken the gate just because local history is incomplete.
-- Runners are pinned to `ubuntu-24.04`; CI reported `ubuntu-latest` migrating
-  to Ubuntu 26 on 2026-10-19. Upgrade intentionally only with native verification.
-- `actionlint-py` locally could not fetch its binary; actionlint v1.7.12 also
-  predates the documented Actions `queue` key. Workflow contracts/YAML parsing
-  are tested here, and the real GitHub run is the authoritative validation.
-- Preview binds to `0.0.0.0`; browser-facing APIs use relative URLs. Any scratch
-  preview/mobile-test process is temporary, not the durable project handoff.
+## 5. Ближайшие шаги (порядок работ, см. docs/WORKLOG.md §«Что дальше»)
+
+1. **webapp**: заменить математический чекер (`webapp/core.js` §3) на физический по
+   контракту `spec` из `dist/content/answer_vectors.json`; экраны — под поля
+   `given/unit/spec/dimension/model/distractors`; добавить инструмент «Единицы».
+2. **tests**: переписать `answer_parity.js`, `content_schema.js`, смоуки, а также
+   `test_release.py`, `test_theory.py`, `test_diagrams.py`, `test_android_build.py`
+   под физику и `tools/subject.py`.
+3. **android**: пакет `by.ziv.ctphysics`, label из `ui_strings`, `AnswerChecker.kt`
+   по тому же контракту (те же векторы), ресурсы из `res/values{,-ru}`.
+4. **windows**: `CTPhysicsTutor`, `%APPDATA%\CTPhysicsTutor`, профиль
+   `ctphysics-window`, subject-scoped resolver (Releases API, без глобального latest).
+5. Проверить `tools/sync_assets.py`, затем первый trusted push в
+   `arena/f7b88593-mathematics` → дождаться настоящего CI → первый `physics-v*`
+   Release с `make_latest=false`; убедиться, что математический latest не изменился.
+6. Записать фактический run/release в `docs/WORKLOG.md` и машинный audit релиза.

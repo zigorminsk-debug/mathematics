@@ -4,6 +4,9 @@
 Uses aapt2 from the Android SDK. Certificate validation is performed separately
 by check_signature.py. Missing tools/APKs are errors here: CI must not skip this
 check and pretend an unsigned, differently named or downgraded APK can update.
+
+Пакет берётся из ``tools/subject.py``: у физики это ``by.ziv.ctphysics``, и
+математический APK не может пройти эту проверку (чужой пакет/подпись).
 """
 from __future__ import annotations
 
@@ -13,8 +16,10 @@ import re
 import subprocess
 import sys
 
+import subject
+
 ROOT = Path(__file__).resolve().parent.parent
-PACKAGE = "by.ziv.ctmaths"
+PACKAGE = subject.ANDROID_PACKAGE
 
 
 def version_code(version: str) -> int:

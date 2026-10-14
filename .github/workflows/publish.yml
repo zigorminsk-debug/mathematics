@@ -22,7 +22,7 @@ defaults:
 
 jobs:
   publish:
-    name: Promote verified artifacts to latest
+    name: Publish the verified physics release (make_latest=false)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -47,7 +47,11 @@ jobs:
         with:
           name: android-release-apk
           path: staging/android
-      - name: Verify inventory, stage draft, publish and confirm latest
+      - name: Name the published APK exactly as the user asked (phyzics.apk)
+        run: |
+          mv staging/android/app-release.apk staging/android/phyzics.apk
+          ls -l staging/android
+      - name: Verify inventory, stage draft, publish without switching repository latest
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_VERSION: ${{ inputs.version }}
