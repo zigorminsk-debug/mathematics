@@ -41,6 +41,24 @@ actual source is Git; the actual publication state is GitHub Actions/Releases.
   is merged, old main does not contain these workflows/handoff documents; start
   from this working branch or integrate its published history before continuing.
 
+## Future Physics/Russian work (user decision 2026-10-14)
+
+The user requested separate Physics and Russian tutor branches, then selected
+**separate Arena sessions with their own working branches**, not two app folders
+in this Mathematics branch. Handoff/specifications/prompts live in
+`docs/subjects/README.md`, `PHYSICS.md`, `RUSSIAN.md`. **No subject branch, APK,
+EXE or subject release has been created by this handoff.** Do not mistake the
+specifications or a Mathematics documentation release for a finished tutor.
+
+A new subject session must begin from this updated history (old main lacks it),
+honour its own assigned branch, and establish package/storage/update/publication
+isolation **before its first subject push**. Repository Releases/latest is
+shared across branches: never publish a renamed subject APK through the inherited
+math latest pipeline. The handoff describes namespaced tags, subject manifests,
+subject-scoped planner/resolver/upgrade checks and `make_latest=false` promotion.
+Do not create a new repository, change main, merge PR #4 or launch sibling branches
+without an explicit authorised task/environment.
+
 ## Invariants — do not regress
 
 1. Stable Android package: **`by.ziv.ctmaths`**. Permanent certificate:

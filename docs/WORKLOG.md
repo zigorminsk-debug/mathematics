@@ -303,6 +303,70 @@ source floor. После push дождаться actual Go/Kotlin/APK/previous-s
 самодокументирован в immutable Release audit; не делать bot commit-loop.
 Physical phone update остаётся непроверенным; не удалять установленное приложение.
 
+## 2026-10-14 — передача физики и русского языка в отдельные сессии
+
+**Проверка состояния:** 2026-10-14T09:01:56+00:00.
+Source **`aa46e76558e389f3fb64564f6ce4ea45aeab32a0`**, fixed session branch
+`arena/d7e34c80-mathematics`, clean tree, VERSION floor .5. API latest:
+**v2026.10.7**, id **412493441**, `2026-10-14T08:31:24Z`, 13 assets, exact aa46e76.
+Push CI **38535383529** и PR CI **38535390684** SUCCESS, auto publisher SUCCESS /
+PR SKIPPED, actual own certificate/package/code + previous APK .6 → .7 gate passed.
+Это закрывает ожидаемую .7 предыдущего pre-push снимка. Все 13 server digest/byte
+checks, including independent audit/checksum reconstruction, прошли в прошлой задаче.
+
+**Новый запрос:** «сделай отдельную ветку с репетитором по Физике и отдельную ветку
+по русскому языку аналогично математике».
+
+**Согласованное ограничение/выбор:** текущая Arena session может менять/пушить
+только свою фиксированную ветку; создавать/переключать другие здесь нельзя.
+Предложены (1) два изолированных проекта-каталога в этой ветке, (2) новые отдельные
+сессии со своими ветками. `ask_user subject_projects` → пользователь выбрал
+**`separate_sessions` («Нужны именно отдельные ветки»)**. Здесь поэтому подготовлены
+specifications/handoff, НЕ два приложения или новые ветки. Новые Arena sessions
+инструментами этой сессии не открывались; следующая пользовательская операция —
+открыть их и передать соответствующие готовые запросы.
+
+**Изменения:**
+
+- `docs/subjects/README.md`: verified base/history, launch steps, ready-to-paste
+  agent prompts, proposed independent subject/package/data/profile/binary/tag
+  identities, shared-framework reuse и обязательная cross-subject isolation.
+- `docs/subjects/PHYSICS.md`: syllabus/content/variants с проверкой структуры,
+  units/dimensions/SI/decimal/scientific-notation answer contract и vectors,
+  everyday explanations/physically valid graphs/circuits/free-body diagrams,
+  UI/native/pipeline implementation map and acceptance criteria.
+- `docs/subjects/RUSSIAN.md`: syllabus/rules/exceptions/normative review,
+  original Russian exercise text under RU/EN UI, rule reference instead of maths
+  tools, strict type-specific normalization (spaces/hyphens/ё/case/stress/Unicode/
+  punctuation/ordered sets), visual language diagrams, negative tests/DoD.
+- README/AGENTS links and explicit **not implemented yet** state.
+- Критический найденный риск отражён в обеих спецификациях: **GitHub latest общий
+  между ветками**. Предметный first push должен атомарно включать channel-aware
+  planner/publisher/client + isolated storage/package. Proposed `physics-v…` /
+  `russian-v…`, `make_latest=false`, subject-scoped API resolver/manifest/audit/
+  previous-APK gate. Нельзя переключить math latest при публикации нового предмета.
+- Старый main по-прежнему не содержит текущую ветку/PR #4; новые сессии должны
+  стартовать из актуальной истории с docs/subjects. Новый repository не создан,
+  конкретные subject certificates/tags/download URLs не выдуманы.
+
+**Команды/факты до этого документационного push:**
+
+- `git branch/status/log`, `cat VERSION`, `gh api releases/latest` — SUCCESS,
+  ветка/head/release проверены. Просмотрены AGENTS/RELEASE, actual package/storage/
+  browser-profile identifiers и release planner/publisher architecture.
+- Банк/JS/Kotlin/Go/keystore/pipeline **не изменены**. Перед commit **SUCCESS**:
+  59 Python tests (0.595s), content 732 task checks/30 vectors/56 lessons/52 figures,
+  sync --check, JS syntax/parity/schema, UI/native/theory smoke (104 zooms), native
+  syntax 12 files, локальные Markdown links всех трёх subject documents и diff gate.
+  Нативные сборки повторятся в actual CI после этой отправки; они не назывались
+  локально выполненными.
+- После commit/push по standing instruction сработает **математическая** сборка,
+  ожидается next automatic .8, не новые Physics/Russian binaries. Не объявлять .8
+  опубликованной до CI/latest проверки; окончательные SHA/run/results — machine
+  Release audit без бесконечного documentation commit-loop.
+- Main/PR не слиты, другие branches не создавались/не отправлялись. Phone install
+  не выполнялся. Нереализованная работа двух предметов передана следующим сессиям.
+
 ## Как добавлять следующую запись (любой агент)
 
 1. UTC timestamp и при необходимости MSK; исходные branch/SHA/VERSION floor,

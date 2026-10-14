@@ -181,3 +181,16 @@ Every trusted repository push automatically publishes the checked release APK, b
 and content after all gates pass. Effective versions increase without manual VERSION bumps;
 PR/fork builds never publish. Each release includes an immutable machine-readable audit
 (`release-info.json`) and checksums; see `AGENTS.md` and `docs/WORKLOG.md` for agent handoff.
+
+## Отдельные репетиторы по физике и русскому языку
+
+По выбору пользователя новые предметы будут разрабатываться **в двух отдельных
+сессиях Arena со своими рабочими ветками**, а не как новые каталоги математики.
+Подготовлены [общая передача и готовые запросы](docs/subjects/README.md),
+[задание по физике](docs/subjects/PHYSICS.md) и
+[задание по русскому языку](docs/subjects/RUSSIAN.md).
+
+Это **планы реализации**, не созданные ветки/приложения. Обязательно изолировать
+package, статистику, releases и content update channels до первого предметного
+push: отдельная Git-ветка сама по себе не изолирует общий GitHub `latest`.
+Текущие APK/Windows и банк в этом репозитории пока остаются **математическими**.
