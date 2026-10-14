@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
-        android:theme="@style/Theme.CTMaths">
+        android:theme="@style/Theme.CTPhysics">
 
         <activity
             android:name=".MainActivity"
@@ -22,7 +22,7 @@
             android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode|locale|layoutDirection|density"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.CTMaths">
+            android:theme="@style/Theme.CTPhysics">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

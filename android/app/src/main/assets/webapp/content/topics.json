@@ -488,11 +488,13 @@
    "everyday": {
     "ru": [
      "Спидометр автомобиля показывает км/ч, а в формулах нужны м/с: разделите показание на 3,6. 36 км/ч — это ровно 10 м/с.",
-     "Прейскурант электроэнергии считает киловатт-часы, а физика — джоули: 1 кВт·ч = 3,6·10⁶ Дж. Модель «идеального» прибора без потерь здесь не работает: в реальном нагревателе часть энергии уходит в среду."
+     "Прейскурант электроэнергии считает киловатт-часы, а физика — джоули: 1 кВт·ч = 3,6·10⁶ Дж. Модель «идеального» прибора без потерь здесь не работает: в реальном нагревателе часть энергии уходит в среду.",
+     "Число без единицы ничего не значит: 5 может быть и метрами, и секундами — физическую величину делает единица измерения."
     ],
     "en": [
      "A car speedometer shows km/h while formulas want m/s: divide by 3.6. 36 km/h is exactly 10 m/s.",
-     "Electricity bills use kilowatt-hours while physics uses joules: 1 kWh = 3.6·10⁶ J. The lossless-appliance model is an approximation: part of the energy heats the room."
+     "Electricity bills use kilowatt-hours while physics uses joules: 1 kWh = 3.6·10⁶ J. The lossless-appliance model is an approximation: part of the energy heats the room.",
+     "A bare number means nothing: 5 may be metres or seconds — a unit is what makes a quantity physical."
     ]
    },
    "figures": []
@@ -548,11 +550,13 @@
    "everyday": {
     "ru": [
      "Покупая обои, площадь стен считают в м², а рулон продают «ширина × длина» в метрах — перемножать можно, потому что м·м даёт м².",
-     "Ошибка «сложить метры с секундами» встречается и в быту: сравнивать время поездки с расстоянием нельзя без скорости — именно её и связывает формула."
+     "Ошибка «сложить метры с секундами» встречается и в быту: сравнивать время поездки с расстоянием нельзя без скорости — именно её и связывает формула.",
+     "Проверка размерности — тоже модель: она подтверждает согласованность формулы, но не доказывает, что выбран верный закон."
     ],
     "en": [
      "Buying wallpaper you measure wall area in m² while a roll is sold as width × length in metres; the product gives m², so the units match.",
-     "Adding metres to seconds is nonsense in everyday life too: distance and time can only be compared through speed, which is exactly what a formula does."
+     "Adding metres to seconds is nonsense in everyday life too: distance and time can only be compared through speed, which is exactly what a formula does.",
+     "Checking dimensions is a model too: it confirms that a formula is consistent, not that the right law was chosen."
     ]
    },
    "figures": []
@@ -608,11 +612,13 @@
    "everyday": {
     "ru": [
      "Кухонные весы с шагом 5 г не покажут «127,3 г»: честный результат — (125 ± 2,5) г, и это нормально.",
-     "Модель «прибор идеален» годится только для оценок: в реальном опыте всегда есть трение, теплообмен и неточность отсчёта."
+     "Модель «прибор идеален» годится только для оценок: в реальном опыте всегда есть трение, теплообмен и неточность отсчёта.",
+     "Модель «прибор идеален» не учитывает ни погрешность отсчёта, ни систематический сдвиг нуля."
     ],
     "en": [
      "Kitchen scales with a 5 g step cannot show 127.3 g: the honest reading is (125 ± 2.5) g.",
-     "The ideal-instrument model is only an estimate: real experiments always have friction, heat exchange and reading error."
+     "The ideal-instrument model is only an estimate: real experiments always have friction, heat exchange and reading error.",
+     "The ideal-instrument model ignores both the reading error and a systematic zero shift."
     ]
    },
    "figures": [
@@ -670,11 +676,13 @@
    "everyday": {
     "ru": [
      "Такси по навигатору показывает путь 7 км, а по прямой до цели 5 км: счётчик берёт деньги за путь, а перемещение — только прямая.",
-     "Модель постоянной скорости на участке: в реальной поездке скорость меняется, поэтому средняя скорость — не «скорость в каждый момент»."
+     "Модель постоянной скорости на участке: в реальной поездке скорость меняется, поэтому средняя скорость — не «скорость в каждый момент».",
+     "Путь и перемещение определены для тела, размерами которого можно пренебречь; для вращающегося колеса «точка» уже не подходит."
     ],
     "en": [
      "A taxi meter charges for the 7 km route while the displacement to the destination is 5 km in a straight line.",
-     "The constant-speed model holds only piecewise: in a real trip the speed changes, so the average is not the instantaneous speed."
+     "The constant-speed model holds only piecewise: in a real trip the speed changes, so the average is not the instantaneous speed.",
+     "Path and displacement assume a body small enough to be a point; a spinning wheel is no longer a point."
     ]
    },
    "figures": [
@@ -750,11 +758,13 @@
    "everyday": {
     "ru": [
      "Курьерский поезд и электричка: чтобы узнать время встречи, складывают скорости, а чтобы догнать — вычитают. Это одна и та же формула x₁ = x₂.",
-     "Модель «скорость постоянна» для поезда годится только на перегоне без разгона и торможения."
+     "Модель «скорость постоянна» для поезда годится только на перегоне без разгона и торможения.",
+     "Модель «скорость постоянна» описывает участок без разгона и торможения, на остальных — только как приближение."
     ],
     "en": [
      "An express and a commuter train: meeting uses the sum of speeds, catching up uses the difference — both follow from x₁ = x₂.",
-     "The constant-speed model works only between acceleration and braking."
+     "The constant-speed model works only between acceleration and braking.",
+     "The constant-speed model describes a stretch without acceleration; elsewhere it is only an approximation."
     ]
    },
    "figures": [
@@ -830,11 +840,13 @@
    "everyday": {
     "ru": [
      "Разгон метро от станции: в первую секунду вагон проходит около метра, а за десять секунд — уже десятки метров, потому что путь растёт как квадрат времени.",
-     "Модель «ускорение постоянно» ломается у реального автомобиля после переключения передачи: там уже важно, как меняется тяга."
+     "Модель «ускорение постоянно» ломается у реального автомобиля после переключения передачи: там уже важно, как меняется тяга.",
+     "Модель «ускорение постоянно» ломается у реального автомобиля после переключения передачи, когда меняется тяга."
     ],
     "en": [
      "A metro train leaving a station covers about a metre in the first second but dozens of metres in ten, because distance grows as the square of time.",
-     "The constant-acceleration model breaks for a real car after a gear shift, where the traction varies."
+     "The constant-acceleration model breaks for a real car after a gear shift, where the traction varies.",
+     "Constant acceleration breaks down for a real car after a gear shift, when the traction changes."
     ]
    },
    "figures": [
@@ -892,11 +904,13 @@
    "everyday": {
     "ru": [
      "Спидометр рисует мгновенную скорость, а пройденный путь — площадь под её графиком: именно поэтому «средняя по времени» скорость не равна среднему показанию спидометра при резких разгонах.",
-     "Радар на дороге измеряет модуль скорости в одной точке, а не среднюю скорость за поездку — это разные физические величины."
+     "Радар на дороге измеряет модуль скорости в одной точке, а не среднюю скорость за поездку — это разные физические величины.",
+     "График — это модель записи движения: он показывает координату и скорость, но не описывает причину ускорения."
     ],
     "en": [
      "A speedometer shows instantaneous speed while the travelled distance is the area under its graph, so the time-average differs from the mean reading during hard acceleration.",
-     "A traffic radar measures the instantaneous speed at one point, not the trip average."
+     "A traffic radar measures the instantaneous speed at one point, not the trip average.",
+     "A graph is a recording model: it shows coordinates and speed but does not describe the cause of the acceleration."
     ]
    },
    "figures": [
@@ -954,11 +968,13 @@
    "everyday": {
     "ru": [
      "Капли с карниза падают по одинаковому закону: за первую секунду ≈ 5 м, за вторую ещё ≈ 15 м — интервалы растут.",
-     "Модель без сопротивления хороша для тяжёлого плотного тела на небольшой высоте; для парашюта и листа бумаги уже нужно учитывать сопротивление воздуха."
+     "Модель без сопротивления хороша для тяжёлого плотного тела на небольшой высоте; для парашюта и листа бумаги уже нужно учитывать сопротивление воздуха.",
+     "Модель свободного падения пренебрегает сопротивлением воздуха; для парашютиста или пылинки она уже неверна."
     ],
     "en": [
      "Roof drips fall the same way: about 5 m in the first second and 15 m more in the second.",
-     "The drag-free model suits a heavy dense body over a short drop; a parachute or a sheet of paper needs air resistance."
+     "The drag-free model suits a heavy dense body over a short drop; a parachute or a sheet of paper needs air resistance.",
+     "Free fall neglects air resistance; for a parachutist or a dust particle the model is already wrong."
     ]
    },
    "figures": [
@@ -1036,11 +1052,13 @@
    "everyday": {
     "ru": [
      "Ремень в машине: при резком торможении тело продолжает двигаться по инерции — первый закон спасает жизнь именно в этой ситуации.",
-     "Модель «масса точки в центре» подходит для коротких примеров; для вращающегося тела уже нужны момент силы и распределение массы."
+     "Модель «масса точки в центре» подходит для коротких примеров; для вращающегося тела уже нужны момент силы и распределение массы.",
+     "Законы Ньютона сформулированы для инерциальных систем отсчёта и тел много больше атомов; в ускоряющейся системе появляются силы инерции."
     ],
     "en": [
      "A seat belt works through inertia: during hard braking the body keeps moving — the first law is exactly what the belt handles.",
-     "The point-mass model suffices for simple problems; a rotating body needs torques and mass distribution."
+     "The point-mass model suffices for simple problems; a rotating body needs torques and mass distribution.",
+     "Newton's laws hold in inertial frames and for bodies far larger than atoms; an accelerating frame adds inertia forces."
     ]
    },
    "figures": [
@@ -1098,11 +1116,13 @@
    "everyday": {
     "ru": [
      "В магазине «весят» на самом деле измеряют массу в килограммах: настоящий вес 12 кг груза — около 118 Н, просто весы заранее поделили на g.",
-     "Модель P = mg верна для покоя; в падающем лифте вес исчезает, поэтому ремень безопасности нужен и в вертикальном движении."
+     "Модель P = mg верна для покоя; в падающем лифте вес исчезает, поэтому ремень безопасности нужен и в вертикальном движении.",
+     "Вес совпадает с силой тяжести только в покое или при равномерном движении: в свободном падении вес равен нулю."
     ],
     "en": [
      "Shop scales actually measure mass in kilograms: the true weight of 12 kg is about 118 N, the device simply divided by g.",
-     "P = mg holds at rest; in a falling lift the weight vanishes, which matters for safety belts."
+     "P = mg holds at rest; in a falling lift the weight vanishes, which matters for safety belts.",
+     "Weight equals gravity only at rest or in uniform motion: in free fall the weight is zero."
     ]
    },
    "figures": []
@@ -1176,11 +1196,13 @@
    "everyday": {
     "ru": [
      "Тормозной путь на льду в разы больше, чем на асфальте, потому что μ отличается в несколько раз — сила трения при той же массе разная.",
-     "Модель «трение не зависит от площади контакта» верна для сухого трения скольжения; для широких шин важнее давление и материал, и это уже за рамками школьной модели."
+     "Модель «трение не зависит от площади контакта» верна для сухого трения скольжения; для широких шин важнее давление и материал, и это уже за рамками школьной модели.",
+     "Закон Гука верен только до предела упругости: дальше график становится нелинейным и тело не возвращается к прежней форме."
     ],
     "en": [
      "Braking distances on ice are far longer than on asphalt because μ differs severalfold at the same mass.",
-     "Independent-of-area dry friction is the school model; real tyres also depend on pressure and material."
+     "Independent-of-area dry friction is the school model; real tyres also depend on pressure and material.",
+     "Hooke's law holds only up to the elastic limit; beyond it the graph bends and the body stays deformed."
     ]
    },
    "figures": [
@@ -1239,11 +1261,13 @@
    "everyday": {
     "ru": [
      "Разбирая «почему санки не едут», полезно нарисовать силы: тяга, трение, тяжесть и реакция — тогда видно, какая из них слишком мала.",
-     "Модель без сопротивления воздуха годится для медленных тел; для велосипедиста на спуске сопротивление уже сравнимо с тягой."
+     "Модель без сопротивления воздуха годится для медленных тел; для велосипедиста на спуске сопротивление уже сравнимо с тягой.",
+     "Схема сил идеализирует задачу: тело считается точечным, а нити — невесомыми и нерастяжимыми."
     ],
     "en": [
      "When a sledge will not move, a force sketch shows which of pull, friction, gravity or reaction is too small.",
-     "Ignoring air drag is fine for slow bodies; for a cyclist downhill it is comparable to the drive."
+     "Ignoring air drag is fine for slow bodies; for a cyclist downhill it is comparable to the drive.",
+     "A force diagram idealises the body as a point and the strings as weightless and inextensible."
     ]
    },
    "figures": [
@@ -1322,11 +1346,13 @@
    "everyday": {
     "ru": [
      "Человек несёт чемодан по горизонтали: тяжесть не совершает работы, хотя руки устают — усталость не равна совершённой работе.",
-     "Модель «КПД постоянен» верна для узкого диапазона нагрузки: у реального двигателя с ростом мощности КПД меняется."
+     "Модель «КПД постоянен» верна для узкого диапазона нагрузки: у реального двигателя с ростом мощности КПД меняется.",
+     "Формула мощности через работу верна для постоянной силы; при переменной силе она даёт среднюю мощность."
     ],
     "en": [
      "Carrying a suitcase horizontally involves no work by gravity, although the arm tires — fatigue is not work.",
-     "Constant efficiency holds only in a narrow load range; a real motor changes efficiency with load."
+     "Constant efficiency holds only in a narrow load range; a real motor changes efficiency with load.",
+     "Power as work over time holds for a constant force; a varying force gives only the average power."
     ]
    },
    "figures": []
@@ -1400,11 +1426,13 @@
    "everyday": {
     "ru": [
      "Велосипедист на спуске разгоняется, а на подъёме замедляется: высота и скорость обмениваются, пока трение и сопротивление не «съедят» часть энергии.",
-     "Модель без потерь завышает скорость и высоту подъёма: в реальности всегда есть трение в цепи и сопротивление воздуха."
+     "Модель без потерь завышает скорость и высоту подъёма: в реальности всегда есть трение в цепи и сопротивление воздуха.",
+     "Закон сохранения механической энергии работает без трения и потерь: при трении часть энергии уходит в тепло."
     ],
     "en": [
      "A cyclist speeds up downhill and slows uphill: height and speed trade, until friction and drag take their share.",
-     "The lossless model overestimates speed and climb: real chains and air always take energy."
+     "The lossless model overestimates speed and climb: real chains and air always take energy.",
+     "Conservation of mechanical energy assumes no friction: with friction part of it becomes heat."
     ]
    },
    "figures": []
@@ -1478,11 +1506,13 @@
    "everyday": {
     "ru": [
      "При столкновении двух машин импульс всей системы до и после примерно один и тот же — именно поэтому удар «сминает» лёгкую машину сильнее.",
-     "Модель замкнутой системы годится для короткого удара: за время удара внешние силы не успевают изменить суммарный импульс."
+     "Модель замкнутой системы годится для короткого удара: за время удара внешние силы не успевают изменить суммарный импульс.",
+     "Импульс сохраняется в замкнутой системе; при внешних силах (трение, удар о стену) закон выполняется лишь приближённо."
     ],
     "en": [
      "In a car crash the momentum of the pair is nearly the same before and after; that is why the lighter car crumples more.",
-     "The closed-system model works for a short impact, when external forces barely change the total momentum."
+     "The closed-system model works for a short impact, when external forces barely change the total momentum.",
+     "Momentum is conserved in a closed system; external forces such as friction make it approximate."
     ]
    },
    "figures": []
@@ -1538,11 +1568,13 @@
    "everyday": {
     "ru": [
      "Дверная ручка стоит далеко от петель именно чтобы плечо было больше и момент при меньшей силе — это и есть физика рычага.",
-     "Модель «рычаг невесом» годится для школьных задач; у реального рычага есть собственный вес, и его момент тоже нужно учитывать."
+     "Модель «рычаг невесом» годится для школьных задач; у реального рычага есть собственный вес, и его момент тоже нужно учитывать.",
+     "Правило моментов выведено для невесомой балки: собственный вес стержня добавляет отдельный момент."
     ],
     "en": [
      "A door handle sits far from the hinges to enlarge the lever arm and reduce the needed force.",
-     "The weightless-lever model is fine for school problems; a real lever also has its own weight moment."
+     "The weightless-lever model is fine for school problems; a real lever also has its own weight moment.",
+     "The lever rule assumes a weightless beam: a rod's own weight adds its own torque."
     ]
    },
    "figures": [
@@ -1618,11 +1650,13 @@
    "everyday": {
     "ru": [
      "Широкие лыжи снижают давление и человек не проваливается; тот же вес на узких ботинках давит в разы сильнее.",
-     "Модель несжимаемой жидкости: вода почти не сжимается, поэтому p = ρgh работает хорошо; для газа она не применяется."
+     "Модель несжимаемой жидкости: вода почти не сжимается, поэтому p = ρgh работает хорошо; для газа она не применяется.",
+     "Формула p = ρgh описывает покоящуюся жидкость; в потоке давление зависит ещё и от скорости движения."
     ],
     "en": [
      "Wide skis spread the same weight over more area, so the pressure drops.",
-     "The incompressible-liquid model suits water well; it does not apply to gases."
+     "The incompressible-liquid model suits water well; it does not apply to gases.",
+     "p = ρgh describes a fluid at rest; in a flow the pressure also depends on the speed."
     ]
    },
    "figures": [
@@ -1698,11 +1732,13 @@
    "everyday": {
     "ru": [
      "Корабль не тонет, потому что его средняя плотность с воздухом внутри меньше плотности воды, хотя сталь тяжелее воды.",
-     "Модель «жидкость покоится» не учитывает волны и течение; в шторм плавучесть оценивают уже другими методами."
+     "Модель «жидкость покоится» не учитывает волны и течение; в шторм плавучесть оценивают уже другими методами.",
+     "Сила Архимеда записана для полностью погружённого тела; у плавающего вытеснен объём меньше, и формула даёт верхнюю оценку."
     ],
     "en": [
      "A ship floats because its average density including air is below that of water, although steel itself is denser.",
-     "The still-liquid model ignores waves and currents."
+     "The still-liquid model ignores waves and currents.",
+     "Archimedes' force assumes full immersion; a floating body displaces less, so the formula is an upper bound."
     ]
    },
    "figures": [
@@ -1760,11 +1796,13 @@
    "everyday": {
     "ru": [
      "«Моль» на кухне — это просто порция: 18 г воды, 44 г углекислого газа — по одному молю, хотя объёмы разные.",
-     "Модель «молекулы — маленькие шарики» помогает считать, но не описывает химические связи; для реакций нужна уже химия."
+     "Модель «молекулы — маленькие шарики» помогает считать, но не описывает химические связи; для реакций нужна уже химия.",
+     "Модель «частицы одинаковы и не взаимодействуют» подходит разреженному газу; в жидкости молекулы связаны друг с другом."
     ],
     "en": [
      "A mole is a fixed portion: 18 g of water and 44 g of CO₂ are one mole each, though their volumes differ.",
-     "The little-spheres model counts particles but does not describe chemical bonds."
+     "The little-spheres model counts particles but does not describe chemical bonds.",
+     "Identical non-interacting particles fit a rarefied gas; in a liquid the molecules are bound to each other."
     ]
    },
    "figures": []
@@ -1820,11 +1858,13 @@
    "everyday": {
     "ru": [
      "Надувной мяч на морозе сжимается: при постоянном давлении объём пропорционален температуре в кельвинах, а не в градусах Цельсия.",
-     "Модель идеального газа хороша при обычных давлениях; при высоком давлении и близко к сжижению она уже не подходит."
+     "Модель идеального газа хороша при обычных давлениях; при высоком давлении и близко к сжижению она уже не подходит.",
+     "Идеальный газ не учитывает собственный объём молекул и силы притяжения, поэтому при высоком давлении модель завышает точность."
     ],
     "en": [
      "A ball shrinks in the cold because volume follows kelvin, not Celsius.",
-     "The ideal-gas model works at ordinary pressures and fails near liquefaction."
+     "The ideal-gas model works at ordinary pressures and fails near liquefaction.",
+     "An ideal gas ignores molecular volume and attraction, so the model loses accuracy at high pressure."
     ]
    },
    "figures": []
@@ -1880,11 +1920,13 @@
    "everyday": {
     "ru": [
      "Насос для велосипеда: при сжатии объём уменьшается и давление растёт — это изотермический процесс, если воздух не успевает нагреться.",
-     "Модель изотермичности ломается при быстром сжатии: воздух заметно нагревается, и тогда нужен уже адиабатный подход."
+     "Модель изотермичности ломается при быстром сжатии: воздух заметно нагревается, и тогда нужен уже адиабатный подход.",
+     "Изопроцессы — предельные случаи: реальный газ обычно меняет объём и температуру одновременно."
     ],
     "en": [
      "A bicycle pump shows Boyle's law: less volume, more pressure, if the air stays cool.",
-     "Fast compression heats the air, so the isothermal model breaks."
+     "Fast compression heats the air, so the isothermal model breaks.",
+     "Isoprocesses are limiting cases: a real gas usually changes volume and temperature at the same time."
     ]
    },
    "figures": [
@@ -1960,11 +2002,13 @@
    "everyday": {
     "ru": [
      "Чайник нагревается долго именно из-за большой теплоёмкости воды: чтобы вскипятить литр, нужно около 3,4·10⁵ Дж.",
-     "Модель «вся теплота идёт в воду» без потерь завышает итог: часть тепла уходит в воздух и сам чайник."
+     "Модель «вся теплота идёт в воду» без потерь завышает итог: часть тепла уходит в воздух и сам чайник.",
+     "Формула Q = cmΔt не учитывает потери тепла в окружающую среду и работу газа при расширении."
     ],
     "en": [
      "A kettle takes time because water's heat capacity is large: boiling a litre needs about 3.4·10⁵ J.",
-     "The lossless model overestimates: part of the heat warms the air and the kettle body."
+     "The lossless model overestimates: part of the heat warms the air and the kettle body.",
+     "Q = cmΔt ignores heat losses to the surroundings and the work of expansion of a gas."
     ]
    },
    "figures": []
@@ -2020,11 +2064,13 @@
    "everyday": {
     "ru": [
      "Кипящая вода не становится горячее 100 °C при обычном давлении: вся подводимая энергия уходит на превращение в пар.",
-     "Модель постоянных λ и L верна при данном давлении; в горах температура кипения ниже, и это уже другая точка фазового перехода."
+     "Модель постоянных λ и L верна при данном давлении; в горах температура кипения ниже, и это уже другая точка фазового перехода.",
+     "Модель «при плавлении температура не меняется» верна для чистого вещества; примеси размывают площадку на графике."
     ],
     "en": [
      "Boiling water stays at 100 °C at normal pressure: the energy becomes vapour.",
-     "λ and L hold at a given pressure; in the mountains water boils cooler."
+     "λ and L hold at a given pressure; in the mountains water boils cooler.",
+     "Constant temperature while melting holds for a pure substance; impurities blur the plateau."
     ]
    },
    "figures": [
@@ -2082,11 +2128,13 @@
    "everyday": {
     "ru": [
      "Статическое электричество на одежде: заряды разделились трением, а притягиваются они уже по закону Кулона — искра в темноте это разряд.",
-     "Модель точечных зарядов не подходит для протяжённых тел: у реального заряженного шара поле снаружи такое же, как у точечного заряда в центре, но внутри — другое."
+     "Модель точечных зарядов не подходит для протяжённых тел: у реального заряженного шара поле снаружи такое же, как у точечного заряда в центре, но внутри — другое.",
+     "Закон Кулона выведен для точечных зарядов в вакууме; в среде и для протяжённых тел он даёт лишь оценку."
     ],
     "en": [
      "Static cling comes from charges separated by friction and then attracting by Coulomb's law.",
-     "The point-charge model fails inside extended bodies."
+     "The point-charge model fails inside extended bodies.",
+     "Coulomb's law assumes point charges in vacuum; in matter or for extended bodies it only estimates."
     ]
    },
    "figures": [
@@ -2144,11 +2192,13 @@
    "everyday": {
     "ru": [
      "Батарейка «1,5 В» — это не «1,5 заряда», а разность потенциалов: она задаёт, какую работу совершит каждый кулон заряда.",
-     "Модель однородного поля годится между плоскими пластинами; у точечного заряда потенциал убывает как 1/r."
+     "Модель однородного поля годится между плоскими пластинами; у точечного заряда потенциал убывает как 1/r.",
+     "Потенциал точечного заряда отсчитывают от бесконечности; в реальной схеме важен явно выбранный нулевой уровень."
     ],
     "en": [
      "A 1.5 V battery sets a potential difference, not an amount of charge.",
-     "The uniform-field model fits flat plates; a point charge has φ ~ 1/r."
+     "The uniform-field model fits flat plates; a point charge has φ ~ 1/r.",
+     "The potential of a point charge is measured from infinity; a real circuit needs an explicit zero level."
     ]
    },
    "figures": []
@@ -2204,11 +2254,13 @@
    "everyday": {
     "ru": [
      "Удлинитель на 20 метров добавляет сопротивление: при той же нагрузке нагреватель получит меньше напряжения, чем у короткого шнура.",
-     "Модель «R постоянно» ломается при нагреве спирали: сопротивление нити лампы накала в холодном состоянии в разы меньше."
+     "Модель «R постоянно» ломается при нагреве спирали: сопротивление нити лампы накала в холодном состоянии в разы меньше.",
+     "Закон Ома для участка цепи верен при постоянной температуре: у лампы накаливания сопротивление растёт с нагревом."
     ],
     "en": [
      "A long extension cord adds resistance, so the appliance receives less voltage.",
-     "Constant R fails for a lamp filament: its cold resistance is several times smaller."
+     "Constant R fails for a lamp filament: its cold resistance is several times smaller.",
+     "Ohm's law for a circuit section assumes constant temperature: a filament's resistance grows as it heats up."
     ]
    },
    "figures": []
@@ -2282,11 +2334,13 @@
    "everyday": {
     "ru": [
      "Лампочки в ёлочной гирлянде, соединённые последовательно, гаснут все сразу — это прямое следствие одинакового тока в цепи.",
-     "Модель идеальных приборов: реальный вольтметр имеет большое, но конечное сопротивление и слегка «подгружает» цепь."
+     "Модель идеальных приборов: реальный вольтметр имеет большое, но конечное сопротивление и слегка «подгружает» цепь.",
+     "Модель «провода без сопротивления, источник идеален» не учитывает падение напряжения на подводящих проводах и внутреннее сопротивление источника."
     ],
     "en": [
      "Series fairy lights all go out at once because the current is shared.",
-     "Ideal meters have infinite and zero resistance; real ones slightly disturb the circuit."
+     "Ideal meters have infinite and zero resistance; real ones slightly disturb the circuit.",
+     "Ideal wires and a perfect source ignore the drop along the leads and the internal resistance of the source."
     ]
    },
    "figures": [
@@ -2363,11 +2417,13 @@
    "everyday": {
     "ru": [
      "Нагреватель и холодильник: мощность показывает скорость потребления, а счёт учитывает и мощность, и время работы.",
-     "Модель «сопротивление постоянно» приближённая: у нити накала оно меняется при нагреве, поэтому реальный ток чуть отличается от расчётного."
+     "Модель «сопротивление постоянно» приближённая: у нити накала оно меняется при нагреве, поэтому реальный ток чуть отличается от расчётного.",
+     "Закон Джоуля–Ленца записан для постоянного тока; для переменного берут действующие значения, иначе мощность считается неверно."
     ],
     "en": [
      "A heater and a fridge differ in power, but the bill counts power multiplied by time.",
-     "Filament resistance changes with temperature, so the real current differs slightly."
+     "Filament resistance changes with temperature, so the real current differs slightly.",
+     "Joule–Lenz law holds for direct current; alternating current needs rms values, otherwise the power is wrong."
     ]
    },
    "figures": []
@@ -2423,11 +2479,13 @@
    "everyday": {
     "ru": [
      "Электродвигатель и динамик работают на силе Ампера: ток в поле создаёт движение — энергия электричества превращается в механическую.",
-     "Модель однородного поля годится в пределах магнита; у реального магнита поле на краях слабее и неоднородно."
+     "Модель однородного поля годится в пределах магнита; у реального магнита поле на краях слабее и неоднородно.",
+     "Сила Ампера записана для однородного поля: вблизи полюса магнита поле неоднородно, и формула даёт только оценку."
     ],
     "en": [
      "Motors and loudspeakers use the Ampère force to turn current into motion.",
-     "The uniform-field model works inside a magnet; real fields weaken at the edges."
+     "The uniform-field model works inside a magnet; real fields weaken at the edges.",
+     "The Ampère force assumes a uniform field: near a magnet's pole the field is non-uniform and the formula estimates only."
     ]
    },
    "figures": [
@@ -2485,11 +2543,13 @@
    "everyday": {
     "ru": [
      "Беспроводная зарядка телефона — это индукция: переменное поле катушки создаёт ЭДС в катушке телефона.",
-     "Модель «идеальный контур» без сопротивления: в реальной катушке часть энергии уходит в нагрев проводов."
+     "Модель «идеальный контур» без сопротивления: в реальной катушке часть энергии уходит в нагрев проводов.",
+     "Закон Фарадея даёт среднее значение ЭДС за интервал; мгновенное значение требует скорости изменения потока."
     ],
     "en": [
      "Wireless phone charging is induction: a changing field in the pad drives an EMF in the phone coil.",
-     "Real coils heat up, so part of the energy is lost."
+     "Real coils heat up, so part of the energy is lost.",
+     "Faraday's law gives the average EMF over an interval; the instantaneous value needs the rate of change of the flux."
     ]
    },
    "figures": [
@@ -2565,11 +2625,13 @@
    "everyday": {
     "ru": [
      "Качели: чтобы раскачать их сильнее, толкать нужно в такт собственному периоду — иначе толчки гасят друг друга.",
-     "Модель малых колебаний: при больших углах период нитяного маятника начинает зависеть от амплитуды, и формула 2π√(l/g) даёт уже неточный результат."
+     "Модель малых колебаний: при больших углах период нитяного маятника начинает зависеть от амплитуды, и формула 2π√(l/g) даёт уже неточный результат.",
+     "Модель гармонических колебаний требует малых отклонений и отсутствия трения; при большой амплитуде период начинает зависеть от неё."
     ],
     "en": [
      "A swing is pumped at its natural period; mistimed pushes cancel each other.",
-     "For large angles the pendulum formula breaks down and the amplitude starts to matter."
+     "For large angles the pendulum formula breaks down and the amplitude starts to matter.",
+     "Harmonic motion assumes small deviations and no friction; at large amplitudes the period starts to depend on amplitude."
     ]
    },
    "figures": [
@@ -2645,11 +2707,13 @@
    "everyday": {
     "ru": [
      "Гром гремит позже вспышки молнии: свет приходит почти мгновенно, а звуку нужно время — по задержке оценивают расстояние, считая 3 с ≈ 1 км.",
-     "Модель «звук идёт по прямой с постоянной скоростью» ломается при ветре и температурных слоях: скорость звука зависит от среды."
+     "Модель «звук идёт по прямой с постоянной скоростью» ломается при ветре и температурных слоях: скорость звука зависит от среды.",
+     "Модель «скорость волны определяется только средой» не работает для волн на воде и вблизи препятствий, где важна дисперсия."
     ],
     "en": [
      "Thunder follows lightning because sound needs time: 3 seconds ≈ 1 km.",
-     "Wind and temperature layers change the speed of sound."
+     "Wind and temperature layers change the speed of sound.",
+     "Wave speed set only by the medium fails for water waves and near obstacles, where dispersion matters."
     ]
    },
    "figures": [
@@ -2708,11 +2772,13 @@
    "everyday": {
     "ru": [
      "Ложка в стакане воды «переламывается» на границе — это преломление; глаз продолжает лучи по прямой и видит смещённое изображение.",
-     "Модель лучевой оптики не объясняет цвета радуги: там нужна уже волновая модель и зависимость n от длины волны."
+     "Модель лучевой оптики не объясняет цвета радуги: там нужна уже волновая модель и зависимость n от длины волны.",
+     "Модель лучей пренебрегает дифракцией: у кромки препятствия свет огибает его, и «прямая» картинка ломается."
     ],
     "en": [
      "A spoon in a glass looks broken because the eye extends refracted rays straight ahead.",
-     "Ray optics cannot explain rainbow colours; the wave model is needed."
+     "Ray optics cannot explain rainbow colours; the wave model is needed.",
+     "Ray optics neglects diffraction: light bends around an edge, so the straight-ray picture fails."
     ]
    },
    "figures": [
@@ -2771,11 +2837,13 @@
    "everyday": {
     "ru": [
      "Очки для близорукости — рассеивающие (мнимый фокус), для дальнозоркости — собирающие: диоптрии в рецепте указывают D = 1/F.",
-     "Модель тонкой линзы не учитывает толщину стекла и аберрации реального объектива."
+     "Модель тонкой линзы не учитывает толщину стекла и аберрации реального объектива.",
+     "Формула тонкой линзы точна для параксиальных лучей; у толстой линзы отсчёт от её центра уже неверен."
     ],
     "en": [
      "Glasses for short sight are diverging and for far sight converging; the prescription lists D = 1/F.",
-     "The thin-lens model ignores thickness and aberrations."
+     "The thin-lens model ignores thickness and aberrations.",
+     "The thin-lens formula is accurate for paraxial rays only; a thick lens has no single optical centre."
     ]
    },
    "figures": [
@@ -2833,11 +2901,13 @@
    "everyday": {
     "ru": [
      "Солнечная батарея на калькуляторе работает фотоэффектом: свет выбивает электроны в полупроводнике, и появляется ток.",
-     "Модель фотона как «порции энергии» нужна там, где волновая модель бессильна; для интерференции, наоборот, нужна волна."
+     "Модель фотона как «порции энергии» нужна там, где волновая модель бессильна; для интерференции, наоборот, нужна волна.",
+     "Уравнение Эйнштейна записано для однофотонного процесса на холодном металле; при большой интенсивности возможны двухфотонные эффекты."
     ],
     "en": [
      "A solar-powered calculator works through the photoelectric effect.",
-     "The photon model is required where the wave model fails, and vice versa."
+     "The photon model is required where the wave model fails, and vice versa.",
+     "Einstein's equation assumes one photon per electron on a cold metal; at high intensity two-photon effects appear."
     ]
    },
    "figures": [
@@ -2895,11 +2965,13 @@
    "everyday": {
     "ru": [
      "Рентгеновский снимок возможен потому, что электронные оболочки тяжёлых атомов поглощают излучение по-разному — это уже атомная, а не ядерная физика.",
-     "Модель «ядро как шарик» достаточна для школьных задач, но не объясняет деление ядер и энергию связи без дополнительных моделей."
+     "Модель «ядро как шарик» достаточна для школьных задач, но не объясняет деление ядер и энергию связи без дополнительных моделей.",
+     "Модели атома (Томсона, Резерфорда, Бора) — приближения: каждая объясняет свой круг опытов и не описывает остальные."
     ],
     "en": [
      "X-rays work because heavy atoms absorb differently — atomic, not nuclear, physics.",
-     "The ball-nucleus model suits school problems but not fission."
+     "The ball-nucleus model suits school problems but not fission.",
+     "Atomic models (Thomson, Rutherford, Bohr) are approximations: each explains its own experiments and fails elsewhere."
     ]
    },
    "figures": []
@@ -2973,11 +3045,13 @@
    "everyday": {
     "ru": [
      "Дозиметр на экране показывает активность: фон можно измерять, но нельзя «ускорить» распад нагревом — период полураспада задан ядром.",
-     "Модель статистическая: для малого числа ядер выводы о распаде вероятностные, точный закон N = N₀·2^(−t/T) работает для больших количеств."
+     "Модель статистическая: для малого числа ядер выводы о распаде вероятностные, точный закон N = N₀·2^(−t/T) работает для больших количеств.",
+     "Закон радиоактивного распада статистический: он верен для большого числа ядер и ничего не предсказывает про одно конкретное."
     ],
     "en": [
      "A dosimeter shows activity; heating cannot speed up decay.",
-     "The law is statistical: it holds for large numbers of nuclei."
+     "The law is statistical: it holds for large numbers of nuclei.",
+     "Radioactive decay is statistical: it holds for many nuclei and predicts nothing about a single one."
     ]
    },
    "figures": [

@@ -672,7 +672,7 @@ _SCIENTIFIC_RE = re.compile(r"^([+-]?\d+(?:[.,]\d+)?)(?:[*]10(?:\^|\*\*)?\(?([+-
 def parse_number(text) -> Fraction | None:
     """Разобрать число в школьной записи; None — если это не число.
 
-    Понимает ``12``, ``12,5``, ``12.5``, ``-3,5``, ``+2``, ``1e-3``,
+    Понимает ``12``, ``12,5``, ``12.5``, ``-3,5``, ``+2``, ``1/2``, ``1e-3``,
     ``1,5·10⁻³``, ``1,5*10^-3``, ``3·10^5``, ``1,6*10-19`` и удаляет
     пробелы-разделители разрядов (``1 000``).
     """
@@ -699,6 +699,14 @@ def parse_number(text) -> Fraction | None:
     power_of_ten = re.fullmatch(r"10\^(?:\(([+-]?\d+)\)|([+-]?\d+))", s)
     if power_of_ten:
         return Fraction(10) ** int(power_of_ten.group(1) or power_of_ten.group(2))
+    fraction = re.fullmatch(r"([-+]?\d+(?:[.,]\d+)?)\s*/\s*([-+]?\d+(?:[.,]\d+)?)", s)
+    if fraction:
+        # обыкновенная дробь: «1/2» — это 0,5; деление на ноль не число
+        numerator = Fraction(fraction.group(1).replace(",", "."))
+        denominator = Fraction(fraction.group(2).replace(",", "."))
+        if denominator == 0:
+            return None
+        return numerator / denominator
     plain = s.replace(",", ".")
     if not re.fullmatch(r"[-+]?\d+(?:\.\d+)?", plain):
         return None

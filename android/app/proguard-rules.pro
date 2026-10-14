@@ -1,7 +1,7 @@
 # The web interface talks to the bridge through reflection-like @JavascriptInterface
 # annotations, so the bridge and its methods must be kept.
--keepclassmembers class by.ziv.ctmaths.NativeBridge {
+-keepclassmembers class by.ziv.ctphysics.NativeBridge {
     public *;
 }
--keep class by.ziv.ctmaths.NativeBridge { *; }
+-keep class by.ziv.ctphysics.NativeBridge { *; }
 -keepattributes JavascriptInterface

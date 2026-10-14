@@ -233,154 +233,461 @@
   };
 
   /* --------------------------------------------------------------------- *
-   * 3. Проверка ответов / answer checker
+   * 3. Проверка ответов / physics answer checker
+   *
+   * Тот же контракт, что в content_src/quantities.py::check_answer и в
+   * android/app/src/main/java/by/ziv/ctphysics/AnswerChecker.kt. Спецификация
+   * задания (spec) приходит из банка: answerType, answerValue, unit,
+   * unitPolicy, dimension, tolerance | rounding.
+   *
+   * Проверяется ФИЗИЧЕСКАЯ ВЕЛИЧИНА: число + единица + размерность.
+   * «10 Н» не принимается вместо «10 кг», «10 см» — вместо «10 м»,
+   * «36 км/ч» принимается как «10 м/с». Никакого eval: единицы разбираются
+   * собственным парсером по белому списку (таблица сгенерирована из Python).
    * --------------------------------------------------------------------- */
   var A = CT.answer = {};
 
-  /** Нормализация: пробелы, юникодные минусы, запятая↔точка, префиксы, ×·. */
-  A.normalize = function (value) {
-    if (value === null || value === undefined) return '';
-    var s = String(value).trim().toLowerCase();
-    s = s.replace(/\u00a0/g, ' ');
-    s = s.replace(/[\u2212\u2013\u2014\u2015]/g, '-');   // − – — ―
-    s = s.replace(/\u00d7/g, '*');                        // ×
-    s = s.replace(/\u00b7/g, '*');                        // ·
-    s = s.replace(/\u2219/g, '*');                        // ∙
-    s = s.replace(/\u0445/g, 'x');                        // русская х
-    s = s.replace(/\u0443/g, 'y');                        // русская у
-    s = s.replace(/\u03c0/g, 'pi');                       // π
-    s = s.replace(/\u221a/g, 'sqrt');                     // √
-    s = s.replace(/^\s*(ответ|answer)\s*[:=]?\s*/i, '');
-    s = s.replace(/^\s*[a-zа-я]{1,2}\s*[:=]\s*/i, '');    // "x = 12", "y:12"
-    s = s.replace(/\s+/g, '');
-    s = s.replace(/^\((.*)\)$/, '$1');                    // (12) → 12
-    s = s.replace(/,/g, '.');
-    if (s.endsWith('.')) s = s.slice(0, -1);              // «12.» — это «12»
-    return s;
+  /* Белый список единиц: symbol/ru/en, вектор размерности (m,kg,s,A,K,mol,cd),
+     множитель к СИ, смещение (°C), приставки и синонимы. */
+
+  /* >>> units:generated */
+  A.UNITS = [{"a":["A","А","ампер","ампера","амперов"],"dim":[0,0,0,1,0,0,0],"en":"A","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"А","s":"A"},{"a":["C","Кл","кулон","кулона","кулонов"],"dim":[0,0,1,1,0,0,0],"en":"C","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Кл","s":"C"},{"a":["F","Ф","фарад","фарада","фарадов"],"dim":[-2,-1,4,2,0,0,0],"en":"F","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Ф","s":"F"},{"a":["H","Гн","генри"],"dim":[2,1,-2,-2,0,0,0],"en":"H","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Гн","s":"H"},{"a":["Hz","Гц","герц","герца"],"dim":[0,0,-1,0,0,0,0],"en":"Hz","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Гц","s":"Hz"},{"a":["J","Дж","джоулей","джоуль","джоуля"],"dim":[2,1,-2,0,0,0,0],"en":"J","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Дж","s":"J"},{"a":["K","К","кельвин","кельвина","кельвинов"],"dim":[0,0,0,0,1,0,0],"en":"K","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"К","s":"K"},{"a":["N","Н","ньютон","ньютона","ньютонов"],"dim":[1,1,-2,0,0,0,0],"en":"N","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Н","s":"N"},{"a":["Ohm","Ω","Ом","ом","ома","омов"],"dim":[2,1,-3,-2,0,0,0],"en":"Ω","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Ом","s":"Ohm"},{"a":["Pa","Па","паскалей","паскаль","паскаля"],"dim":[-1,1,-2,0,0,0,0],"en":"Pa","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Па","s":"Pa"},{"a":["T","Тл","тесла","теслы"],"dim":[0,1,-2,-1,0,0,0],"en":"T","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Тл","s":"T"},{"a":["V","В","вольт","вольта","вольтов"],"dim":[2,1,-3,-1,0,0,0],"en":"V","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"В","s":"V"},{"a":["W","Вт","ватт","ватта"],"dim":[2,1,-3,0,0,0,0],"en":"W","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Вт","s":"W"},{"a":["Wb","Вб","вебер","вебера","веберов"],"dim":[2,1,-2,-1,0,0,0],"en":"Wb","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"Вб","s":"Wb"},{"a":["cd","кандела","кд"],"dim":[0,0,0,0,0,0,1],"en":"cd","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"кд","s":"cd"},{"a":["day","сут","сутки","суток"],"dim":[0,0,1,0,0,0,0],"en":"сут","f":"86400","fexact":"86400/1","o":0.0,"p":false,"ru":"сут","s":"day"},{"a":["degC","°C","градусцельсия","цельсия","⁰C"],"dim":[0,0,0,0,1,0,0],"en":"°C","f":"1","fexact":"1/1","o":273.15,"p":false,"ru":"°C","s":"degC"},{"a":["dpt","диоптрии","диоптрия","дптр"],"dim":[-1,0,0,0,0,0,0],"en":"dpt","f":"1","fexact":"1/1","o":0.0,"p":false,"ru":"дптр","s":"dpt"},{"a":["eV","эВ","эв"],"dim":[2,1,-2,0,0,0,0],"en":"eV","f":"1.6e-19","fexact":"1/6250000000000000000","o":0.0,"p":false,"ru":"эВ","s":"eV"},{"a":["g","г","грамм","грамма","граммов"],"dim":[0,1,0,0,0,0,0],"en":"g","f":"0.001","fexact":"1/1000","o":0.0,"p":true,"ru":"г","s":"g"},{"a":["g/cm^3","g/cm³","г/см³"],"dim":[-3,1,0,0,0,0,0],"en":"g/cm³","f":"1000","fexact":"1000/1","o":0.0,"p":false,"ru":"г/см³","s":"g/cm^3"},{"a":["h","ч","час","часа","часов"],"dim":[0,0,1,0,0,0,0],"en":"h","f":"3600","fexact":"3600/1","o":0.0,"p":false,"ru":"ч","s":"h"},{"a":["kWh","кВт·ч","кВтч"],"dim":[2,1,-2,0,0,0,0],"en":"kWh","f":"3600000","fexact":"3600000/1","o":0.0,"p":false,"ru":"кВт·ч","s":"kWh"},{"a":["kg","кг","килограмм","килограмма","килограммов"],"dim":[0,1,0,0,0,0,0],"en":"kg","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"кг","s":"kg"},{"a":["km/h","км/ч"],"dim":[1,0,-1,0,0,0,0],"en":"km/h","f":"0.2777777777777778","fexact":"5/18","o":0.0,"p":false,"ru":"км/ч","s":"km/h"},{"a":["L","l","л","литр","литра","литров"],"dim":[3,0,0,0,0,0,0],"en":"l","f":"0.001","fexact":"1/1000","o":0.0,"p":true,"ru":"л","s":"l"},{"a":["m","м","метр","метра","метров"],"dim":[1,0,0,0,0,0,0],"en":"m","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"м","s":"m"},{"a":["m/s^2","m/s²","м/с²"],"dim":[1,0,-2,0,0,0,0],"en":"m/s²","f":"1","fexact":"1/1","o":0.0,"p":false,"ru":"м/с²","s":"m/s^2"},{"a":["min","мин","минут","минута","минуты"],"dim":[0,0,1,0,0,0,0],"en":"min","f":"60","fexact":"60/1","o":0.0,"p":false,"ru":"мин","s":"min"},{"a":["mm Hg","mmHg","мм рт. ст.","ммрт.ст."],"dim":[-1,1,-2,0,0,0,0],"en":"mm Hg","f":"133.32236842105263","fexact":"20265/152","o":0.0,"p":false,"ru":"мм рт. ст.","s":"mmHg"},{"a":["mol","молей","моль","моля"],"dim":[0,0,0,0,0,1,0],"en":"mol","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"моль","s":"mol"},{"a":["s","с","сек","секунд","секунда","секунды"],"dim":[0,0,1,0,0,0,0],"en":"s","f":"1","fexact":"1/1","o":0.0,"p":true,"ru":"с","s":"s"},{"a":["t","т","тонн","тонна","тонны"],"dim":[0,1,0,0,0,0,0],"en":"t","f":"1000","fexact":"1000/1","o":0.0,"p":false,"ru":"т","s":"t"},{"a":["u","а.е.м.","аем"],"dim":[0,1,0,0,0,0,0],"en":"u","f":"1.66e-27","fexact":"83/50000000000000000000000000000","o":0.0,"p":false,"ru":"а.е.м.","s":"u"}];
+  A.PREFIXES = [{"f":"1e-12","la":"p","ru":"п"},{"f":"1e-09","la":"n","ru":"н"},{"f":"1e-06","la":"µ","ru":"мк"},{"f":"1e-06","la":"u","ru":"мк"},{"f":"0.001","la":"m","ru":"м"},{"f":"0.01","la":"c","ru":"с"},{"f":"0.1","la":"d","ru":"д"},{"f":"1000","la":"k","ru":"к"},{"f":"1000000","la":"M","ru":"М"},{"f":"1000000000","la":"G","ru":"Г"}];
+/* <<< units:generated */
+  A.DIM_AXES = ['m', 'kg', 's', 'A', 'K', 'mol', 'cd'];
+  A.ZERO_DIM = [0, 0, 0, 0, 0, 0, 0];
+
+  var SUPER = {'\u2070': '0', '\u00b9': '1', '\u00b2': '2', '\u00b3': '3', '\u2074': '4',
+    '\u2075': '5', '\u2076': '6', '\u2077': '7', '\u2078': '8', '\u2079': '9', '\u207b': '-'};
+
+  /** Ключ синонима: без регистра, пробелов, «^» и «·» (как в Python). */
+  function aliasKey(name) {
+    return String(name).trim().toLowerCase().replace(/[ ]/g, '').replace(/\^/g, '')
+      .replace(/[\u00b7*]/g, '');
+  }
+  A.aliasKey = aliasKey;
+
+  var UNITS_BY_NAME = {};
+  var UNITS_BY_ALIAS = {};
+  A.UNITS.forEach(function (unit) {
+    [unit.s, unit.ru, unit.en].concat(unit.a || []).forEach(function (name) {
+      var stripped = String(name).trim();
+      if (stripped && UNITS_BY_NAME[stripped] === undefined) UNITS_BY_NAME[stripped] = unit;
+      if (stripped && !(stripped.length === 1 && /[a-z]/i.test(stripped))) {
+        var key = aliasKey(stripped);
+        if (key && UNITS_BY_ALIAS[key] === undefined) UNITS_BY_ALIAS[key] = unit;
+      }
+    });
+  });
+
+  /** Надстрочные степени и знаки → обычная запись: «м²» → «м^2», «·» → «*». */
+  A.toExpression = function (text) {
+    var out = String(text === null || text === undefined ? '' : text);
+    out = out.replace(/[\u2070\u00b9\u00b2\u00b3\u2074\u2075\u2076\u2077\u2078\u2079\u207b]+/g,
+      function (match) {
+        var digits = '';
+        for (var i = 0; i < match.length; i++) digits += SUPER[match[i]];
+        return '^(' + digits + ')';
+      });
+    out = out.replace(/[\u00b7\u2219\u00d7\u22c5]/g, '*');
+    return out.replace(/\s+/g, '');
   };
 
-  /** Значение — целое число (для строгого сравнения целых ответов). */
-  A.isInteger = function (value) {
-    return typeof value === 'number' && isFinite(value) && Math.abs(value % 1) < 1e-12;
-  };
+  /* --- справочник единиц для интерфейса -------------------------------- */
 
-  /** Строка → рациональное число или null. Понимает «3», «0.75», «3/4», «-2,5». */
-  A.parseNumber = function (value) {
-    if (value === null || value === undefined) return null;
-    if (typeof value === 'number') return isFinite(value) ? value : null;
-    var s = A.normalize(value);
-    if (!/^[-+]?(\d+(\.\d+)?|\.\d+)([-+*\/]\d+(\.\d+)?)*$/.test(s)) return null;
-    try {
-      var frac = A.evalFraction(s);
-      return frac === null || !isFinite(frac) ? null : frac;
-    } catch (e) { return null; }
-  };
-
-  /** Точная арифметика по мере возможности (дроби), с запасным float. */
-  A.evalFraction = function (s) {
-    var parts = [];
-    var sign = 1;
-    var tokens = s.match(/[-+*/]|[^-+*/]+/g) || [];
-    if (!tokens.length) return null;
-    for (var i = 0; i < tokens.length; i++) {
-      var tok = tokens[i];
-      if (tok === '+' || tok === '-') parts.push(['op', tok]);
-      else if (tok === '*' || tok === '/') parts.push(['op', tok]);
-      else parts.push(['num', parseFloat(tok)]);
-    }
-    // сначала * и /
-    var out = [];
-    for (var j = 0; j < parts.length; j++) {
-      var part = parts[j];
-      if (part[0] === 'op' && (part[1] === '*' || part[1] === '/')) {
-        var prev = out.pop();
-        var next = parts[++j];
-        if (!prev || !next || prev[0] !== 'num' || next[0] !== 'num') return null;
-        out.push(['num', part[1] === '*' ? prev[1] * next[1] : prev[1] / next[1]]);
-      } else {
-        if (part[0] === 'num' && j === 0) out.push(part);
-        else out.push(part);
+  /** Как единица относится к СИ: «1», «5/18», «10³», «1/1000». */
+  A.unitFactorText = function (unit) {
+    if (!unit) return '';
+    var exact = String(unit.fexact || '');
+    var factor = Number(unit.f === undefined ? 1 : unit.f);
+    if (factor === 1) return '1';
+    if (/^-?\d+\/\d+$/.test(exact)) {
+      var parts = exact.split('/');
+      if (Math.abs(Number(parts[0])) <= 1e6 && Math.abs(Number(parts[1])) <= 1e6) {
+        return Number(parts[0]) + '/' + Number(parts[1]);
       }
     }
-    // затем + и -
-    var acc = null, op = '+';
-    for (var k = 0; k < out.length; k++) {
-      var item = out[k];
-      if (item[0] === 'op') { op = item[1]; continue; }
-      if (acc === null) { acc = op === '-' ? -item[1] : item[1]; op = '+'; continue; }
-      acc = op === '+' ? acc + item[1] : acc - item[1];
-      op = '+';
+    var absolute = Math.abs(factor);
+    if (absolute >= 1e4 || absolute < 1e-3) {
+      var exponent = Math.floor(Math.log(absolute) / Math.LN10);
+      var mantissa = factor / Math.pow(10, exponent);
+      var digits = Math.abs(mantissa - Math.round(mantissa)) < 1e-9
+        ? String(Math.round(mantissa)) : mantissa.toFixed(3).replace(/0+$/, '').replace(/\.$/, '');
+      return digits + '\u00b710' + A.superscript(exponent);
     }
-    return acc;
+    return String(factor).replace('.', ',');
   };
 
-  /** Значения из задания: правильный ответ и «принимаемые» записи. */
-  A.candidates = function (task) {
-    var list = [];
-    if (!task) return list;
-    var push = function (value) { if (value !== null && value !== undefined && String(value) !== '') list.push(String(value)); };
-    if (typeof task.answer === 'string') push(task.answer);
-    else if (task.answer && typeof task.answer === 'object') { push(A.pick(task.answer)); }
-    if (Array.isArray(task.accept)) task.accept.forEach(function (v) { push(A.pick(v)); });
-    return list;
+  /** Число надстрочными цифрами: 3 → «³», -2 → «⁻²». */
+  A.superscript = function (value) {
+    var digits = { '-': '\u207b', '0': '\u2070', '1': '\u00b9', '2': '\u00b2', '3': '\u00b3',
+      '4': '\u2074', '5': '\u2075', '6': '\u2076', '7': '\u2077', '8': '\u2078', '9': '\u2079' };
+    return String(value).split('').map(function (character) {
+      return digits[character] === undefined ? character : digits[character];
+    }).join('');
   };
 
-  /** Двуязычное значение из задания. */
+  /** Размерность словами: [1,0,-2,…] → «м/с²» (язык — язык подписи). */
+  A.dimsText = function (dim, lang) {
+    var names = (lang === 'en')
+      ? ['m', 'kg', 's', 'A', 'K', 'mol', 'cd']
+      : ['\u043c', '\u043a\u0433', '\u0441', '\u0410', '\u041a', '\u043c\u043e\u043b\u044c', '\u043a\u0434'];
+    var top = [], bottom = [];
+    (dim || []).forEach(function (power, index) {
+      if (!power) return;
+      var name = names[index] || ('?' + index);
+      var target = power > 0 ? top : bottom;
+      target.push(name + (Math.abs(power) === 1 ? '' : A.superscript(Math.abs(power))));
+    });
+    if (!top.length && !bottom.length) return '';
+    var head = top.length ? top.join('\u00b7') : '1';
+    return bottom.length ? head + '/' + bottom.join('\u00b7') : head;
+  };
+
+  /* --- число в школьной записи ----------------------------------------- */
+
+  /** «12», «12,5», «-3,5», «1/2», «1e-3», «1,5·10⁻³», «3·10⁵» → Number | null. */
+  A.number = function (text) {
+    if (text === null || text === undefined) return null;
+    var s = String(text).trim();
+    if (!s) return null;
+    s = s.replace(/\u00a0/g, '').replace(/ /g, '');
+    s = s.replace(/[\u2212\u2013\u2014\u2015]/g, '-');
+    s = s.replace(/10([\u2070\u00b9\u00b2\u00b3\u2074\u2075\u2076\u2077\u2078\u2079\u207b]+)/g,
+      function (match, digits) {
+        var out = '';
+        for (var i = 0; i < digits.length; i++) out += SUPER[digits[i]];
+        return '10^(' + out + ')';
+      });
+    s = s.replace(/[\u22c5\u2219\u00d7\u00b7]/g, '*');
+    var scientific = s.match(/^([+-]?\d+(?:[.,]\d+)?)(?:\*10(?:\^|\*\*)?\(?([+-]?\d+)\)?|[eE]([+-]?\d+))$/);
+    if (scientific) {
+      var mantissa = Number(scientific[1].replace(',', '.'));
+      var exponent = Number(scientific[2] || scientific[3] || '0');
+      if (!isFinite(mantissa) || !isFinite(exponent)) return null;
+      return mantissa * Math.pow(10, exponent);
+    }
+    var power = s.match(/^10\^(?:\(([+-]?\d+)\)|([+-]?\d+))$/);
+    if (power) return Math.pow(10, Number(power[1] || power[2]));
+    var fraction = s.match(/^([+-]?\d+(?:[.,]\d+)?)\/([+-]?\d+(?:[.,]\d+)?)$/);
+    if (fraction) {
+      // обыкновенная дробь: «1/2» = 0,5; деление на ноль — не число
+      var numerator = Number(fraction[1].replace(',', '.'));
+      var denominator = Number(fraction[2].replace(',', '.'));
+      if (!isFinite(numerator) || !isFinite(denominator) || denominator === 0) return null;
+      return numerator / denominator;
+    }
+    var plain = s.replace(',', '.');
+    if (!/^[-+]?\d+(?:\.\d+)?$/.test(plain)) return null;
+    return Number(plain);
+  };
+
+  /* --- единицы измерения ----------------------------------------------- */
+
+  /** Единица по точному обозначению или синониму (без приставок). */
+  A.baseLookup = function (name) {
+    var stripped = String(name).trim();
+    if (UNITS_BY_NAME[stripped]) return UNITS_BY_NAME[stripped];
+    return UNITS_BY_ALIAS[A.aliasKey(stripped)] || null;
+  };
+
+  /** Как в Python: сначала целое обозначение («Гн» — генри, а не гиганьютон),
+      и только потом разбор «приставка + единица». */
+  A.lookupUnit = function (name) {
+    var exact = A.baseLookup(name);
+    if (exact) return exact;
+    return A.prefixedUnit(name);
+  };
+
+  /** Множитель и смещение единицы из таблицы («f»/«o») или уже вычисленные. */
+  function unitFactor(unit) {
+    if (unit.factor !== undefined && unit.factor !== null) return Number(unit.factor);
+    return Number(unit.f === undefined ? 1 : unit.f);
+  }
+  function unitOffset(unit) {
+    if (unit.offset !== undefined && unit.offset !== null) return Number(unit.offset);
+    return Number(unit.o === undefined ? 0 : unit.o);
+  }
+
+  A.prefixedUnit = function (name) {
+    var text = String(name).trim();
+    var candidates = [];
+    A.PREFIXES.forEach(function (prefix) {
+      [prefix.ru, prefix.la].forEach(function (form) {
+        if (text.length > form.length && text.indexOf(form) === 0) {
+          candidates.push([form.length, prefix, text.slice(form.length)]);
+        }
+      });
+    });
+    candidates.sort(function (a, b) { return b[0] - a[0]; });
+    for (var i = 0; i < candidates.length; i++) {
+      var prefix = candidates[i][1];
+      var base = A.baseLookup(candidates[i][2]);
+      if (!base || !base.p || base.o) continue;          // °C не приставляется
+      if (base.s === 'kg') continue;                     // масса: «мкг» — не микрокилограмм
+      return { s: prefix.la + base.s, ru: prefix.ru + base.ru, en: prefix.la + base.en,
+               dim: base.dim, factor: Number(prefix.f) * unitFactor(base), offset: 0,
+               prefixed: true };
+    }
+    return null;
+  };
+
+  A.unitOf = function (text) {
+    var raw = String(text === null || text === undefined ? '' : text).trim();
+    if (!raw) return null;
+    var expression = A.toExpression(raw);
+    if (!expression) return null;
+    if (expression === '1') {
+      return { s: '1', ru: '', en: '', dim: A.ZERO_DIM.slice(), factor: 1, offset: 0 };
+    }
+    // токенизатор единиц повторяет Python `_tokenize`: буквы (включая греческие
+    // Ω/µ), цифры, «.», «_», «°», операторы «* / ^ ( )» и знак «-»
+    var tokens = [];
+    var isUnitChar = function (ch) {
+      return /[0-9A-Za-z\u0400-\u04ff._\u00b0\u03a9\u00b5\u03bc]/.test(ch);
+    };
+    var tokenizerFailed = false;
+    (function () {
+      var index = 0;
+      while (index < expression.length && !tokenizerFailed) {
+        var ch = expression[index];
+        if ('*/^()'.indexOf(ch) >= 0) { tokens.push(ch); index += 1; continue; }
+        if (/[0-9.]/.test(ch)) {
+          var end = index;
+          while (end < expression.length && /[0-9.]/.test(expression[end])) end += 1;
+          tokens.push(expression.slice(index, end));
+          index = end;
+          continue;
+        }
+        if (ch === '-') { tokens.push(ch); index += 1; continue; }
+        var stop = index;
+        while (stop < expression.length && isUnitChar(expression[stop])) stop += 1;
+        if (stop === index) { tokenizerFailed = true; break; }
+        tokens.push(expression.slice(index, stop));
+        index = stop;
+      }
+    })();
+    if (tokenizerFailed || !tokens.length) return null;
+    var position = 0;
+    var peek = function () { return tokens[position]; };
+    var next = function () { var token = tokens[position]; position += 1; return token; };
+
+    var parseExpression = function () {
+      var node = parseTerm();
+      while (peek() === '*' || peek() === '/') {
+        var operator = next();
+        var right = parseTerm();
+        node = operator === '*' ? mulDim(node, right) : divDim(node, right);
+      }
+      return node;
+    };
+    var parseTerm = function () {
+      var node = parseAtom();
+      if (peek() === '^') {
+        next();
+        var wrapped = false;
+        if (peek() === '(') { next(); wrapped = true; }
+        var sign = 1;
+        if (peek() === '-') { next(); sign = -1; }
+        else if (peek() === '+') { next(); }
+        var exponent = next();
+        if (!/^\d+$/.test(String(exponent))) throw new Error('exponent');
+        if (wrapped && next() !== ')') throw new Error('exponent paren');
+        node = powDim(node, sign * Number(exponent));
+      }
+      return node;
+    };
+    var parseAtom = function () {
+      var token = next();
+      if (token === undefined) throw new Error('end');
+      if (token === '(') {
+        var inner = parseExpression();
+        if (next() !== ')') throw new Error('paren');
+        return inner;
+      }
+      if (token === '1') return { dim: A.ZERO_DIM.slice(), factor: 1, offset: 0 };
+      if (/^\d+$/.test(token)) throw new Error('numeric factor');
+      if (token === '-') { var negated = parseAtom(); negated.factor = -negated.factor; return negated; }
+      var unit = A.lookupUnit(token);
+      if (!unit) throw new Error('unknown unit');
+      return { dim: unit.dim.slice(), factor: unitFactor(unit), offset: unitOffset(unit),
+               unit: unit };
+    };
+    var mulDim = function (a, b) {
+      return { dim: a.dim.map(function (x, i) { return x + b.dim[i]; }),
+               factor: a.factor * b.factor, offset: 0 };
+    };
+    var divDim = function (a, b) {
+      return { dim: a.dim.map(function (x, i) { return x - b.dim[i]; }),
+               factor: a.factor / b.factor, offset: 0 };
+    };
+    var powDim = function (node, exponent) {
+      return { dim: node.dim.map(function (x) { return x * exponent; }),
+               factor: Math.pow(node.factor, exponent), offset: 0 };
+    };
+
+    var parsed;
+    try {
+      parsed = parseExpression();
+      if (position !== tokens.length) return null;
+    } catch (error) {
+      return null;
+    }
+    if (tokens.length === 1) {
+      var single = A.lookupUnit(tokens[0]);
+      if (single) {
+        // сохраняем подпись и смещение °C: «°C» — единственная единица со сдвигом
+        return { s: single.s, ru: single.ru, en: single.en, dim: single.dim.slice(),
+                 factor: unitFactor(single), offset: unitOffset(single),
+                 prefixed: !!single.prefixed };
+      }
+    }
+    var label = raw;
+    return { s: label, ru: label, en: label, dim: parsed.dim, factor: parsed.factor,
+             offset: parsed.offset || 0 };
+  };
+
+  /* --- проверка ответа -------------------------------------------------- */
+
+  A.sameDim = function (a, b) {
+    if (!a || !b || a.length !== b.length) return false;
+    for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+    return true;
+  };
+
+  A.dimensionOf = function (text) {
+    var raw = String(text === null || text === undefined ? '' : text).trim();
+    if (!raw || raw === '1' || raw === '\u2014' || raw === '-') return A.ZERO_DIM.slice();
+    var unit = A.unitOf(raw);
+    return unit ? unit.dim : null;
+  };
+
+  /** Разделить «1,5·10⁻³ м» на («1,5·10⁻³», «м») по самой длинной числовой части. */
+  A.splitNumberUnit = function (text) {
+    var raw = String(text === null || text === undefined ? '' : text).trim();
+    if (!raw) return ['', ''];
+    for (var index = raw.length; index > 0; index--) {
+      var head = raw.slice(0, index).trim();
+      var tail = raw.slice(index).trim();
+      if (!head || A.number(head) === null) continue;
+      if (!tail || A.unitOf(tail) !== null) return [head, tail];
+    }
+    var fallback = raw.match(/^([^A-Za-z\u0410-\u044f\u0401\u0451\u00b5\u03bc\u00b0]+)\s*(.*)$/);
+    if (fallback && A.number(fallback[1].trim()) !== null && fallback[2].trim()) {
+      return [fallback[1].trim(), fallback[2].trim()];
+    }
+    return [raw, ''];
+  };
+
+  A.tolerance = function (spec) {
+    if (spec.tolerance) {
+      var value = Number(spec.tolerance.value);
+      if (spec.tolerance.kind === 'relative') {
+        return function (expected) { return Math.abs(value * expected); };
+      }
+      return function () { return Math.abs(value); };
+    }
+    if (spec.rounding !== undefined && spec.rounding !== null) {
+      // как в Python: допуск по границе округления 5·10^-(знаков+1)
+      var half = 5 * Math.pow(10, -(Number(spec.rounding) + 1));
+      return function () { return half; };
+    }
+    return function () { return 1e-9; };
+  };
+
+  /** Вердикт и причина: empty | unit | dimension | missing_unit | value. */
+  A.grade = function (user, spec) {
+    spec = spec || {};
+    var text = user === null || user === undefined ? '' : String(user).trim();
+    if (!text) return { ok: false, reason: 'empty' };
+    if (spec.answerType === 'choice') {
+      var normalized = A.normalize(text);
+      if (!normalized) return { ok: false, reason: 'empty' };
+      var variants = (spec.accept || []).map(A.pick);
+      if (spec.answer !== undefined && spec.answer !== null) variants.push(A.pick(spec.answer));
+      for (var i = 0; i < variants.length; i++) {
+        if (A.normalize(variants[i]) === normalized) return { ok: true, reason: '' };
+      }
+      return { ok: false, reason: 'value' };
+    }
+    var parts = A.splitNumberUnit(text);
+    var number = A.number(parts[0]);
+    if (number === null) return { ok: false, reason: 'empty' };
+    var unit = parts[1] ? A.unitOf(parts[1]) : null;
+    if (parts[1] && !unit) return { ok: false, reason: 'unit' };
+    var policy = spec.unitPolicy || (spec.unit ? 'named' : 'optional');
+    if (!unit && policy === 'required') return { ok: false, reason: 'missing_unit' };
+    var dimension = spec.dimension ? A.dimensionOf(spec.dimension) : null;
+    if (unit && dimension && !A.sameDim(unit.dim, dimension)) {
+      return { ok: false, reason: 'dimension' };
+    }
+    if (spec.answerValue === undefined || spec.answerValue === null) {
+      return { ok: false, reason: 'value' };
+    }
+    var expected = Number(spec.answerValue);
+    var target = spec.unit ? A.unitOf(spec.unit) : null;
+    var got;
+    if (unit) {
+      if (target) {
+        if (!A.sameDim(unit.dim, target.dim)) return { ok: false, reason: 'dimension' };
+        got = (number * unit.factor + (unit.offset || 0) - (target.offset || 0)) / target.factor;
+      } else {
+        if (dimension && !A.sameDim(unit.dim, dimension)) {
+          return { ok: false, reason: 'dimension' };
+        }
+        got = number * unit.factor + (unit.offset || 0);
+      }
+    } else {
+      got = number;
+    }
+    var allowed = A.tolerance(spec)(expected);
+    // Double чуть менее точен, чем дроби Python: запас только относительно
+    // самого значения, иначе сравнение «примерно ноль» стало бы бессмысленным.
+    var slack = allowed + 1e-9 * Math.abs(expected);
+    return Math.abs(got - expected) <= slack
+      ? { ok: true, reason: '', value: got, unit: unit || target }
+      : { ok: false, reason: 'value', value: got, unit: unit || target };
+  };
+
   A.pick = function (value) {
     if (value === null || value === undefined) return '';
     return typeof value === 'string' ? value : I.pick(value);
   };
 
-  /** Совпадает ли ответ пользователя с «эталонным» ответом задания. */
-  A.check = function (userAnswer, task) {
-    if (!task) return false;
-    var got = String(userAnswer === null || userAnswer === undefined ? '' : userAnswer);
-    var normalizedUser = A.normalize(got);
-    if (task.answerType === 'choice') {
-      // Вариант сравнивается ровно (без численных допусков): «8/2» — не ответ «4».
-      var variants = A.candidates(task);
-      for (var c = 0; c < variants.length; c++) {
-        if (A.normalize(variants[c]) === normalizedUser) return true;
-      }
-      return false;
-    }
-    var user = normalizedUser;
-    if (!user) return false;
-    var candidates = A.candidates(task);
-    var i, cn;
-    for (i = 0; i < candidates.length; i++) {
-      if (A.normalize(candidates[i]) === user) return true;
-    }
-    var userNum = A.parseNumber(userAnswer);
-    if (userNum !== null) {
-      for (i = 0; i < candidates.length; i++) {
-        cn = A.parseNumber(candidates[i]);
-        if (cn === null) continue;
-        var diff = Math.abs(userNum - cn);
-        if (diff <= 1e-9) return true;
-        if (A.isInteger(cn)) continue;                                // целое — только точно
-        if (diff <= 5e-4 * Math.max(1, Math.abs(cn))) return true;    // «0,833» для 5/6
-      }
-    }
-    // Третий рубеж: ответы-выражения («√2/2», «2π») и написанные от руки
-    // десятичные приближения. Для обычных чисел он не включается — иначе
-    // «1000,5» подошло бы к ответу «1000».
-    var userVal = CT.math.value(userAnswer);
-    if (userVal === null) return false;
-    var userIsExpression = A.isExpression(userAnswer);
-    for (i = 0; i < candidates.length; i++) {
-      if (!userIsExpression && !A.isExpression(candidates[i])) continue;
-      var candidateVal = CT.math.value(candidates[i]);
-      if (candidateVal === null) continue;
-      if (Math.abs(userVal - candidateVal) <= 1e-3 * Math.max(1, Math.abs(candidateVal))) return true;
-    }
-    return false;
+  /** Приведение варианта ответа: без «ответ:», с точкой вместо запятой. */
+  A.normalize = function (value) {
+    if (value === null || value === undefined) return '';
+    var s = String(value).trim().toLowerCase();
+    s = s.replace(/\u00a0/g, ' ').replace(/[\u2212\u2013\u2014\u2015]/g, '-');
+    s = s.replace(/^\s*(ответ|answer)\s*[:.=]?\s*/i, '');
+    s = s.replace(/^\s*[\u0430-\u044fa-z]\s*[).:]\s*/i, '');
+    s = s.replace(/,/g, '.').replace(/ /g, '');
+    return s;
   };
 
-  /** Ответ записан как выражение (корень, π, дробная степень), а не как число. */
-  A.isExpression = function (value) {
-    if (value === null || value === undefined) return false;
-    return /sqrt|pi|\^|\(/.test(A.normalize(value)) && A.parseNumber(value) === null;
+  /** Проверка ответа ученика для интерфейса: задание банка или готовая spec. */
+  A.check = function (user, task) {
+    if (!task) return false;
+    if (task.spec) return A.grade(user, task.spec).ok;
+    var spec = { answerType: task.answerType || 'number' };
+    if (spec.answerType === 'choice') {
+      spec.accept = (task.accept || []).concat(
+        task.answer !== undefined && task.answer !== null ? [task.answer] : []);
+      spec.answer = task.answer;
+      return A.grade(user, spec).ok;
+    }
+    // без спецификации (старые данные) — сравнение по списку принимаемых записей
+    var normalized = A.normalize(user).replace(/,/g, '.');
+    var candidates = (task.accept || []).slice();
+    if (task.answer !== undefined) candidates.push(A.pick(task.answer));
+    for (var i = 0; i < candidates.length; i++) {
+      var candidate = A.normalize(candidates[i]);
+      if (candidate && candidate === normalized) return true;
+      var left = A.number(user);
+      var right = A.number(candidates[i]);
+      if (left !== null && right !== null && Math.abs(left - right) <= 1e-9) return true;
+    }
+    return false;
   };
 
   /* --------------------------------------------------------------------- *

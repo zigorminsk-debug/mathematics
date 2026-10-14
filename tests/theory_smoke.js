@@ -162,14 +162,15 @@ function checkLesson(id, lang) {
   CT.store.settings.lang = 'ru';
   CT.render();
   const standaloneSearch = doc.querySelector('#view input[type="search"]');
-  standaloneSearch.value = 'Виета';
+  standaloneSearch.value = 'Цена деления';
   standaloneSearch.dispatchEvent(new window.Event('input', { bubbles: true }));
   click(doc.querySelector('#view .formula-link'));
   click(doc.querySelector('.modal-lang'));
-  checkLesson('quadratic', 'en');
+  checkLesson('measure-accuracy', 'en');
   close();
-  assert.equal(doc.querySelector('#view input[type="search"]').value, 'Виета');
-  assert.equal(doc.querySelectorAll('#view .formula-link').length, 1);
+  assert.equal(doc.querySelector('#view input[type="search"]').value, 'Цена деления');
+  assert(doc.querySelectorAll('#view .formula-link').length >= 1,
+    'the filtered formula stays clickable after a language change');
 
   // Wrong answers open the same clickable definitions inside remediation.
   CT.i18n.setLang('ru');
@@ -202,33 +203,33 @@ function checkLesson(id, lang) {
   // A theory window opened above the formula tool has a true one-level Back.
   CT.tools.sheet(CT.runner.current());
   const search = doc.querySelector('.sheet input[type="search"]');
-  search.value = 'Виета';
+  search.value = 'Цена деления';
   search.dispatchEvent(new window.Event('input', { bubbles: true }));
   const originalRow = doc.querySelector('.sheet .formula-link');
   const sheet = doc.querySelector('.sheet');
   sheet.scrollTop = 123;
   click(originalRow);
   assert(doc.querySelector('.modal-back'), 'nested theory exposes a Back control');
-  checkLesson('quadratic', 'ru');
+  checkLesson('measure-accuracy', 'ru');
   CT.onAndroidBack();
   assert(open(), 'Back restores the formula tool instead of closing all tools');
   assert.equal(doc.querySelector('.sheet input[type="search"]'), search, 'the exact parent search node is restored');
-  assert.equal(search.value, 'Виета');
+  assert.equal(search.value, 'Цена деления');
   assert.equal(sheet.scrollTop, 123, 'parent formula-tool scroll is preserved');
   assert.equal(doc.activeElement, originalRow, 'focus returns to the selected formula');
 
   // Changing language inside theory also translates the restored parent tool.
   click(originalRow);
   click(doc.querySelector('.modal-lang'));
-  checkLesson('quadratic', 'en');
+  checkLesson('measure-accuracy', 'en');
   assert.equal(doc.querySelector('.analogous-item .answer-input').value, 'saved incorrect analogous answer',
     'an analogous answer also survives a theory-language change');
   assert(doc.querySelector('.analogous-item .feedback.bad').textContent.includes('Not yet'));
   click(doc.querySelector('.modal-back'));
   assert.equal(doc.getElementById('modal-title').textContent, 'Formulas');
-  assert.equal(doc.querySelector('.sheet input[type="search"]').value, 'Виета');
-  assert(doc.querySelector('.sheet .formula-link').textContent.includes("Vieta's theorem"),
-    'the preserved Russian query still finds an English formula');
+  assert.equal(doc.querySelector('.sheet input[type="search"]').value, 'Цена деления');
+  assert(doc.querySelector('.sheet .formula-link').textContent.includes("Scale division"),
+    'the preserved Russian query still finds the same formula after switching to English');
 
   // Escape backs out one level; the close control closes the complete stack.
   click(doc.querySelector('.sheet .formula-link'));
@@ -245,7 +246,7 @@ function checkLesson(id, lang) {
   const zoomProgress = JSON.stringify(CT.store.progress);
   CT.tools.sheet(CT.runner.current());
   let threeSearch = doc.querySelector('.sheet input[type="search"]');
-  threeSearch.value = 'Виета';
+  threeSearch.value = 'Цена деления';
   threeSearch.dispatchEvent(new window.Event('input', { bubbles: true }));
   click(doc.querySelector('.sheet .formula-link'));
   const parentLesson = doc.querySelector('.sheet');
@@ -259,13 +260,13 @@ function checkLesson(id, lang) {
   const afterLang = CT.i18n.lang;
   assert.notEqual(beforeLang, afterLang);
   assert.equal(doc.querySelector('.diagram-viewport svg').style.width, '150%', 'zoom survives language change');
-  assert(doc.querySelector('.diagram-caption').textContent.includes(CT.content.figureById('parabola-roots').caption[afterLang]));
+  assert(doc.querySelector('.diagram-caption').textContent.includes(CT.content.figureById('scale-ruler').caption[afterLang]));
   CT.onAndroidBack();
-  assert(doc.querySelector('.theory-everyday').textContent.includes(CT.content.lessonById('quadratic').everyday[afterLang][0]));
+  assert(doc.querySelector('.theory-everyday').textContent.includes(CT.content.lessonById('measure-accuracy').everyday[afterLang][0]));
   assert.equal(doc.querySelector('.sheet').scrollTop, 211, 'translated parent retains its reading position');
   assert(doc.activeElement.classList.contains('diagram-enlarge'), 'translated Back restores focus');
   CT.onAndroidBack();
-  assert.equal(doc.querySelector('.sheet input[type="search"]').value, 'Виета');
+  assert.equal(doc.querySelector('.sheet input[type="search"]').value, 'Цена деления');
   CT.onAndroidBack();
   assert(!open());
   assert.equal(JSON.stringify(CT.store.session), savedRun);
@@ -274,8 +275,8 @@ function checkLesson(id, lang) {
   // Downloaded SVG data is untrusted: invalid late nodes reject the whole
   // drawing; plain caption/definition text remains available. No partial SVG.
   CT.i18n.setLang('ru'); CT.store.settings.lang = 'ru';
-  await route('#/study/numbers');
-  const originalFigure = CT.content.figures['fraction-bar'];
+  await route('#/study/measurements');
+  const originalFigure = CT.content.figures['scale-ruler'];
   for (const bad of [
     { kind: 'script', role: 'text', filled: false },
     { kind: '__proto__', role: 'text', filled: false },
@@ -283,8 +284,8 @@ function checkLesson(id, lang) {
     { kind: 'line', role: 'primary', filled: false, x1: 0, y1: 0, x2: 1, y2: 1, onclick: 'alert(1)' },
     { kind: 'line', role: 'primary', filled: false, x1: NaN, y1: 0, x2: 1, y2: 1 },
   ]) {
-    CT.content.figures['fraction-bar'] = { ...originalFigure, drawing: [...originalFigure.drawing, bad] };
-    click(doc.querySelector('.study-point-link[data-lesson="fractions"]'));
+    CT.content.figures['scale-ruler'] = { ...originalFigure, drawing: [...originalFigure.drawing, bad] };
+    click(doc.querySelector('.study-point-link[data-lesson="measure-accuracy"]'));
     assert(!doc.querySelector('.theory-figure svg'), 'no partially built unsafe figure');
     assert(doc.querySelector('.theory-figure figcaption').textContent.includes(originalFigure.caption.ru));
     close();
@@ -292,17 +293,20 @@ function checkLesson(id, lang) {
   const escaped = JSON.parse(JSON.stringify(originalFigure));
   escaped.drawing.push({ kind: 'text', role: 'text', filled: false, x: 15, y: 15,
     anchor: 'start', text: { ru: '<img src=x onerror=alert(1)>', en: '<img src=x onerror=alert(1)>' } });
-  CT.content.figures['fraction-bar'] = escaped;
-  click(doc.querySelector('.study-point-link[data-lesson="fractions"]'));
+  CT.content.figures['scale-ruler'] = escaped;
+  click(doc.querySelector('.study-point-link[data-lesson="measure-accuracy"]'));
   assert(doc.querySelector('.theory-figure svg').textContent.includes('<img src=x onerror=alert(1)>'));
   assert(!doc.querySelector('.theory-figure img'), 'SVG labels are text, never markup');
   close();
-  CT.content.figures['fraction-bar'] = originalFigure;
-  assert.equal(visualCoverage.size, 104, 'all 52 diagrams enlarged in both languages');
+  CT.content.figures['scale-ruler'] = originalFigure;
+  assert.equal(visualCoverage.size, Object.keys(CT.content.figures).length * 2,
+    'every diagram is enlarged in both languages');
   assert.equal(networkCalls, 0, 'studying definitions/theorems is entirely offline');
   assert.deepEqual(errors, [], 'no JavaScript or DOM errors');
   process.stdout.write(`✓ theory journeys: ${points} points, ${groups} sections, ${formulas} formulas (RU/EN), ` +
-    '56 everyday explanations, 104 figure zooms, offline SVG safety, nested Back, language, answers/searches preserved\n');
+    `${Object.keys(CT.content.lessons).length} everyday explanations, ` +
+    `${visualCoverage.size} figure zooms, offline SVG safety, nested Back, language, ` +
+    `answers/searches preserved\n`);
   dom.window.close();
 })().catch((error) => {
   process.stderr.write('✗ theory journey failed: ' + error.stack + '\n');

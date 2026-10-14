@@ -808,7 +808,11 @@ ANSWER_VECTORS = [
     _vector("unknown-unit", "Неизвестная единица отвергается, а не игнорируется",
             _spec("Н", "kg·m/s^2", "10", tolerance={"kind": "absolute", "value": "0.1"}),
             [_case("10 Н", True), _case("10 фунтов", False, "unit"),
-             _case("10", True), _case("10,5 Н", False, "value")]),
+             _case("10", True), _case("10,5 Н", False, "value")]),    _vector("fraction", "Обыкновенная дробь «1/2» — это 0,5",
+            _spec("1", "1", "0.5", rounding=2),
+            [_case("1/2", True), _case("0,5", True), _case("0.50", True),
+             _case("3/4", False, "value"), _case("1/0", False, "empty")]),
+
     _vector("empty-and-junk", "Пустой и мусорный ввод не считаются ответом",
             _spec("м", "m", "5", tolerance={"kind": "absolute", "value": "0.1"}),
             [_case("", False, "empty"), _case("   ", False, "empty"),

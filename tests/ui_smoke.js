@@ -83,7 +83,7 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
 (async () => {
   for (let i = 0; i < 80 && !window.CT.content.bank.length; i++) await sleep(50);
   check('bank loaded into the interface', window.CT.content.bank.length === 180, String(window.CT.content.bank.length));
-  check('analogous bank loaded', window.CT.content.analogous.length > 300, String(window.CT.content.analogous.length));
+  check('analogous bank loaded', window.CT.content.analogous.length >= 39, String(window.CT.content.analogous.length));
   check('formula sheet loaded', window.CT.content.formulas.length >= 5);
   check('bilingual error catalogue loaded', Object.keys(window.CT.content.mistakes.errors || {}).length >= 50);
   check('interface strings loaded', Object.keys(window.CT.i18n.strings || {}).length >= 100);
@@ -95,7 +95,7 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   click(doc.getElementById('lang-toggle'));
   await sleep(40);
   check('language switches to English', window.CT.store.settings.lang === 'en' && /Tests/.test(doc.getElementById('mainnav').textContent));
-  check('interface strings follow the language', /Tasks solved|Tests/.test(text()) || /CT Maths Tutor/.test(doc.getElementById('brand-name').textContent),
+  check('interface strings follow the language', /Tasks solved|Tests/.test(text()) || /CT Physics Tutor/.test(doc.getElementById('brand-name').textContent),
     doc.getElementById('brand-name').textContent);
   click(doc.getElementById('lang-toggle'));
   await sleep(40);
@@ -207,10 +207,10 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
     String(doc.querySelectorAll('.formula-group').length));
   const search = doc.querySelector('.sheet .answer-input');
   if (search) {
-    search.value = 'Виета';
+    search.value = 'Скорость из единиц';
     search.dispatchEvent(new window.Event('input', { bubbles: true }));
     await sleep(40);
-    check('formula search filters the list', /Виета/.test(doc.body.textContent));
+    check('formula search filters the list', doc.body.textContent.includes('Скорость из единиц'));
   }
   window.CT.closeModal();
   await sleep(20);
@@ -283,12 +283,12 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   check('developer name shown', /Захаревич Игорь|Zakharevich Igor/.test(text()));
 
   // ---- тренировка по теме и настройки -----------------------------------------
-  window.location.hash = '#/practice/planimetry';
+  window.location.hash = '#/practice/kinematics';
   await sleep(120);
   check('topic practice renders a task', !!doc.querySelector('.answer-input') || !!doc.querySelector('.option'));
 
   // ---- изучение темы -------------------------------------------------------
-  window.location.hash = '#/study/planimetry';
+  window.location.hash = '#/study/kinematics';
   await sleep(100);
   check('study screen opens the topic', /Изучить тему/.test(text()) && doc.querySelectorAll('.formula-group').length >= 1,
     text().slice(0, 120));

@@ -1,4 +1,4 @@
-package by.ziv.ctmaths
+package by.ziv.ctphysics
 
 import android.app.Activity
 import android.content.Context
@@ -135,9 +135,13 @@ class NativeBridge(
     /* -------------------------------------------------------------- update */
 
     /**
-     * Downloads a newer content pack (version.json + task banks) from the release
-     * feed, verifies every SHA-256 and installs it over the embedded bank.  The
-     * student's progress is never touched.
+     * Downloads a newer content pack (version.json + task banks) from the
+     * subject-scoped feed, verifies every SHA-256 and installs it over the
+     * embedded bank. The student's progress is never touched.
+     *
+     * Пустой ``baseUrl`` означает «реши сам»: адрес берётся из Releases API по
+     * последнему выпуску физики ([ReleaseFeed]). Общий `/releases/latest`
+     * репозитория содержит математику и не используется никогда.
      */
     /** Asynchronous bridge: an offline check must not block the WebView UI. */
     @JavascriptInterface
@@ -158,16 +162,27 @@ class NativeBridge(
     @Synchronized
     @JavascriptInterface
     fun checkUpdates(baseUrl: String, currentVersion: String): String {
-        val base = baseUrl.ifBlank { DEFAULT_UPDATE_BASE }.trimEnd('/')
+        val requested = baseUrl.ifBlank { resolveUpdateBase() ?: "" }
+        val base = requested.trimEnd('/')
         val installedVersion = installedContentVersion()
         val current = if (ContentVersions.compare(currentVersion, installedVersion) > 0) {
             currentVersion
         } else installedVersion
         var staged: File? = null
         return try {
+            if (base.isEmpty()) throw IOException("no published physics release found")
             if (!base.startsWith("https://")) throw IllegalArgumentException("update feed must use HTTPS")
+            if (!base.startsWith(ReleaseFeed.downloadBase(""))) {
+                throw IllegalArgumentException("update feed must belong to this subject's releases")
+            }
             val manifest = httpGet("$base/version.json")
             val manifestJson = JSONObject(manifest.toString(Charsets.UTF_8))
+            // Чужой предмет отвергается целиком: банк математики не должен
+            // попасть ни в кэш, ни в интерфейс физики.
+            if (!ReleaseFeed.manifestMatches(manifestJson.optString("subject"),
+                    manifestJson.optString("package"))) {
+                return result("error", current, 0, "manifest belongs to another subject")
+            }
             val version = manifestJson.optString("contentVersion")
             if (!ContentVersions.isValid(version)) {
                 return result("error", current, 0, "manifest has no valid contentVersion")
@@ -238,12 +253,20 @@ class NativeBridge(
         }.toString()
     }
 
+    /** Последний опубликованный выпуск физики (через Releases API). */
+    private fun resolveUpdateBase(): String? = try {
+        ReleaseFeed.feedFrom(httpGet(ReleaseFeed.RELEASES_API).toString(Charsets.UTF_8))
+    } catch (error: Exception) {
+        Log.w(TAG, "cannot resolve the physics release feed: ${error.message}")
+        null
+    }
+
     private fun httpGet(url: String): ByteArray {
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
             connectTimeout = 15000
             readTimeout = 30000
-            setRequestProperty("User-Agent", "CTMathsTutor/${BuildConfig.VERSION_NAME}")
+            setRequestProperty("User-Agent", "CTPhysicsTutor/${BuildConfig.VERSION_NAME}")
             instanceFollowRedirects = true
         }
         try {
@@ -435,9 +458,10 @@ class NativeBridge(
     }
 
     companion object {
-        private const val TAG = "CTMathsBridge"
-        const val DEFAULT_UPDATE_BASE =
-            "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
+        private const val TAG = "CTPhysicsBridge"
+
+        /** Поток обновлений по умолчанию: последний выпуск физики. */
+        fun defaultUpdateBase(): String = ReleaseFeed.RELEASES_API
     }
 }
 

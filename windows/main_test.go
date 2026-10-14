@@ -112,7 +112,10 @@ func feedServer(t *testing.T, version string, bank []byte) *httptest.Server {
 	mux.HandleFunc("/version.json", func(w http.ResponseWriter, r *http.Request) {
 		manifest := map[string]any{
 			"contentVersion": version,
-			"counts":         map[string]int{"bank": 150, "analogous": 552},
+			"subject":        "physics",
+			"package":        "by.ziv.ctphysics",
+			"tag":            "physics-v" + version,
+			"counts":         map[string]int{"bank": 180, "analogous": 39},
 			"files": map[string]any{
 				"bank.json": map[string]any{"sha256": hex.EncodeToString(sum[:]), "bytes": len(bank)},
 			},
@@ -192,9 +195,13 @@ func TestCheckUpdatesOffline(t *testing.T) {
 	}
 	// Пустой адрес означает «взять канал по умолчанию»; сам адрес должен
 	// указывать на последний релиз репозитория (без обращения к сети).
-	want := "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
-	if defaultFeed != want {
-		t.Fatalf("defaultFeed = %q, want %q", defaultFeed, want)
+	want := "https://github.com/zigorminsk-debug/mathematics/releases/download/physics-v2026.10.1"
+	if got := FeedForTag("physics-v2026.10.1"); got != want {
+		t.Fatalf("FeedForTag = %q, want %q", got, want)
+	}
+	// Поток физики не имеет права указывать на общий /releases/latest: там математика.
+	if strings.Contains(want, "/latest/") {
+		t.Fatal("physics feed must be tag-specific")
 	}
 }
 
@@ -348,6 +355,50 @@ func TestCheckUpdatesInstallsTheManifest(t *testing.T) {
 	}
 }
 
+// TestForeignSubjectManifestIsRejected: поток физики не должен принимать банк
+// математики — иначе в приложении окажутся чужие задания и чужая статистика.
+func TestForeignSubjectManifestIsRejected(t *testing.T) {
+	store := newTestStore(t)
+	bank := []byte(`{"meta":{"contentVersion":"2026.10.9"},"tasks":[]}`)
+	sum := sha256.Sum256(bank)
+	feed := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/version.json" {
+			_ = json.NewEncoder(w).Encode(map[string]any{
+				"contentVersion": "2026.10.9",
+				"subject":        "mathematics",
+				"package":        "by.ziv.ctmaths",
+				"files": map[string]any{
+					"bank.json": map[string]any{"sha256": hex.EncodeToString(sum[:]), "bytes": len(bank)},
+				},
+			})
+			return
+		}
+		_, _ = w.Write(bank)
+	}))
+	defer feed.Close()
+
+	result := store.CheckUpdates(feed.URL, "2026.10.1")
+	if result.Status != "error" || !strings.Contains(result.Message, "another subject") {
+		t.Fatalf("foreign subject accepted: %+v", result)
+	}
+	if _, ok := store.ReadContent("bank"); ok {
+		t.Fatal("foreign bank was written into the physics store")
+	}
+}
+
+// TestFeedForTagIsVersionSpecific: приложение физики не читает общий
+// /releases/latest/download (там математика), только свои теги.
+func TestFeedForTagIsVersionSpecific(t *testing.T) {
+	got := FeedForTag("physics-v2026.10.1")
+	want := "https://github.com/zigorminsk-debug/mathematics/releases/download/physics-v2026.10.1"
+	if got != want {
+		t.Fatalf("FeedForTag = %q, want %q", got, want)
+	}
+	if strings.Contains(got, "/latest/") {
+		t.Fatal("feed must not use the repository-wide latest release")
+	}
+}
+
 func TestReportEndpoint(t *testing.T) {
 	srv, store := newTestServer(t)
 	mux := http.NewServeMux()
@@ -420,6 +471,8 @@ func TestBrokenPackLeavesPreviousContentAndProgressIntact(t *testing.T) {
 		if r.URL.Path == "/version.json" {
 			json.NewEncoder(w).Encode(map[string]any{
 				"contentVersion": "2027.1.0",
+				"subject":        "physics",
+				"package":        "by.ziv.ctphysics",
 				"files": map[string]any{
 					"bank.json":   map[string]any{"sha256": hex.EncodeToString(digest[:])},
 					"topics.json": map[string]any{"sha256": strings.Repeat("0", 64)},

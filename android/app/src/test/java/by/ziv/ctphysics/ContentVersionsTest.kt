@@ -1,6 +1,8 @@
-package by.ziv.ctmaths
+package by.ziv.ctphysics
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ContentVersionsTest {

@@ -1,4 +1,4 @@
-package by.ziv.ctmaths
+package by.ziv.ctphysics
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException

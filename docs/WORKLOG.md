@@ -139,3 +139,71 @@
    (идентичность, каталоги данных, subject-scoped обновление).
 5. Только после этого — первый `physics-v*` Release с `make_latest=false`, два
    EXE и `phyzics.apk`, и проверка, что математический latest не изменился.
+
+---
+
+## 2026-10-14 (продолжение): красный CI разобран, порт завершён
+
+Красная сборка (runs 38548137521, 38548422293) падала **не из-за контента**, а
+из-за половинчатого коммита: в дереве уже были физические `content_src/kit.py`,
+`webapp/core.js` и `dist/content/*.json`, но `tests/answer_parity.js` и
+`android/…/AnswerCheckerTest.kt` оставались в математическом формате векторов.
+Локально это не воспроизводилось только потому, что нужные правки лежали
+незакоммиченными. Вывод для следующего агента: **перед пушем прогонять
+`python3 tools/build_content.py` на чистом worktree** (`git worktree add --detach`)
+— CI собирает `dist/` заново и видит ровно то, что запушено.
+
+### Что исправлено в этом коммите
+
+* `tests/answer_parity.js` + `tests/unit_vectors.json` — физический формат
+  векторов (`{cases:[{id, spec, cases[…]}]}`), 92 единицы и 16 векторов,
+  сверка причины отказа (`empty|unit|dimension|missing_unit|value`);
+* `android/app/src/main/.../by/ziv/ctphysics/AnswerChecker.kt` — три настоящих
+  дефекта паритета, найденных локальным стендом Kotlin (JDK + `kotlinc` через
+  `jdk4py`/npm, см. ниже): надстрочная степень без десятки ломала `2,7·10⁷ Дж`,
+  `splitNumberUnit` слева-направо превращал «0,05» в «0» плюс «,05»,
+  `normalize` не срезал букву варианта («б) 2,5 м»), плюс «пусто» вместо
+  «неверное значение» для неразобранной записи и приоритет `dimension` над `unit`;
+* `android/app/src/main/.../by/ziv/ctphysics/ReleaseFeed.kt` (новый) —
+  предметный канал обновления: Releases API, только теги `physics-v*`, чужой
+  манифест отвергается; `NativeBridge.kt` больше **не** читает общий
+  `/releases/latest/download`; 7 новых юнит-тестов;
+* `windows/store.go` — тот же предметный резолвер (`ResolveFeed`, `FeedForTag`,
+  отвержение чужого `subject`/`package`) и два новых Go-теста;
+* `windows/main.go`, `build.sh`, `build.ps1` — имя, каталог данных
+  `%APPDATA%\CTPhysicsTutor`, профиль окна `ctphysics-window`;
+* `webapp/index.html`, `styles.css`, `icon.svg`, debug-строки Android —
+  заголовок, описание и подпись под предмет физики;
+* `README.md` — полностью переписан под физику (формат ЦТ 10A+20B/210 минут,
+  `phyzics.apk`, идентификаторы, что именно проверяется автоматически);
+* удалены оставшиеся математические исходники `android/.../by/ziv/ctmaths/`
+  (иначе в APK попадали бы два пакета сразу).
+
+### Локальный прогон всех ворот CI (2026-10-14)
+
+| Ворота CI | Локальная проверка | Результат |
+|---|---|---|
+| `tools/build_content.py` | `python3 tools/build_content.py` | 180 заданий, 39 генераторов, 37 уроков, 26 схем, 213 строк, 16 векторов |
+| ассеты | `python3 tools/sync_assets.py --check` | копии совпадают |
+| JS | `node --check webapp/{core,app}.js` | синтаксис чист |
+| парность | `node tests/answer_parity.js` | 92 единицы, 180 заданий, 39 аналогичных |
+| схема контента | `node tests/content_schema.js` | ✓ |
+| Python-тесты | `.venv/bin/python -m unittest discover -s tests` | **104 теста, OK** |
+| синтаксис | `.venv/bin/python tools/check_syntax.py --require` | 15 файлов, 0 ошибок |
+| интерфейс | `node tests/{ui,native,theory}_smoke.js` (jsdom) | ✓ три прогона |
+| Windows | `go vet`, `go test`, сборка amd64+arm64 | vet/test OK, оба EXE собраны (9,1 МБ / 8,3 МБ) |
+| Android (юниты) | стенд Kotlin: `kotlinc` 2.4.21 + JDK 25 (`jdk4py`) | **21 тест, OK** (`AnswerChecker`, `ContentVersions`, `ReleaseFeed`) |
+| подпись | `python3 tools/check_signature.py --require --keystore …` | отпечаток совпал |
+
+Стенд Kotlin (в песочнице нет Android SDK и Gradle, поэтому используется
+компилятор + минимальные заглушки `org.json`/`org.junit` вне репозитория):
+
+```bash
+python3 -m pip download jdk4py go-bin            # JDK и Go из PyPI
+npm install --no-save kotlin-compiler@2.4.21     # компилятор Kotlin
+# shim org.json/org.junit + Runner.kt вне репозитория, затем kotlinc и java
+```
+
+Ограничения стенда: `MainActivity.kt` и `NativeBridge.kt` используют Android
+API и локально не компилируются (в CI их собирает Gradle); APK локально не
+пересобирается, поэтому факт сборки APK подтверждается только раном CI.

@@ -120,8 +120,8 @@
    "bytes": 95162
   },
   "answer_vectors.json": {
-   "sha256": "2d0a0d5eadbfa9329c16f3a1890af7be00d44dd5521f7211e1e254af27c7290c",
-   "bytes": 10134
+   "sha256": "612dea313a50c318a429ae190486d0822b9110a40b62771f9bdf7778946918bd",
+   "bytes": 10770
   },
   "bank.json": {
    "sha256": "b4fe9cdfce65d8d81a32971a8a210a2fd8759b1834abf4a84ccceff6542f4a86",
@@ -136,8 +136,8 @@
    "bytes": 23671
   },
   "topics.json": {
-   "sha256": "63e78761872d4859f889f5003b8b3e96374a7537d170819123213449ceb9d005",
-   "bytes": 281212
+   "sha256": "7b196ef1c0213e186f0b18f0dacc2cdc3e22dc269ace193521d9a95c2c3f90c5",
+   "bytes": 293373
   },
   "ui_strings.json": {
    "sha256": "6d5138660784ce81b117a8d1ceb4e2216e5c8b9580df158b9f2b9745369dc799",

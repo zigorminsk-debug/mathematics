@@ -32,10 +32,14 @@ TARGETS = [
     ("android", ROOT / "android" / "app" / "src" / "main" / "assets" / "webapp"),
 ]
 
-#: the shared answer-checker vectors are asserted by the Android unit tests too
+#: the shared answer-checker vectors, unit table and banks are asserted by the
+#: Android unit tests too (parity of Python, JavaScript and Kotlin)
+ANDROID_TEST_RESOURCES = ROOT / "android" / "app" / "src" / "test" / "resources"
 EXTRA_FILES = [
-    (CONTENT / "answer_vectors.json",
-     ROOT / "android" / "app" / "src" / "test" / "resources" / "answer_vectors.json"),
+    (CONTENT / "answer_vectors.json", ANDROID_TEST_RESOURCES / "answer_vectors.json"),
+    (CONTENT / "bank.json", ANDROID_TEST_RESOURCES / "bank.json"),
+    (CONTENT / "analogous.json", ANDROID_TEST_RESOURCES / "analogous.json"),
+    (ROOT / "tests" / "unit_vectors.json", ANDROID_TEST_RESOURCES / "unit_vectors.json"),
 ]
 
 SKIP_NAMES = {".DS_Store", "Thumbs.db"}

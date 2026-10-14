@@ -462,6 +462,45 @@
    ]
   },
   {
+   "id": "fraction",
+   "note": "Обыкновенная дробь «1/2» — это 0,5",
+   "spec": {
+    "answerType": "number",
+    "answerValue": "0.5",
+    "dimension": "1",
+    "unitPolicy": "named",
+    "unit": "1",
+    "rounding": 2
+   },
+   "cases": [
+    {
+     "input": "1/2",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "0,5",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "0.50",
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "input": "3/4",
+     "ok": false,
+     "reason": "value"
+    },
+    {
+     "input": "1/0",
+     "ok": false,
+     "reason": "empty"
+    }
+   ]
+  },
+  {
    "id": "empty-and-junk",
    "note": "Пустой и мусорный ввод не считаются ответом",
    "spec": {
@@ -579,5 +618,5 @@
    ]
   }
  ],
- "count": 15
+ "count": 16
 }

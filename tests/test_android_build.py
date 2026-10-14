@@ -1,4 +1,9 @@
-"""APK identity/version tests and fail-closed checks of the signature gate."""
+"""APK identity/version tests and fail-closed checks of the signature gate.
+
+Проверяется предмет физики: пакет ``by.ziv.ctphysics`` (и ``…debug`` для
+отладочной сборки), versionCode, невозможность «обновить» физику математикой и
+отказ шлюза подписи, если сертификат не совпал с постоянным.
+"""
 import contextlib
 import io
 from pathlib import Path
@@ -14,6 +19,16 @@ import check_signature as signature
 
 
 class ApkVersionTests(unittest.TestCase):
+    def test_package_belongs_to_the_physics_subject(self):
+        self.assertEqual(update.PACKAGE, "by.ziv.ctphysics")
+        self.assertNotIn("ctmaths", update.PACKAGE)
+
+    def test_a_mathematics_apk_can_never_be_offered_as_a_physics_update(self):
+        maths = dict(name="by.ziv.ctmaths", versionCode=261008, versionName="2026.10.8")
+        with self.assertRaises(ValueError):
+            update.validate(dict(name=update.PACKAGE, versionCode=261100,
+                                 versionName="2026.11.0"), "2026.11.0", maths)
+
     def test_version_counter(self):
         self.assertEqual(261003, update.version_code("2026.10.3"))
         self.assertEqual(261004, update.version_code("2026.10.4"))
@@ -25,15 +40,18 @@ class ApkVersionTests(unittest.TestCase):
                 update.version_code(bad)
 
     def test_badging(self):
-        actual = update.parse_badging("package: name='by.ziv.ctmaths' versionCode='261003' versionName='2026.10.3' compileSdkVersion='34' compileSdkVersionCodename='14'\nother: value")
+        package = update.PACKAGE
+        actual = update.parse_badging(
+            f"package: name='{package}' versionCode='261003' versionName='2026.10.3' "
+            "compileSdkVersion='34' compileSdkVersionCodename='14'\nother: value")
         self.assertEqual(update.PACKAGE, actual["name"])
         update.validate(actual, "2026.10.3", dict(name=update.PACKAGE, versionCode=2, versionName="2026.10.2"))
-        for previous in (dict(name="by.ziv.ctmaths.debug", versionCode=1),
+        for previous in (dict(name=update.PACKAGE + ".debug", versionCode=1),
                          dict(name=update.PACKAGE, versionCode=261003),
                          dict(name=update.PACKAGE, versionCode=261004)):
             with self.assertRaises(ValueError):
                 update.validate(actual, "2026.10.3", previous)
-        for bad in (dict(actual, name="by.ziv.ctmaths.debug"),
+        for bad in (dict(actual, name=update.PACKAGE + ".debug"),
                     dict(actual, versionCode=1), dict(actual, versionName="1.0.0")):
             with self.assertRaises(ValueError):
                 update.validate(bad, "2026.10.3")

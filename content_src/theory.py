@@ -10,6 +10,8 @@
 
 from __future__ import annotations
 
+import copy
+
 from kit import PhysicsError
 
 LESSONS: dict[str, dict] = {}
@@ -1323,7 +1325,220 @@ _lesson(
 
 
 def payload() -> dict:
-    """Уроки для topics.json: ключ → двуязычная запись."""
+    """Уроки для topics.json: ключ → двуязычная запись.
+
+    К бытовому объяснению каждого урока добавляется фраза о границах
+    применимости модели (``LIMITS``): приложение показывает её в том же блоке,
+    а сборка контента останавливается, если такой фразы нет.
+    """
     if not LESSONS:
         raise PhysicsError("каталог уроков пуст")
-    return LESSONS
+    missing = sorted(set(LESSONS) - set(LIMITS))
+    if missing:
+        raise PhysicsError("нет границ применимости для уроков: " + ", ".join(missing))
+    unknown = sorted(set(LIMITS) - set(LESSONS))
+    if unknown:
+        raise PhysicsError("границы применимости для неизвестных уроков: " + ", ".join(unknown))
+    lessons = copy.deepcopy(LESSONS)
+    for key, lesson in lessons.items():
+        ru, en = LIMITS[key]
+        lesson["everyday"]["ru"].append(ru)
+        lesson["everyday"]["en"].append(en)
+    return lessons
+
+
+# --------------------------------------------------------------------------- #
+#  Границы применимости моделей / where the models stop working
+# --------------------------------------------------------------------------- #
+
+#: Для каждого урока — одна фраза о том, где модель перестаёт работать.
+#: Это требование к содержанию урока, а не украшение: без такой оговорки ученик
+#: переносит формулу на случаи, для которых она не выведена (сопротивление
+#: воздуха, трение, примеси, большие деформации, сильные поля).
+LIMITS: dict[str, tuple[str, str]] = {
+    "units-si": (
+        "Число без единицы ничего не значит: 5 может быть и метрами, и секундами — "
+        "физическую величину делает единица измерения.",
+        "A bare number means nothing: 5 may be metres or seconds — a unit is what "
+        "makes a quantity physical."),
+    "dimensions-check": (
+        "Проверка размерности — тоже модель: она подтверждает согласованность "
+        "формулы, но не доказывает, что выбран верный закон.",
+        "Checking dimensions is a model too: it confirms that a formula is "
+        "consistent, not that the right law was chosen."),
+    "measure-accuracy": (
+        "Модель «прибор идеален» не учитывает ни погрешность отсчёта, ни "
+        "систематический сдвиг нуля.",
+        "The ideal-instrument model ignores both the reading error and a systematic "
+        "zero shift."),
+    "motion-terms": (
+        "Путь и перемещение определены для тела, размерами которого можно "
+        "пренебречь; для вращающегося колеса «точка» уже не подходит.",
+        "Path and displacement assume a body small enough to be a point; a spinning "
+        "wheel is no longer a point."),
+    "uniform-motion": (
+        "Модель «скорость постоянна» описывает участок без разгона и торможения, "
+        "на остальных — только как приближение.",
+        "The constant-speed model describes a stretch without acceleration; "
+        "elsewhere it is only an approximation."),
+    "accelerated-motion": (
+        "Модель «ускорение постоянно» ломается у реального автомобиля после "
+        "переключения передачи, когда меняется тяга.",
+        "Constant acceleration breaks down for a real car after a gear shift, when "
+        "the traction changes."),
+    "kinematics-graphs": (
+        "График — это модель записи движения: он показывает координату и скорость, "
+        "но не описывает причину ускорения.",
+        "A graph is a recording model: it shows coordinates and speed but does not "
+        "describe the cause of the acceleration."),
+    "free-fall": (
+        "Модель свободного падения пренебрегает сопротивлением воздуха; для "
+        "парашютиста или пылинки она уже неверна.",
+        "Free fall neglects air resistance; for a parachutist or a dust particle the "
+        "model is already wrong."),
+    "newton-laws": (
+        "Законы Ньютона сформулированы для инерциальных систем отсчёта и тел много "
+        "больше атомов; в ускоряющейся системе появляются силы инерции.",
+        "Newton's laws hold in inertial frames and for bodies far larger than atoms; "
+        "an accelerating frame adds inertia forces."),
+    "forces-weight": (
+        "Вес совпадает с силой тяжести только в покое или при равномерном движении: "
+        "в свободном падении вес равен нулю.",
+        "Weight equals gravity only at rest or in uniform motion: in free fall the "
+        "weight is zero."),
+    "friction-elasticity": (
+        "Закон Гука верен только до предела упругости: дальше график становится "
+        "нелинейным и тело не возвращается к прежней форме.",
+        "Hooke's law holds only up to the elastic limit; beyond it the graph bends "
+        "and the body stays deformed."),
+    "force-diagram": (
+        "Схема сил идеализирует задачу: тело считается точечным, а нити — "
+        "невесомыми и нерастяжимыми.",
+        "A force diagram idealises the body as a point and the strings as weightless "
+        "and inextensible."),
+    "work-power": (
+        "Формула мощности через работу верна для постоянной силы; при переменной "
+        "силе она даёт среднюю мощность.",
+        "Power as work over time holds for a constant force; a varying force gives "
+        "only the average power."),
+    "energy-conservation": (
+        "Закон сохранения механической энергии работает без трения и потерь: при "
+        "трении часть энергии уходит в тепло.",
+        "Conservation of mechanical energy assumes no friction: with friction part "
+        "of it becomes heat."),
+    "momentum": (
+        "Импульс сохраняется в замкнутой системе; при внешних силах (трение, удар о "
+        "стену) закон выполняется лишь приближённо.",
+        "Momentum is conserved in a closed system; external forces such as friction "
+        "make it approximate."),
+    "torque": (
+        "Правило моментов выведено для невесомой балки: собственный вес стержня "
+        "добавляет отдельный момент.",
+        "The lever rule assumes a weightless beam: a rod's own weight adds its own "
+        "torque."),
+    "pressure-hydrostatics": (
+        "Формула p = ρgh описывает покоящуюся жидкость; в потоке давление зависит "
+        "ещё и от скорости движения.",
+        "p = ρgh describes a fluid at rest; in a flow the pressure also depends on "
+        "the speed."),
+    "archimedes": (
+        "Сила Архимеда записана для полностью погружённого тела; у плавающего "
+        "вытеснен объём меньше, и формула даёт верхнюю оценку.",
+        "Archimedes' force assumes full immersion; a floating body displaces less, "
+        "so the formula is an upper bound."),
+    "amount-substance": (
+        "Модель «частицы одинаковы и не взаимодействуют» подходит разреженному "
+        "газу; в жидкости молекулы связаны друг с другом.",
+        "Identical non-interacting particles fit a rarefied gas; in a liquid the "
+        "molecules are bound to each other."),
+    "ideal-gas": (
+        "Идеальный газ не учитывает собственный объём молекул и силы притяжения, "
+        "поэтому при высоком давлении модель завышает точность.",
+        "An ideal gas ignores molecular volume and attraction, so the model loses "
+        "accuracy at high pressure."),
+    "isoprocesses": (
+        "Изопроцессы — предельные случаи: реальный газ обычно меняет объём и "
+        "температуру одновременно.",
+        "Isoprocesses are limiting cases: a real gas usually changes volume and "
+        "temperature at the same time."),
+    "heat-capacity": (
+        "Формула Q = cmΔt не учитывает потери тепла в окружающую среду и работу "
+        "газа при расширении.",
+        "Q = cmΔt ignores heat losses to the surroundings and the work of expansion "
+        "of a gas."),
+    "phase-first-law": (
+        "Модель «при плавлении температура не меняется» верна для чистого "
+        "вещества; примеси размывают площадку на графике.",
+        "Constant temperature while melting holds for a pure substance; impurities "
+        "blur the plateau."),
+    "coulomb-field": (
+        "Закон Кулона выведен для точечных зарядов в вакууме; в среде и для "
+        "протяжённых тел он даёт лишь оценку.",
+        "Coulomb's law assumes point charges in vacuum; in matter or for extended "
+        "bodies it only estimates."),
+    "potential-capacitance": (
+        "Потенциал точечного заряда отсчитывают от бесконечности; в реальной схеме "
+        "важен явно выбранный нулевой уровень.",
+        "The potential of a point charge is measured from infinity; a real circuit "
+        "needs an explicit zero level."),
+    "ohm-law": (
+        "Закон Ома для участка цепи верен при постоянной температуре: у лампы "
+        "накаливания сопротивление растёт с нагревом.",
+        "Ohm's law for a circuit section assumes constant temperature: a filament's "
+        "resistance grows as it heats up."),
+    "circuits": (
+        "Модель «провода без сопротивления, источник идеален» не учитывает падение "
+        "напряжения на подводящих проводах и внутреннее сопротивление источника.",
+        "Ideal wires and a perfect source ignore the drop along the leads and the "
+        "internal resistance of the source."),
+    "current-work": (
+        "Закон Джоуля–Ленца записан для постоянного тока; для переменного берут "
+        "действующие значения, иначе мощность считается неверно.",
+        "Joule–Lenz law holds for direct current; alternating current needs rms "
+        "values, otherwise the power is wrong."),
+    "magnetic-forces": (
+        "Сила Ампера записана для однородного поля: вблизи полюса магнита поле "
+        "неоднородно, и формула даёт только оценку.",
+        "The Ampère force assumes a uniform field: near a magnet's pole the field is "
+        "non-uniform and the formula estimates only."),
+    "induction": (
+        "Закон Фарадея даёт среднее значение ЭДС за интервал; мгновенное значение "
+        "требует скорости изменения потока.",
+        "Faraday's law gives the average EMF over an interval; the instantaneous "
+        "value needs the rate of change of the flux."),
+    "oscillations": (
+        "Модель гармонических колебаний требует малых отклонений и отсутствия "
+        "трения; при большой амплитуде период начинает зависеть от неё.",
+        "Harmonic motion assumes small deviations and no friction; at large "
+        "amplitudes the period starts to depend on amplitude."),
+    "waves-sound": (
+        "Модель «скорость волны определяется только средой» не работает для волн на "
+        "воде и вблизи препятствий, где важна дисперсия.",
+        "Wave speed set only by the medium fails for water waves and near obstacles, "
+        "where dispersion matters."),
+    "reflection-refraction": (
+        "Модель лучей пренебрегает дифракцией: у кромки препятствия свет огибает "
+        "его, и «прямая» картинка ломается.",
+        "Ray optics neglects diffraction: light bends around an edge, so the "
+        "straight-ray picture fails."),
+    "lens": (
+        "Формула тонкой линзы точна для параксиальных лучей; у толстой линзы "
+        "отсчёт от её центра уже неверен.",
+        "The thin-lens formula is accurate for paraxial rays only; a thick lens has "
+        "no single optical centre."),
+    "photoeffect": (
+        "Уравнение Эйнштейна записано для однофотонного процесса на холодном "
+        "металле; при большой интенсивности возможны двухфотонные эффекты.",
+        "Einstein's equation assumes one photon per electron on a cold metal; at "
+        "high intensity two-photon effects appear."),
+    "atom-nucleus": (
+        "Модели атома (Томсона, Резерфорда, Бора) — приближения: каждая объясняет "
+        "свой круг опытов и не описывает остальные.",
+        "Atomic models (Thomson, Rutherford, Bohr) are approximations: each explains "
+        "its own experiments and fails elsewhere."),
+    "radioactivity": (
+        "Закон радиоактивного распада статистический: он верен для большого числа "
+        "ядер и ничего не предсказывает про одно конкретное.",
+        "Radioactive decay is statistical: it holds for many nuclei and predicts "
+        "nothing about a single one."),
+}

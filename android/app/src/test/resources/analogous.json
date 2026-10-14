@@ -1,0 +1,4476 @@
+{
+ "meta": {
+  "contentVersion": "2026.10.1",
+  "schema": 1,
+  "subject": "physics",
+  "package": "by.ziv.ctphysics",
+  "app": "CTPhysicsTutor",
+  "years": [
+   2021,
+   2022,
+   2023,
+   2024,
+   2025,
+   2026
+  ],
+  "counts": {
+   "bank": 180,
+   "analogous": 39,
+   "choice": 60,
+   "quantity": 120,
+   "lessons": 37,
+   "figures": 26
+  },
+  "author": "Zakharevich Igor",
+  "repo": "https://github.com/zigorminsk-debug/mathematics",
+  "disclosure": {
+   "ru": "Авторские тренировочные варианты, составленные по программе и формату ЦТ по физике. Это не официальные задания РИКЗ.",
+   "en": "Authored practice papers written to the physics CT syllabus and format. They are not official RIKZ materials."
+  },
+  "structureSource": "Перечень РИКЗ: физика — 10 заданий части A, 20 заданий части B, всего 30, 210 минут (ЦТ/ЦЭ 2025). Проверено 2026-10-14."
+ },
+ "tasks": [
+  {
+   "id": "phys-practice-measurements-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "measurements",
+   "difficulty": 1,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Переведите 144 км/ч в м/с.",
+    "en": "Convert 144 km/h to m/s."
+   },
+   "options": null,
+   "answer": {
+    "ru": "40,0 м/с",
+    "en": "40.0 m/s"
+   },
+   "accept": [
+    "40",
+    "40,0",
+    "40.0",
+    "40 м/с",
+    "40 m/s",
+    "144 km/ч",
+    "144 km/h"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: v =  V.",
+     "Подставим данные: v =  144.",
+     "Вычислим: v = 40,0 м/с."
+    ],
+    "en": [
+     "Write the formula: v =  V.",
+     "Substitute the data: v =  144.",
+     "Compute: v = 40.0 m/s."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: 1 км/ч = 5/18 м/с"
+    ],
+    "en": [
+     "Formula: 1 км/ч = 5/18 м/с"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "перевод единиц"
+   ],
+   "unit": {
+    "ru": "м/с",
+    "en": "m/s"
+   },
+   "unitPolicy": "named",
+   "dimension": "m/s",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "V",
+     "name": "V",
+     "value_ru": "144",
+     "value_en": "144",
+     "unit": {
+      "ru": "км/ч",
+      "en": "km/h"
+     },
+     "unit_symbol": "км/ч"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "40",
+    "accept": [],
+    "unit": "м/с",
+    "unitPolicy": "named",
+    "dimension": "m/s",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "1 км/ч = 5/18 м/с",
+     "en": "1 км/ч = 5/18 м/с"
+    },
+    "dim": "v = V",
+    "vars": {
+     "v": "m/s",
+     "V": "m/s"
+    },
+    "ask": "v"
+   }
+  },
+  {
+   "id": "phys-practice-measurements-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "measurements",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Счётчик показал 7,5 кВт·ч. Выразите эту энергию в джоулях.",
+    "en": "The meter shows 7.5 kWh. Express this energy in joules."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2,7·10⁷ Дж",
+    "en": "2.7·10^7 J"
+   },
+   "accept": [
+    "2,7·10⁷",
+    "2.7·10^7",
+    "27000000 Дж",
+    "2,7·10⁷ Дж",
+    "27000000 J"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: E =  W.",
+     "Подставим данные: E =  7,5.",
+     "Вычислим: E = 2,7·10⁷ Дж."
+    ],
+    "en": [
+     "Write the formula: E =  W.",
+     "Substitute the data: E =  7.5.",
+     "Compute: E = 2.7·10^7 J."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: 1 кВт·ч = 3,6·10⁶ Дж"
+    ],
+    "en": [
+     "Formula: 1 кВт·ч = 3,6·10⁶ Дж"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "приставки СИ"
+   ],
+   "unit": {
+    "ru": "Дж",
+    "en": "J"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/s^2",
+   "tolerance": null,
+   "rounding": 0,
+   "given": [
+    {
+     "symbol": "W",
+     "name": "W",
+     "value_ru": "7,5",
+     "value_en": "7.5",
+     "unit": {
+      "ru": "кВт·ч",
+      "en": "kWh"
+     },
+     "unit_symbol": "кВт·ч"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "27000000",
+    "accept": [],
+    "unit": "Дж",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/s^2",
+    "rounding": 0
+   },
+   "model": {
+    "formula": {
+     "ru": "1 кВт·ч = 3,6·10⁶ Дж",
+     "en": "1 кВт·ч = 3,6·10⁶ Дж"
+    },
+    "dim": "E = W",
+    "vars": {
+     "E": "kg·m^2/s^2",
+     "W": "kg·m^2/s^2"
+    },
+    "ask": "E"
+   }
+  },
+  {
+   "id": "phys-practice-measurements-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "measurements",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Между подписями 2 В и 12 В на шкале вольтметра 5 промежутков. Найдите цену деления прибора.",
+    "en": "Between the marks 2 V and 12 V of a voltmeter scale there are 5 gaps. Find the scale division."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2,00 В",
+    "en": "2.00 V"
+   },
+   "accept": [
+    "2",
+    "2,00",
+    "2.00",
+    "2 В",
+    "2 V"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: c =  (b - a)/n.",
+     "Подставим данные: c =  (12 - 2)/5.",
+     "Вычислим: c = 2,00 В."
+    ],
+    "en": [
+     "Write the formula: c =  (b - a)/n.",
+     "Substitute the data: c =  (12 - 2)/5.",
+     "Compute: c = 2.00 V."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: c = (a₂ − a₁)/n"
+    ],
+    "en": [
+     "Formula: c = (a₂ − a₁)/n"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "цена деления"
+   ],
+   "unit": {
+    "ru": "В",
+    "en": "V"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/(s^3·A)",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "a",
+     "name": "a",
+     "value_ru": "2",
+     "value_en": "2",
+     "unit": {
+      "ru": "В",
+      "en": "V"
+     },
+     "unit_symbol": "В"
+    },
+    {
+     "symbol": "b",
+     "name": "b",
+     "value_ru": "12",
+     "value_en": "12",
+     "unit": {
+      "ru": "В",
+      "en": "V"
+     },
+     "unit_symbol": "В"
+    },
+    {
+     "symbol": "n",
+     "name": "n",
+     "value_ru": "5",
+     "value_en": "5",
+     "unit": {
+      "ru": "",
+      "en": ""
+     },
+     "unit_symbol": ""
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "2",
+    "accept": [],
+    "unit": "В",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/(s^3·A)",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "c = (a₂ − a₁)/n",
+     "en": "c = (a₂ − a₁)/n"
+    },
+    "dim": "c = (b - a)/n",
+    "vars": {
+     "c": "kg·m^2/(s^3·A)",
+     "a": "kg·m^2/(s^3·A)",
+     "b": "kg·m^2/(s^3·A)",
+     "n": "1"
+    },
+    "ask": "c"
+   }
+  },
+  {
+   "id": "phys-practice-kinematics-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "kinematics",
+   "difficulty": 1,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Тело движется равномерно со скоростью 8 м/с в течение 10 с. Какой путь оно пройдёт?",
+    "en": "A body moves uniformly at 8 m/s for 10 s. What distance does it cover?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "80 м",
+    "en": "80 m"
+   },
+   "accept": [
+    "80",
+    "80 м",
+    "80 m",
+    "8000 см",
+    "8000 cm",
+    "80000 мм",
+    "80000 mm",
+    "0.08 км",
+    "0,08 км",
+    "0.08 km"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: s =  v·t.",
+     "Подставим данные: s =  8·10.",
+     "Вычислим: s = 80 м."
+    ],
+    "en": [
+     "Write the formula: s =  v·t.",
+     "Substitute the data: s =  8·10.",
+     "Compute: s = 80 m."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: s = v·t (равномерное движение)"
+    ],
+    "en": [
+     "Formula: s = v·t (равномерное движение)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "равноускоренное движение"
+   ],
+   "unit": {
+    "ru": "м",
+    "en": "m"
+   },
+   "unitPolicy": "named",
+   "dimension": "m",
+   "tolerance": null,
+   "rounding": 0,
+   "given": [
+    {
+     "symbol": "v",
+     "name": "v",
+     "value_ru": "8",
+     "value_en": "8",
+     "unit": {
+      "ru": "м/с",
+      "en": "m/s"
+     },
+     "unit_symbol": "м/с"
+    },
+    {
+     "symbol": "t",
+     "name": "t",
+     "value_ru": "10",
+     "value_en": "10",
+     "unit": {
+      "ru": "с",
+      "en": "s"
+     },
+     "unit_symbol": "с"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "80",
+    "accept": [],
+    "unit": "м",
+    "unitPolicy": "named",
+    "dimension": "m",
+    "rounding": 0
+   },
+   "model": {
+    "formula": {
+     "ru": "s = v·t (равномерное движение)",
+     "en": "s = v·t (равномерное движение)"
+    },
+    "dim": "s = v*t",
+    "vars": {
+     "s": "m",
+     "v": "m/s",
+     "t": "s"
+    },
+    "ask": "s"
+   }
+  },
+  {
+   "id": "phys-practice-kinematics-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "kinematics",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Автомобиль двигался со скоростью 6 м/с и за 4 с увеличил её до 18 м/с. Найдите ускорение.",
+    "en": "A car moving at 6 m/s increased its speed to 18 m/s in 4 s. Find the acceleration."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3,00 м/с²",
+    "en": "3.00 m/s²"
+   },
+   "accept": [
+    "3",
+    "3,00",
+    "3.00",
+    "3 м/с²",
+    "3 m/s²"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: a =  (v1 - v0)/t.",
+     "Подставим данные: a =  (18 - 6)/4.",
+     "Вычислим: a = 3,00 м/с²."
+    ],
+    "en": [
+     "Write the formula: a =  (v1 - v0)/t.",
+     "Substitute the data: a =  (18 - 6)/4.",
+     "Compute: a = 3.00 m/s²."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: a = (v − v₀)/t"
+    ],
+    "en": [
+     "Formula: a = (v − v₀)/t"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "равноускоренное движение"
+   ],
+   "unit": {
+    "ru": "м/с²",
+    "en": "m/s²"
+   },
+   "unitPolicy": "named",
+   "dimension": "m/s^2",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "v0",
+     "name": "v0",
+     "value_ru": "6",
+     "value_en": "6",
+     "unit": {
+      "ru": "м/с",
+      "en": "m/s"
+     },
+     "unit_symbol": "м/с"
+    },
+    {
+     "symbol": "v1",
+     "name": "v1",
+     "value_ru": "18",
+     "value_en": "18",
+     "unit": {
+      "ru": "м/с",
+      "en": "m/s"
+     },
+     "unit_symbol": "м/с"
+    },
+    {
+     "symbol": "t",
+     "name": "t",
+     "value_ru": "4",
+     "value_en": "4",
+     "unit": {
+      "ru": "с",
+      "en": "s"
+     },
+     "unit_symbol": "с"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "3",
+    "accept": [],
+    "unit": "м/с^2",
+    "unitPolicy": "named",
+    "dimension": "m/s^2",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "a = (v − v₀)/t",
+     "en": "a = (v − v₀)/t"
+    },
+    "dim": "a = (v1 - v0)/t",
+    "vars": {
+     "a": "m/s^2",
+     "v0": "m/s",
+     "v1": "m/s",
+     "t": "s"
+    },
+    "ask": "a"
+   }
+  },
+  {
+   "id": "phys-practice-kinematics-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "kinematics",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Автомобиль проехал 20 км за 1 ч и 30 км за 3 ч. Найдите среднюю скорость на всём пути.",
+    "en": "A car covered 20 km in 1 h and 30 km in 3 h. Find the average speed over the whole trip."
+   },
+   "options": null,
+   "answer": {
+    "ru": "12,50 км/ч",
+    "en": "12.50 km/h"
+   },
+   "accept": [
+    "12,5",
+    "12.5",
+    "12,50",
+    "12.50",
+    "12.5 км/ч",
+    "12,5 км/ч",
+    "12.5 km/h",
+    "12.5 km/ч",
+    "12,5 km/ч"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: v =  (s1 + s2)/(t1 + t2).",
+     "Подставим данные: v =  (20 + 30)/(1 + 3).",
+     "Вычислим: v = 12,50 км/ч."
+    ],
+    "en": [
+     "Write the formula: v =  (s1 + s2)/(t1 + t2).",
+     "Substitute the data: v =  (20 + 30)/(1 + 3).",
+     "Compute: v = 12.50 km/h."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: vср = (s₁ + s₂)/(t₁ + t₂)"
+    ],
+    "en": [
+     "Formula: vср = (s₁ + s₂)/(t₁ + t₂)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "средняя скорость"
+   ],
+   "unit": {
+    "ru": "км/ч",
+    "en": "km/h"
+   },
+   "unitPolicy": "named",
+   "dimension": "m/s",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "s1",
+     "name": "s1",
+     "value_ru": "20",
+     "value_en": "20",
+     "unit": {
+      "ru": "км",
+      "en": "km"
+     },
+     "unit_symbol": "км"
+    },
+    {
+     "symbol": "t1",
+     "name": "t1",
+     "value_ru": "1",
+     "value_en": "1",
+     "unit": {
+      "ru": "ч",
+      "en": "h"
+     },
+     "unit_symbol": "ч"
+    },
+    {
+     "symbol": "s2",
+     "name": "s2",
+     "value_ru": "30",
+     "value_en": "30",
+     "unit": {
+      "ru": "км",
+      "en": "km"
+     },
+     "unit_symbol": "км"
+    },
+    {
+     "symbol": "t2",
+     "name": "t2",
+     "value_ru": "3",
+     "value_en": "3",
+     "unit": {
+      "ru": "ч",
+      "en": "h"
+     },
+     "unit_symbol": "ч"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "12.5",
+    "accept": [],
+    "unit": "км/ч",
+    "unitPolicy": "named",
+    "dimension": "m/s",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "vср = (s₁ + s₂)/(t₁ + t₂)",
+     "en": "vср = (s₁ + s₂)/(t₁ + t₂)"
+    },
+    "dim": "v = (s1 + s2)/(t1 + t2)",
+    "vars": {
+     "v": "m/s",
+     "s1": "m",
+     "s2": "m",
+     "t1": "s",
+     "t2": "s"
+    },
+    "ask": "v"
+   }
+  },
+  {
+   "id": "phys-practice-dynamics-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "dynamics",
+   "difficulty": 1,
+   "answerType": "quantity",
+   "text": {
+    "ru": "На тело массой 2 кг действует равнодействующая сила 4 Н. Найдите ускорение.",
+    "en": "A net force of 4 N acts on a body of 2 kg. Find the acceleration."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2,00 м/с²",
+    "en": "2.00 m/s²"
+   },
+   "accept": [
+    "2",
+    "2,00",
+    "2.00",
+    "2 м/с²",
+    "2 m/s²"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: a =  F/m.",
+     "Подставим данные: a =  4/2.",
+     "Вычислим: a = 2,00 м/с²."
+    ],
+    "en": [
+     "Write the formula: a =  F/m.",
+     "Substitute the data: a =  4/2.",
+     "Compute: a = 2.00 m/s²."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: a = F/m"
+    ],
+    "en": [
+     "Formula: a = F/m"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "второй закон Ньютона"
+   ],
+   "unit": {
+    "ru": "м/с²",
+    "en": "m/s²"
+   },
+   "unitPolicy": "named",
+   "dimension": "m/s^2",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "m",
+     "name": "m",
+     "value_ru": "2",
+     "value_en": "2",
+     "unit": {
+      "ru": "кг",
+      "en": "kg"
+     },
+     "unit_symbol": "кг"
+    },
+    {
+     "symbol": "F",
+     "name": "F",
+     "value_ru": "4",
+     "value_en": "4",
+     "unit": {
+      "ru": "Н",
+      "en": "N"
+     },
+     "unit_symbol": "Н"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "2",
+    "accept": [],
+    "unit": "м/с^2",
+    "unitPolicy": "named",
+    "dimension": "m/s^2",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "a = F/m",
+     "en": "a = F/m"
+    },
+    "dim": "a = F/m",
+    "vars": {
+     "a": "m/s^2",
+     "F": "kg·m/s^2",
+     "m": "kg"
+    },
+    "ask": "a"
+   }
+  },
+  {
+   "id": "phys-practice-dynamics-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "dynamics",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Брусок массой 10 кг равномерно скользит по горизонтальной поверхности. Коэффициент трения μ = 0,25, g = 9,8. Найдите силу трения.",
+    "en": "A block of 10 kg slides at constant speed on a horizontal surface. The friction coefficient is μ = 0.25, g = 9.8. Find the friction force."
+   },
+   "options": null,
+   "answer": {
+    "ru": "24,5 Н",
+    "en": "24.5 N"
+   },
+   "accept": [
+    "24,5",
+    "24.5",
+    "24.5 Н",
+    "24,5 Н",
+    "24.5 N"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: F =  mu·m·g.",
+     "Подставим данные: F =  0,25·10·g.",
+     "Вычислим: F = 24,5 Н."
+    ],
+    "en": [
+     "Write the formula: F =  mu·m·g.",
+     "Substitute the data: F =  0.25·10·g.",
+     "Compute: F = 24.5 N."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: Fтр = μ·m·g"
+    ],
+    "en": [
+     "Formula: Fтр = μ·m·g"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "сила трения"
+   ],
+   "unit": {
+    "ru": "Н",
+    "en": "N"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m/s^2",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "m",
+     "name": "m",
+     "value_ru": "10",
+     "value_en": "10",
+     "unit": {
+      "ru": "кг",
+      "en": "kg"
+     },
+     "unit_symbol": "кг"
+    },
+    {
+     "symbol": "mu",
+     "name": "mu",
+     "value_ru": "0,25",
+     "value_en": "0.25",
+     "unit": {
+      "ru": "",
+      "en": ""
+     },
+     "unit_symbol": ""
+    },
+    {
+     "symbol": "g",
+     "name": "g",
+     "value_ru": "9,8",
+     "value_en": "9.8",
+     "unit": {
+      "ru": "м/с²",
+      "en": "m/s²"
+     },
+     "unit_symbol": "м/с²"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "24.5",
+    "accept": [],
+    "unit": "Н",
+    "unitPolicy": "named",
+    "dimension": "kg·m/s^2",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "Fтр = μ·m·g",
+     "en": "Fтр = μ·m·g"
+    },
+    "dim": "F = mu*m*g",
+    "vars": {
+     "F": "kg·m/s^2",
+     "mu": "1",
+     "m": "kg",
+     "g": "m/s^2"
+    },
+    "ask": "F"
+   }
+  },
+  {
+   "id": "phys-practice-dynamics-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "dynamics",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Пружина жёсткостью 400 Н/м сжата на 0,05 м. Найдите силу упругости.",
+    "en": "A spring of stiffness 400 N/m is compressed by 0.05 m. Find the elastic force."
+   },
+   "options": null,
+   "answer": {
+    "ru": "20,0 Н",
+    "en": "20.0 N"
+   },
+   "accept": [
+    "20",
+    "20,0",
+    "20.0",
+    "20 Н",
+    "20 N"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: F =  k·x.",
+     "Подставим данные: F =  400·0,05.",
+     "Вычислим: F = 20,0 Н."
+    ],
+    "en": [
+     "Write the formula: F =  k·x.",
+     "Substitute the data: F =  400·0.05.",
+     "Compute: F = 20.0 N."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: F = k·x (в пределах упругости)"
+    ],
+    "en": [
+     "Formula: F = k·x (в пределах упругости)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "сила упругости"
+   ],
+   "unit": {
+    "ru": "Н",
+    "en": "N"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m/s^2",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "k",
+     "name": "k",
+     "value_ru": "400",
+     "value_en": "400",
+     "unit": {
+      "ru": "Н/м",
+      "en": "N/m"
+     },
+     "unit_symbol": "Н/м"
+    },
+    {
+     "symbol": "x",
+     "name": "x",
+     "value_ru": "0,05",
+     "value_en": "0.05",
+     "unit": {
+      "ru": "м",
+      "en": "m"
+     },
+     "unit_symbol": "м"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "20",
+    "accept": [],
+    "unit": "Н",
+    "unitPolicy": "named",
+    "dimension": "kg·m/s^2",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "F = k·x (в пределах упругости)",
+     "en": "F = k·x (в пределах упругости)"
+    },
+    "dim": "F = k*x",
+    "vars": {
+     "F": "kg·m/s^2",
+     "k": "kg/s^2",
+     "x": "m"
+    },
+    "ask": "F"
+   }
+  },
+  {
+   "id": "phys-practice-workenergy-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "workenergy",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Сила 20 Н действует под углом 0° к перемещению 4 м. Найдите работу силы. cos 0° = 1.",
+    "en": "A force of 20 N acts at 0° to a displacement of 4 m. Find the work. cos 0° = 1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "80 Дж",
+    "en": "80 J"
+   },
+   "accept": [
+    "80",
+    "80 Дж",
+    "80 J"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: A =  F·s.",
+     "Подставим данные: A =  20·4.",
+     "Вычислим: A = 80 Дж."
+    ],
+    "en": [
+     "Write the formula: A =  F·s.",
+     "Substitute the data: A =  20·4.",
+     "Compute: A = 80 J."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: A = F·s·cos α"
+    ],
+    "en": [
+     "Formula: A = F·s·cos α"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "работа и мощность"
+   ],
+   "unit": {
+    "ru": "Дж",
+    "en": "J"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/s^2",
+   "tolerance": null,
+   "rounding": 0,
+   "given": [
+    {
+     "symbol": "F",
+     "name": "F",
+     "value_ru": "20",
+     "value_en": "20",
+     "unit": {
+      "ru": "Н",
+      "en": "N"
+     },
+     "unit_symbol": "Н"
+    },
+    {
+     "symbol": "s",
+     "name": "s",
+     "value_ru": "4",
+     "value_en": "4",
+     "unit": {
+      "ru": "м",
+      "en": "m"
+     },
+     "unit_symbol": "м"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "80",
+    "accept": [],
+    "unit": "Дж",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/s^2",
+    "rounding": 0
+   },
+   "model": {
+    "formula": {
+     "ru": "A = F·s·cos α",
+     "en": "A = F·s·cos α"
+    },
+    "dim": "A = F*s",
+    "vars": {
+     "A": "kg·m^2/s^2",
+     "F": "kg·m/s^2",
+     "s": "m"
+    },
+    "ask": "A"
+   }
+  },
+  {
+   "id": "phys-practice-workenergy-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "workenergy",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "За 30 с совершена работа 4800 Дж. Найдите среднюю мощность.",
+    "en": "A work of 4800 J is done in 30 s. Find the average power."
+   },
+   "options": null,
+   "answer": {
+    "ru": "160,0 Вт",
+    "en": "160.0 W"
+   },
+   "accept": [
+    "160",
+    "160,0",
+    "160.0",
+    "160 Вт",
+    "160 W"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: P =  A/t.",
+     "Подставим данные: P =  4800/30.",
+     "Вычислим: P = 160,0 Вт."
+    ],
+    "en": [
+     "Write the formula: P =  A/t.",
+     "Substitute the data: P =  4800/30.",
+     "Compute: P = 160.0 W."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: P = A/t"
+    ],
+    "en": [
+     "Formula: P = A/t"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "работа и мощность"
+   ],
+   "unit": {
+    "ru": "Вт",
+    "en": "W"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/s^3",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "A",
+     "name": "A",
+     "value_ru": "4800",
+     "value_en": "4800",
+     "unit": {
+      "ru": "Дж",
+      "en": "J"
+     },
+     "unit_symbol": "Дж"
+    },
+    {
+     "symbol": "t",
+     "name": "t",
+     "value_ru": "30",
+     "value_en": "30",
+     "unit": {
+      "ru": "с",
+      "en": "s"
+     },
+     "unit_symbol": "с"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "160",
+    "accept": [],
+    "unit": "Вт",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/s^3",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "P = A/t",
+     "en": "P = A/t"
+    },
+    "dim": "P = A/t",
+    "vars": {
+     "P": "kg·m^2/s^3",
+     "A": "kg·m^2/s^2",
+     "t": "s"
+    },
+    "ask": "P"
+   }
+  },
+  {
+   "id": "phys-practice-workenergy-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "workenergy",
+   "difficulty": 1,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Тело массой 8 кг движется со скоростью 6 м/с. Найдите его импульс.",
+    "en": "A body of 8 kg moves at 6 m/s. Find its momentum."
+   },
+   "options": null,
+   "answer": {
+    "ru": "48 кг·м/с",
+    "en": "48 kg·m/s"
+   },
+   "accept": [
+    "48",
+    "48 кг·м/с",
+    "48 kg·m/s"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: p =  m·v.",
+     "Подставим данные: p =  8·6.",
+     "Вычислим: p = 48 кг·м/с."
+    ],
+    "en": [
+     "Write the formula: p =  m·v.",
+     "Substitute the data: p =  8·6.",
+     "Compute: p = 48 kg·m/s."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: p = m·v"
+    ],
+    "en": [
+     "Formula: p = m·v"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "импульс и закон сохранения"
+   ],
+   "unit": {
+    "ru": "кг·м/с",
+    "en": "kg·m/s"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m/s",
+   "tolerance": null,
+   "rounding": 0,
+   "given": [
+    {
+     "symbol": "m",
+     "name": "m",
+     "value_ru": "8",
+     "value_en": "8",
+     "unit": {
+      "ru": "кг",
+      "en": "kg"
+     },
+     "unit_symbol": "кг"
+    },
+    {
+     "symbol": "v",
+     "name": "v",
+     "value_ru": "6",
+     "value_en": "6",
+     "unit": {
+      "ru": "м/с",
+      "en": "m/s"
+     },
+     "unit_symbol": "м/с"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "48",
+    "accept": [],
+    "unit": "кг·м/с",
+    "unitPolicy": "named",
+    "dimension": "kg·m/s",
+    "rounding": 0
+   },
+   "model": {
+    "formula": {
+     "ru": "p = m·v",
+     "en": "p = m·v"
+    },
+    "dim": "p = m*v",
+    "vars": {
+     "p": "kg·m/s",
+     "m": "kg",
+     "v": "m/s"
+    },
+    "ask": "p"
+   }
+  },
+  {
+   "id": "phys-practice-statics-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "statics",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "К рычагу приложена сила 30 Н, плечо силы 0,5 м. Найдите момент силы относительно оси вращения.",
+    "en": "A force of 30 N is applied to a lever with an arm of 0.5 m. Find the moment of the force about the axis."
+   },
+   "options": null,
+   "answer": {
+    "ru": "15,0 Н·м",
+    "en": "15.0 N·m"
+   },
+   "accept": [
+    "15",
+    "15,0",
+    "15.0",
+    "15 Н·м",
+    "15 N·m"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: M =  F·d.",
+     "Подставим данные: M =  30·0,5.",
+     "Вычислим: M = 15,0 Н·м."
+    ],
+    "en": [
+     "Write the formula: M =  F·d.",
+     "Substitute the data: M =  30·0.5.",
+     "Compute: M = 15.0 N·m."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: M = F·d (плечо — перпендикулярное расстояние)"
+    ],
+    "en": [
+     "Formula: M = F·d (плечо — перпендикулярное расстояние)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "момент силы"
+   ],
+   "unit": {
+    "ru": "Н·м",
+    "en": "N·m"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/s^2",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "F",
+     "name": "F",
+     "value_ru": "30",
+     "value_en": "30",
+     "unit": {
+      "ru": "Н",
+      "en": "N"
+     },
+     "unit_symbol": "Н"
+    },
+    {
+     "symbol": "d",
+     "name": "d",
+     "value_ru": "0,5",
+     "value_en": "0.5",
+     "unit": {
+      "ru": "м",
+      "en": "m"
+     },
+     "unit_symbol": "м"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "15",
+    "accept": [],
+    "unit": "Н·м",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/s^2",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "M = F·d (плечо — перпендикулярное расстояние)",
+     "en": "M = F·d (плечо — перпендикулярное расстояние)"
+    },
+    "dim": "M = F*d",
+    "vars": {
+     "M": "kg·m^2/s^2",
+     "F": "kg·m/s^2",
+     "d": "m"
+    },
+    "ask": "M"
+   }
+  },
+  {
+   "id": "phys-practice-statics-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "statics",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Тело объёмом 0,002 м³ полностью погружено в воду. ρ = 1000, g = 9,8. Найдите силу Архимеда.",
+    "en": "A body of volume 0.002 m³ is fully submerged in water. ρ = 1000, g = 9.8. Find the buoyant force."
+   },
+   "options": null,
+   "answer": {
+    "ru": "19,60 Н",
+    "en": "19.60 N"
+   },
+   "accept": [
+    "19,6",
+    "19.6",
+    "19,60",
+    "19.60",
+    "19.6 Н",
+    "19,6 Н",
+    "19.6 N"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: F =  rho_water·V·g.",
+     "Подставим данные: F =  rho_water·0,002·g.",
+     "Вычислим: F = 19,60 Н."
+    ],
+    "en": [
+     "Write the formula: F =  rho_water·V·g.",
+     "Substitute the data: F =  rho_water·0.002·g.",
+     "Compute: F = 19.60 N."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: F = ρ·V·g"
+    ],
+    "en": [
+     "Formula: F = ρ·V·g"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "сила Архимеда"
+   ],
+   "unit": {
+    "ru": "Н",
+    "en": "N"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m/s^2",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "V",
+     "name": "V",
+     "value_ru": "0,002",
+     "value_en": "0.002",
+     "unit": {
+      "ru": "м³",
+      "en": "m³"
+     },
+     "unit_symbol": "м³"
+    },
+    {
+     "symbol": "rho_water",
+     "name": "rho_water",
+     "value_ru": "1000",
+     "value_en": "1000",
+     "unit": {
+      "ru": "кг/м³",
+      "en": "kg/m³"
+     },
+     "unit_symbol": "кг/м³"
+    },
+    {
+     "symbol": "g",
+     "name": "g",
+     "value_ru": "9,8",
+     "value_en": "9.8",
+     "unit": {
+      "ru": "м/с²",
+      "en": "m/s²"
+     },
+     "unit_symbol": "м/с²"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "19.6",
+    "accept": [],
+    "unit": "Н",
+    "unitPolicy": "named",
+    "dimension": "kg·m/s^2",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "F = ρ·V·g",
+     "en": "F = ρ·V·g"
+    },
+    "dim": "F = rho_water*V*g",
+    "vars": {
+     "F": "kg·m/s^2",
+     "V": "m^3",
+     "rho_water": "kg/m^3",
+     "g": "m/s^2"
+    },
+    "ask": "F"
+   }
+  },
+  {
+   "id": "phys-practice-statics-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "statics",
+   "difficulty": 1,
+   "answerType": "quantity",
+   "text": {
+    "ru": "На площадь 0,01 м² действует сила 500 Н. Найдите давление.",
+    "en": "A force of 500 N acts on an area of 0.01 m². Find the pressure."
+   },
+   "options": null,
+   "answer": {
+    "ru": "50,0 кПа",
+    "en": "50.0 kPa"
+   },
+   "accept": [
+    "50",
+    "50,0",
+    "50.0",
+    "50 кПа",
+    "50 kPa",
+    "0.05 МПа",
+    "0,05 МПа",
+    "0.05 MPa"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: p =  F/S.",
+     "Подставим данные: p =  500/0,01.",
+     "Вычислим: p = 50,0 кПа."
+    ],
+    "en": [
+     "Write the formula: p =  F/S.",
+     "Substitute the data: p =  500/0.01.",
+     "Compute: p = 50.0 kPa."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: p = F/S"
+    ],
+    "en": [
+     "Formula: p = F/S"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "давление"
+   ],
+   "unit": {
+    "ru": "кПа",
+    "en": "kPa"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg/(m·s^2)",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "F",
+     "name": "F",
+     "value_ru": "500",
+     "value_en": "500",
+     "unit": {
+      "ru": "Н",
+      "en": "N"
+     },
+     "unit_symbol": "Н"
+    },
+    {
+     "symbol": "S",
+     "name": "S",
+     "value_ru": "0,01",
+     "value_en": "0.01",
+     "unit": {
+      "ru": "м²",
+      "en": "m²"
+     },
+     "unit_symbol": "м²"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "50",
+    "accept": [],
+    "unit": "кПа",
+    "unitPolicy": "named",
+    "dimension": "kg/(m·s^2)",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "p = F/S",
+     "en": "p = F/S"
+    },
+    "dim": "p = F/S",
+    "vars": {
+     "p": "kg/(m·s^2)",
+     "F": "kg·m/s^2",
+     "S": "m^2"
+    },
+    "ask": "p"
+   }
+  },
+  {
+   "id": "phys-practice-molecular-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "molecular",
+   "difficulty": 1,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Найдите количество вещества в 132 г углекислого газа CO₂ (молярная масса 44 г/моль).",
+    "en": "Find the amount of substance in 132 g of CO₂ (molar mass 44 g/mol)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3 моль",
+    "en": "3 mol"
+   },
+   "accept": [
+    "3",
+    "3 моль",
+    "3 mol"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: nu =  m/M.",
+     "Подставим данные: nu =  132/44.",
+     "Вычислим: nu = 3 моль."
+    ],
+    "en": [
+     "Write the formula: nu =  m/M.",
+     "Substitute the data: nu =  132/44.",
+     "Compute: nu = 3 mol."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: ν = m/M"
+    ],
+    "en": [
+     "Formula: ν = m/M"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "количество вещества"
+   ],
+   "unit": {
+    "ru": "моль",
+    "en": "mol"
+   },
+   "unitPolicy": "named",
+   "dimension": "mol",
+   "tolerance": null,
+   "rounding": 0,
+   "given": [
+    {
+     "symbol": "m",
+     "name": "m",
+     "value_ru": "132",
+     "value_en": "132",
+     "unit": {
+      "ru": "г",
+      "en": "g"
+     },
+     "unit_symbol": "г"
+    },
+    {
+     "symbol": "M",
+     "name": "M",
+     "value_ru": "44",
+     "value_en": "44",
+     "unit": {
+      "ru": "г/моль",
+      "en": "г/mol"
+     },
+     "unit_symbol": "г/моль"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "3",
+    "accept": [],
+    "unit": "моль",
+    "unitPolicy": "named",
+    "dimension": "mol",
+    "rounding": 0
+   },
+   "model": {
+    "formula": {
+     "ru": "ν = m/M",
+     "en": "ν = m/M"
+    },
+    "dim": "nu = m/M",
+    "vars": {
+     "nu": "mol",
+     "m": "kg",
+     "M": "kg/mol"
+    },
+    "ask": "nu"
+   }
+  },
+  {
+   "id": "phys-practice-molecular-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "molecular",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "При постоянном давлении газ занимает объём 3 л при 250 К. Какой объём он займёт при 500 К?",
+    "en": "At constant pressure a gas occupies 3 l at 250 K. What volume will it occupy at 500 K?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "6,000 л",
+    "en": "6.000 l"
+   },
+   "accept": [
+    "6",
+    "6,000",
+    "6.000",
+    "6 л",
+    "6 l"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: V2 =  V1·T2/T1.",
+     "Подставим данные: V2 =  3·500/250.",
+     "Вычислим: V2 = 6,000 л."
+    ],
+    "en": [
+     "Write the formula: V2 =  V1·T2/T1.",
+     "Substitute the data: V2 =  3·500/250.",
+     "Compute: V2 = 6.000 l."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: V₁/T₁ = V₂/T₂ (p = const, T в кельвинах)"
+    ],
+    "en": [
+     "Formula: V₁/T₁ = V₂/T₂ (p = const, T в кельвинах)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "изопроцессы"
+   ],
+   "unit": {
+    "ru": "л",
+    "en": "l"
+   },
+   "unitPolicy": "named",
+   "dimension": "m^3",
+   "tolerance": null,
+   "rounding": 3,
+   "given": [
+    {
+     "symbol": "V1",
+     "name": "V1",
+     "value_ru": "3",
+     "value_en": "3",
+     "unit": {
+      "ru": "л",
+      "en": "l"
+     },
+     "unit_symbol": "л"
+    },
+    {
+     "symbol": "T1",
+     "name": "T1",
+     "value_ru": "250",
+     "value_en": "250",
+     "unit": {
+      "ru": "К",
+      "en": "K"
+     },
+     "unit_symbol": "К"
+    },
+    {
+     "symbol": "T2",
+     "name": "T2",
+     "value_ru": "500",
+     "value_en": "500",
+     "unit": {
+      "ru": "К",
+      "en": "K"
+     },
+     "unit_symbol": "К"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "6",
+    "accept": [],
+    "unit": "л",
+    "unitPolicy": "named",
+    "dimension": "m^3",
+    "rounding": 3
+   },
+   "model": {
+    "formula": {
+     "ru": "V₁/T₁ = V₂/T₂ (p = const, T в кельвинах)",
+     "en": "V₁/T₁ = V₂/T₂ (p = const, T в кельвинах)"
+    },
+    "dim": "V2 = V1*T2/T1",
+    "vars": {
+     "V2": "m^3",
+     "V1": "m^3",
+     "T1": "K",
+     "T2": "K"
+    },
+    "ask": "V2"
+   }
+  },
+  {
+   "id": "phys-practice-molecular-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "molecular",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Идеальный газ количеством 1 моль находится при температуре 300 К. R = 8,31. Найдите давление, если объём сосуда 20 л (газ считаем идеальным).",
+    "en": "An ideal gas of 1 mol is at 300 K. R = 8.31. Find the pressure if the vessel volume is 20 l (ideal-gas model)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "124,6 кПа",
+    "en": "124.6 kPa"
+   },
+   "accept": [
+    "124,65",
+    "124.65",
+    "124,6",
+    "124.6",
+    "124.65 кПа",
+    "124,65 кПа",
+    "124.65 kPa",
+    "0.12465 МПа",
+    "0,12465 МПа",
+    "0.12465 MPa"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: p =  nu·R·T/V.",
+     "Подставим данные: p =  1·R·300/20.",
+     "Вычислим: p = 124,6 кПа."
+    ],
+    "en": [
+     "Write the formula: p =  nu·R·T/V.",
+     "Substitute the data: p =  1·R·300/20.",
+     "Compute: p = 124.6 kPa."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: pV = νRT"
+    ],
+    "en": [
+     "Formula: pV = νRT"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "уравнение состояния газа"
+   ],
+   "unit": {
+    "ru": "кПа",
+    "en": "kPa"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg/(m·s^2)",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "nu",
+     "name": "nu",
+     "value_ru": "1",
+     "value_en": "1",
+     "unit": {
+      "ru": "моль",
+      "en": "mol"
+     },
+     "unit_symbol": "моль"
+    },
+    {
+     "symbol": "T",
+     "name": "T",
+     "value_ru": "300",
+     "value_en": "300",
+     "unit": {
+      "ru": "К",
+      "en": "K"
+     },
+     "unit_symbol": "К"
+    },
+    {
+     "symbol": "V",
+     "name": "V",
+     "value_ru": "20",
+     "value_en": "20",
+     "unit": {
+      "ru": "л",
+      "en": "l"
+     },
+     "unit_symbol": "л"
+    },
+    {
+     "symbol": "R",
+     "name": "R",
+     "value_ru": "8,31",
+     "value_en": "8.31",
+     "unit": {
+      "ru": "Дж/(моль·К)",
+      "en": "J/(mol·K)"
+     },
+     "unit_symbol": "Дж/(моль·К)"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "124.65",
+    "accept": [],
+    "unit": "кПа",
+    "unitPolicy": "named",
+    "dimension": "kg/(m·s^2)",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "pV = νRT",
+     "en": "pV = νRT"
+    },
+    "dim": "p = nu*R*T/V",
+    "vars": {
+     "p": "kg/(m·s^2)",
+     "nu": "mol",
+     "R": "kg·m^2/(s^2·K·mol)",
+     "T": "K",
+     "V": "m^3"
+    },
+    "ask": "p"
+   }
+  },
+  {
+   "id": "phys-practice-thermo-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "thermo",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Сколько теплоты нужно, чтобы нагреть 2 кг воды на 40 К? Удельная теплоёмкость воды c = 4200.",
+    "en": "How much heat warms 2 kg of water by 40 K? The specific heat capacity is c = 4200."
+   },
+   "options": null,
+   "answer": {
+    "ru": "336,0 кДж",
+    "en": "336.0 kJ"
+   },
+   "accept": [
+    "336",
+    "336,0",
+    "336.0",
+    "336 кДж",
+    "336 kJ"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: Q =  c_water·m·dt.",
+     "Подставим данные: Q =  c_water·2·40.",
+     "Вычислим: Q = 336,0 кДж."
+    ],
+    "en": [
+     "Write the formula: Q =  c_water·m·dt.",
+     "Substitute the data: Q =  c_water·2·40.",
+     "Compute: Q = 336.0 kJ."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: Q = c·m·Δt"
+    ],
+    "en": [
+     "Formula: Q = c·m·Δt"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "теплота и теплоёмкость"
+   ],
+   "unit": {
+    "ru": "кДж",
+    "en": "kJ"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/s^2",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "m",
+     "name": "m",
+     "value_ru": "2",
+     "value_en": "2",
+     "unit": {
+      "ru": "кг",
+      "en": "kg"
+     },
+     "unit_symbol": "кг"
+    },
+    {
+     "symbol": "dt",
+     "name": "dt",
+     "value_ru": "40",
+     "value_en": "40",
+     "unit": {
+      "ru": "К",
+      "en": "K"
+     },
+     "unit_symbol": "К"
+    },
+    {
+     "symbol": "c_water",
+     "name": "c_water",
+     "value_ru": "4200",
+     "value_en": "4200",
+     "unit": {
+      "ru": "Дж/(кг·К)",
+      "en": "J/(kg·K)"
+     },
+     "unit_symbol": "Дж/(кг·К)"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "336",
+    "accept": [],
+    "unit": "кДж",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/s^2",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "Q = c·m·Δt",
+     "en": "Q = c·m·Δt"
+    },
+    "dim": "Q = c_water*m*dt",
+    "vars": {
+     "Q": "kg·m^2/s^2",
+     "c_water": "m^2/(s^2·K)",
+     "m": "kg",
+     "dt": "K"
+    },
+    "ask": "Q"
+   }
+  },
+  {
+   "id": "phys-practice-thermo-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "thermo",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Сколько теплоты нужно, чтобы расплавить 4 кг льда при 0 °C? λ = 3,4·10⁵.",
+    "en": "How much heat melts 4 kg of ice at 0 °C? λ = 3.4·10^5."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1,36 МДж",
+    "en": "1.36 MJ"
+   },
+   "accept": [
+    "1,36",
+    "1.36",
+    "1.36 МДж",
+    "1,36 МДж",
+    "1.36 MJ"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: Q =  L_ice·m.",
+     "Подставим данные: Q =  L_ice·4.",
+     "Вычислим: Q = 1,36 МДж."
+    ],
+    "en": [
+     "Write the formula: Q =  L_ice·m.",
+     "Substitute the data: Q =  L_ice·4.",
+     "Compute: Q = 1.36 MJ."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: Q = λ·m"
+    ],
+    "en": [
+     "Formula: Q = λ·m"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "удельная теплота"
+   ],
+   "unit": {
+    "ru": "МДж",
+    "en": "MJ"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/s^2",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "m",
+     "name": "m",
+     "value_ru": "4",
+     "value_en": "4",
+     "unit": {
+      "ru": "кг",
+      "en": "kg"
+     },
+     "unit_symbol": "кг"
+    },
+    {
+     "symbol": "L_ice",
+     "name": "L_ice",
+     "value_ru": "3,4·10⁵",
+     "value_en": "3.4·10^5",
+     "unit": {
+      "ru": "Дж/кг",
+      "en": "J/kg"
+     },
+     "unit_symbol": "Дж/кг"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "1.36",
+    "accept": [],
+    "unit": "МДж",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/s^2",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "Q = λ·m",
+     "en": "Q = λ·m"
+    },
+    "dim": "Q = L_ice*m",
+    "vars": {
+     "Q": "kg·m^2/s^2",
+     "L_ice": "m^2/s^2",
+     "m": "kg"
+    },
+    "ask": "Q"
+   }
+  },
+  {
+   "id": "phys-practice-thermo-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "thermo",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Нагреватель передал рабочему телу 2 кДж, полезная работа 0,4 кДж. Найдите КПД теплового двигателя в процентах.",
+    "en": "The heater supplied 2 kJ and useful work was 0.4 kJ. Find the efficiency of the heat engine in per cent."
+   },
+   "options": null,
+   "answer": {
+    "ru": "20",
+    "en": "20"
+   },
+   "accept": [
+    "20"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: eta =  A·100/Q.",
+     "Подставим данные: eta =  0,4·100/2.",
+     "Вычислим: eta = 20 ."
+    ],
+    "en": [
+     "Write the formula: eta =  A·100/Q.",
+     "Substitute the data: eta =  0.4·100/2.",
+     "Compute: eta = 20 ."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: η = Aполез/Qзатр, в процентах умножить на 100"
+    ],
+    "en": [
+     "Formula: η = Aполез/Qзатр, в процентах умножить на 100"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "КПД"
+   ],
+   "unit": {
+    "ru": "",
+    "en": ""
+   },
+   "unitPolicy": "named",
+   "dimension": "1",
+   "tolerance": null,
+   "rounding": 0,
+   "given": [
+    {
+     "symbol": "A",
+     "name": "A",
+     "value_ru": "0,4",
+     "value_en": "0.4",
+     "unit": {
+      "ru": "кДж",
+      "en": "kJ"
+     },
+     "unit_symbol": "кДж"
+    },
+    {
+     "symbol": "Q",
+     "name": "Q",
+     "value_ru": "2",
+     "value_en": "2",
+     "unit": {
+      "ru": "кДж",
+      "en": "kJ"
+     },
+     "unit_symbol": "кДж"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "20",
+    "accept": [],
+    "unit": "1",
+    "unitPolicy": "named",
+    "dimension": "1",
+    "rounding": 0
+   },
+   "model": {
+    "formula": {
+     "ru": "η = Aполез/Qзатр, в процентах умножить на 100",
+     "en": "η = Aполез/Qзатр, в процентах умножить на 100"
+    },
+    "dim": "eta = A*100/Q",
+    "vars": {
+     "eta": "1",
+     "A": "kg·m^2/s^2",
+     "Q": "kg·m^2/s^2"
+    },
+    "ask": "eta"
+   }
+  },
+  {
+   "id": "phys-practice-electrostatics-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "electrostatics",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Два заряда 5 мкКл и -5 мкКл находятся на расстоянии 0,02 м в вакууме. k = 9·10⁹. Найдите силу их взаимодействия (модуль силы).",
+    "en": "Two charges of 5 µC and -5 µC are 0.02 m apart in vacuum. k = 9·10^9. Find the magnitude of the force between them."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-562,5 Н",
+    "en": "-562.5 N"
+   },
+   "accept": [
+    "-562,5",
+    "-562.5",
+    "-562.5 Н",
+    "-562,5 Н",
+    "-562.5 N"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: F =  k_coulomb·q1·q2/r².",
+     "Подставим данные: F =  k_coulomb·5·-5/0,02².",
+     "Вычислим: F = -562,5 Н."
+    ],
+    "en": [
+     "Write the formula: F =  k_coulomb·q1·q2/r².",
+     "Substitute the data: F =  k_coulomb·5·-5/0.02².",
+     "Compute: F = -562.5 N."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: F = k·q₁·q₂/r²"
+    ],
+    "en": [
+     "Formula: F = k·q₁·q₂/r²"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "закон Кулона"
+   ],
+   "unit": {
+    "ru": "Н",
+    "en": "N"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m/s^2",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "q1",
+     "name": "q1",
+     "value_ru": "5",
+     "value_en": "5",
+     "unit": {
+      "ru": "мкКл",
+      "en": "µC"
+     },
+     "unit_symbol": "мкКл"
+    },
+    {
+     "symbol": "q2",
+     "name": "q2",
+     "value_ru": "-5",
+     "value_en": "-5",
+     "unit": {
+      "ru": "мкКл",
+      "en": "µC"
+     },
+     "unit_symbol": "мкКл"
+    },
+    {
+     "symbol": "r",
+     "name": "r",
+     "value_ru": "0,02",
+     "value_en": "0.02",
+     "unit": {
+      "ru": "м",
+      "en": "m"
+     },
+     "unit_symbol": "м"
+    },
+    {
+     "symbol": "k_coulomb",
+     "name": "k_coulomb",
+     "value_ru": "9·10⁹",
+     "value_en": "9·10^9",
+     "unit": {
+      "ru": "Н·м²/Кл²",
+      "en": "N·m²/C²"
+     },
+     "unit_symbol": "Н·м²/Кл²"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "-562.5",
+    "accept": [],
+    "unit": "Н",
+    "unitPolicy": "named",
+    "dimension": "kg·m/s^2",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "F = k·q₁·q₂/r²",
+     "en": "F = k·q₁·q₂/r²"
+    },
+    "dim": "F = k_coulomb*q1*q2/r^2",
+    "vars": {
+     "F": "kg·m/s^2",
+     "q1": "A·s",
+     "q2": "A·s",
+     "r": "m",
+     "k_coulomb": "kg·m^3/(s^4·A^2)"
+    },
+    "ask": "F"
+   }
+  },
+  {
+   "id": "phys-practice-electrostatics-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "electrostatics",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "На заряд 1 мкКл действует сила 0,02 Н. Найдите напряжённость поля.",
+    "en": "A force of 0.02 N acts on a charge of 1 µC. Find the field strength."
+   },
+   "options": null,
+   "answer": {
+    "ru": "20,0 кН/Кл",
+    "en": "20.0 kN/C"
+   },
+   "accept": [
+    "20",
+    "20,0",
+    "20.0",
+    "20 кН/Кл",
+    "20 kN/C"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: E =  F/q.",
+     "Подставим данные: E =  0,02/1.",
+     "Вычислим: E = 20,0 кН/Кл."
+    ],
+    "en": [
+     "Write the formula: E =  F/q.",
+     "Substitute the data: E =  0.02/1.",
+     "Compute: E = 20.0 kN/C."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: E = F/q"
+    ],
+    "en": [
+     "Formula: E = F/q"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "напряжённость и потенциал"
+   ],
+   "unit": {
+    "ru": "кН/Кл",
+    "en": "kN/C"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m/(s^3·A)",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "q",
+     "name": "q",
+     "value_ru": "1",
+     "value_en": "1",
+     "unit": {
+      "ru": "мкКл",
+      "en": "µC"
+     },
+     "unit_symbol": "мкКл"
+    },
+    {
+     "symbol": "F",
+     "name": "F",
+     "value_ru": "0,02",
+     "value_en": "0.02",
+     "unit": {
+      "ru": "Н",
+      "en": "N"
+     },
+     "unit_symbol": "Н"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "20",
+    "accept": [],
+    "unit": "кН/Кл",
+    "unitPolicy": "named",
+    "dimension": "kg·m/(s^3·A)",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "E = F/q",
+     "en": "E = F/q"
+    },
+    "dim": "E = F/q",
+    "vars": {
+     "E": "kg·m/(s^3·A)",
+     "F": "kg·m/s^2",
+     "q": "A·s"
+    },
+    "ask": "E"
+   }
+  },
+  {
+   "id": "phys-practice-electrostatics-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "electrostatics",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "При переносе заряда 2 мКл электрическое поле совершило работу 0,4 Дж. Найдите напряжение между точками.",
+    "en": "Moving a charge of 2 mC, the field did a work of 0.4 J. Find the voltage between the points."
+   },
+   "options": null,
+   "answer": {
+    "ru": "200,00 В",
+    "en": "200.00 V"
+   },
+   "accept": [
+    "200",
+    "200,00",
+    "200.00",
+    "200 В",
+    "200 V"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: U =  A/q.",
+     "Подставим данные: U =  0,4/2.",
+     "Вычислим: U = 200,00 В."
+    ],
+    "en": [
+     "Write the formula: U =  A/q.",
+     "Substitute the data: U =  0.4/2.",
+     "Compute: U = 200.00 V."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: U = A/q"
+    ],
+    "en": [
+     "Formula: U = A/q"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "напряжённость и потенциал"
+   ],
+   "unit": {
+    "ru": "В",
+    "en": "V"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/(s^3·A)",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "q",
+     "name": "q",
+     "value_ru": "2",
+     "value_en": "2",
+     "unit": {
+      "ru": "мКл",
+      "en": "mC"
+     },
+     "unit_symbol": "мКл"
+    },
+    {
+     "symbol": "A",
+     "name": "A",
+     "value_ru": "0,4",
+     "value_en": "0.4",
+     "unit": {
+      "ru": "Дж",
+      "en": "J"
+     },
+     "unit_symbol": "Дж"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "200",
+    "accept": [],
+    "unit": "В",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/(s^3·A)",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "U = A/q",
+     "en": "U = A/q"
+    },
+    "dim": "U = A/q",
+    "vars": {
+     "U": "kg·m^2/(s^3·A)",
+     "A": "kg·m^2/s^2",
+     "q": "A·s"
+    },
+    "ask": "U"
+   }
+  },
+  {
+   "id": "phys-practice-current-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "current",
+   "difficulty": 1,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Напряжение на резисторе 24 В, сопротивление 4 Ом. Найдите силу тока.",
+    "en": "The voltage across a 4 Ω resistor is 24 V. Find the current."
+   },
+   "options": null,
+   "answer": {
+    "ru": "6,00 А",
+    "en": "6.00 A"
+   },
+   "accept": [
+    "6",
+    "6,00",
+    "6.00",
+    "6 А",
+    "6 A",
+    "6000 мА",
+    "6000 mA",
+    "6000000 мкА",
+    "6·10⁶ мкА",
+    "6·10^6 µA"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: I =  U/R.",
+     "Подставим данные: I =  24/4.",
+     "Вычислим: I = 6,00 А."
+    ],
+    "en": [
+     "Write the formula: I =  U/R.",
+     "Substitute the data: I =  24/4.",
+     "Compute: I = 6.00 A."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: I = U/R"
+    ],
+    "en": [
+     "Formula: I = U/R"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "закон Ома"
+   ],
+   "unit": {
+    "ru": "А",
+    "en": "A"
+   },
+   "unitPolicy": "named",
+   "dimension": "A",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "U",
+     "name": "U",
+     "value_ru": "24",
+     "value_en": "24",
+     "unit": {
+      "ru": "В",
+      "en": "V"
+     },
+     "unit_symbol": "В"
+    },
+    {
+     "symbol": "R",
+     "name": "R",
+     "value_ru": "4",
+     "value_en": "4",
+     "unit": {
+      "ru": "Ом",
+      "en": "Ω"
+     },
+     "unit_symbol": "Ом"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "6",
+    "accept": [],
+    "unit": "А",
+    "unitPolicy": "named",
+    "dimension": "A",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "I = U/R",
+     "en": "I = U/R"
+    },
+    "dim": "I = U/R",
+    "vars": {
+     "I": "A",
+     "U": "kg·m^2/(s^3·A)",
+     "R": "kg·m^2/(s^3·A^2)"
+    },
+    "ask": "I"
+   }
+  },
+  {
+   "id": "phys-practice-current-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "current",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Два резистора 2 Ом и 8 Ом соединены параллельно. Найдите общее сопротивление участка.",
+    "en": "Two resistors 2 Ω and 8 Ω are connected in parallel. Find the total resistance."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1,60 Ом",
+    "en": "1.60 Ω"
+   },
+   "accept": [
+    "1,6",
+    "1.6",
+    "1,60",
+    "1.60",
+    "1.6 Ом",
+    "1,6 Ом",
+    "1.6 Ω"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: R =  R1·R2/(R1+R2).",
+     "Подставим данные: R =  2·8/(2+8).",
+     "Вычислим: R = 1,60 Ом."
+    ],
+    "en": [
+     "Write the formula: R =  R1·R2/(R1+R2).",
+     "Substitute the data: R =  2·8/(2+8).",
+     "Compute: R = 1.60 Ω."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: R = R₁R₂/(R₁ + R₂)"
+    ],
+    "en": [
+     "Formula: R = R₁R₂/(R₁ + R₂)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "параллельное соединение"
+   ],
+   "unit": {
+    "ru": "Ом",
+    "en": "Ω"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/(s^3·A^2)",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "R1",
+     "name": "R1",
+     "value_ru": "2",
+     "value_en": "2",
+     "unit": {
+      "ru": "Ом",
+      "en": "Ω"
+     },
+     "unit_symbol": "Ом"
+    },
+    {
+     "symbol": "R2",
+     "name": "R2",
+     "value_ru": "8",
+     "value_en": "8",
+     "unit": {
+      "ru": "Ом",
+      "en": "Ω"
+     },
+     "unit_symbol": "Ом"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "1.6",
+    "accept": [],
+    "unit": "Ом",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/(s^3·A^2)",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "R = R₁R₂/(R₁ + R₂)",
+     "en": "R = R₁R₂/(R₁ + R₂)"
+    },
+    "dim": "R = R1*R2/(R1+R2)",
+    "vars": {
+     "R": "kg·m^2/(s^3·A^2)",
+     "R1": "kg·m^2/(s^3·A^2)",
+     "R2": "kg·m^2/(s^3·A^2)"
+    },
+    "ask": "R"
+   }
+  },
+  {
+   "id": "phys-practice-current-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "current",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Найдите мощность тока в резисторе сопротивлением 4 Ом при напряжении 24 В.",
+    "en": "Find the power in a 4 Ω resistor at 24 V."
+   },
+   "options": null,
+   "answer": {
+    "ru": "144,0 Вт",
+    "en": "144.0 W"
+   },
+   "accept": [
+    "144",
+    "144,0",
+    "144.0",
+    "144 Вт",
+    "144 W"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: P =  U²/R.",
+     "Подставим данные: P =  24²/4.",
+     "Вычислим: P = 144,0 Вт."
+    ],
+    "en": [
+     "Write the formula: P =  U²/R.",
+     "Substitute the data: P =  24²/4.",
+     "Compute: P = 144.0 W."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: P = U²/R"
+    ],
+    "en": [
+     "Formula: P = U²/R"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "работа тока"
+   ],
+   "unit": {
+    "ru": "Вт",
+    "en": "W"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/s^3",
+   "tolerance": null,
+   "rounding": 1,
+   "given": [
+    {
+     "symbol": "U",
+     "name": "U",
+     "value_ru": "24",
+     "value_en": "24",
+     "unit": {
+      "ru": "В",
+      "en": "V"
+     },
+     "unit_symbol": "В"
+    },
+    {
+     "symbol": "R",
+     "name": "R",
+     "value_ru": "4",
+     "value_en": "4",
+     "unit": {
+      "ru": "Ом",
+      "en": "Ω"
+     },
+     "unit_symbol": "Ом"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "144",
+    "accept": [],
+    "unit": "Вт",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/s^3",
+    "rounding": 1
+   },
+   "model": {
+    "formula": {
+     "ru": "P = U²/R",
+     "en": "P = U²/R"
+    },
+    "dim": "P = U^2/R",
+    "vars": {
+     "P": "kg·m^2/s^3",
+     "U": "kg·m^2/(s^3·A)",
+     "R": "kg·m^2/(s^3·A^2)"
+    },
+    "ask": "P"
+   }
+  },
+  {
+   "id": "phys-practice-magnetism-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "magnetism",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Проводник длиной 0,2 м с током 2 А расположен перпендикулярно магнитному полю с индукцией 0,1 Тл. Найдите силу Ампера.",
+    "en": "A conductor of length 0.2 m with current 2 A is perpendicular to a magnetic field of 0.1 T. Find the Ampere force."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0,04 Н",
+    "en": "0.04 N"
+   },
+   "accept": [
+    "0,04",
+    "0.04",
+    "0.04 Н",
+    "0,04 Н",
+    "0.04 N"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: F =  B·I·l.",
+     "Подставим данные: F =  0,1·2·0,2.",
+     "Вычислим: F = 0,04 Н."
+    ],
+    "en": [
+     "Write the formula: F =  B·I·l.",
+     "Substitute the data: F =  0.1·2·0.2.",
+     "Compute: F = 0.04 N."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: F = B·I·l (sin α = 1)"
+    ],
+    "en": [
+     "Formula: F = B·I·l (sin α = 1)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "сила Ампера"
+   ],
+   "unit": {
+    "ru": "Н",
+    "en": "N"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m/s^2",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "B",
+     "name": "B",
+     "value_ru": "0,1",
+     "value_en": "0.1",
+     "unit": {
+      "ru": "Тл",
+      "en": "T"
+     },
+     "unit_symbol": "Тл"
+    },
+    {
+     "symbol": "I",
+     "name": "I",
+     "value_ru": "2",
+     "value_en": "2",
+     "unit": {
+      "ru": "А",
+      "en": "A"
+     },
+     "unit_symbol": "А"
+    },
+    {
+     "symbol": "l",
+     "name": "l",
+     "value_ru": "0,2",
+     "value_en": "0.2",
+     "unit": {
+      "ru": "м",
+      "en": "m"
+     },
+     "unit_symbol": "м"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "0.04",
+    "accept": [],
+    "unit": "Н",
+    "unitPolicy": "named",
+    "dimension": "kg·m/s^2",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "F = B·I·l (sin α = 1)",
+     "en": "F = B·I·l (sin α = 1)"
+    },
+    "dim": "F = B*I*l",
+    "vars": {
+     "F": "kg·m/s^2",
+     "B": "kg/(s^2·A)",
+     "I": "A",
+     "l": "m"
+    },
+    "ask": "F"
+   }
+  },
+  {
+   "id": "phys-practice-magnetism-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "magnetism",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Заряд 4 мкКл движется со скоростью 500 м/с перпендикулярно магнитному полю с индукцией 0,01 Тл. Найдите силу Лоренца.",
+    "en": "A charge of 4 µC moves at 500 m/s perpendicular to a magnetic field of 0.01 T. Find the Lorentz force."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0,02 мН",
+    "en": "0.02 mN"
+   },
+   "accept": [
+    "0,02",
+    "0.02",
+    "0.02 мН",
+    "0,02 мН",
+    "0.02 mN"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: F =  q·v·B.",
+     "Подставим данные: F =  4·500·0,01.",
+     "Вычислим: F = 0,02 мН."
+    ],
+    "en": [
+     "Write the formula: F =  q·v·B.",
+     "Substitute the data: F =  4·500·0.01.",
+     "Compute: F = 0.02 mN."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: F = |q|·v·B (sin α = 1)"
+    ],
+    "en": [
+     "Formula: F = |q|·v·B (sin α = 1)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "сила Лоренца"
+   ],
+   "unit": {
+    "ru": "мН",
+    "en": "mN"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m/s^2",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "q",
+     "name": "q",
+     "value_ru": "4",
+     "value_en": "4",
+     "unit": {
+      "ru": "мкКл",
+      "en": "µC"
+     },
+     "unit_symbol": "мкКл"
+    },
+    {
+     "symbol": "v",
+     "name": "v",
+     "value_ru": "500",
+     "value_en": "500",
+     "unit": {
+      "ru": "м/с",
+      "en": "m/s"
+     },
+     "unit_symbol": "м/с"
+    },
+    {
+     "symbol": "B",
+     "name": "B",
+     "value_ru": "0,01",
+     "value_en": "0.01",
+     "unit": {
+      "ru": "Тл",
+      "en": "T"
+     },
+     "unit_symbol": "Тл"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "0.02",
+    "accept": [],
+    "unit": "мН",
+    "unitPolicy": "named",
+    "dimension": "kg·m/s^2",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "F = |q|·v·B (sin α = 1)",
+     "en": "F = |q|·v·B (sin α = 1)"
+    },
+    "dim": "F = q*v*B",
+    "vars": {
+     "F": "kg·m/s^2",
+     "q": "A·s",
+     "v": "m/s",
+     "B": "kg/(s^2·A)"
+    },
+    "ask": "F"
+   }
+  },
+  {
+   "id": "phys-practice-magnetism-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "magnetism",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Контур площадью 0,02 м² находится в однородном магнитном поле с индукцией 0,2 Тл перпендикулярно линиям индукции. Найдите магнитный поток.",
+    "en": "A loop of area 0.02 m² lies in a uniform magnetic field of 0.2 T perpendicular to the field lines. Find the magnetic flux."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0,004 Вб",
+    "en": "0.004 Wb"
+   },
+   "accept": [
+    "0,004",
+    "0.004",
+    "0.004 Вб",
+    "0,004 Вб",
+    "0.004 Wb"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: Phi =  B·S.",
+     "Подставим данные: Phi =  0,2·0,02.",
+     "Вычислим: Phi = 0,004 Вб."
+    ],
+    "en": [
+     "Write the formula: Phi =  B·S.",
+     "Substitute the data: Phi =  0.2·0.02.",
+     "Compute: Phi = 0.004 Wb."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: Φ = B·S (cos α = 1)"
+    ],
+    "en": [
+     "Formula: Φ = B·S (cos α = 1)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "электромагнитная индукция"
+   ],
+   "unit": {
+    "ru": "Вб",
+    "en": "Wb"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/(s^2·A)",
+   "tolerance": null,
+   "rounding": 3,
+   "given": [
+    {
+     "symbol": "B",
+     "name": "B",
+     "value_ru": "0,2",
+     "value_en": "0.2",
+     "unit": {
+      "ru": "Тл",
+      "en": "T"
+     },
+     "unit_symbol": "Тл"
+    },
+    {
+     "symbol": "S",
+     "name": "S",
+     "value_ru": "0,02",
+     "value_en": "0.02",
+     "unit": {
+      "ru": "м²",
+      "en": "m²"
+     },
+     "unit_symbol": "м²"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "0.004",
+    "accept": [],
+    "unit": "Вб",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/(s^2·A)",
+    "rounding": 3
+   },
+   "model": {
+    "formula": {
+     "ru": "Φ = B·S (cos α = 1)",
+     "en": "Φ = B·S (cos α = 1)"
+    },
+    "dim": "Phi = B*S",
+    "vars": {
+     "Phi": "kg·m^2/(s^2·A)",
+     "B": "kg/(s^2·A)",
+     "S": "m^2"
+    },
+    "ask": "Phi"
+   }
+  },
+  {
+   "id": "phys-practice-oscillations-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "oscillations",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Маятник совершил 10 колебаний за 20 с. Найдите период колебаний.",
+    "en": "A pendulum made 10 oscillations in 20 s. Find the period."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2,000 с",
+    "en": "2.000 s"
+   },
+   "accept": [
+    "2",
+    "2,000",
+    "2.000",
+    "2 с",
+    "2 s",
+    "0.0333333333333333 мин",
+    "0,0333333333333333333 мин",
+    "0.0333333333333333333 min",
+    "0.000555555555555556 ч",
+    "0,000555555555555555556 ч",
+    "0.000555555555555555556 h",
+    "2000 мс",
+    "2000 ms"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: T =  t/N.",
+     "Подставим данные: T =  20/10.",
+     "Вычислим: T = 2,000 с."
+    ],
+    "en": [
+     "Write the formula: T =  t/N.",
+     "Substitute the data: T =  20/10.",
+     "Compute: T = 2.000 s."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: T = t/N"
+    ],
+    "en": [
+     "Formula: T = t/N"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "период и частота"
+   ],
+   "unit": {
+    "ru": "с",
+    "en": "s"
+   },
+   "unitPolicy": "named",
+   "dimension": "s",
+   "tolerance": null,
+   "rounding": 3,
+   "given": [
+    {
+     "symbol": "t",
+     "name": "t",
+     "value_ru": "20",
+     "value_en": "20",
+     "unit": {
+      "ru": "с",
+      "en": "s"
+     },
+     "unit_symbol": "с"
+    },
+    {
+     "symbol": "N",
+     "name": "N",
+     "value_ru": "10",
+     "value_en": "10",
+     "unit": {
+      "ru": "",
+      "en": ""
+     },
+     "unit_symbol": ""
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "2",
+    "accept": [],
+    "unit": "с",
+    "unitPolicy": "named",
+    "dimension": "s",
+    "rounding": 3
+   },
+   "model": {
+    "formula": {
+     "ru": "T = t/N",
+     "en": "T = t/N"
+    },
+    "dim": "T = t/N",
+    "vars": {
+     "T": "s",
+     "t": "s",
+     "N": "1"
+    },
+    "ask": "T"
+   }
+  },
+  {
+   "id": "phys-practice-oscillations-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "oscillations",
+   "difficulty": 1,
+   "answerType": "quantity",
+   "text": {
+    "ru": "За 20 с тело совершило 100 колебаний. Найдите частоту колебаний.",
+    "en": "In 20 s a body made 100 oscillations. Find the frequency."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5,00 Гц",
+    "en": "5.00 Hz"
+   },
+   "accept": [
+    "5",
+    "5,00",
+    "5.00",
+    "5 Гц",
+    "5 Hz",
+    "0.005 кГц",
+    "0,005 кГц",
+    "0.005 kHz",
+    "5e-6 МГц",
+    "5·10⁻⁶ МГц",
+    "5·10^-6 MHz"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: f =  N/t.",
+     "Подставим данные: f =  100/20.",
+     "Вычислим: f = 5,00 Гц."
+    ],
+    "en": [
+     "Write the formula: f =  N/t.",
+     "Substitute the data: f =  100/20.",
+     "Compute: f = 5.00 Hz."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: ν = N/t"
+    ],
+    "en": [
+     "Formula: ν = N/t"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "период и частота"
+   ],
+   "unit": {
+    "ru": "Гц",
+    "en": "Hz"
+   },
+   "unitPolicy": "named",
+   "dimension": "1/s",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "t",
+     "name": "t",
+     "value_ru": "20",
+     "value_en": "20",
+     "unit": {
+      "ru": "с",
+      "en": "s"
+     },
+     "unit_symbol": "с"
+    },
+    {
+     "symbol": "N",
+     "name": "N",
+     "value_ru": "100",
+     "value_en": "100",
+     "unit": {
+      "ru": "",
+      "en": ""
+     },
+     "unit_symbol": ""
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "5",
+    "accept": [],
+    "unit": "Гц",
+    "unitPolicy": "named",
+    "dimension": "1/s",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "ν = N/t",
+     "en": "ν = N/t"
+    },
+    "dim": "f = N/t",
+    "vars": {
+     "f": "1/s",
+     "t": "s",
+     "N": "1"
+    },
+    "ask": "f"
+   }
+  },
+  {
+   "id": "phys-practice-oscillations-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "oscillations",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Звук распространяется в воздухе со скоростью 300 м/с. Частота колебаний 200 Гц. Найдите длину волны.",
+    "en": "Sound travels in air at 300 m/s. The frequency is 200 Hz. Find the wavelength."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1,500 м",
+    "en": "1.500 m"
+   },
+   "accept": [
+    "1,5",
+    "1.5",
+    "1,500",
+    "1.500",
+    "1.5 м",
+    "1,5 м",
+    "1.5 m",
+    "150 см",
+    "150 cm",
+    "1500 мм",
+    "1500 mm",
+    "0.0015 км",
+    "0,0015 км",
+    "0.0015 km"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: lam =  v/f.",
+     "Подставим данные: lam =  300/200.",
+     "Вычислим: lam = 1,500 м."
+    ],
+    "en": [
+     "Write the formula: lam =  v/f.",
+     "Substitute the data: lam =  300/200.",
+     "Compute: lam = 1.500 m."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: λ = v/ν"
+    ],
+    "en": [
+     "Formula: λ = v/ν"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "звук"
+   ],
+   "unit": {
+    "ru": "м",
+    "en": "m"
+   },
+   "unitPolicy": "named",
+   "dimension": "m",
+   "tolerance": null,
+   "rounding": 3,
+   "given": [
+    {
+     "symbol": "v",
+     "name": "v",
+     "value_ru": "300",
+     "value_en": "300",
+     "unit": {
+      "ru": "м/с",
+      "en": "m/s"
+     },
+     "unit_symbol": "м/с"
+    },
+    {
+     "symbol": "f",
+     "name": "f",
+     "value_ru": "200",
+     "value_en": "200",
+     "unit": {
+      "ru": "Гц",
+      "en": "Hz"
+     },
+     "unit_symbol": "Гц"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "1.5",
+    "accept": [],
+    "unit": "м",
+    "unitPolicy": "named",
+    "dimension": "m",
+    "rounding": 3
+   },
+   "model": {
+    "formula": {
+     "ru": "λ = v/ν",
+     "en": "λ = v/ν"
+    },
+    "dim": "lam = v/f",
+    "vars": {
+     "lam": "m",
+     "v": "m/s",
+     "f": "1/s"
+    },
+    "ask": "lam"
+   }
+  },
+  {
+   "id": "phys-practice-optics-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "optics",
+   "difficulty": 2,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Фокусное расстояние линзы 0,1 м. Найдите её оптическую силу.",
+    "en": "The focal length of a lens is 0.1 m. Find its optical power."
+   },
+   "options": null,
+   "answer": {
+    "ru": "10,00 дптр",
+    "en": "10.00 dpt"
+   },
+   "accept": [
+    "10",
+    "10,00",
+    "10.00",
+    "10 дптр",
+    "10 dpt"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: D =  1/F.",
+     "Подставим данные: D =  1/0,1.",
+     "Вычислим: D = 10,00 дптр."
+    ],
+    "en": [
+     "Write the formula: D =  1/F.",
+     "Substitute the data: D =  1/0.1.",
+     "Compute: D = 10.00 dpt."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: D = 1/F"
+    ],
+    "en": [
+     "Formula: D = 1/F"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "оптическая сила"
+   ],
+   "unit": {
+    "ru": "дптр",
+    "en": "dpt"
+   },
+   "unitPolicy": "named",
+   "dimension": "1/m",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "F",
+     "name": "F",
+     "value_ru": "0,1",
+     "value_en": "0.1",
+     "unit": {
+      "ru": "м",
+      "en": "m"
+     },
+     "unit_symbol": "м"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "10",
+    "accept": [],
+    "unit": "дптр",
+    "unitPolicy": "named",
+    "dimension": "1/m",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "D = 1/F",
+     "en": "D = 1/F"
+    },
+    "dim": "D = 1/F",
+    "vars": {
+     "D": "1/m",
+     "F": "m"
+    },
+    "ask": "D"
+   }
+  },
+  {
+   "id": "phys-practice-optics-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "optics",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Предмет стоит на расстоянии 0,2 м от линзы, изображение получилось на расстоянии 0,4 м. Найдите линейное увеличение линзы.",
+    "en": "An object is 0.2 m from a lens and the image is 0.4 m away. Find the linear magnification."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2,00",
+    "en": "2.00"
+   },
+   "accept": [
+    "2",
+    "2,00",
+    "2.00"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: G =  f/d.",
+     "Подставим данные: G =  0,4/0,2.",
+     "Вычислим: G = 2,00 ."
+    ],
+    "en": [
+     "Write the formula: G =  f/d.",
+     "Substitute the data: G =  0.4/0.2.",
+     "Compute: G = 2.00 ."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: Г = f/d"
+    ],
+    "en": [
+     "Formula: Г = f/d"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "формула тонкой линзы"
+   ],
+   "unit": {
+    "ru": "",
+    "en": ""
+   },
+   "unitPolicy": "named",
+   "dimension": "1",
+   "tolerance": null,
+   "rounding": 2,
+   "given": [
+    {
+     "symbol": "d",
+     "name": "d",
+     "value_ru": "0,2",
+     "value_en": "0.2",
+     "unit": {
+      "ru": "м",
+      "en": "m"
+     },
+     "unit_symbol": "м"
+    },
+    {
+     "symbol": "f",
+     "name": "f",
+     "value_ru": "0,4",
+     "value_en": "0.4",
+     "unit": {
+      "ru": "м",
+      "en": "m"
+     },
+     "unit_symbol": "м"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "2",
+    "accept": [],
+    "unit": "1",
+    "unitPolicy": "named",
+    "dimension": "1",
+    "rounding": 2
+   },
+   "model": {
+    "formula": {
+     "ru": "Г = f/d",
+     "en": "Г = f/d"
+    },
+    "dim": "G = f/d",
+    "vars": {
+     "G": "1",
+     "d": "m",
+     "f": "m"
+    },
+    "ask": "G"
+   }
+  },
+  {
+   "id": "phys-practice-optics-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "optics",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Свет переходит из воздуха в среду с показателем преломления n = 1,6. Найдите скорость света в этой среде. c = 3·10⁸.",
+    "en": "Light enters a medium with refractive index n = 1.6. Find the speed of light in the medium. c = 3·10^8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1,875·10⁸ м/с",
+    "en": "1.875·10^8 m/s"
+   },
+   "accept": [
+    "1,875·10⁸",
+    "1.875·10^8",
+    "187500000 м/с",
+    "1,875·10⁸ м/с",
+    "187500000 m/s",
+    "675000000 km/ч",
+    "6,75·10⁸ km/ч",
+    "6.75·10^8 km/h"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: v =  c/n.",
+     "Подставим данные: v =  c/1,6.",
+     "Вычислим: v = 1,875·10⁸ м/с."
+    ],
+    "en": [
+     "Write the formula: v =  c/n.",
+     "Substitute the data: v =  c/1.6.",
+     "Compute: v = 1.875·10^8 m/s."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: n = c/v → v = c/n"
+    ],
+    "en": [
+     "Formula: n = c/v → v = c/n"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "преломление света"
+   ],
+   "unit": {
+    "ru": "м/с",
+    "en": "m/s"
+   },
+   "unitPolicy": "named",
+   "dimension": "m/s",
+   "tolerance": null,
+   "rounding": 0,
+   "given": [
+    {
+     "symbol": "n",
+     "name": "n",
+     "value_ru": "1,6",
+     "value_en": "1.6",
+     "unit": {
+      "ru": "",
+      "en": ""
+     },
+     "unit_symbol": ""
+    },
+    {
+     "symbol": "c",
+     "name": "c",
+     "value_ru": "3·10⁸",
+     "value_en": "3·10^8",
+     "unit": {
+      "ru": "м/с",
+      "en": "m/s"
+     },
+     "unit_symbol": "м/с"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "187500000",
+    "accept": [],
+    "unit": "м/с",
+    "unitPolicy": "named",
+    "dimension": "m/s",
+    "rounding": 0
+   },
+   "model": {
+    "formula": {
+     "ru": "n = c/v → v = c/n",
+     "en": "n = c/v → v = c/n"
+    },
+    "dim": "v = c/n",
+    "vars": {
+     "v": "m/s",
+     "c": "m/s",
+     "n": "1"
+    },
+    "ask": "v"
+   }
+  },
+  {
+   "id": "phys-practice-quantum-01",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "quantum",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Найдите энергию фотона с частотой 2·10¹⁴·10¹⁴ Гц. h = 6,63·10⁻³⁴.",
+    "en": "Find the energy of a photon with frequency 2·10^14·10¹⁴ Hz. h = 6.63·10^-34."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1,326·10⁻¹⁹ Дж",
+    "en": "1.326·10^-19 J"
+   },
+   "accept": [
+    "1,326·10⁻¹⁹",
+    "1.326·10^-19",
+    "1.326e-19 Дж",
+    "1,326·10⁻¹⁹ Дж",
+    "1.326e-19 J"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: E =  h·nu.",
+     "Подставим данные: E =  h·2·10¹⁴.",
+     "Вычислим: E = 1,326·10⁻¹⁹ Дж."
+    ],
+    "en": [
+     "Write the formula: E =  h·nu.",
+     "Substitute the data: E =  h·2·10^14.",
+     "Compute: E = 1.326·10^-19 J."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: E = h·ν"
+    ],
+    "en": [
+     "Formula: E = h·ν"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "фотоэффект"
+   ],
+   "unit": {
+    "ru": "Дж",
+    "en": "J"
+   },
+   "unitPolicy": "named",
+   "dimension": "kg·m^2/s^2",
+   "tolerance": {
+    "kind": "relative",
+    "value": "0.01"
+   },
+   "rounding": null,
+   "given": [
+    {
+     "symbol": "nu",
+     "name": "nu",
+     "value_ru": "2·10¹⁴",
+     "value_en": "2·10^14",
+     "unit": {
+      "ru": "Гц",
+      "en": "Hz"
+     },
+     "unit_symbol": "Гц"
+    },
+    {
+     "symbol": "h",
+     "name": "h",
+     "value_ru": "6,63·10⁻³⁴",
+     "value_en": "6.63·10^-34",
+     "unit": {
+      "ru": "Дж·с",
+      "en": "J·s"
+     },
+     "unit_symbol": "Дж·с"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "1.326e-19",
+    "accept": [],
+    "unit": "Дж",
+    "unitPolicy": "named",
+    "dimension": "kg·m^2/s^2",
+    "tolerance": {
+     "kind": "relative",
+     "value": "0.01"
+    }
+   },
+   "model": {
+    "formula": {
+     "ru": "E = h·ν",
+     "en": "E = h·ν"
+    },
+    "dim": "E = h*nu",
+    "vars": {
+     "E": "kg·m^2/s^2",
+     "nu": "1/s",
+     "h": "kg·m^2/s"
+    },
+    "ask": "E"
+   }
+  },
+  {
+   "id": "phys-practice-quantum-02",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "quantum",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Работа выхода электрона 4 эВ. Найдите красную границу фотоэффекта — частоту, при которой энергия фотона равна работе выхода. h = 6,63·10⁻³⁴, 1 эВ = 1,6·10⁻¹⁹ Дж.",
+    "en": "The work function is 4 eV. Find the threshold frequency at which the photon energy equals the work function. h = 6.63·10^-34, 1 eV = 1.6·10⁻¹⁹ J."
+   },
+   "options": null,
+   "answer": {
+    "ru": "9,653·10¹⁴ Гц",
+    "en": "9.653·10^14 Hz"
+   },
+   "accept": [
+    "9,653·10¹⁴",
+    "9.653·10^14",
+    "9.653092006033183e14 Гц",
+    "9,653·10¹⁴ Гц",
+    "9.653092006033183e14 Hz",
+    "9.653092006033183e11 кГц",
+    "9,653·10¹¹ кГц",
+    "9.653·10^11 kHz",
+    "9.653092006033183e8 МГц",
+    "9,653·10⁸ МГц",
+    "9.653·10^8 MHz"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: nu =  A/h.",
+     "Подставим данные: nu =  4/h.",
+     "Вычислим: nu = 9,653·10¹⁴ Гц."
+    ],
+    "en": [
+     "Write the formula: nu =  A/h.",
+     "Substitute the data: nu =  4/h.",
+     "Compute: nu = 9.653·10^14 Hz."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: hν = Aвых"
+    ],
+    "en": [
+     "Formula: hν = Aвых"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "фотоэффект"
+   ],
+   "unit": {
+    "ru": "Гц",
+    "en": "Hz"
+   },
+   "unitPolicy": "named",
+   "dimension": "1/s",
+   "tolerance": {
+    "kind": "relative",
+    "value": "0.01"
+   },
+   "rounding": null,
+   "given": [
+    {
+     "symbol": "A",
+     "name": "A",
+     "value_ru": "4",
+     "value_en": "4",
+     "unit": {
+      "ru": "эВ",
+      "en": "eV"
+     },
+     "unit_symbol": "эВ"
+    },
+    {
+     "symbol": "h",
+     "name": "h",
+     "value_ru": "6,63·10⁻³⁴",
+     "value_en": "6.63·10^-34",
+     "unit": {
+      "ru": "Дж·с",
+      "en": "J·s"
+     },
+     "unit_symbol": "Дж·с"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "9.653092006033183e14",
+    "accept": [],
+    "unit": "Гц",
+    "unitPolicy": "named",
+    "dimension": "1/s",
+    "tolerance": {
+     "kind": "relative",
+     "value": "0.01"
+    }
+   },
+   "model": {
+    "formula": {
+     "ru": "hν = Aвых",
+     "en": "hν = Aвых"
+    },
+    "dim": "nu = A/h",
+    "vars": {
+     "nu": "1/s",
+     "A": "kg·m^2/s^2",
+     "h": "kg·m^2/s"
+    },
+    "ask": "nu"
+   }
+  },
+  {
+   "id": "phys-practice-quantum-03",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "quantum",
+   "difficulty": 3,
+   "answerType": "quantity",
+   "text": {
+    "ru": "Период полураспада 2 суток. Какая доля ядер распадётся за 8 суток?",
+    "en": "The half-life is 2 days. What fraction of the nuclei decays in 8 days?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "0,938",
+    "en": "0.938"
+   },
+   "accept": [
+    "0,9375",
+    "0.9375",
+    "0,938",
+    "0.938"
+   ],
+   "solution": {
+    "ru": [
+     "Запишем формулу: f =  1 - 2^(-4).",
+     "Подставим данные: f =  1 - 2^(-4).",
+     "Вычислим: f = 0,938 ."
+    ],
+    "en": [
+     "Write the formula: f =  1 - 2^(-4).",
+     "Substitute the data: f =  1 - 2^(-4).",
+     "Compute: f = 0.938 ."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула: N = N₀·2^(−t/T); распалось 1 − 2^(−t/T)"
+    ],
+    "en": [
+     "Formula: N = N₀·2^(−t/T); распалось 1 − 2^(−t/T)"
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "units",
+    "scratch"
+   ],
+   "src": "авторское тренировочное задание (аналог) по физике; не материалы РИКЗ",
+   "tags": [
+    "радиоактивность"
+   ],
+   "unit": {
+    "ru": "",
+    "en": ""
+   },
+   "unitPolicy": "named",
+   "dimension": "1",
+   "tolerance": null,
+   "rounding": 3,
+   "given": [
+    {
+     "symbol": "t",
+     "name": "t",
+     "value_ru": "8",
+     "value_en": "8",
+     "unit": {
+      "ru": "сут",
+      "en": "сут"
+     },
+     "unit_symbol": "сут"
+    },
+    {
+     "symbol": "T",
+     "name": "T",
+     "value_ru": "2",
+     "value_en": "2",
+     "unit": {
+      "ru": "сут",
+      "en": "сут"
+     },
+     "unit_symbol": "сут"
+    }
+   ],
+   "spec": {
+    "answerType": "quantity",
+    "answerValue": "0.9375",
+    "accept": [],
+    "unit": "1",
+    "unitPolicy": "named",
+    "dimension": "1",
+    "rounding": 3
+   },
+   "model": {
+    "formula": {
+     "ru": "N = N₀·2^(−t/T); распалось 1 − 2^(−t/T)",
+     "en": "N = N₀·2^(−t/T); распалось 1 − 2^(−t/T)"
+    },
+    "dim": "f = 1 - 2^(-4)",
+    "vars": {
+     "f": "1",
+     "t": "s",
+     "T": "s"
+    },
+    "ask": "f"
+   }
+  }
+ ]
+}

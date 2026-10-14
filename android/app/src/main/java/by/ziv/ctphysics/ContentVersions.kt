@@ -1,4 +1,4 @@
-package by.ziv.ctmaths
+package by.ziv.ctphysics
 
 /** Numeric dotted versions: 2026.10.3 is newer than 2026.9.9. */
 internal object ContentVersions {

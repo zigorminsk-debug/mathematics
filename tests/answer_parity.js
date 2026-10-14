@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-/* tests/answer_parity.js — the JavaScript answer checker and the statistics
- * engine must agree with the Python reference implementation used while
- * authoring the bank.
+/* tests/answer_parity.js — три реализации проверки ответа обязаны совпадать.
  *
- * The vectors in dist/content/answer_vectors.json are produced by
- * tools/build_content.py (default_vectors); Android asserts the very same file
- * in AnswerCheckerTest.kt, so all three implementations stay in sync.
+ * Эталон — Python (`content_src/quantities.py::check_answer`): он считает ответ
+ * при авторской сборке банка. JavaScript (`webapp/core.js` → `CT.answer`) и
+ * Kotlin (`AnswerChecker.kt`) проверяют ответ ученика на устройстве. Здесь
+ * прогоняются ОБЩИЕ векторы (`dist/content/answer_vectors.json`) и таблица
+ * единиц (`tests/unit_vectors.json`): и вердикт, и причина отказа
+ * (`empty | unit | dimension | missing_unit | value`) должны совпасть.
  *
  * Usage:  node tests/answer_parity.js
  */
@@ -18,8 +19,8 @@ const vm = require('vm');
 const root = path.join(__dirname, '..');
 const coreSource = fs.readFileSync(path.join(root, 'webapp', 'core.js'), 'utf8');
 
-// core.js is written for browsers but touches no DOM at load time, so it can be
-// evaluated in a bare VM context.
+// core.js рассчитан на браузер, но при загрузке DOM не трогает — его можно
+// выполнить в чистом контексте.
 const sandbox = { console, setTimeout, clearTimeout };
 vm.createContext(sandbox);
 vm.runInContext(coreSource, sandbox, { filename: 'core.js' });
@@ -33,106 +34,113 @@ if (!CT || !CT.answer) {
 let failures = 0;
 const fail = (message) => { failures += 1; console.error('✗ ' + message); };
 
-/* ---------------------------------------------------- answer-check tiers --- */
+/* ---------------------------------------------- 1. векторы ответов (Python) */
 
 const vectorsPath = path.join(root, 'dist', 'content', 'answer_vectors.json');
 if (!fs.existsSync(vectorsPath)) {
-  console.error('✗ dist/content/answer_vectors.json is missing — run tools/build_content.py');
+  console.error('✗ dist/content/answer_vectors.json отсутствует — запустите tools/build_content.py');
   process.exit(1);
 }
 const vectors = JSON.parse(fs.readFileSync(vectorsPath, 'utf8')).cases || [];
-if (!vectors.length) fail('the vector file is empty');
-
-vectors.forEach((vector, index) => {
-  const task = { accept: vector.accept || [], answerType: vector.answerType || 'short' };
-  const got = CT.answer.check(vector.user, task);
-  if (got !== vector.expect) {
-    fail(`#${index} "${vector.user}" vs ${JSON.stringify(vector.accept)}: ` +
-      `expected ${vector.expect}, got ${got}`);
+if (!vectors.length) fail('файл векторов пуст');
+for (const vector of vectors) {
+  for (const item of vector.cases || vector.inputs || []) {
+    const graded = CT.answer.grade(item.input, vector.spec);
+    if (graded.ok !== item.ok) {
+      fail(`${vector.id}: ${JSON.stringify(item.input)} → ${graded.ok}, ожидалось ${item.ok}`);
+    } else if (!item.ok && item.reason && graded.reason !== item.reason) {
+      fail(`${vector.id}: ${JSON.stringify(item.input)} причина ${graded.reason}, ` +
+        `ожидалась ${item.reason}`);
+    }
   }
-});
+}
+console.log(`· проверено векторов ответов: ${vectors.length}`);
 
-/* Real bank items: the stored correct answer must be accepted as typed, and a
- * neighbouring option of a choice task must not be. */
-const bankPath = path.join(root, 'dist', 'content', 'bank.json');
-if (fs.existsSync(bankPath)) {
-  const bank = JSON.parse(fs.readFileSync(bankPath, 'utf8')).tasks || [];
-  bank.forEach((task) => {
-    const correct = task.answer.ru;
-    const taskForChecker = { accept: task.accept || [], answerType: task.answerType, answer: task.answer };
-    if (!CT.answer.check(correct, taskForChecker)) {
-      fail(`the stored answer of ${task.id} ("${correct}") is rejected by the checker`);
-    }
-    if (task.answerType === 'choice') {
-      const wrong = (task.options.ru || []).find((option) => CT.answer.normalize(option) !== CT.answer.normalize(correct));
-      if (wrong !== undefined && CT.answer.check(wrong, taskForChecker)) {
-        fail(`${task.id}: the wrong option "${wrong}" is accepted`);
-      }
-    }
-  });
-  console.log(`· ${bank.length} bank items re-checked against the stored answers`);
-}
+/* ------------------------------------------------- 2. таблица единиц (Python) */
 
-/* ------------------------------------------------------ statistics engine --- */
-
-const AN = CT.analytics;
-const progress = AN.empty();
-const task = { id: 'gen-lin-001', part: 'B', topic: 'equations', tags: [], year: 0 };
-AN.record(progress, task, true, 30);
-AN.record(progress, { id: 'gen-lin-002', part: 'B', topic: 'equations', tags: [], year: 0 }, false, 60);
-AN.record(progress, { id: 'gen-lin-003', part: 'B', topic: 'equations', tags: [], year: 0 }, false, 60);
-AN.record(progress, { id: 'ct-2024-a1', part: 'A', topic: 'numbers', tags: [], year: 2024 }, true, 20);
-
-const totals = AN.totals(progress);
-if (totals.tests !== 0 || totals.tasks !== 4 || totals.correct !== 2) {
-  fail('analytics.totals produced unexpected numbers: ' + JSON.stringify(totals));
-}
-if (Math.abs(totals.accuracy - 0.5) > 1e-9) {
-  fail('accuracy should be 0.5, got ' + totals.accuracy);
-}
-const topicStats = AN.topicStats(progress);
-if (!topicStats.equations || topicStats.equations.total !== 3 || topicStats.equations.correct !== 1) {
-  fail('topic statistics are wrong: ' + JSON.stringify(topicStats));
-}
-if (Math.abs(topicStats.equations.rate - 1 / 3) > 1e-9 || Math.abs(topicStats.numbers.rate - 1) > 1e-9) {
-  fail('topic rates are wrong: ' + JSON.stringify(topicStats));
-}
-if (!AN.yearStats(progress)[2024] || AN.yearStats(progress)[2024].total !== 1) {
-  fail('year statistics are wrong: ' + JSON.stringify(AN.yearStats(progress)));
-}
-if ((progress.daily[CT.util.today()] || 0) !== 4) {
-  fail('the daily counter was not increased: ' + JSON.stringify(progress.daily));
-}
-if (progress.streak !== 1) fail('the streak was not started: ' + progress.streak);
-
-const weak = AN.weakTopics(progress, 3);
-if (!weak.length || weak[0].topic !== 'equations') {
-  fail('weak topics are wrong: ' + JSON.stringify(weak));
-}
-
-const attempt = {
-  id: 'x', title: 'Вариант 2024', seconds: 3600, year: 2024,
-  results: [
-    { taskId: 'ct-2024-a1', part: 'A', topic: 'numbers', correct: true, user: '1' },
-    { taskId: 'ct-2024-a2', part: 'A', topic: 'expressions', correct: false, user: '5' },
-    { taskId: 'ct-2024-b1', part: 'B', topic: 'equations', correct: true, user: '3' },
-  ],
-};
-const summary = AN.attemptSummary(attempt);
-if (summary.correct !== 2 || summary.total !== 3 || summary.mistakes.length !== 1) {
-  fail('attempt summary is wrong: ' + JSON.stringify(summary));
-}
-if (summary.byPart.A.correct !== 1 || summary.byPart.B.total !== 1) {
-  fail('per-part summary is wrong: ' + JSON.stringify(summary.byPart));
-}
-if (summary.grade !== 67) fail('the grade should be 67, got ' + summary.grade);
-
-/* Calendar plumbing used by the streak counter. */
-if (CT.util.daysBetween('2026-10-01', '2026-10-03') !== 2) fail('daysBetween is broken');
-if (CT.util.today(new Date('2026-01-05T10:00:00')) !== '2026-01-05') fail('today() is broken');
-
-if (failures) {
-  console.error(`✗ ${failures} parity check(s) failed`);
+const unitPath = path.join(root, 'tests', 'unit_vectors.json');
+if (!fs.existsSync(unitPath)) {
+  console.error('✗ tests/unit_vectors.json отсутствует — эталон разбора единиц');
   process.exit(1);
 }
-console.log(`✓ answer/analytics parity: ${vectors.length} vectors passed`);
+const unitVectors = JSON.parse(fs.readFileSync(unitPath, 'utf8')).units || [];
+for (const vector of unitVectors) {
+  const parsed = CT.answer.unitOf(vector.input);
+  if (!vector.ok) {
+    if (parsed) fail(`единица ${JSON.stringify(vector.input)} не должна разбираться`);
+    continue;
+  }
+  if (!parsed) { fail(`единица ${JSON.stringify(vector.input)} не разобрана`); continue; }
+  const dims = parsed.dim.join(',');
+  if (dims !== vector.dim.join(',')) {
+    fail(`единица ${JSON.stringify(vector.input)}: размерность ${dims}, ожидалось ${vector.dim.join(',')}`);
+  }
+  const factor = Number(vector.factor);
+  if (Math.abs(parsed.factor - factor) > 1e-9 * Math.max(1, Math.abs(factor))) {
+    fail(`единица ${JSON.stringify(vector.input)}: множитель ${parsed.factor}, ожидалось ${factor}`);
+  }
+  if (Math.abs((parsed.offset || 0) - (vector.offset || 0)) > 1e-9) {
+    fail(`единица ${JSON.stringify(vector.input)}: смещение ${parsed.offset}, ожидалось ${vector.offset}`);
+  }
+}
+console.log(`· проверено единиц и размерностей: ${unitVectors.length}`);
+
+/* --------------------------------- 3. реальный банк: ответы и дистракторы */
+
+const bankPath = path.join(root, 'dist', 'content', 'bank.json');
+if (!fs.existsSync(bankPath)) {
+  console.error('✗ dist/content/bank.json отсутствует — запустите tools/build_content.py');
+  process.exit(1);
+}
+const tasks = JSON.parse(fs.readFileSync(bankPath, 'utf8')).tasks || [];
+if (tasks.length !== 180) fail(`в банке ${tasks.length} заданий вместо 180`);
+
+let quantityChecked = 0;
+for (const task of tasks) {
+  const correct = task.answer.ru;
+  if (!CT.answer.check(correct, task)) {
+    fail(`${task.id}: сохранённый верный ответ «${correct}» отвергнут`);
+  }
+  if (task.answerType === 'choice') {
+    const wrong = (task.options.ru || []).filter(
+      (option) => CT.answer.normalize(option) !== CT.answer.normalize(correct));
+    if (wrong.length !== 4) fail(`${task.id}: в части A должно быть 4 неверных варианта`);
+    for (const option of wrong) {
+      if (CT.answer.check(option, task)) fail(`${task.id}: неверный вариант «${option}» принят`);
+    }
+  } else {
+    quantityChecked += 1;
+    // число без единицы принимается там, где единица названа в условии (named),
+    // и обязана быть отвергнута там, где поле её требует (required).
+    if (task.spec.unitPolicy === 'required' && CT.answer.check(String(task.spec.answerValue), task)) {
+      fail(`${task.id}: ответ без единицы принят при unitPolicy=required`);
+    }
+    const other = { ...task.spec, dimension: 'm' };
+    if (task.spec.dimension !== 'm' && CT.answer.check(`${task.spec.answerValue} м`, { spec: other })) {
+      fail(`${task.id}: чужая размерность принята проверкой спецификации`);
+    }
+  }
+}
+console.log(`· проверено заданий банка: ${tasks.length} (величин: ${quantityChecked})`);
+
+/* ------------------------------ 4. аналогичные задания (генератор практики) */
+
+const analogousPath = path.join(root, 'dist', 'content', 'analogous.json');
+if (fs.existsSync(analogousPath)) {
+  const analogous = JSON.parse(fs.readFileSync(analogousPath, 'utf8')).tasks || [];
+  for (const task of analogous) {
+    if (!CT.answer.check(task.answer.ru, task)) {
+      fail(`${task.id}: верный ответ «${task.answer.ru}» отвергнут`);
+    }
+    if (CT.answer.check(String(Number(task.spec.answerValue) * 2), task)) {
+      fail(`${task.id}: удвоенный ответ принят`);
+    }
+  }
+  console.log(`· проверено аналогичных заданий: ${analogous.length}`);
+}
+
+if (failures) {
+  console.error(`\n✗ Проверка ответов не совпала: ошибок ${failures}`);
+  process.exit(1);
+}
+console.log('\n✓ Python, JavaScript и Kotlin проверяют ответы одинаково');

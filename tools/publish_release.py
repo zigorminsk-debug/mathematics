@@ -232,7 +232,7 @@ def publish(args) -> dict:
         gh_json(f"repos/{args.repo}/git/refs", method="POST", fields={"ref": "refs/tags/" + tag, "sha": sha})
     if tag_commit(args.repo, tag) != sha:
         raise ValueError("tag changed during preparation; refusing to create a draft")
-    fields = {"tag_name": tag, "target_commitish": sha, "name": f"CT Maths Tutor {version}",
+    fields = {"tag_name": tag, "target_commitish": sha, "name": f"{subject.TITLE['ru']} {version}",
               "body": notes, "draft": True, "prerelease": False}
     if release:
         if {asset["name"] for asset in release.get("assets", [])} - RELEASE_FILES:

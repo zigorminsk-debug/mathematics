@@ -1,8 +1,8 @@
-// Command CTMathsTutor — Windows-версия приложения «Репетитор ЦТ: Математика».
+// Command CTPhysicsTutor — Windows-версия приложения «Репетитор ЦТ: Физика».
 //
 // Программа запускает локальный HTTP-сервер только на loopback-адресе, отдаёт
 // встроенный (через go:embed) интерфейс и банк заданий, хранит прогресс в
-// %APPDATA%\CTMathsTutor и открывает окно приложения в Edge или Chrome в режиме
+// %APPDATA%\CTPhysicsTutor и открывает окно приложения в Edge или Chrome в режиме
 // --app (без адресной строки), а при их отсутствии — в браузере по умолчанию.
 //
 // The Windows front-end: one self-contained executable that serves the shared
@@ -45,7 +45,7 @@ var buildStamp = "dev"
 var appVersion = embeddedVersion()
 
 const (
-	appName   = "Репетитор ЦТ: Математика"
+	appName   = "Репетитор ЦТ: Физика"
 	appRepo   = "https://github.com/zigorminsk-debug/mathematics"
 	developer = "Захаревич Игорь (Zakharevich Igor)"
 	devEmail  = "ziv@csl.by"
@@ -70,12 +70,12 @@ func main() {
 
 	var (
 		addr       = flag.String("addr", "127.0.0.1:0", "адрес локального сервера (loopback)")
-		dataDir    = flag.String("data", "", "каталог данных (по умолчанию %APPDATA%\\CTMathsTutor)")
+		dataDir    = flag.String("data", "", "каталог данных (по умолчанию %APPDATA%\\CTPhysicsTutor)")
 		portable   = flag.Bool("portable", false, "хранить данные рядом с приложением (портативный режим)")
 		noBrowser  = flag.Bool("no-browser", false, "не открывать окно приложения")
 		idleMin    = flag.Int("idle-exit", 60, "выйти после N минут без запросов (0 — не выходить)")
 		printVer   = flag.Bool("version", false, "показать версию и выйти")
-		feedURL    = flag.String("feed", defaultFeed, "адрес потока обновлений банка заданий")
+		feedURL    = flag.String("feed", "", "адрес потока обновлений; пусто — последний выпуск физики")
 		openFolder = flag.String("open", "", "открыть каталог данных (data|reports) и выйти")
 	)
 	flag.Parse()
@@ -474,7 +474,7 @@ func shutdown(httpServer *http.Server) {
 
 func defaultDataDir() string {
 	if dir, err := os.UserConfigDir(); err == nil && dir != "" {
-		return filepath.Join(dir, "CTMathsTutor")
+		return filepath.Join(dir, "CTPhysicsTutor")
 	}
 	return executableDir()
 }
@@ -495,7 +495,7 @@ func openUI(url string) error {
 		for _, candidate := range browserCandidates() {
 			if _, err := os.Stat(candidate); err == nil {
 				cmd := exec.Command(candidate, "--app="+url, "--window-size=1280,900",
-					"--user-data-dir="+filepath.Join(os.TempDir(), "ctmaths-window"))
+					"--user-data-dir="+filepath.Join(os.TempDir(), "ctphysics-window"))
 				if err := cmd.Start(); err == nil {
 					return nil
 				}

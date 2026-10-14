@@ -19,6 +19,19 @@ const root = path.join(__dirname, '..');
 const contentDir = path.join(root, 'dist', 'content');
 const read = (name) => JSON.parse(fs.readFileSync(path.join(contentDir, name + '.json'), 'utf8'));
 
+/* Проверка ответов нужна и здесь: спецификация задания обязана сходиться с
+ * той же реализацией, что стоит в приложении (webapp/core.js → CT.answer). */
+const vm = require('vm');
+const sandbox = { console, setTimeout, clearTimeout };
+vm.createContext(sandbox);
+vm.runInContext(fs.readFileSync(path.join(root, 'webapp', 'core.js'), 'utf8'), sandbox,
+  { filename: 'core.js' });
+if (!sandbox.CT || !sandbox.CT.answer) {
+  console.error('✗ core.js did not expose the CT.answer API');
+  process.exit(1);
+}
+const CT = sandbox.CT;
+
 let failures = 0;
 const fail = (message) => { failures++; console.error('✗ ' + message); };
 
@@ -113,7 +126,7 @@ Object.entries(lessons).forEach(([id, lesson]) => {
 
 const figures = topics.figures || {};
 const usedFigures = new Set(Object.values(lessons).flatMap((lesson) => lesson.figures || []));
-if (Object.keys(figures).length < 50) fail('offline mathematical figure catalogue is incomplete');
+if (Object.keys(figures).length < 26) fail('offline physics figure catalogue is incomplete');
 Object.entries(figures).forEach(([id, figure]) => {
   if (id !== figure.id || !/^[a-z][a-z0-9-]*$/.test(id)) fail(`invalid figure id "${id}"`);
   if (!usedFigures.has(id)) fail(`unreachable diagram "${id}"`);
@@ -183,8 +196,86 @@ usedKeys.forEach((key) => {
   if (!ui[key]) fail(`the interface uses the missing string "${key}"`);
 });
 
+
+/* ------------------------------------------------------------------------- *
+ * Предмет «физика»: ответ — величина, поэтому у каждой расчётной задачи есть
+ * спецификация (единица, размерность, допуск), а контент не должен ссылаться
+ * на математику. Эти проверки отделяют физическое приложение от математического.
+ * ------------------------------------------------------------------------- */
+const FORBIDDEN = ['математик', 'mathemat', 'ctmaths', 'ctmathstutor'];
+const scanText = (value, where) => {
+  if (typeof value === 'string') {
+    const lower = value.toLowerCase();
+    FORBIDDEN.forEach((word) => {
+      if (lower.includes(word)) fail(`${where} still mentions mathematics: ${value.slice(0, 60)}`);
+    });
+    return;
+  }
+  if (Array.isArray(value)) value.forEach((item) => scanText(item, where));
+  else if (value && typeof value === 'object') Object.values(value).forEach((item) => scanText(item, where));
+};
+
+if (bank.meta.subject !== 'physics') fail('bank.json is not marked as the physics subject');
+if (bank.meta.package !== 'by.ziv.ctphysics') fail('bank.json carries the wrong Android package');
+if (bank.meta.app !== 'CTPhysicsTutor') fail('bank.json carries the wrong Windows binary name');
+if (analogous.meta.subject !== 'physics') fail('analogous.json is not marked as the physics subject');
+
+let specs = 0;
+bank.tasks.concat(analogous.tasks).forEach((task) => {
+  scanText(task.text, task.id);
+  scanText(task.solution, task.id);
+  scanText(task.tags, task.id);
+  if (!Array.isArray(task.given)) fail(`${task.id} has no structured data list`);
+  (task.given || []).forEach((entry) => {
+    if (!entry.symbol || !entry.value_ru || !entry.value_en) fail(`${task.id}: incomplete given entry`);
+    // безразмерные данные («5 делений») не имеют подписи единицы — это нормально
+    const dimensionless = !entry.unit || (!entry.unit.ru && !entry.unit.en);
+    if (dimensionless && !['1', '', undefined, null].includes(entry.unit_symbol)) {
+      fail(`${task.id}: given entry has a symbol's unit but no label (${entry.unit_symbol})`);
+    }
+  });
+  if (task.part === 'B') {
+    const spec = task.spec;
+    if (!spec) { fail(`${task.id}: part B task has no answer specification`); return; }
+    if (spec.answerType !== task.answerType) fail(`${task.id}: spec answerType differs from the task`);
+    if (!spec.dimension) fail(`${task.id}: spec has no dimension`);
+    const unit = CT.answer.unitOf(spec.dimension);
+    if (!unit) fail(`${task.id}: spec dimension "${spec.dimension}" is not parseable`);
+    if (spec.unitPolicy === 'required' && !spec.unit) fail(`${task.id}: required unit is not named`);
+    if (spec.unit) {
+      const named = CT.answer.unitOf(spec.unit);
+      if (!named) fail(`${task.id}: spec unit "${spec.unit}" is unknown`);
+      else if (unit && !CT.answer.sameDim(named.dim, unit.dim)) {
+        fail(`${task.id}: spec unit does not match the declared dimension`);
+      }
+    }
+    if (!spec.tolerance && spec.rounding === undefined) fail(`${task.id}: spec has no tolerance or rounding`);
+    if (!CT.answer.check(task.answer.ru, task)) fail(`${task.id}: the stored answer is rejected`);
+    if (!CT.answer.check(task.answer.en, task)) fail(`${task.id}: the English answer is rejected`);
+    specs++;
+  }
+});
+if (specs < 100) fail(`only ${specs} tasks carry an answer specification`);
+
+const physicsTexts = [ui, mistakes, lessons, { study: topics.study }, formulas, topics.topics];
+physicsTexts.forEach((block, index) => scanText(block, 'content #' + index));
+
+read('answer_vectors');
+const vectors = JSON.parse(fs.readFileSync(path.join(contentDir, 'answer_vectors.json'), 'utf8'));
+if (!Array.isArray(vectors.cases) || vectors.cases.length < 10) fail('answer_vectors.json is too small');
+
 const version = read('version');
 if (!version.contentVersion) fail('version.json has no contentVersion');
+if (version.subject !== 'physics') fail('version.json is not marked as the physics subject');
+if (version.package !== 'by.ziv.ctphysics') fail('version.json carries the wrong package');
+if (!/^https:\/\/github\.com\/[^/]+\/[^/]+\/releases\/download\/physics-v/.test(version.baseUrl || '')) {
+  fail('version.json must point at the physics release channel, not at /releases/latest');
+}
+if (!/subject-scoped/.test(version.updatePolicy || '')) fail('version.json does not document the update policy');
+if (version.examMinutes !== 210) fail('version.json does not use the 210-minute physics format');
+if (!version.structureSource || !/РИКЗ|RIKZ/.test(version.structureSource)) {
+  fail('version.json does not cite the official structure source');
+}
 if (!version.files || !Object.keys(version.files).length) fail('version.json lists no files');
 if (!Array.isArray(version.years) || version.years.length < 5) fail('version.json has no exam years');
 
@@ -204,6 +295,10 @@ if (!Array.isArray(version.periods) || version.periods.length !== version.years.
     }
     const partA = inBank.filter((task) => task.part === 'A').length;
     const partB = inBank.filter((task) => task.part === 'B').length;
+    if (partA !== 10 || partB !== 20) {
+      fail(`period ${period.year}: the physics format is 10 A + 20 B, the bank has ${partA} + ${partB}`);
+    }
+    if (period.minutes !== 210) fail(`period ${period.year}: the physics exam takes 210 minutes`);
     if (partA !== period.parts.A || partB !== period.parts.B) {
       fail(`period ${period.year}: parts mismatch (A ${partA}/${period.parts.A}, B ${partB}/${period.parts.B})`);
     }
@@ -218,7 +313,7 @@ if (failures) {
   console.error(`✗ ${failures} content problem(s) found`);
   process.exit(1);
 }
-console.log(`✓ content schema: ${bank.tasks.length} exam tasks, ${analogous.tasks.length} analogous, ` +
+console.log(`✓ content schema (physics): ${bank.tasks.length} exam tasks, ${analogous.tasks.length} analogous, ` +
   `${Object.keys(ui).length} interface strings, ${Object.keys(lessons).length} everyday/detailed lessons, ${Object.keys(figures).length} offline figures, ` +
   `${Object.keys(mistakes.errors).length} error diagnoses, ` +
   `${usedKeys.size} strings referenced by the UI`);

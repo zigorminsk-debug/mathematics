@@ -1,4 +1,4 @@
-/* app.js — экраны приложения «Репетитор ЦТ: Математика».
+/* app.js — экраны приложения «Репетитор ЦТ: Физика».
  *
  * Один и тот же код работает в Android WebView и в окне Windows: слой
  * платформы скрыт в CT.bridge (core.js). Здесь только интерфейс:
@@ -51,7 +51,7 @@
    * 1. Локальное состояние и хранилище
    * ------------------------------------------------------------------ */
   var DEFAULT_SETTINGS = {
-    lang: 'ru', theme: 'system', fontScale: 1, examMinutes: 180, dailyGoal: 20,
+    lang: 'ru', theme: 'system', fontScale: 1, examMinutes: 210, dailyGoal: 20,
     autoAdvance: true, sound: true, vibrate: true, autoUpdate: true, baseUrl: '',
     keepScreenOn: true, simpleCalc: false,
   };
@@ -74,7 +74,7 @@
         Object.keys(DEFAULT_SETTINGS).forEach(function (key) {
           if (settings[key] === undefined) settings[key] = DEFAULT_SETTINGS[key];
         });
-        // «Портативный» отпечаток: экзамен по умолчанию 180 минут, цель — 20 заданий
+        // «Портативный» отпечаток: экзамен по умолчанию 210 минут (формат ЦТ по физике), цель — 20 заданий
         self.settings = settings;
         var progress = data[1] || {};
         var empty = AN.empty();
@@ -1182,8 +1182,8 @@
       if (hintShown < hints.length) CT.toast(t('more_hints_fmt', hints.length - hintShown));
     });
     toolsRow.appendChild(hintBtn);
-    [['calculator', t('tool_calculator')], ['sheet', t('tool_sheet')], ['scratch', t('tool_scratch')],
-     ['graph', t('tool_graph')]].forEach(function (pair) {
+    [['calculator', t('tool_calculator')], ['sheet', t('tool_sheet')], ['units', t('tool_units')],
+     ['scratch', t('tool_scratch')], ['graph', t('tool_graph')]].forEach(function (pair) {
       var btn = el('button', { class: 'btn ghost', text: pair[1] });
       btn.addEventListener('click', function () { TOOLS.open(pair[0], task); });
       toolsRow.appendChild(btn);
@@ -1609,6 +1609,7 @@
     open: function (name, task) {
       if (name === 'calculator') TOOLS.calculator();
       else if (name === 'sheet') TOOLS.sheet(task);
+      else if (name === 'units') TOOLS.units();
       else if (name === 'scratch') TOOLS.scratchpad(task);
       else if (name === 'graph') TOOLS.graph(task);
     },
@@ -1733,6 +1734,54 @@
       wrap.appendChild(row);
       UI.modal(t('tool_scratch'), wrap, { tall: true });
       area.focus();
+    },
+
+    /* --- единицы и размерности -------------------------------------------- */
+    /**
+     * Справочник единиц. Физический ответ — это число с единицей, поэтому
+     * рядом с калькулятором всегда доступна таблица единиц СИ, их множителей и
+     * размерностей. Данные таблицы приходят из Python (tools/unit_table.py),
+     * то есть приложение и проверка ответов пользуются одними и теми же
+     * сведениями о единицах.
+     */
+    units: function () {
+        var wrap = el('div', { class: 'units-tool' });
+        wrap.appendChild(el('p', { class: 'units-intro', text: t('units_intro') }));
+        var search = el('input', {
+            class: 'answer-input units-search', type: 'search',
+            placeholder: t('units_search_hint'), 'aria-label': t('units_search_hint'),
+        });
+        wrap.appendChild(search);
+        var table = el('div', { class: 'units-table' });
+        wrap.appendChild(table);
+        var head = el('div', { class: 'units-row units-head' }, [
+            el('span', { class: 'units-symbol', text: t('answer_label') }),
+            el('span', { class: 'units-name' }),
+            el('span', { class: 'units-dimension', text: t('units_dimension_col') }),
+            el('span', { class: 'units-factor', text: t('units_factor_col') }),
+        ]);
+        var render = function () {
+            clear(table);
+            table.appendChild(head);
+            var query = (search.value || '').trim().toLowerCase();
+            var rows = 0;
+            (A.UNITS || []).forEach(function (unit) {
+                var label = I.lang === 'ru' ? unit.ru : unit.en;
+                var haystack = [unit.s, unit.ru, unit.en, A.dimsText(unit.dim, I.lang)]
+                    .concat(unit.a || []).join(' ').toLowerCase();
+                if (query && haystack.indexOf(query) < 0) return;
+                rows += 1;
+                table.appendChild(el('div', { class: 'units-row' }, [
+                    el('span', { class: 'units-symbol', text: label || unit.s }),
+                    el('span', { class: 'units-dimension', text: A.dimsText(unit.dim, I.lang) || '—' }),
+                    el('span', { class: 'units-factor', text: A.unitFactorText(unit) }),
+                ]));
+            });
+            if (!rows) table.appendChild(el('p', { class: 'units-empty', text: t('units_nothing_found') }));
+        };
+        search.addEventListener('input', render);
+        render();
+        UI.modal(t('tool_units'), wrap, { tall: true, keepHistory: true });
     },
 
     graph: function (task) {
@@ -1888,7 +1937,7 @@
     examCard.appendChild(el('h3', { text: t('exam_settings') }));
     var minutes = el('input', { class: 'answer-input', type: 'number', min: 10, max: 300, value: S.settings.examMinutes });
     minutes.addEventListener('change', function () {
-      S.settings.examMinutes = U.clamp(parseInt(minutes.value, 10) || 180, 10, 300);
+      S.settings.examMinutes = U.clamp(parseInt(minutes.value, 10) || 210, 10, 300);
       S.saveSettings(true);
     });
     examCard.appendChild(h('<label class="field"><span>' + esc(t('exam_minutes')) + '</span></label>'));
@@ -2033,7 +2082,8 @@
     root.appendChild(el('p', { class: 'muted', text: t('tools_intro') }));
     var grid = el('div', { class: 'grid-4' });
     [['calculator', t('tool_calculator'), '🧮'], ['sheet', t('tool_sheet'), '📐'],
-     ['scratch', t('tool_scratch'), '📝'], ['graph', t('tool_graph'), '📈']].forEach(function (entry) {
+     ['units', t('tool_units'), '📏'], ['scratch', t('tool_scratch'), '📝'],
+     ['graph', t('tool_graph'), '📈']].forEach(function (entry) {
       var btn = el('button', { class: 'btn big tool-btn' });
       btn.appendChild(el('span', { class: 'tool-icon', text: entry[2] }));
       btn.appendChild(el('span', { text: entry[1] }));

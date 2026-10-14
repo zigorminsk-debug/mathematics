@@ -78,8 +78,8 @@ window.CTNative = {
     return JSON.stringify({
       app: {
         version: '2026.10.1', build: '1', os: 'Android 14 (API 34)',
-        platform: 'android', shell: 'webview', dataDir: '/data/user/0/by.ziv.ctmaths/files/data',
-        contentDir: '/data/user/0/by.ziv.ctmaths/files/content', reportsDir: '/storage/emulated/0/Android/data/by.ziv.ctmaths/files/reports',
+        platform: 'android', shell: 'webview', dataDir: '/data/user/0/by.ziv.ctphysics/files/data',
+        contentDir: '/data/user/0/by.ziv.ctphysics/files/content', reportsDir: '/storage/emulated/0/Android/data/by.ziv.ctphysics/files/reports',
         repo: 'https://github.com/zigorminsk-debug/mathematics', email: 'ziv@csl.by', phone: '+3753371412',
       },
       content: { version: '2026.10.1', overlay: false },
@@ -130,9 +130,9 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
 
   check('state requested from the native side', called.getState === 1, String(called.getState));
   check('platform reported as android', window.CT.bridge.platform === 'android', window.CT.bridge.platform);
-  check('data folder from the native state', window.CT.bridge.info.dataDir === '/data/user/0/by.ziv.ctmaths/files/data');
+  check('data folder from the native state', window.CT.bridge.info.dataDir === '/data/user/0/by.ziv.ctphysics/files/data');
   check('content read through the native bridge', window.CT.content.bank.length === 180, String(window.CT.content.bank.length));
-  check('footer shows the native data folder', /by\.ziv\.ctmaths/.test(doc.getElementById('app-folder').textContent),
+  check('footer shows the native data folder', /by\.ziv\.ctphysics/.test(doc.getElementById('app-folder').textContent),
     doc.getElementById('app-folder').textContent);
 
   // a blob round trip: settings changed by the user must be stored natively

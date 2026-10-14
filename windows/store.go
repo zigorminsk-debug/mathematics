@@ -182,6 +182,9 @@ func (s *Store) WriteReport(kind string, html []byte) (string, error) {
 // contentManifest mirrors dist/content/version.json published with a release.
 type contentManifest struct {
 	ContentVersion string `json:"contentVersion"`
+	Subject        string `json:"subject"`
+	Package        string `json:"package"`
+	Tag            string `json:"tag"`
 	BaseURL        string `json:"baseUrl"`
 	Files          map[string]struct {
 		SHA256 string `json:"sha256"`
@@ -204,7 +207,59 @@ type UpdateResult struct {
 	Downloaded int64  `json:"downloaded,omitempty"`
 }
 
-const defaultFeed = "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
+// Общий “/releases/latest/download“ отдаёт математику: физика живёт под
+// собственными тегами `physics-v*`, поэтому поток обновлений ищется по Releases
+// API, а не по «последнему релизу репозитория». Подмена файлов математики
+// невозможна: манифест обязан быть помечен своим предметом (см. subject).
+const (
+	releasesAPI   = "https://api.github.com/repos/zigorminsk-debug/mathematics/releases?per_page=30"
+	releaseTagPre = "physics-v"
+	downloadBase  = "https://github.com/zigorminsk-debug/mathematics/releases/download"
+	subjectName   = "physics"
+	subjectPkg    = "by.ziv.ctphysics"
+)
+
+// FeedForTag собирает поток обновлений конкретного выпуска физики.
+func FeedForTag(tag string) string {
+	return strings.TrimRight(downloadBase, "/") + "/" + tag
+}
+
+// ResolveFeed выбирает самый новый стабильный выпуск физики по Releases API.
+// Выпуски математики и черновики пропускаются.
+func (s *Store) ResolveFeed() (string, error) {
+	data, err := s.fetch(releasesAPI)
+	if err != nil {
+		return "", err
+	}
+	var releases []struct {
+		TagName    string `json:"tag_name"`
+		Draft      bool   `json:"draft"`
+		Prerelease bool   `json:"prerelease"`
+	}
+	if err := json.Unmarshal(data, &releases); err != nil {
+		return "", fmt.Errorf("releases: %w", err)
+	}
+	best, bestVersion := "", ""
+	for _, release := range releases {
+		if release.Draft || release.Prerelease {
+			continue
+		}
+		if !strings.HasPrefix(release.TagName, releaseTagPre) {
+			continue
+		}
+		version := strings.TrimPrefix(release.TagName, releaseTagPre)
+		if !regexp.MustCompile(`^[0-9]+(\.[0-9]+)*$`).MatchString(version) {
+			continue
+		}
+		if best == "" || compareContentVersions(version, bestVersion) > 0 {
+			best, bestVersion = release.TagName, version
+		}
+	}
+	if best == "" {
+		return "", fmt.Errorf("no published %s release found", subjectName)
+	}
+	return FeedForTag(best), nil
+}
 
 // compareContentVersions сравнивает версии банка по числовым компонентам:
 // "2026.10.3" новее "2026.9.9", хотя лексикографически было бы наоборот.
@@ -243,7 +298,11 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 	s.updateMu.Lock()
 	defer s.updateMu.Unlock()
 	if feed == "" {
-		feed = defaultFeed
+		resolved, err := s.ResolveFeed()
+		if err != nil {
+			return UpdateResult{Status: "offline", Message: err.Error(), Version: current}
+		}
+		feed = resolved
 	}
 	feed = strings.TrimRight(feed, "/")
 
@@ -257,6 +316,12 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 	}
 	if !regexp.MustCompile(`^[0-9]+(\.[0-9]+)*$`).MatchString(manifest.ContentVersion) || len(manifest.Files) == 0 {
 		return UpdateResult{Status: "error", Message: "manifest is empty", Version: current}
+	}
+	// Чужой предмет отвергается целиком: банк математики не должен попасть ни в
+	// кэш, ни в интерфейс физики (у предметов разные задания и статистика).
+	if manifest.Subject != subjectName || manifest.Package != subjectPkg {
+		return UpdateResult{Status: "error", Version: current,
+			Message: "manifest belongs to another subject"}
 	}
 	if compareContentVersions(manifest.ContentVersion, current) <= 0 {
 		// A build can be ahead of releases/latest. Never downgrade its bank.

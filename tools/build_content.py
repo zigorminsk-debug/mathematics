@@ -50,6 +50,12 @@ DIST = ROOT / "dist" / "content"
 TOOLS = ROOT / "tools"
 VERSION_FILE = ROOT / "VERSION"
 
+for _path in (str(TOOLS), str(SRC)):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
+
+import unit_table  # noqa: E402  (таблица единиц — общий источник для JS и Kotlin)
+
 sys.path.insert(0, str(SRC))
 sys.path.insert(0, str(TOOLS))
 
@@ -457,6 +463,20 @@ def main() -> int:
             shutil.rmtree(target)
         shutil.copytree(DIST, target)
         print(f"    → {target.relative_to(ROOT)}/")
+
+    print("Генерация таблицы единиц (Python → JS → Kotlin)")
+    core_js = ROOT / "webapp" / "core.js"
+    if core_js.exists():
+        core_js.write_text(unit_table.apply_javascript(core_js.read_text(encoding="utf-8")),
+                           encoding="utf-8")
+        print("    → webapp/core.js (блок units:generated)")
+    unit_table.write_unit_vectors()
+    print("    → tests/unit_vectors.json")
+    kotlin = (ROOT / "android" / "app" / "src" / "main" / "java" / "by" / "ziv"
+              / "ctphysics" / "UnitTable.kt")
+    if kotlin.parent.exists():
+        kotlin.write_text(unit_table.render_kotlin(), encoding="utf-8")
+        print(f"    → {kotlin.relative_to(ROOT)}")
 
     print("Генерация строк Android")
     for lang, folder in (("en", "values"), ("ru", "values-ru")):

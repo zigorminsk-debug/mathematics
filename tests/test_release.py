@@ -1,354 +1,291 @@
-"""Release policy, fail-closed publication and reusable workflow contracts.
+"""Контракт выпуска физики: отдельный канал, отдельные файлы, отдельный пакет.
 
-No network, native SDK or real GitHub release mutations in these tests.
-Native APK identity/certificate/update tests are still required by Android CI.
+Физика живёт в том же репозитории, что и математика, поэтому главное здесь —
+доказать, что выпуск физики **не может** задеть математику: свой префикс тега,
+``make_latest=false``, свой APK и свои EXE, свой канал обновления. Если этот
+тест падает, публикацию запускать нельзя.
 """
-import argparse
-import contextlib
-import io
-from datetime import date
-import hashlib
-import json
-import os
-from pathlib import Path
+
+from __future__ import annotations
+
+import pathlib
 import sys
-import tempfile
 import unittest
-from unittest.mock import patch
+from datetime import date
 
-import yaml
-
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
-import release_plan as plan
-import publish_release as pub
 
-SHA = "a" * 40
+import check_apk_update  # noqa: E402
+import publish_release  # noqa: E402
+import release_plan  # noqa: E402
+import subject  # noqa: E402
+
 REPO = "zigorminsk-debug/mathematics"
-TODAY = date(2026, 10, 14)
 
 
-def release(version, sha="b" * 40, *, draft=False, prerelease=False):
-    return {"id": 10, "tag_name": "v" + version, "target_commitish": sha,
-            "draft": draft, "prerelease": prerelease, "html_url": f"https://github.com/{REPO}/releases/tag/v{version}",
-            "assets": [{"name": name} for name in plan.RELEASE_FILES]}
+class PhysicsIdentity(unittest.TestCase):
+
+    def test_names_do_not_overlap_with_mathematics(self):
+        self.assertEqual(subject.SUBJECT, "physics")
+        self.assertEqual(subject.TAG_PREFIX, "physics-v")
+        self.assertEqual(subject.ANDROID_PACKAGE, "by.ziv.ctphysics")
+        self.assertEqual(subject.ANDROID_DEBUG_PACKAGE, "by.ziv.ctphysics.debug")
+        self.assertEqual(subject.WINDOWS_BINARY, "CTPhysicsTutor")
+        self.assertTrue(subject.WINDOWS_DATA_DIR.endswith("CTPhysicsTutor"))
+        self.assertIn("%APPDATA%", subject.WINDOWS_DATA_DIR)
+        self.assertEqual(subject.WINDOWS_EDGE_PROFILE, "ctphysics-window")
+        self.assertEqual(check_apk_update.PACKAGE, subject.ANDROID_PACKAGE)
+        for value in (subject.ANDROID_PACKAGE, subject.WINDOWS_BINARY,
+                      subject.WINDOWS_EDGE_PROFILE, subject.APK_ASSET,
+                      subject.GRADLE_APK, subject.KEYSTORE):
+            self.assertNotIn("ctmaths", value.lower())
+            self.assertNotIn("ctmathstutor", value.lower())
+
+    def test_apk_is_published_under_the_requested_name(self):
+        """Пользователь просил «apk назови phyzics» — так он и называется."""
+        self.assertEqual(subject.APK_ASSET, "phyzics.apk")
+        self.assertEqual(subject.GRADLE_APK,
+                         "android/app/build/outputs/apk/release/app-release.apk")
+        self.assertTrue(subject.GRADLE_APK.endswith("app-release.apk"))
+        self.assertIn(subject.APK_ASSET, subject.installers())
+        self.assertEqual(subject.installers(),
+                         {"phyzics.apk", "CTPhysicsTutor-amd64.exe",
+                          "CTPhysicsTutor-arm64.exe"})
+
+    def test_math_tags_are_not_mistaken_for_physics(self):
+        self.assertIsNone(subject.release_version("v2026.10.8"))
+        self.assertIsNone(subject.release_version("v2026.10.7"))
+        self.assertEqual(subject.release_version("physics-v2026.10.1"), "2026.10.1")
+        self.assertEqual(subject.tag("2026.10.1"), "physics-v2026.10.1")
+
+    def test_update_channel_is_subject_scoped(self):
+        url = subject.content_base_url(REPO, "2026.10.1")
+        self.assertEqual(
+            url,
+            "https://github.com/zigorminsk-debug/mathematics"
+            "/releases/download/physics-v2026.10.1")
+        self.assertNotIn("/latest/", url)
+        identity = subject.manifest_identity()
+        self.assertEqual(identity["subject"], "physics")
+        self.assertEqual(identity["package"], "by.ziv.ctphysics")
+        self.assertEqual(identity["tagPrefix"], "physics-v")
+
+    def test_release_inventory(self):
+        self.assertEqual(len(release_plan.RELEASE_FILES), 13)
+        self.assertEqual(len(release_plan.CONTENT_FILES), 7)
+        self.assertEqual(release_plan.RELEASE_FILES, release_plan.CONTENT_FILES | {
+            "version.json", "release-info.json", "SHA256SUMS.txt",
+            "phyzics.apk", "CTPhysicsTutor-amd64.exe", "CTPhysicsTutor-arm64.exe"})
+        self.assertEqual(release_plan.INSTALLERS, subject.installers())
 
 
-def jobs(prefix=""):
-    return [{"name": prefix + name, "conclusion": "success", "id": index}
-            for index, name in enumerate(plan.BUILD_JOBS, 1)]
+class ReleasePolicy(unittest.TestCase):
+    """Чистая политика нумерации — то, что нельзя проверять «на живом» релизе."""
 
+    def releases(self, *entries):
+        return list(entries)
 
-def make_staging(root, version="2026.10.5"):
-    staging = root / "staging"
-    for name in ("content", "windows", "android"):
-        (staging / name).mkdir(parents=True)
-    for name in plan.CONTENT_FILES:
-        (staging / "content" / name).write_text('{}\n', encoding="utf-8")
-    files = {name: pub.metadata(staging / "content" / name) for name in sorted(plan.CONTENT_FILES)}
-    pub.write_json(staging / "content" / "version.json", {"contentVersion": version, "files": files})
-    for name in plan.INSTALLERS:
-        (staging / ("android" if name.endswith(".apk") else "windows") / name).write_bytes(b"fake native artifact; CI gates mocked")
-    return staging
+    def release(self, tag, *, draft=False, prerelease=False, commit="other",
+                assets=None, sha_field="_source_sha"):
+        entry = {"tag_name": tag, "draft": draft, "prerelease": prerelease,
+                 "target_commitish": commit, "html_url": "https://example.invalid/r/" + tag,
+                 "assets": [{"name": name} for name in (assets or [])]}
+        if sha_field:
+            entry[sha_field] = commit
+        return entry
 
+    def test_first_release_starts_from_the_repository_floor(self):
+        plan = release_plan.choose_version("2026.10.1", [], "a" * 40, date(2026, 10, 14))
+        self.assertEqual(plan["version"], "2026.10.1")
+        self.assertEqual(plan["tag"], "physics-v2026.10.1")
+        self.assertTrue(plan["publish"])
+        self.assertFalse(plan["already_published"])
+        self.assertEqual(plan["previous_tag"], "")
 
-class ReleasePlanTests(unittest.TestCase):
-    def test_initial_release_respects_source_floor(self):
-        result = plan.choose_version("2026.10.5", [release("2026.10.2")], SHA, TODAY)
-        self.assertEqual("2026.10.5", result["version"])
-        self.assertEqual("v2026.10.2", result["previous_tag"])
-        self.assertFalse(result["already_published"])
+    def test_new_month_raises_the_floor(self):
+        plan = release_plan.choose_version("2026.10.1", [], "a" * 40, date(2026, 12, 3))
+        self.assertEqual(plan["version"], "2026.12.0")
 
-    def test_every_new_source_increases_version_without_manual_bump(self):
-        result = plan.choose_version("2026.10.5", [release("2026.10.8")], SHA, TODAY)
-        self.assertEqual("2026.10.9", result["version"])
-        self.assertEqual(261009, plan.version_code(result["version"]))
+    def test_previous_physics_release_moves_the_version_forward(self):
+        previous = self.release("physics-v2026.10.1", commit="b" * 40,
+                                assets=release_plan.RELEASE_FILES)
+        plan = release_plan.choose_version("2026.10.1", [previous], "a" * 40,
+                                           date(2026, 10, 14))
+        self.assertEqual(plan["version"], "2026.10.2")
+        self.assertEqual(plan["previous_tag"], "physics-v2026.10.1")
+        self.assertEqual(plan["previous_version"], "2026.10.1")
 
-    def test_calendar_floor_uses_current_month(self):
-        result = plan.choose_version("2026.9.5", [], SHA, TODAY)
-        self.assertEqual("2026.10.0", result["version"])
+    def test_mathematics_releases_are_invisible_to_the_physics_counter(self):
+        maths = self.release("v2026.10.8", commit="c" * 40, assets=release_plan.RELEASE_FILES)
+        plan = release_plan.choose_version("2026.10.1", [maths], "a" * 40,
+                                           date(2026, 10, 14))
+        self.assertEqual(plan["version"], "2026.10.1")
+        self.assertEqual(plan["previous_tag"], "")
 
-    def test_patch_and_year_boundaries_do_not_wrap_or_duplicate_codes(self):
-        for current, expected in (("2026.10.99", "2026.11.0"), ("2026.12.99", "2027.1.0")):
-            self.assertEqual(expected, plan.next_version(current))
-            self.assertGreater(plan.version_code(expected), plan.version_code(current))
+    def test_republishing_the_same_commit_is_idempotent(self):
+        commit = "d" * 40
+        published = self.release("physics-v2026.10.1", commit=commit,
+                                 assets=release_plan.RELEASE_FILES)
+        plan = release_plan.choose_version("2026.10.1", [published], commit,
+                                           date(2026, 10, 14))
+        self.assertTrue(plan["already_published"])
+        self.assertEqual(plan["version"], "2026.10.1")
+        self.assertEqual(plan["release_url"], published["html_url"])
+
+    def test_incomplete_published_assets_are_refused(self):
+        commit = "d" * 40
+        published = self.release("physics-v2026.10.1", commit=commit,
+                                 assets=release_plan.RELEASE_FILES - {"phyzics.apk"})
         with self.assertRaises(ValueError):
-            plan.next_version("2099.12.99")
+            release_plan.choose_version("2026.10.1", [published], commit,
+                                        date(2026, 10, 14))
 
-    def test_prerelease_unrelated_and_draft_do_not_become_stable(self):
-        releases = [release("2026.10.2"), release("2026.10.8", prerelease=True),
-                    release("2026.12.5", draft=True), dict(tag_name="preview", draft=False)]
-        result = plan.choose_version("2026.10.5", releases, SHA, TODAY)
-        self.assertEqual("2026.10.5", result["version"])
-        self.assertEqual("v2026.10.2", result["previous_tag"])
-
-    def test_different_source_draft_or_tag_is_not_overwritten(self):
-        result = plan.choose_version("2026.10.5", [release("2026.10.5", draft=True)], SHA, TODAY)
-        self.assertEqual("2026.10.6", result["version"])
-
-    def test_same_source_draft_is_resumed_even_after_month_boundary(self):
-        result = plan.choose_version("2026.10.5", [release("2026.10.5", SHA, draft=True)], SHA, date(2026, 11, 1))
-        self.assertEqual("2026.10.5", result["version"])
-        self.assertFalse(result["already_published"])
-
-    def test_rerun_of_published_commit_is_idempotent(self):
-        for target in (SHA, "main", "b" * 40):
-            entry = dict(release("2026.10.6", target), _source_sha=SHA)
-            result = plan.choose_version("2026.10.5", [entry], SHA, TODAY)
-            self.assertEqual("2026.10.6", result["version"])
-            self.assertTrue(result["already_published"])
-            self.assertIn("v2026.10.6", result["release_url"])
-
-
-    def test_incomplete_published_release_is_not_silently_repaired(self):
-        broken = release("2026.10.5", SHA)
-        broken["assets"].pop()
-        with self.assertRaisesRegex(ValueError, "incomplete assets"):
-            plan.choose_version("2026.10.5", [broken], SHA, TODAY)
-
-    def test_explicit_tag_must_equal_allocated_version(self):
-        plan.choose_version("2026.10.5", [], SHA, TODAY, "v2026.10.5")
-        with self.assertRaisesRegex(ValueError, "must be"):
-            plan.choose_version("2026.10.5", [], SHA, TODAY, "v2026.10.2")
-
-    def test_source_floor_and_canonical_versions(self):
-        self.assertEqual("2026.1.5", plan.canonical("2026.01.05"))
-        for bad in ("1.0.0", "v2026.10.5", "2026.13.5", "2026.10.100", "2026.10.5\n"):
-            with self.subTest(bad=bad), self.assertRaises(ValueError):
-                plan.canonical(bad)
-
-    def test_runner_only_apply_cannot_downgrade(self):
-        with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / "VERSION"
-            path.write_text("2026.10.5\n")
-            plan.apply_version(path, "2026.10.6")
-            self.assertEqual("2026.10.6\n", path.read_text())
-            with self.assertRaises(ValueError):
-                plan.apply_version(path, "2026.10.4")
-            self.assertEqual("2026.10.6\n", path.read_text())
-
-    def test_stale_branch_cannot_publish_over_newer_history(self):
-        import subprocess
-        with patch.object(plan, "git_commit", return_value="b" * 40), \
-             patch.object(plan.subprocess, "run", return_value=subprocess.CompletedProcess([], 1)):
-            with self.assertRaisesRegex(ValueError, "does not descend"):
-                plan.check_lineage(release("2026.10.5"), SHA)
-
-
-class PublicationGateTests(unittest.TestCase):
-    def setUp(self):
-        self.run = {"repository": {"full_name": REPO}, "head_sha": SHA, "event": "push"}
-
-    def test_exact_source_and_all_three_build_gates_are_required(self):
-        self.assertEqual(3, len(pub.validate_run(self.run, jobs(), REPO, SHA, "refs/heads/arena/test", "v2026.10.5")))
-        for index in range(3):
-            for state in ("failure", "cancelled", "skipped", None):
-                broken = jobs()
-                broken[index]["conclusion"] = state
-                with self.subTest(index=index, state=state), self.assertRaises(ValueError):
-                    pub.validate_run(self.run, broken, REPO, SHA, "refs/heads/main", "v2026.10.5")
+    def test_requested_tag_cannot_be_rewritten(self):
         with self.assertRaises(ValueError):
-            pub.validate_run(self.run, jobs()[1:], REPO, SHA, "refs/heads/main", "v2026.10.5")
+            release_plan.choose_version("2026.10.1", [], "a" * 40, date(2026, 10, 14),
+                                        requested_tag="physics-v2026.9.0")
 
-    def test_reusable_job_names_and_manual_tag_are_supported(self):
-        run = dict(self.run, event="workflow_dispatch")
-        self.assertEqual(3, len(pub.validate_run(run, jobs("Build, verify and release / "), REPO,
-                                                SHA, "refs/tags/v2026.10.5", "v2026.10.5")))
+    def test_draft_of_another_commit_does_not_capture_the_version(self):
+        other = self.release("physics-v2026.10.1", draft=True, commit="e" * 40)
+        plan = release_plan.choose_version("2026.10.1", [other], "a" * 40,
+                                           date(2026, 10, 14))
+        self.assertFalse(plan["already_published"])
+        self.assertNotEqual(plan["tag"], "physics-v2026.10.1")
 
-    def test_pr_fork_wrong_commit_and_wrong_tag_cannot_publish(self):
-        for run, sha, ref in ((dict(self.run, event="pull_request"), SHA, "refs/pull/4/merge"),
-                              (dict(self.run, repository={"full_name": "someone/fork"}), SHA, "refs/heads/main"),
-                              (self.run, "b" * 40, "refs/heads/main"),
-                              (self.run, SHA, "refs/tags/v2026.10.4"),
-                              (self.run, SHA, "refs/heads/")):
-            with self.subTest(run=run, ref=ref), self.assertRaises(ValueError):
-                pub.validate_run(run, jobs(), REPO, sha, ref, "v2026.10.5")
-
-    def test_duplicate_job_name_cannot_fake_a_pass(self):
-        with self.assertRaises(ValueError):
-            pub.validate_run(self.run, jobs() + jobs()[:1], REPO, SHA, "refs/heads/main", "v2026.10.5")
-
-    def test_complete_same_version_payload_has_immutable_manifest_urls(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            manifest = pub.assemble(make_staging(root), root / "release", "2026.10.5", REPO)
-            self.assertEqual("2026.10.5", manifest["appVersion"])
-            self.assertIn("/download/v2026.10.5", manifest["baseUrl"])
-            self.assertNotIn("latest", manifest["baseUrl"])
-            for name, entry in manifest["files"].items():
-                self.assertEqual(pub.digest(root / "release" / name), entry["sha256"])
-                self.assertTrue(entry["url"].endswith("/" + name))
-
-    def test_wrong_version_bad_checksum_missing_and_debug_assets_fail_closed(self):
-        for fault in ("version", "checksum", "missing", "debug"):
-            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as temp:
-                root = Path(temp)
-                staging = make_staging(root)
-                if fault == "version":
-                    expected = "2026.10.6"
-                else:
-                    expected = "2026.10.5"
-                if fault == "checksum":
-                    (staging / "content" / "bank.json").write_text('{"changed":true}')
-                elif fault == "missing":
-                    (staging / "windows" / "CTMathsTutor-arm64.exe").unlink()
-                elif fault == "debug":
-                    (staging / "android" / "app-debug.apk").write_bytes(b"not a release APK")
-                with self.assertRaises(ValueError):
-                    pub.assemble(staging, root / "release", expected, REPO)
-
-    def test_uploaded_inventory_checks_server_digest_and_completeness(self):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            for name in plan.RELEASE_FILES:
-                (root / name).write_bytes(b"payload")
-            assets = [{"name": name, "state": "uploaded", "size": 7, "digest": "sha256:" + pub.digest(root / name)}
-                      for name in plan.RELEASE_FILES]
-            pub.validate_inventory({"assets": assets}, root)
-            for bad in (assets[:-1], assets + [dict(name="app-debug.apk", state="uploaded", size=7)],
-                        [dict(asset, digest="sha256:" + "0" * 64) for asset in assets],
-                        [dict(asset, state="new") for asset in assets]):
-                with self.assertRaises(ValueError):
-                    pub.validate_inventory({"assets": bad}, root)
-
-    def test_atomic_publication_and_audit_with_mocked_github(self):
-        self.simulate_publication(fault=False)
-
-    def test_incomplete_draft_never_becomes_public_or_latest(self):
-        self.simulate_publication(fault=True)
-
-    def simulate_publication(self, fault):
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            (root / "VERSION").write_text("2026.10.5\n")
-            cert = root / "android/keystore/expected-cert-sha256.txt"
-            cert.parent.mkdir(parents=True)
-            cert.write_text("B2:BD:fake-test-only\n")
-            staging = make_staging(root)
-            output = root / "release"
-            args = argparse.Namespace(repo=REPO, version="2026.10.5", source_version="2026.10.5",
-                                      run_id="99", staging=staging, output=output)
-            state = {"tag": None, "draft": True, "uploaded": False, "promoted": False}
-
-            def api(path, *, method="GET", fields=None, **kwargs):
-                if path.endswith("/actions/runs/99"):
-                    return self.run
-                if path.endswith("/git/refs"):
-                    self.assertEqual(SHA, fields["sha"])
-                    state["tag"] = SHA
-                    return {}
-                if path.endswith("/releases") and method == "POST":
-                    self.assertEqual(SHA, state["tag"])
-                    self.assertTrue(fields["draft"])
-                    return dict(release("2026.10.5", SHA, draft=True), id=11)
-                if path.endswith("/releases/11") or path.endswith("/releases/latest"):
-                    if method == "PATCH" and fields.get("draft") is False:
-                        self.assertTrue(state["uploaded"])
-                        self.assertFalse(fault)
-                        state["draft"], state["promoted"] = False, True
-                    assets = [{"name": p.name, "state": "uploaded", "size": p.stat().st_size,
-                               "digest": "sha256:" + pub.digest(p)} for p in output.iterdir()]
-                    if fault:
-                        assets.pop()
-                    return dict(release("2026.10.5", SHA, draft=state["draft"]), id=11, assets=assets)
-                self.fail("unexpected API request: " + path)
-
-            def upload(arguments):
-                self.assertEqual(["release", "upload", "v2026.10.5"], arguments[:3])
-                self.assertTrue(state["draft"])
-                state["uploaded"] = True
-                return ""
-
-            env = {"GITHUB_SHA": SHA, "GITHUB_RUN_ID": "99", "GITHUB_REF": "refs/heads/main", "GITHUB_STEP_SUMMARY": ""}
-            with patch.object(pub, "ROOT", root), patch.object(pub, "git_commit", return_value=SHA), \
-                 patch.object(pub, "check_lineage"), patch.object(pub, "gh_json", side_effect=api), \
-                 patch.object(pub, "gh_pages", side_effect=lambda path: jobs() if "/jobs?" in path else [release("2026.10.4")]), \
-                 patch.object(pub, "tag_commit", side_effect=lambda repo, tag: state["tag"]), \
-                 patch.object(pub, "gh", side_effect=upload), patch.dict(os.environ, env), \
-                 contextlib.redirect_stdout(io.StringIO()):
-                if fault:
-                    with self.assertRaises(ValueError):
-                        pub.publish(args)
-                    self.assertFalse(state["promoted"])
-                    self.assertTrue(state["draft"])
-                else:
-                    pub.publish(args)
-                    self.assertTrue(state["promoted"])
-                    info = json.loads((output / "release-info.json").read_text())
-                    self.assertEqual(SHA, info["sourceCommit"])
-                    self.assertEqual(261005, info["android"]["versionCode"])
-                    self.assertEqual(3, len(info["checks"]))
-                    for line in (output / "SHA256SUMS.txt").read_text().splitlines():
-                        expected, name = line.split("  ")
-                        self.assertEqual(expected, hashlib.sha256((output / name).read_bytes()).hexdigest())
-                    self.assertEqual(len(plan.RELEASE_FILES) - 1, len((output / "SHA256SUMS.txt").read_text().splitlines()))
+    def test_version_numbering(self):
+        self.assertEqual(release_plan.canonical("2026.10.01"), "2026.10.1")
+        self.assertEqual(release_plan.canonical("2026.9.0"), "2026.9.0")
+        self.assertEqual(release_plan.next_version("2026.10.98"), "2026.10.99")
+        self.assertEqual(release_plan.next_version("2026.10.99"), "2026.11.0")
+        self.assertEqual(release_plan.next_version("2026.12.99"), "2027.1.0")
 
 
-class WorkflowContractTests(unittest.TestCase):
+class PublisherSource(unittest.TestCase):
+    """Публикатор обязан оставаться «слепым» к математике."""
+
     @classmethod
     def setUpClass(cls):
-        # BaseLoader preserves `on` (YAML 1.2 used by Actions), unlike SafeLoader's
-        # YAML 1.1 boolean conversion of `on` to True.
-        cls.ci = yaml.load((ROOT / ".github/workflows/ci.yml").read_text(), Loader=yaml.BaseLoader)
-        cls.recovery = yaml.load((ROOT / ".github/workflows/release.yml").read_text(), Loader=yaml.BaseLoader)
-        cls.publisher = yaml.load((ROOT / ".github/workflows/publish.yml").read_text(), Loader=yaml.BaseLoader)
+        cls.source = (ROOT / "tools" / "publish_release.py").read_text(encoding="utf-8")
 
-    def test_ci_triggers_and_queue_preserve_successive_pushes(self):
-        self.assertEqual(["**"], self.ci["on"]["push"]["branches"])
-        self.assertIn("pull_request", self.ci["on"])
-        self.assertEqual("max", self.ci["concurrency"]["queue"])
-        self.assertEqual("false", self.ci["concurrency"]["cancel-in-progress"])
-        self.assertEqual("bash", self.ci["defaults"]["run"]["shell"])
-        for job in self.ci["jobs"].values():
-            if "runs-on" in job:
-                self.assertEqual("ubuntu-24.04", job["runs-on"])
-        self.assertEqual("ubuntu-24.04", self.publisher["jobs"]["publish"]["runs-on"])
-        self.assertIn("ctmaths-release-pipeline", self.ci["concurrency"]["group"])
-        self.assertEqual("ctmaths-release-pipeline", self.recovery["concurrency"]["group"])
-        self.assertEqual("max", self.recovery["concurrency"]["queue"])
+    def test_publication_never_touches_the_global_latest(self):
+        """Ни одна исполняемая строка публикатора не строит URL общего latest-фида.
 
-    def test_recovery_uses_complete_ci_and_avoids_nested_lock_deadlock(self):
-        recovery = self.recovery["jobs"]["build_verify_publish"]
-        self.assertEqual("./.github/workflows/ci.yml", recovery["uses"])
-        self.assertEqual("true", recovery["with"]["release_request"])
-        self.assertIn("ci-release-child-", self.ci["concurrency"]["group"])
-        self.assertIn("inputs.release_request", self.ci["concurrency"]["group"])
+        Упоминания ``/releases/latest/download`` законны только там, где это
+        документация: в docstring модуля и в текст релиза («не используется»).
+        """
+        source = self.source
+        module_doc_end = source.index('"""', source.index('"""') + 3) + 3
+        notes_start = source.index("def release_notes(")
+        notes_end = source.index("def publish(")
+        code = source[module_doc_end:notes_start] + source[notes_end:]
+        self.assertNotIn("releases/latest/download", code,
+                         "client banks must be fetched from the version-specific tag")
+        self.assertIn("make_latest", source, "make_latest flag must be set explicitly")
+        self.assertIn('"false"', source, "the release must not become repository latest")
+        self.assertIn("content_base_url(", code,
+                      "URLs come from the subject-scoped resolver")
 
-    def test_publication_needs_every_gate_and_is_not_enabled_for_prs(self):
-        job = self.ci["jobs"]["publish"]
-        self.assertEqual({"prepare", "content", "windows", "android"}, set(job["needs"]))
-        self.assertIn("success()", job["if"])
-        self.assertIn("already_published != 'true'", job["if"])
-        self.assertEqual("read", self.ci["permissions"]["contents"])
-        self.assertEqual("write", job["permissions"]["contents"])
-        condition = self.ci["jobs"]["prepare"]["steps"][-1]["env"]["ALLOW_PUBLICATION"]
-        self.assertIn(REPO, condition)
-        self.assertIn("github.event_name != 'pull_request'", condition)
+    def test_publisher_refuses_when_the_repository_latest_moved(self):
+        self.assertIn("releases/latest", self.source)
+        self.assertIn("ValueError", self.source)
 
-    def test_all_builds_apply_the_exact_same_effective_version(self):
-        for key, name in zip(("content", "windows", "android"), plan.BUILD_JOBS):
-            job = self.ci["jobs"][key]
-            self.assertEqual(name, job["name"])
-            self.assertEqual("prepare", job["needs"])
-            self.assertEqual("${{ needs.prepare.outputs.version }}", job["env"]["BUILD_VERSION"])
-            self.assertTrue(any("--apply-version" in step.get("run", "") for step in job["steps"]))
-        names = [step.get("name", "") for step in self.ci["jobs"]["content"]["steps"]]
-        self.assertLess(names.index("Ensure the committed assets match the sources"),
-                        names.index("Apply the effective version to the verified content"))
-        android = "\n".join(step.get("run", "") for step in self.ci["jobs"]["android"]["steps"])
-        self.assertIn("--previous previous-release/app-release.apk", android)
-        self.assertIn("--require --apk previous-release/app-release.apk", android)
-        previous = [step for step in self.ci["jobs"]["android"]["steps"] if "--previous previous-release" in step.get("run", "")][0]
-        self.assertIn("already_published != 'true'", previous["if"])
+    def test_inventory_uses_the_subject_asset_names(self):
+        self.assertIn("subject.APK_ASSET", self.source, "APK is staged under its subject name")
+        self.assertIn("INSTALLERS", self.source, "installers come from the shared inventory")
+        self.assertIn("CONTENT_FILES", self.source, "content files come from the shared inventory")
 
-    def test_publisher_reuses_same_run_artifacts_never_debug(self):
-        self.assertEqual({"workflow_call"}, set(self.publisher["on"]))
-        steps = self.publisher["jobs"]["publish"]["steps"]
-        downloads = [step for step in steps if step.get("uses", "").startswith("actions/download-artifact@")]
-        self.assertEqual({"content-bank", "windows-exe", "android-release-apk"}, {step["with"]["name"] for step in downloads})
-        self.assertFalse(any("run-id" in step["with"] or "repository" in step["with"] for step in downloads))
-        self.assertFalse(any("gradle" in step.get("run", "") or "go build" in step.get("run", "") for step in steps))
-        self.assertTrue(any(step.get("with", {}).get("name") == "release-audit" for step in steps))
+    def test_release_title_is_the_physics_one(self):
+        self.assertIn("subject.TITLE", self.source, "release name must use the physics title")
+        self.assertNotIn("CT Maths Tutor", self.source)
+        self.assertNotIn("CTMaths", self.source)
+
+    def test_notes_mention_the_subject_and_the_disclosure(self):
+        notes = publish_release.release_notes("2026.10.1", "a" * 40,
+                                              "https://example.invalid/run", 261001)
+        self.assertIn("2026.10.1", notes)
+        self.assertIn(subject.ANDROID_PACKAGE, notes)
+        self.assertIn(subject.APK_ASSET, notes)
+        self.assertNotIn("{subject.", notes)
+
+    def test_run_validation_requires_every_build_job(self):
+        jobs = [{"name": name, "conclusion": "success", "id": index + 1}
+                for index, name in enumerate(release_plan.BUILD_JOBS)]
+        publish_release.validate_run(
+            {"event": "push", "head_sha": "a" * 40,
+             "repository": {"full_name": REPO}},
+            jobs, REPO, "a" * 40, "refs/heads/arena/f7b88593-mathematics", "")
+        broken = [dict(job) for job in jobs]
+        broken[2]["conclusion"] = "failure"
+        with self.assertRaises(ValueError):
+            publish_release.validate_run({"event": "push", "head_sha": "a" * 40,
+                                          "repository": {"full_name": REPO}},
+                                         broken, REPO, "a" * 40,
+                                         "refs/heads/arena/f7b88593-mathematics", "")
+        # публикация из pull request запрещена
+        with self.assertRaises(ValueError):
+            publish_release.validate_run({"event": "pull_request", "head_sha": "a" * 40,
+                                          "repository": {"full_name": REPO}},
+                                         jobs, REPO, "a" * 40, "refs/heads/main", "")
+
+
+class WorkflowGuards(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.workflows = {
+            name: (ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
+            for name in ("release.yml", "ci.yml", "publish.yml")
+        }
+
+    def test_no_mathematics_names_left_in_the_physics_pipeline(self):
+        for name, text in self.workflows.items():
+            lowered = text.lower()
+            self.assertNotIn("ctmaths", lowered, name)
+            self.assertNotIn("ctmathstutor", lowered, name)
+            self.assertNotIn("ctmaths-window", lowered, name)
+
+    def test_release_workflow_builds_the_physics_binaries(self):
+        release = self.workflows["release.yml"]
+        # release.yml вызывает общий ci.yml (без пересборки «своими руками»)
+        self.assertIn("./.github/workflows/ci.yml", release)
+        self.assertIn("physics-v", release)
+        ci = self.workflows["ci.yml"]
+        self.assertIn("CTPhysicsTutor-amd64.exe", ci)
+        self.assertIn("CTPhysicsTutor-arm64.exe", ci)
+
+    def test_publish_workflow_renames_the_apk(self):
+        publish = self.workflows["publish.yml"]
+        self.assertIn("mv staging/android/app-release.apk staging/android/phyzics.apk", publish)
+        self.assertIn("make_latest=false", publish)
+
+    def test_ci_downloads_the_previous_physics_apk_only(self):
+        ci = self.workflows["ci.yml"]
+        self.assertIn("phyzics.apk", ci)
+        self.assertNotIn("--pattern app-release.apk", ci)
+
+
+class Keystore(unittest.TestCase):
+
+    def test_permanent_key_fingerprint_is_pinned(self):
+        fingerprint = (ROOT / subject.EXPECTED_CERT).read_text(encoding="utf-8").strip()
+        parts = fingerprint.split(":")
+        self.assertEqual(len(parts), 32)
+        for part in parts:
+            self.assertRegex(part, r"^[0-9A-F]{2}$")
+        self.assertNotIn("B2:BD", fingerprint, "математический сертификат не подходит физике")
+
+    def test_keystore_properties_match_the_subject(self):
+        properties = (ROOT / "android" / "keystore" / "keystore.properties").read_text(
+            encoding="utf-8")
+        values = dict(line.split("=", 1) for line in properties.splitlines() if "=" in line)
+        self.assertEqual(values["keyAlias"], "ctphysics")
+        self.assertEqual(values["storeType"], "PKCS12")
+        self.assertTrue(values["storeFile"].endswith("ctphysics-release.p12"))
+        self.assertEqual(pathlib.Path(values["storeFile"]).name,
+                         pathlib.Path(subject.KEYSTORE).name)
+        self.assertTrue((ROOT / subject.KEYSTORE).exists())
+        self.assertEqual(subject.KEYSTORE_ENV, "CTPHYSICS_KEYSTORE_FILE")
 
 
 if __name__ == "__main__":

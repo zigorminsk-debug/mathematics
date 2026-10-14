@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CTMathsTutor"
+rootProject.name = "CTPhysicsTutor"
 include(":app")
