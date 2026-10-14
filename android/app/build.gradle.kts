@@ -50,11 +50,11 @@ require(appVersionName == contentVersion) { "VERSION_NAME must match VERSION" }
 
 
 android {
-    namespace = "by.ziv.ctmaths"
+    namespace = "by.ziv.ctrussian"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "by.ziv.ctmaths"
+        applicationId = "by.ziv.ctrussian"
         minSdk = 24
         targetSdk = 34
         versionCode = appVersionCode
@@ -92,7 +92,7 @@ android {
             // Тот же постоянный ключ, что и у релиза: debug-ключ, который Gradle
             // сам генерирует на каждой машине и на каждом CI-раннере, разный,
             // поэтому debug-сборка с нового раннера не вставала поверх прежней.
-            // Пакет у debug всё равно отдельный (by.ziv.ctmaths.debug) — поверх
+            // Пакет у debug всё равно отдельный (by.ziv.ctrussian.debug) — поверх
             // релиза он не встанет по определению Android, только рядом.
             if (signingConfigs.findByName("release") != null) {
                 signingConfig = signingConfigs.getByName("release")

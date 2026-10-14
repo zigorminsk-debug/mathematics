@@ -1,146 +1,66 @@
-# Архитектура / Architecture
+# Архитектура / Architecture — «Репетитор ЦТ: Русский язык»
 
-Проект сознательно построен вокруг **одного общего интерфейса**: и Android, и Windows
-запускают одну и ту же веб-страницу (`webapp/`), а различия платформ спрятаны за тонким
-слоем моста — `window.CTNative` (Kotlin) в Android и локальный HTTP API `/api/...` в Go.
+Один общий интерфейс (`webapp/`) работает и в Android (WebView), и в Windows (Go-сервер на
+loopback + окно Edge/Chrome `--app`); различия платформ — за мостом: `window.CTNative`
+(Kotlin) и локальный HTTP API `/api/...` (Go).
 
 ```
-                        content_src/*.py            (авторство заданий, проверка точной арифметикой)
-                                │
-                    tools/build_content.py
-                                │
-                         dist/content/*.json
-                                │
-                    tools/sync_assets.py   (dist/ — артефакт: в git только копии для приложений)
-                    ┌───────────┴────────────┐
-                    ▼                        ▼
-        windows/web/  (go:embed)   android/app/src/main/assets/webapp/
-                    │                        │
-        windows/main.go + store.go   MainActivity.kt + NativeBridge.kt
-                    │                        │
-              браузер / окно --app      WebView (WebViewAssetLoader)
-                    └───────────┬────────────┘
-                                ▼
-                        webapp/core.js  (мост, i18n, проверка ответов, математика, статистика)
-                        webapp/app.js   (экраны: тест, разбор, статистика, инструменты, настройки)
+content_src/*.py  (пулы материала, тексты, правила, схемы, чекер, векторы)
+        │  tools/build_content.py  — план 40 заданий, квоты РИКЗ 2026, Unicode, связи, векторы
+        ▼
+dist/content/*.json (bank, analogous, topics, rules, ui_strings, mistakes, answer_vectors, version)
+        │  tools/sync_assets.py  — точное зеркало (лишние файлы удаляются)
+   ┌────┴─────────────────────────┐
+   ▼                              ▼
+windows/web/ (go:embed)      android/app/src/main/assets/webapp/
+windows/main.go, store.go    MainActivity.kt, NativeBridge.kt, UpdateFeed.kt, AnswerChecker.kt
+   └────────────┬─────────────────┘
+                ▼
+webapp/core.js — мост, i18n, ПРЕДМЕТНЫЙ ЧЕКЕР, загрузка только своего банка, аналитика
+webapp/app.js  — экраны, элементы ответа по типам, карточки правил, схемы, «Правила», отчёт
 ```
 
-## Слои
+## Content (`content_src/`, `tools/`)
 
-### 1. Контент (`content_src/`, `tools/`)
+See `docs/CONTENT.md`. The builder produces language-neutral Russian material plus
+bilingual instructions/explanations; Russian text is never translated (EN switches only
+the interface/explanations). Android string resources are generated from `ui_strings.py`.
 
-* `kit.py` — модель `Task`, форматирование чисел (русская запятая), точная арифметика
-  (`Fraction`, разложение корней, `quad`), портируемая проверка ответов `check_answer()`,
-  формат банка JSON.
-* `periods.py` — единственный список периодов ЦТ: модуль, состав частей (А/В), время и
-  подписи; попадает в `version.json`.
-* `task_bank_2021.py … task_bank_2026.py` — по 30 заданий формата ЦТ (А1…А18, В1…В12).
-* `templates.py` + `templates_extra.py` — 25 детерминированных генераторов
-  (`RNG = random.Random(20260114)`); вместе они дают 552 однотипных задания для закрепления
-  и тренировки.
-* `formulas.py`, `ui_strings.py`, `mistakes.py` — справочник формул, каталог строк интерфейса
-  (RU/EN), каталог типичных ошибок по тегам заданий.
-* `study.py` — конспект «что изучить» по каждой теме и её разделы формул: при неверном ответе
-  разбор сразу открывает тему задания (`topics.json` → `study`), а экран `#/study/<тема>`
-  показывает конспект, формулы и разобранные примеры.
-* `theory.py` — 56 офлайн-материалов с определениями, правилами/теоремами и примерами
-  на двух языках (`topics.json` → `lessons`); каждый пункт конспекта и формула
-  ссылаются на соответствующий материал, ссылки проверяются при сборке.
-* `intuition.py` — бытовые объяснения во всех 56 уроках (`lessons[].everyday`);
-  `diagrams.py` — 52 локальные typed SVG схемы в 51 уроке (`figures` + refs),
-  bilingual labels/captions и независимо проверяемая математическая модель.
-* `tools/build_content.py` — единственный источник истины: импортирует модули, запускает
-  **каждый** `check()` и падает при любой неверной математике, затем пишет `dist/content/*.json`
-  и манифест `version.json` (SHA-256 каждого файла).
-* `tools/sync_assets.py` — раскладывает `webapp/` и `dist/content/` в оба приложения и
-  в тестовые ресурсы Android; режим `--check` валит CI, если копии разъехались с источником.
+## Answer checking
 
-### 2. Общий интерфейс (`webapp/`)
+`checker.py` (reference) = `CT.answer.checkSpec` (core.js) = `AnswerChecker.check` (Kotlin).
+Types: multi (part A, several of five), single, numbers (unordered set / ordered sequence),
+word (explicit case/ё/hyphen policy, significant spaces), stress (acute or capitalised
+vowel), match (А1Б2…), integer. Parity: `answer_vectors.json` (123 hand-written vectors)
+in all three implementations, plus every canonical task answer in JS.
 
-Ни сборщиков, ни CDN: обычные `<script>`, поэтому страница работает и из `file://`,
-и из ассетного домена Android, и с локального сервера Go.
+## Interface (`webapp/app.js`)
 
-* `core.js` — `CT.util`, `CT.i18n` (каталог строк, `%s`-подстановки), `CT.bridge`
-  (автовыбор между `CTNative` и `fetch('api/...')`), `CT.content` (банк, аналоги, формулы,
-  ошибки, подбор аналогичных заданий по тегам), `CT.answer` (проверка ответов),
-  `CT.math` (безопасный парсер выражений и построение графиков — без `eval`),
-  `CT.analytics` (статистика, серии дней, слабые темы), `CT.store` (blobs с debounce), `CT.charts`.
-* `app.js` — экраны: главная, список вариантов, экзамен, прохождение теста (таймер, навигация,
-  отметки), результаты, **разбор ошибок с однотипными заданиями**, статистика, бесконечная
-  тренировка по темам, сборник формул, настройки, обновление, «О программе» с кликабельными
-  контактами. Кликабельные конспекты, названия разделов и формулы открывают окно теории.
-  Одноуровневый возврат из теории в инструмент «Формулы» сохраняет исходные DOM-узлы,
-  строку поиска и прокрутку; «Назад» Android закрывает слой, не меняя сессию/ответ.
-  Материалы переключаются RU/EN в самом окне. Экспорт отчёта — самостоятельный HTML-файл со статистикой.
+- Screens: home, variants, exam (120 min timer, no checking/hints), run (training with
+  analysis after each answer), result, mistakes (by rule, reinforcement with analogs),
+  practice by area, study by area (rule list → cards), **«Правила»** (search over all
+  cards), statistics (areas, weakest rules), tools (rule search, memos, scratchpad with
+  ё/«»/—/stress mark), settings (RU/EN, theme, text 0.9–1.3, exam minutes, goal), about.
+- Answer controls: option toggles (several selections), numbered chips + input (order
+  badges for sequences), word input with autocorrect/spellcheck/capitalisation off,
+  stress letter buttons, match selects, numeric input.
+- Remediation is rule-specific: misjudged options of a set answer → their `itemRules` →
+  typical-error diagnosis, rule cards and analogous exercises of those rules.
+- Visuals: typed SVG (viewer: zoom 100–300 %, internal pan, one-level Back restoring
+  DOM/scroll/focus), semantic HTML tables (caption/th, focusable scroll region) and decision
+  trees (nested lists with Да/Нет). No raw markup/URLs/eval anywhere (validated at build
+  and again in the renderer).
+- Calculator, plotter and maths formula sheets are removed.
 
-### 3. Android (`android/`)
+## Native shells
 
-* `MainActivity.kt` — WebView, `WebViewAssetLoader` (страница получает нормальный
-  `https://appassets.androidplatform.net` origin, поэтому работают fetch и localStorage),
-  обработка кнопки «назад» через `CT.onAndroidBack`, внешние ссылки (почта, телефон,
-  WhatsApp, GitHub) открываются системными приложениями.
-* `NativeBridge.kt` — `window.CTNative`: состояние, чтение/запись JSON-blobs, выдача банка с
-  приоритетом скачанного обновления над ассетами, загрузка пакета обновлений с проверкой
-  SHA-256, экспорт отчёта, тосты, `keepScreenOn`, выход.
-* `AnswerChecker.kt` + `AnswerCheckerTest.kt` — нативный порт проверки ответов и тест
-  по общим векторам (паритет с Python и JavaScript).
+- Android (`by.ziv.ctrussian`): WebViewAssetLoader host, Back delegated to the page,
+  text zoom follows the system font scale, private storage per package (statistics are
+  separate from the mathematics app), subject-scoped updates (`UpdateFeed.kt`).
+- Windows (`CTRussianTutor-*.exe`): stdlib-only Go server on 127.0.0.1, data in
+  `%APPDATA%\CTRussianTutor`, browser profile `ctrussian-window`, subject-scoped updates
+  (`store.go`), atomic content packs, foreign/stale overlays ignored.
 
-### 4. Windows (`windows/`)
+## Release
 
-* `main.go` — один бинарник: `go:embed all:web`, локальный сервер на свободном порту
-  loopback, маршруты `/api/state|blob|update|report|open-folder|quit`, выдача банка
-  (обновлённый поверх встроенного), запуск окна в режиме приложения Edge/Chrome, выход по
-  простою (`--idle-exit`), флаги `--portable`, `--data`, `--no-browser`, `--version`.
-* `store.go` — данные в `%APPDATA%\CTMathsTutor`: blobs прогресса, каталог `content/` для
-  скачанных пакетов, отчёты; обновление банка по манифесту с проверкой SHA-256.
-* `main_test.go` — тесты хранилища, оверлея контента, установки пакета, отклонения
-  подделанного пакета и HTTP-обработчиков.
-
-## Проверка ответов (три реализации, одни векторы)
-
-| Платформа | Файл | Назначение |
-|---|---|---|
-| Python | `content_src/kit.py` | авторская проверка при сборке банка |
-| JavaScript | `webapp/core.js` → `CT.answer` | проверка в интерфейсе (обе ОС) |
-| Kotlin | `android/.../AnswerChecker.kt` | нативная проверка, модульные тесты |
-
-Алгоритм — четыре рубежа:
-
-1. каноническое совпадение строк (пробелы, юникодные минусы, запятая/точка, `π`→`pi`,
-   `√`→`sqrt`, префиксы `ответ:`, `x =`, внешние скобки);
-2. задание с выбором варианта на этом останавливается — «повезло с числом» не считается
-   ответом (`8/2` не принимается вместо `4`);
-3. точное числовое равенство (дроби, десятичные, `12.`, `.5`); округление, написанное рукой,
-   допускается только для дробных ответов и в пределах 5·10⁻⁴ (`0,833` для `5/6`), а целые
-   сравниваются точно (`1000,5` ≠ `1000`);
-4. ответы, записанные выражением (`√2/2`, `2π`, `6√2`), сравниваются численно с допуском
-   10⁻³ — но только если хотя бы одна сторона записана выражением.
-
-Векторы (`dist/content/answer_vectors.json`) генерирует `tools/build_content.py`, а проверяют
-все три реализации: `node tests/answer_parity.js`, `gradle testDebugUnitTest` и сам сборщик
-банка.
-
-## Поток данных обновления
-
-1. Пользователь нажимает «Проверить обновления» (или автообновление при запуске).
-2. Приложение загружает `release/latest/download/version.json`, сравнивает `contentVersion`.
-3. Для каждого файла из манифеста проверяется SHA-256, файл кладётся в приватный каталог
-   `content/` (Android: `filesDir/content`, Windows: `%APPDATA%\CTMathsTutor\data\content`).
-4. При следующем чтении банка побеждает скачанная версия; встроенная остаётся резервом.
-5. Прогресс, настройки и незавершённая сессия живут в других файлах и не затрагиваются.
-
-## Офлайн-схемы и вложенный viewer
-
-`CT.content` загружает `topics.figures`; `app.js` создаёт SVG только из allowlisted
-примитивов с конечными координатами, без разметки/eval/URLs. Caption остаётся
-доступным даже при повреждённой схеме; один плохой примитив отвергает весь SVG.
-Все тексты задаются через textContent. CSS использует общую light/dark палитру;
-цвет дополнен типом линии, подписями и legend.
-
-Обычная карточка схемы → вложенный modal viewer (100–300%, zoom buttons,
-внутренняя прокрутка). Используется существующий DOM stack: Back восстанавливает
-родительский урок/инструмент, scroll и focus. Изменение языка сохраняет масштаб и
-переводит caption/labels; после возврата переводится родитель. Прогресс/ответы
-не изменяются. Общий JS/CSS и JSON одинаковы в Android/Windows; native bridge
-для SVG не расширялся. Старый UI может игнорировать новые поля банка, но просмотр
-схем/пояснений требует обновлённого APK/EXE.
+See `docs/RELEASE.md` (family `russian-v…`, `make_latest=false`, latest verified unchanged).

@@ -2,13 +2,14 @@ package main
 
 // store.go — постоянное хранилище приложения Windows.
 //
-// Раскладка данных (каталог задаётся --data, иначе %APPDATA%\CTMathsTutor,
-// при --portable — рядом с исполняемым файлом):
+// Раскладка данных (каталог задаётся --data, иначе %APPDATA%\CTRussianTutor,
+// при --portable — рядом с исполняемым файлом). Данные отделены от других
+// репетиторов (математика, физика): свой каталог, свой профиль окна.
 //
 //	data/progress.json   успеваемость ученика (попытки, статистика по темам)
 //	data/settings.json   язык, тема оформления, длительность экзамена, цель дня
 //	data/session.json    незавершённый тест (можно продолжить)
-//	data/content/*.json  банк заданий, скачанный «поверх» встроенного (обновление)
+//	data/content/*.json  проверенный банк ЭТОГО предмета (выпуск russian-v…) поверх встроенного
 //	reports/*.html        выгруженные отчёты о прогрессе
 //
 // On-disk layout of the Windows app: JSON blobs, a content overlay that shadows
@@ -45,6 +46,8 @@ const maxBlobBytes = 32 << 20
 type Store struct {
 	root      string
 	http      *http.Client
+	api       string // Releases API of the repository (overridable in tests)
+	downloads string // tag-specific download root (overridable in tests)
 	contentMu sync.RWMutex
 	updateMu  sync.Mutex
 }
@@ -71,7 +74,7 @@ func NewStore(base string) (*Store, error) {
 			}
 		}
 	}
-	return &Store{root: root, http: &http.Client{Timeout: 45 * time.Second}}, nil
+	return &Store{root: root, http: &http.Client{Timeout: 45 * time.Second}, api: releasesAPI, downloads: downloadRoot}, nil
 }
 
 // Root returns the data directory ("data").
@@ -179,11 +182,46 @@ func (s *Store) WriteReport(kind string, html []byte) (string, error) {
 
 // ---------------------------------------------------------------- updates ---
 
-// contentManifest mirrors dist/content/version.json published with a release.
+// Subject identity of this executable (subject.json). The repository-wide
+// GitHub "latest" belongs to the mathematics tutor, so it is never used: the
+// release is chosen through the paginated Releases API and every file comes
+// from that release's tag-specific URL. A pack of another subject is rejected.
+const (
+	subjectID       = "russian"
+	subjectPackage  = "by.ziv.ctrussian"
+	subjectTag      = "russian-v"
+	contentSchema   = 2
+	contentProtocol = 2
+	releasesAPI     = "https://api.github.com/repos/zigorminsk-debug/mathematics/releases"
+	downloadRoot    = "https://github.com/zigorminsk-debug/mathematics/releases/download/"
+	releasePageSize = 100
+	maxReleasePages = 10
+)
+
+// contentFiles is the exact content inventory of a subject manifest.
+var contentFiles = []string{"analogous.json", "answer_vectors.json", "bank.json", "mistakes.json", "rules.json",
+	"topics.json", "ui_strings.json"}
+
+// releaseFiles is the exact asset inventory of a complete subject release.
+var releaseFiles = append(append([]string{}, contentFiles...), "version.json", "release-info.json", "SHA256SUMS.txt",
+	"app-release.apk", "CTRussianTutor-amd64.exe", "CTRussianTutor-arm64.exe")
+
+var (
+	releaseTag = regexp.MustCompile(`^russian-v(20[0-9]{2})\.([1-9]|1[0-2])\.(0|[1-9][0-9]?)$`)
+	sha256Hex  = regexp.MustCompile(`^[0-9a-f]{64}$`)
+	versionRe  = regexp.MustCompile(`^[0-9]+(\.[0-9]+)*$`)
+)
+
+// contentManifest mirrors dist/content/version.json of a subject release.
 type contentManifest struct {
-	ContentVersion string `json:"contentVersion"`
-	BaseURL        string `json:"baseUrl"`
-	Files          map[string]struct {
+	Schema          int    `json:"schema"`
+	Subject         string `json:"subject"`
+	Package         string `json:"package"`
+	ContentProtocol int    `json:"contentProtocol"`
+	Tag             string `json:"tag"`
+	ContentVersion  string `json:"contentVersion"`
+	BaseURL         string `json:"baseUrl"`
+	Files           map[string]struct {
 		SHA256 string `json:"sha256"`
 		Bytes  int64  `json:"bytes"`
 	} `json:"files"`
@@ -191,6 +229,23 @@ type contentManifest struct {
 		Bank      int `json:"bank"`
 		Analogous int `json:"analogous"`
 	} `json:"counts"`
+}
+
+// githubRelease is the part of a Releases API entry the channel needs. Missing
+// draft/prerelease flags fail closed (treated as not stable).
+type githubRelease struct {
+	TagName    string `json:"tag_name"`
+	Draft      *bool  `json:"draft"`
+	Prerelease *bool  `json:"prerelease"`
+	Assets     []struct {
+		Name  string `json:"name"`
+		State string `json:"state"`
+	} `json:"assets"`
+}
+
+type releaseCandidate struct {
+	Tag     string
+	Version string
 }
 
 // UpdateResult is returned to the interface (and shown as a toast).
@@ -202,9 +257,112 @@ type UpdateResult struct {
 	Message    string `json:"message,omitempty"`
 	Previous   string `json:"previous,omitempty"`
 	Downloaded int64  `json:"downloaded,omitempty"`
+	Tag        string `json:"tag,omitempty"`
 }
 
-const defaultFeed = "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
+// versionOfTag returns the canonical version of a tag of THIS family.
+func versionOfTag(tag string) (string, bool) {
+	match := releaseTag.FindStringSubmatch(tag)
+	if match == nil {
+		return "", false
+	}
+	return match[1] + "." + match[2] + "." + match[3], true
+}
+
+// completeInventory: exactly the expected, fully uploaded assets.
+func completeInventory(release githubRelease) bool {
+	if len(release.Assets) != len(releaseFiles) {
+		return false
+	}
+	names := map[string]bool{}
+	for _, asset := range release.Assets {
+		if asset.State != "uploaded" {
+			return false
+		}
+		names[asset.Name] = true
+	}
+	for _, name := range releaseFiles {
+		if !names[name] {
+			return false
+		}
+	}
+	return len(names) == len(releaseFiles)
+}
+
+// selectRelease picks the highest canonical version among published, complete
+// releases of this subject family (drafts, prereleases and foreign families —
+// the mathematics "v…" latest included — are ignored).
+func selectRelease(releases []githubRelease) *releaseCandidate {
+	var best *releaseCandidate
+	for _, release := range releases {
+		if release.Draft == nil || *release.Draft || release.Prerelease == nil || *release.Prerelease {
+			continue
+		}
+		version, ok := versionOfTag(release.TagName)
+		if !ok || !completeInventory(release) {
+			continue
+		}
+		if best == nil || compareContentVersions(version, best.Version) > 0 {
+			best = &releaseCandidate{Tag: release.TagName, Version: version}
+		}
+	}
+	return best
+}
+
+// manifestError checks a manifest before any content file is downloaded.
+func manifestError(manifest contentManifest, expected *releaseCandidate) error {
+	switch {
+	case manifest.Subject != subjectID:
+		return errors.New("manifest belongs to another subject")
+	case manifest.Package != subjectPackage:
+		return errors.New("manifest belongs to another package")
+	case manifest.Schema != contentSchema || manifest.ContentProtocol != contentProtocol:
+		return errors.New("unsupported manifest schema")
+	case !versionRe.MatchString(manifest.ContentVersion):
+		return errors.New("manifest has no valid contentVersion")
+	}
+	if expected != nil && (manifest.ContentVersion != expected.Version || manifest.Tag != expected.Tag) {
+		return errors.New("manifest does not match the selected release tag")
+	}
+	if len(manifest.Files) != len(contentFiles) {
+		return errors.New("manifest must list exactly the content files")
+	}
+	for _, name := range contentFiles {
+		meta, ok := manifest.Files[name]
+		if !ok || !sha256Hex.MatchString(meta.SHA256) || meta.Bytes <= 0 {
+			return fmt.Errorf("manifest entry %s is missing or has no SHA-256/size", name)
+		}
+	}
+	return nil
+}
+
+// overlayManifestError: a stored overlay is usable only for this subject/package.
+func overlayManifestError(manifest contentManifest) error {
+	if manifest.Subject != subjectID || manifest.Package != subjectPackage {
+		return errors.New("foreign overlay")
+	}
+	if !versionRe.MatchString(manifest.ContentVersion) {
+		return errors.New("overlay version unknown")
+	}
+	return nil
+}
+
+// bankError rejects a bank of another subject (for example the mathematics bank).
+func bankError(data []byte) error {
+	var bank struct {
+		Meta struct {
+			Subject string `json:"subject"`
+			Package string `json:"package"`
+		} `json:"meta"`
+	}
+	if err := json.Unmarshal(data, &bank); err != nil {
+		return err
+	}
+	if bank.Meta.Subject != subjectID || bank.Meta.Package != subjectPackage {
+		return errors.New("foreign bank rejected")
+	}
+	return nil
+}
 
 // compareContentVersions сравнивает версии банка по числовым компонентам:
 // "2026.10.3" новее "2026.9.9", хотя лексикографически было бы наоборот.
@@ -236,17 +394,48 @@ func compareContentVersions(left, right string) int {
 	return 0
 }
 
-// CheckUpdates downloads the manifest, verifies every file (SHA-256) and installs
-// the ones that differ into the content overlay. The installed version keeps
-// working when the network is unavailable.
-func (s *Store) CheckUpdates(feed, current string) UpdateResult {
+// resolveRelease pages through the Releases API (100 per page, bounded).
+func (s *Store) resolveRelease() (*releaseCandidate, error) {
+	var all []githubRelease
+	for page := 1; page <= maxReleasePages; page++ {
+		data, err := s.fetchWith(fmt.Sprintf("%s?per_page=%d&page=%d", s.api, releasePageSize, page), true)
+		if err != nil {
+			return nil, err
+		}
+		var batch []githubRelease
+		if err := json.Unmarshal(data, &batch); err != nil {
+			return nil, fmt.Errorf("releases page %d: %w", page, err)
+		}
+		all = append(all, batch...)
+		if len(batch) < releasePageSize {
+			break
+		}
+	}
+	return selectRelease(all), nil
+}
+
+// CheckUpdates installs a newer, fully verified content pack of THIS subject.
+// An explicit override (tests, a local feed) skips only the release selection;
+// the manifest/bank subject checks and every checksum still apply.
+func (s *Store) CheckUpdates(override, current string) UpdateResult {
 	s.updateMu.Lock()
 	defer s.updateMu.Unlock()
+	var candidate *releaseCandidate
+	feed := strings.TrimRight(strings.TrimSpace(override), "/")
 	if feed == "" {
-		feed = defaultFeed
+		found, err := s.resolveRelease()
+		if err != nil {
+			return UpdateResult{Status: "offline", Message: err.Error(), Version: current}
+		}
+		if found == nil {
+			return UpdateResult{Status: "uptodate", Version: current, Message: "no published release of this subject yet"}
+		}
+		if compareContentVersions(found.Version, current) <= 0 {
+			return UpdateResult{Status: "uptodate", Version: current, Message: "already up to date", Tag: found.Tag}
+		}
+		candidate = found
+		feed = strings.TrimRight(s.downloads, "/") + "/" + found.Tag
 	}
-	feed = strings.TrimRight(feed, "/")
-
 	manifestData, err := s.fetch(feed + "/version.json")
 	if err != nil {
 		return UpdateResult{Status: "offline", Message: err.Error(), Version: current}
@@ -255,11 +444,11 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 	if err := json.Unmarshal(manifestData, &manifest); err != nil {
 		return UpdateResult{Status: "error", Message: "manifest: " + err.Error(), Version: current}
 	}
-	if !regexp.MustCompile(`^[0-9]+(\.[0-9]+)*$`).MatchString(manifest.ContentVersion) || len(manifest.Files) == 0 {
-		return UpdateResult{Status: "error", Message: "manifest is empty", Version: current}
+	if err := manifestError(manifest, candidate); err != nil {
+		return UpdateResult{Status: "error", Message: err.Error(), Version: current}
 	}
 	if compareContentVersions(manifest.ContentVersion, current) <= 0 {
-		// A build can be ahead of releases/latest. Never downgrade its bank.
+		// A build can be ahead of the newest release. Never downgrade its bank.
 		return UpdateResult{Status: "uptodate", Version: current, Message: "already up to date"}
 	}
 	stage, err := os.MkdirTemp(s.root, "content-update-")
@@ -269,50 +458,43 @@ func (s *Store) CheckUpdates(feed, current string) UpdateResult {
 	defer os.RemoveAll(stage)
 
 	var total int64
-	installed := 0
-	names := make([]string, 0, len(manifest.Files))
-	for name := range manifest.Files {
-		names = append(names, name)
-	}
+	names := append([]string{}, contentFiles...)
 	sort.Strings(names)
 	for _, name := range names {
 		meta := manifest.Files[name]
-		base := strings.TrimSuffix(name, ".json")
-		if name == "version.json" || !strings.HasSuffix(name, ".json") || !blobName.MatchString(base) {
-			return UpdateResult{Status: "error", Version: current, Message: "invalid content filename"}
-		}
-		if len(meta.SHA256) != 64 {
-			return UpdateResult{Status: "error", Version: current, Message: name + ": missing checksum"}
-		}
 		data, err := s.fetch(feed + "/" + name)
 		if err != nil {
 			return UpdateResult{Status: "error", Version: current, Message: name + ": " + err.Error()}
 		}
 		sum := sha256.Sum256(data)
-		if !strings.EqualFold(hex.EncodeToString(sum[:]), meta.SHA256) {
-			return UpdateResult{Status: "error", Version: current, Message: name + ": checksum mismatch"}
+		if !strings.EqualFold(hex.EncodeToString(sum[:]), meta.SHA256) || meta.Bytes != int64(len(data)) {
+			return UpdateResult{Status: "error", Version: current, Message: name + ": checksum or size mismatch"}
 		}
-		if !json.Valid(data) || (meta.Bytes > 0 && meta.Bytes != int64(len(data))) {
-			return UpdateResult{Status: "error", Version: current, Message: name + ": invalid JSON or size"}
+		if !json.Valid(data) {
+			return UpdateResult{Status: "error", Version: current, Message: name + ": invalid JSON"}
+		}
+		if name == "bank.json" || name == "analogous.json" {
+			if err := bankError(data); err != nil {
+				return UpdateResult{Status: "error", Version: current, Message: name + ": " + err.Error()}
+			}
 		}
 		if err := os.WriteFile(filepath.Join(stage, name), data, 0o644); err != nil {
 			return UpdateResult{Status: "error", Version: current, Message: name + ": " + err.Error()}
 		}
 		total += int64(len(data))
-		installed++
 	}
-	// сам манифест тоже кладём в оверлей: из него приложение узнаёт установленную
-	// версию банка (в списке files его нет — он описывает остальные файлы)
+	// The manifest is stored too: it carries the installed version and subject.
 	if err := os.WriteFile(filepath.Join(stage, "version.json"), manifestData, 0o644); err != nil {
 		return UpdateResult{Status: "error", Version: current, Message: "version.json: " + err.Error()}
 	}
 	if err := s.installContentPack(stage); err != nil {
 		return UpdateResult{Status: "error", Version: current, Message: err.Error()}
 	}
+	tag := manifest.Tag
 	return UpdateResult{
-		Status: "updated", Version: manifest.ContentVersion, Previous: current,
-		Files: installed, NewTasks: manifest.Counts.Bank + manifest.Counts.Analogous,
-		Downloaded: total, Message: "installed " + manifest.ContentVersion,
+		Status: "updated", Version: manifest.ContentVersion, Previous: current, Files: len(names),
+		NewTasks: manifest.Counts.Bank + manifest.Counts.Analogous, Downloaded: total, Tag: tag,
+		Message: "installed " + manifest.ContentVersion,
 	}
 }
 
@@ -366,11 +548,21 @@ func secureURL(raw string) bool {
 
 // fetch downloads a small file with a hard size limit (a content file is a few
 // hundred kilobytes; the limit protects against a hostile feed).
-func (s *Store) fetch(url string) ([]byte, error) {
+func (s *Store) fetch(url string) ([]byte, error) { return s.fetchWith(url, false) }
+
+func (s *Store) fetchWith(url string, api bool) ([]byte, error) {
 	if !secureURL(url) {
 		return nil, fmt.Errorf("refusing non-https url %q", url)
 	}
-	response, err := s.http.Get(url)
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	request.Header.Set("User-Agent", "CTRussianTutor/"+appVersion)
+	if api {
+		request.Header.Set("Accept", "application/vnd.github+json")
+	}
+	response, err := s.http.Do(request)
 	if err != nil {
 		return nil, err
 	}

@@ -2,6 +2,8 @@ name: Publish verified artifacts
 
 # Callable only after all build/check jobs. Never triggered from PR artifacts,
 # never recompiles native binaries, never overwrites a published release.
+# Subject release: make_latest=false; the repository latest (mathematics) must
+# be identical before and after (tools/publish_release.py verifies it).
 on:
   workflow_call:
     inputs:
@@ -22,7 +24,7 @@ defaults:
 
 jobs:
   publish:
-    name: Promote verified artifacts to latest
+    name: Publish verified subject release (make_latest=false)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -47,7 +49,7 @@ jobs:
         with:
           name: android-release-apk
           path: staging/android
-      - name: Verify inventory, stage draft, publish and confirm latest
+      - name: Verify inventory, stage draft, publish (not latest) and confirm math latest unchanged
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_VERSION: ${{ inputs.version }}

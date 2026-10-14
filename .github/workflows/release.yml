@@ -1,10 +1,10 @@
 name: Release
 
-# Recovery/manual and explicit-tag entry points use the SAME complete CI gates
+# Subject «russian»: recovery/manual and explicit russian-v… tag entry points use the SAME complete CI gates
 # and SAME artifacts as automatic branch publication; no unverified rebuilds.
 on:
   push:
-    tags: ['v*']
+    tags: ['russian-v*']
   workflow_dispatch:
     inputs:
       tag:
@@ -17,17 +17,18 @@ permissions:
   contents: write
   actions: read
 
-# This is the same outer lock as trusted branch CI. The reusable CI caller
-# receives release_request=true so it uses a different inner group (no deadlock).
+# This is the same outer lock as trusted branch CI of THIS subject (never the
+# mathematics lock). The reusable CI caller receives release_request=true so it
+# uses a different inner group (no deadlock).
 concurrency:
-  group: ctmaths-release-pipeline
+  group: ctrussian-release-pipeline
   queue: max
   cancel-in-progress: false
 
 jobs:
   build_verify_publish:
     name: Build, verify and release
-    if: ${{ github.repository == 'zigorminsk-debug/mathematics' && (github.ref_type == 'branch' || startsWith(github.ref, 'refs/tags/v')) }}
+    if: ${{ github.repository == 'zigorminsk-debug/mathematics' && (github.ref_type == 'branch' || startsWith(github.ref, 'refs/tags/russian-v')) }}
     uses: ./.github/workflows/ci.yml
     with:
       publish: true

@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "subject": "russian",
+  "title": {
+    "ru": "Репетитор ЦТ: Русский язык",
+    "en": "CT Russian Tutor"
+  },
+  "repository": "zigorminsk-debug/mathematics",
+  "tagPrefix": "russian-v",
+  "contentProtocol": 2,
+  "android": {
+    "applicationId": "by.ziv.ctrussian",
+    "debugApplicationId": "by.ziv.ctrussian.debug",
+    "keystore": "android/keystore/ctrussian-release.p12",
+    "certificateSha256File": "android/keystore/expected-cert-sha256.txt"
+  },
+  "windows": {
+    "binaryStem": "CTRussianTutor",
+    "dataDir": "CTRussianTutor",
+    "browserProfile": "ctrussian-window"
+  },
+  "release": {
+    "pipelineLock": "ctrussian-release-pipeline",
+    "makeLatest": false,
+    "foreignTagPrefixes": ["v", "physics-v"],
+    "foreignPackages": ["by.ziv.ctmaths", "by.ziv.ctphysics"]
+  }
+}

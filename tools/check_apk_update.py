@@ -13,8 +13,9 @@ import re
 import subprocess
 import sys
 
+from subject import PACKAGE  # explicit subject configuration (subject.json), never guessed
+
 ROOT = Path(__file__).resolve().parent.parent
-PACKAGE = "by.ziv.ctmaths"
 
 
 def version_code(version: str) -> int:

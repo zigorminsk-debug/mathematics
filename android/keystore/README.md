@@ -1,25 +1,30 @@
-# Ключ подписи Android / Android signing key
+# Ключ подписи Android / Android signing key — «Репетитор ЦТ: Русский язык»
 
 ```
-ctmaths-release.p12        постоянный ключ проекта (PKCS#12, срок действия до 2056 года)
+ctrussian-release.p12      постоянный ключ приложения by.ziv.ctrussian (PKCS#12, RSA 3072, до 2056 года)
 keystore.properties        пароль и псевдоним (используется сборкой и CI)
-expected-cert-sha256.txt   эталонный отпечаток сертификата
+expected-cert-sha256.txt   эталонный отпечаток сертификата (зафиксирован ДО первого выпуска)
 ```
 
 ```
-Owner:   CN=CT Maths Tutor, OU=Android release, O=Zakharevich Igor, C=BY, L=Minsk
-SHA-256: B2:BD:B4:D1:26:B8:88:C7:D8:AF:50:80:F6:7E:CF:E1:E4:3F:EB:F2:8E:5D:1A:E6:61:D6:D7:AE:70:C5:14:65
+Owner:   CN=CT Russian Tutor, OU=Android release, O=Zakharevich Igor, L=Minsk, C=BY
+SHA-256: DE:65:1A:CC:E1:DB:76:9B:DC:A8:DB:EB:04:5C:94:9F:39:7F:85:7A:E6:DB:12:EE:D1:32:38:A0:83:B6:6A:3D
+Создан:  2026-10-14 (до первой публикации russian-v…)
 ```
 
-**Почему ключ лежит в репозитории.** Android ставит новый APK поверх старой версии
-только при совпадении подписи. Пока ключ один и тот же, каждое обновление
-устанавливается «поверх» без удаления приложения и без потери статистики ученика.
-CI сверяет собранный APK с `expected-cert-sha256.txt`
-(`python3 tools/check_signature.py`) и падает, если подпись изменилась.
+**Отдельный ключ.** Это не ключ математики (`by.ziv.ctmaths`, отпечаток `B2:BD:B4:…:14:65`
+остаётся только в своей ветке и не меняется). `tests/test_android_build.py` проверяет,
+что отпечаток русского ключа не совпадает с математическим и что APK подписан именно им.
 
-**Не меняйте этот ключ у уже распространяемых APK без корректной миграции
-подписи** — иначе Android не сможет обновить приложение поверх. Для нового
-приложения до первой публикации в Google Play используйте собственный приватный
-ключ и храните его в секретах, а не в репозитории. Параметры сборки:
-`ANDROID_KEYSTORE_FILE`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`,
-`ANDROID_KEY_PASSWORD` (см. `docs/RELEASE.md`).
+**Почему ключ лежит в репозитории.** Так же устроен ключ математики: распространение —
+через GitHub Releases (sideload), а секреты Actions из сессии сборки записать нельзя
+(API вернул 403). Ключ в Git публичен: любой, у кого есть доступ к репозиторию, технически
+может подписать APK тем же сертификатом. Перед публикацией в магазинах приложений
+нужен приватный ключ в секретах (`ANDROID_KEYSTORE_FILE`, `ANDROID_KEYSTORE_PASSWORD`,
+`ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`) — но смена ключа после первого выпуска ломает
+обновление «поверх» (на Android 9+ возможна только ротация через APK Signature Scheme v3).
+Решение о такой миграции принимает владелец; см. `docs/RELEASE.md`.
+
+**Не меняйте этот ключ** у уже распространяемого APK: CI сверяет и сам ключ
+(`python3 tools/check_signature.py --keystore android/keystore/ctrussian-release.p12`),
+и подпись каждого собранного APK с `expected-cert-sha256.txt`.

@@ -1,138 +1,159 @@
 {
- "contentVersion": "2026.10.5",
- "schema": 1,
- "years": [
-  2021,
-  2022,
-  2023,
-  2024,
-  2025,
-  2026
- ],
- "counts": {
-  "bank": 180,
-  "analogous": 552,
-  "choice": 108,
-  "short": 72
+ "schema": 2,
+ "subject": "russian",
+ "package": "by.ziv.ctrussian",
+ "contentProtocol": 2,
+ "tagPrefix": "russian-v",
+ "contentVersion": "2026.10.1",
+ "appVersion": "2026.10.1",
+ "files": {
+  "bank.json": {
+   "sha256": "3e955a32082ddcdcf5d5c88281322e0a96ac33a3a83224ac954d99c287e4d110",
+   "bytes": 711493
+  },
+  "analogous.json": {
+   "sha256": "91ab81c335908996a4ca6a504f19e42fb934dbf7f1eedbb4abb6c4d31f39b50c",
+   "bytes": 440648
+  },
+  "topics.json": {
+   "sha256": "7e6e5fab68aa3d961e9507f409a95215cd89001e35a77e64874642486844a37e",
+   "bytes": 344232
+  },
+  "rules.json": {
+   "sha256": "65c2a8788a52fecd94b1bda219f6ecc4cff198fd8437ed8943197406175f4f82",
+   "bytes": 47183
+  },
+  "ui_strings.json": {
+   "sha256": "cbdf965b09b92de032f21a9779d7593b7ea165b4faf4e358c571aa08ef83f122",
+   "bytes": 27237
+  },
+  "mistakes.json": {
+   "sha256": "f39690e661ea3707ce99fda2efd9a85c2ec0f4dd8defe02eafeb420d7a801665",
+   "bytes": 14113
+  },
+  "answer_vectors.json": {
+   "sha256": "1a16247d799d9e1d74c721a5180c2affbbeb227e5d0201f0fd3602cffc55cdc2",
+   "bytes": 39175
+  }
  },
- "author": "Zakharevich Igor",
- "email": "ziv@csl.by",
- "phone": "+3753371412",
- "repo": "https://github.com/zigorminsk-debug/mathematics",
+ "counts": {
+  "bank": 240,
+  "analogous": 193,
+  "rules": 54,
+  "figures": 49
+ },
  "periods": [
   {
    "year": 2021,
-   "label": {
-    "ru": "Вариант 2021",
-    "en": "Variant 2021"
-   },
    "parts": {
     "A": 18,
-    "B": 12
+    "B": 22
    },
-   "minutes": 180,
-   "tasks": 30
+   "minutes": 120,
+   "label": {
+    "ru": "Вариант 2021 (авторский)",
+    "en": "Variant 2021 (authored)"
+   },
+   "tasks": 40
   },
   {
    "year": 2022,
-   "label": {
-    "ru": "Вариант 2022",
-    "en": "Variant 2022"
-   },
    "parts": {
     "A": 18,
-    "B": 12
+    "B": 22
    },
-   "minutes": 180,
-   "tasks": 30
+   "minutes": 120,
+   "label": {
+    "ru": "Вариант 2022 (авторский)",
+    "en": "Variant 2022 (authored)"
+   },
+   "tasks": 40
   },
   {
    "year": 2023,
-   "label": {
-    "ru": "Вариант 2023",
-    "en": "Variant 2023"
-   },
    "parts": {
     "A": 18,
-    "B": 12
+    "B": 22
    },
-   "minutes": 180,
-   "tasks": 30
+   "minutes": 120,
+   "label": {
+    "ru": "Вариант 2023 (авторский)",
+    "en": "Variant 2023 (authored)"
+   },
+   "tasks": 40
   },
   {
    "year": 2024,
-   "label": {
-    "ru": "Вариант 2024",
-    "en": "Variant 2024"
-   },
    "parts": {
     "A": 18,
-    "B": 12
+    "B": 22
    },
-   "minutes": 180,
-   "tasks": 30
+   "minutes": 120,
+   "label": {
+    "ru": "Вариант 2024 (авторский)",
+    "en": "Variant 2024 (authored)"
+   },
+   "tasks": 40
   },
   {
    "year": 2025,
-   "label": {
-    "ru": "Вариант 2025",
-    "en": "Variant 2025"
-   },
    "parts": {
     "A": 18,
-    "B": 12
+    "B": 22
    },
-   "minutes": 180,
-   "tasks": 30
+   "minutes": 120,
+   "label": {
+    "ru": "Вариант 2025 (авторский)",
+    "en": "Variant 2025 (authored)"
+   },
+   "tasks": 40
   },
   {
    "year": 2026,
-   "label": {
-    "ru": "Вариант 2026",
-    "en": "Variant 2026"
-   },
    "parts": {
     "A": 18,
-    "B": 12
+    "B": 22
    },
-   "minutes": 180,
-   "tasks": 30
+   "minutes": 120,
+   "label": {
+    "ru": "Вариант 2026 (авторский)",
+    "en": "Variant 2026 (authored)"
+   },
+   "tasks": 40
   }
  ],
  "disclaimer": {
-  "ru": "Задания составлены по мотивам ЦТ соответствующего года и не являются официальными материалами РИКЗ.",
-  "en": "The tasks follow the format of the corresponding CT year and are not official RIKZ materials."
+  "ru": "Варианты 2021–2026 — авторская тренировочная практика по структуре спецификации РИКЗ 2026 года (40 заданий, 120 минут). Год — название набора, а не копия экзамена; это не официальные материалы РИКЗ.",
+  "en": "Variants 2021–2026 are authored practice sets built on the structure of the 2026 RIKZ specification (40 tasks, 120 minutes). The year only names the set; these are not official RIKZ materials."
  },
- "examMinutes": 180,
- "files": {
-  "analogous.json": {
-   "sha256": "1fcd2e9ecd7e278e4119f954e64187a83cf4f76c36607005ca37e0f6d83b06c6",
-   "bytes": 558415
+ "examMinutes": 120,
+ "specification": {
+  "title": {
+   "ru": "Спецификация экзаменационной (тестовой) работы по учебному предмету «Русский язык» для проведения ЦЭ и ЦТ в 2026 году (утв. 03.11.2025, опубл. РИКЗ 05.11.2025)",
+   "en": "RIKZ specification of the 2026 CE/CT test in Russian (approved 03.11.2025, published 05.11.2025)"
   },
-  "answer_vectors.json": {
-   "sha256": "1979abdff6f9d97554ef7b59836fb283221a233584ceeee8e6a4e01368082bd6",
-   "bytes": 3136
+  "url": "https://rikc.by/ru/specification/2026/01.pdf",
+  "checked": "2026-10-14",
+  "tasks": 40,
+  "parts": {
+   "A": 18,
+   "B": 22
   },
-  "bank.json": {
-   "sha256": "b3ebc3ddd429c2a710baad0b5fd7a6d8b3038779c49e8d76092bdcd7204747e9",
-   "bytes": 246094
+  "minutes": 120,
+  "partA": {
+   "ru": "закрытые задания: выбор нескольких правильных ответов из пяти",
+   "en": "closed tasks: choose several correct answers out of five"
   },
-  "formulas.json": {
-   "sha256": "55fb763ea1dbf0742ef82af1de4d24008ea2e28f3a75c1c4d119865ec33d404f",
-   "bytes": 28727
+  "partB": {
+   "ru": "открытые задания: ответ — слово, несколько цифр или сочетание букв и цифр",
+   "en": "open tasks: the answer is a word, several digits or letters with digits"
   },
-  "mistakes.json": {
-   "sha256": "99ed1109b535441ac7606b201e931e260d804dd1ffea55436fc749c9b27ed98e",
-   "bytes": 36224
-  },
-  "topics.json": {
-   "sha256": "23872d4ddd07f22ffb725e248d6f3f529b57e6968b34879cbad581dbf1b46f2a",
-   "bytes": 601844
-  },
-  "ui_strings.json": {
-   "sha256": "79a8506dc5223890c5e8aa142e1f9474ce8bea04749b132de3b1400963749739",
-   "bytes": 21828
+  "levels": {
+   "I": 4,
+   "II": 10,
+   "III": 16,
+   "IV": 6,
+   "V": 4
   }
- },
- "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
+ }
 }

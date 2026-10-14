@@ -1,14 +1,15 @@
-/* core.js — общее ядро интерфейса (Android WebView и Windows Go).
+/* core.js — общее ядро интерфейса «Репетитор ЦТ: Русский язык»
+ * (Android WebView и Windows Go).
  *
- * Здесь всё, что не зависит от платформы: загрузка банка заданий, алгоритм
- * проверки ответов (он же продублирован на Kotlin для нативных тестов),
- * безопасный калькулятор без eval, построение графиков, аналитика прогресса
- * и хранилище с автосохранением.
+ * Здесь всё, что не зависит от платформы: загрузка банка (только своего
+ * предмета — чужой банк отвергается), предметная проверка ответов (тот же
+ * контракт, что content_src/checker.py и AnswerChecker.kt), аналитика
+ * прогресса и хранилище с автосохранением.
  *
- * Shared engine of the UI: content loading, the portable answer checker,
- * a safe expression calculator (no eval), plotting, analytics and storage.
- * Platform differences live behind CT.bridge (window.CTNative on Android,
- * fetch() to the local HTTP API on Windows).
+ * Shared engine: subject-checked content loading, the language answer checker
+ * (no math normalisation), analytics and storage. Platform differences live
+ * behind CT.bridge (window.CTNative on Android, the loopback HTTP API on
+ * Windows).
  */
 (function (global) {
   'use strict';
@@ -233,389 +234,220 @@
   };
 
   /* --------------------------------------------------------------------- *
-   * 3. Проверка ответов / answer checker
+   * 3. Проверка ответов / subject answer checker
+   *
+   * Port of content_src/checker.py (same contract, same vectors). Nothing is
+   * removed implicitly: spaces, hyphens, ё, case and stress marks are part of
+   * the answer unless the task's explicit policy says otherwise.
    * --------------------------------------------------------------------- */
   var A = CT.answer = {};
+  A.WHITESPACE = '\t\n\u000b\u000c\r \u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008' +
+    '\u2009\u200a\u2028\u2029\u202f\u205f\u3000';
+  A.VOWELS = 'аеёиоуыэюя';
+  var ACUTE = '\u0301', GRAVE = '\u0300';
 
-  /** Нормализация: пробелы, юникодные минусы, запятая↔точка, префиксы, ×·. */
-  A.normalize = function (value) {
-    if (value === null || value === undefined) return '';
-    var s = String(value).trim().toLowerCase();
-    s = s.replace(/\u00a0/g, ' ');
-    s = s.replace(/[\u2212\u2013\u2014\u2015]/g, '-');   // − – — ―
-    s = s.replace(/\u00d7/g, '*');                        // ×
-    s = s.replace(/\u00b7/g, '*');                        // ·
-    s = s.replace(/\u2219/g, '*');                        // ∙
-    s = s.replace(/\u0445/g, 'x');                        // русская х
-    s = s.replace(/\u0443/g, 'y');                        // русская у
-    s = s.replace(/\u03c0/g, 'pi');                       // π
-    s = s.replace(/\u221a/g, 'sqrt');                     // √
-    s = s.replace(/^\s*(ответ|answer)\s*[:=]?\s*/i, '');
-    s = s.replace(/^\s*[a-zа-я]{1,2}\s*[:=]\s*/i, '');    // "x = 12", "y:12"
-    s = s.replace(/\s+/g, '');
-    s = s.replace(/^\((.*)\)$/, '$1');                    // (12) → 12
-    s = s.replace(/,/g, '.');
-    if (s.endsWith('.')) s = s.slice(0, -1);              // «12.» — это «12»
-    return s;
+  A.nfc = function (text) { return String(text).normalize('NFC'); };
+
+  /** Trim the ends; a run of whitespace becomes ONE space (never deleted). */
+  A.squeeze = function (text) {
+    var out = '', pending = false;
+    for (var i = 0; i < text.length; i++) {
+      var ch = text.charAt(i);
+      if (A.WHITESPACE.indexOf(ch) >= 0) { pending = true; continue; }
+      if (pending && out) out += ' ';
+      pending = false;
+      out += ch;
+    }
+    return out;
   };
 
-  /** Значение — целое число (для строгого сравнения целых ответов). */
-  A.isInteger = function (value) {
-    return typeof value === 'number' && isFinite(value) && Math.abs(value % 1) < 1e-12;
-  };
+  function number(token) {
+    if (!/^[0-9]+$/.test(token) || (token.length > 1 && token.charAt(0) === '0')) return null;
+    return parseInt(token, 10);
+  }
 
-  /** Строка → рациональное число или null. Понимает «3», «0.75», «3/4», «-2,5». */
-  A.parseNumber = function (value) {
-    if (value === null || value === undefined) return null;
-    if (typeof value === 'number') return isFinite(value) ? value : null;
-    var s = A.normalize(value);
-    if (!/^[-+]?(\d+(\.\d+)?|\.\d+)([-+*\/]\d+(\.\d+)?)*$/.test(s)) return null;
-    try {
-      var frac = A.evalFraction(s);
-      return frac === null || !isFinite(frac) ? null : frac;
-    } catch (e) { return null; }
-  };
-
-  /** Точная арифметика по мере возможности (дроби), с запасным float. */
-  A.evalFraction = function (s) {
-    var parts = [];
-    var sign = 1;
-    var tokens = s.match(/[-+*/]|[^-+*/]+/g) || [];
+  /** Numbers 1..max in input order or null (duplicates are invalid). */
+  A.parseNumbers = function (raw, max) {
+    var text = A.squeeze(A.nfc(raw));
+    if (!text) return null;
+    var tokens = text.split(/[ ,;]+/).filter(function (token) { return token !== ''; });
     if (!tokens.length) return null;
+    if (tokens.length === 1 && max <= 9 && tokens[0].length > 1) {
+      if (!/^[0-9]+$/.test(tokens[0])) return null;
+      tokens = tokens[0].split('');
+    }
+    var values = [];
     for (var i = 0; i < tokens.length; i++) {
-      var tok = tokens[i];
-      if (tok === '+' || tok === '-') parts.push(['op', tok]);
-      else if (tok === '*' || tok === '/') parts.push(['op', tok]);
-      else parts.push(['num', parseFloat(tok)]);
+      if (max <= 9 && tokens[i].length !== 1) return null;
+      var value = number(tokens[i]);
+      if (value === null || value < 1 || value > max || values.indexOf(value) >= 0) return null;
+      values.push(value);
     }
-    // сначала * и /
+    return values;
+  };
+
+  A.foldWord = function (text, spec) {
+    text = A.nfc(text);
+    if (spec.hyphen === 'typographic') text = text.replace(/[\u2010\u2011]/g, '-');
+    text = A.squeeze(text);
+    if (spec.case === 'insensitive') text = text.toLowerCase();
+    if (spec.yo === 'e-equals-yo') text = text.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
+    return text;
+  };
+
+  A.parseStress = function (raw, word) {
+    var text = A.squeeze(A.nfc(raw));
+    if (!text || text.indexOf(' ') >= 0 || text.indexOf(GRAVE) >= 0) return null;
+    var marks = text.split(ACUTE).length - 1;
+    if (marks > 1) return null;
+    var position, base;
+    if (marks === 1) {
+      position = text.indexOf(ACUTE) - 1;
+      base = text.replace(ACUTE, '');
+      if (position < 0 || base.toLowerCase() !== word || A.VOWELS.indexOf(base.charAt(position).toLowerCase()) < 0) return null;
+      return position;
+    }
+    var capitals = [];
+    for (var i = 0; i < text.length; i++) if (text.charAt(i) !== text.charAt(i).toLowerCase()) capitals.push(i);
+    if (capitals.length !== 1) return null;
+    position = capitals[0];
+    if (text.toLowerCase() !== word || A.VOWELS.indexOf(text.charAt(position).toLowerCase()) < 0) return null;
+    return position;
+  };
+
+  A.parseMatch = function (raw, labels, right) {
+    var text = A.squeeze(A.nfc(raw)).toUpperCase().replace(/[ ,;:\-]/g, '');
+    if (!text || !/^(?:[А-ЯЁ][0-9]{1,2})+$/.test(text)) return null;
+    var pairs = {}, re = /([А-ЯЁ])([0-9]{1,2})/g, found;
+    while ((found = re.exec(text))) {
+      var value = number(found[2]);
+      if (labels.indexOf(found[1]) < 0 || pairs[found[1]] !== undefined || value === null || value < 1 || value > right) return null;
+      pairs[found[1]] = value;
+    }
+    return Object.keys(pairs).length === labels.length ? pairs : null;
+  };
+
+  function sameList(a, b) {
+    if (!a || !b || a.length !== b.length) return false;
+    for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+    return true;
+  }
+  function sorted(list) { return list.slice().sort(function (x, y) { return x - y; }); }
+
+  /** Grade one answer against a check spec; never throws, unknown types fail. */
+  A.checkSpec = function (user, spec) {
+    var raw = user === null || user === undefined ? '' : String(user);
+    if (!spec) return false;
+    var values, normalized;
+    switch (spec.type) {
+      case 'multi':
+        values = A.parseNumbers(raw, spec.options);
+        return values !== null && sameList(sorted(values), spec.answer);
+      case 'single':
+        values = A.parseNumbers(raw, spec.options);
+        return values !== null && values.length === 1 && values[0] === spec.answer;
+      case 'numbers':
+        values = A.parseNumbers(raw, spec.max);
+        if (values === null) return false;
+        return spec.order === 'ordered' ? sameList(values, spec.answer) : sameList(sorted(values), spec.answer);
+      case 'word':
+        normalized = A.nfc(raw);
+        if (normalized.indexOf(ACUTE) >= 0 || normalized.indexOf(GRAVE) >= 0) return false;
+        var got = A.foldWord(raw, spec);
+        if (!got) return false;
+        return [spec.answer].concat(spec.accept || []).some(function (candidate) { return A.foldWord(candidate, spec) === got; });
+      case 'stress':
+        return A.parseStress(raw, spec.word) === spec.answer;
+      case 'match':
+        var pairs = A.parseMatch(raw, spec.labels, spec.right);
+        return pairs !== null && spec.labels.every(function (label) { return pairs[label] === spec.answer[label]; });
+      case 'integer':
+        var value = number(A.squeeze(A.nfc(raw)));
+        return value !== null && value === spec.answer;
+      default:
+        return false;
+    }
+  };
+
+  A.check = function (user, task) { return !!task && A.checkSpec(user, task.check); };
+
+  /** The canonical answer in a readable form. */
+  A.display = function (spec) {
+    if (!spec) return '';
+    if (spec.type === 'multi' || spec.type === 'numbers') return spec.answer.join(', ');
+    if (spec.type === 'single' || spec.type === 'integer') return String(spec.answer);
+    if (spec.type === 'word') return spec.answer;
+    if (spec.type === 'stress') return spec.display;
+    if (spec.type === 'match') return spec.labels.map(function (label) { return label + spec.answer[label]; }).join(' ');
+    return '';
+  };
+
+  /** The learner's answer in a readable form (numbers normalised when valid). */
+  A.formatUser = function (user, task) {
+    var raw = user === null || user === undefined ? '' : String(user);
+    if (!raw.trim() || !task) return '';
+    var spec = task.check, values;
+    if (spec.type === 'multi' || spec.type === 'single') values = A.parseNumbers(raw, spec.options);
+    if (spec.type === 'numbers') values = A.parseNumbers(raw, spec.max);
+    if (values) return (spec.type === 'numbers' && spec.order === 'ordered' ? values : sorted(values)).join(', ');
+    return raw;
+  };
+
+  /** Items judged wrongly in a set answer (extra or missing choices), 1-based. */
+  A.misjudged = function (user, task) {
+    if (!task || !Array.isArray(task.itemRules)) return null;
+    var spec = task.check;
+    if (!(spec.type === 'multi' || (spec.type === 'numbers' && spec.order === 'unordered'))) return null;
+    var values = A.parseNumbers(user === undefined || user === null ? '' : String(user), spec.options || spec.max) || [];
     var out = [];
-    for (var j = 0; j < parts.length; j++) {
-      var part = parts[j];
-      if (part[0] === 'op' && (part[1] === '*' || part[1] === '/')) {
-        var prev = out.pop();
-        var next = parts[++j];
-        if (!prev || !next || prev[0] !== 'num' || next[0] !== 'num') return null;
-        out.push(['num', part[1] === '*' ? prev[1] * next[1] : prev[1] / next[1]]);
-      } else {
-        if (part[0] === 'num' && j === 0) out.push(part);
-        else out.push(part);
-      }
+    for (var i = 1; i <= task.itemRules.length; i++) {
+      if ((values.indexOf(i) >= 0) !== (spec.answer.indexOf(i) >= 0)) out.push(i);
     }
-    // затем + и -
-    var acc = null, op = '+';
-    for (var k = 0; k < out.length; k++) {
-      var item = out[k];
-      if (item[0] === 'op') { op = item[1]; continue; }
-      if (acc === null) { acc = op === '-' ? -item[1] : item[1]; op = '+'; continue; }
-      acc = op === '+' ? acc + item[1] : acc - item[1];
-      op = '+';
-    }
-    return acc;
-  };
-
-  /** Значения из задания: правильный ответ и «принимаемые» записи. */
-  A.candidates = function (task) {
-    var list = [];
-    if (!task) return list;
-    var push = function (value) { if (value !== null && value !== undefined && String(value) !== '') list.push(String(value)); };
-    if (typeof task.answer === 'string') push(task.answer);
-    else if (task.answer && typeof task.answer === 'object') { push(A.pick(task.answer)); }
-    if (Array.isArray(task.accept)) task.accept.forEach(function (v) { push(A.pick(v)); });
-    return list;
-  };
-
-  /** Двуязычное значение из задания. */
-  A.pick = function (value) {
-    if (value === null || value === undefined) return '';
-    return typeof value === 'string' ? value : I.pick(value);
-  };
-
-  /** Совпадает ли ответ пользователя с «эталонным» ответом задания. */
-  A.check = function (userAnswer, task) {
-    if (!task) return false;
-    var got = String(userAnswer === null || userAnswer === undefined ? '' : userAnswer);
-    var normalizedUser = A.normalize(got);
-    if (task.answerType === 'choice') {
-      // Вариант сравнивается ровно (без численных допусков): «8/2» — не ответ «4».
-      var variants = A.candidates(task);
-      for (var c = 0; c < variants.length; c++) {
-        if (A.normalize(variants[c]) === normalizedUser) return true;
-      }
-      return false;
-    }
-    var user = normalizedUser;
-    if (!user) return false;
-    var candidates = A.candidates(task);
-    var i, cn;
-    for (i = 0; i < candidates.length; i++) {
-      if (A.normalize(candidates[i]) === user) return true;
-    }
-    var userNum = A.parseNumber(userAnswer);
-    if (userNum !== null) {
-      for (i = 0; i < candidates.length; i++) {
-        cn = A.parseNumber(candidates[i]);
-        if (cn === null) continue;
-        var diff = Math.abs(userNum - cn);
-        if (diff <= 1e-9) return true;
-        if (A.isInteger(cn)) continue;                                // целое — только точно
-        if (diff <= 5e-4 * Math.max(1, Math.abs(cn))) return true;    // «0,833» для 5/6
-      }
-    }
-    // Третий рубеж: ответы-выражения («√2/2», «2π») и написанные от руки
-    // десятичные приближения. Для обычных чисел он не включается — иначе
-    // «1000,5» подошло бы к ответу «1000».
-    var userVal = CT.math.value(userAnswer);
-    if (userVal === null) return false;
-    var userIsExpression = A.isExpression(userAnswer);
-    for (i = 0; i < candidates.length; i++) {
-      if (!userIsExpression && !A.isExpression(candidates[i])) continue;
-      var candidateVal = CT.math.value(candidates[i]);
-      if (candidateVal === null) continue;
-      if (Math.abs(userVal - candidateVal) <= 1e-3 * Math.max(1, Math.abs(candidateVal))) return true;
-    }
-    return false;
-  };
-
-  /** Ответ записан как выражение (корень, π, дробная степень), а не как число. */
-  A.isExpression = function (value) {
-    if (value === null || value === undefined) return false;
-    return /sqrt|pi|\^|\(/.test(A.normalize(value)) && A.parseNumber(value) === null;
+    return out;
   };
 
   /* --------------------------------------------------------------------- *
-   * 4. Безопасная математика / calculator & plotting (no eval)
+   * 4. Загрузка контента / content (subject-checked)
    * --------------------------------------------------------------------- */
-  var M = CT.math = {};
-
-  var FUNCTIONS = {
-    sin: function (x) { return Math.sin(x); },
-    cos: function (x) { return Math.cos(x); },
-    tan: function (x) { return Math.tan(x); },
-    tg: function (x) { return Math.tan(x); },
-    cot: function (x) { return 1 / Math.tan(x); },
-    ctg: function (x) { return 1 / Math.tan(x); },
-    asin: Math.asin, acos: Math.acos, atan: Math.atan,
-    arcsin: Math.asin, arccos: Math.acos, arctg: Math.atan, arctan: Math.atan,
-    sqrt: Math.sqrt, abs: Math.abs, ln: Math.log, lg: function (x) { return Math.log(x) / Math.LN10; },
-    log: function (x) { return Math.log(x) / Math.LN10; },
-    exp: Math.exp, round: function (x) { return Math.round(x); },
-    floor: Math.floor, ceil: Math.ceil, sign: function (x) { return x > 0 ? 1 : (x < 0 ? -1 : 0); },
-  };
-  var CONSTANTS = { pi: Math.PI, 'π': Math.PI, e: Math.E, tau: 2 * Math.PI };
-
-  /** Разбор выражения в массив чисел/операторов/функций. */
-  function tokenize(src) {
-    var s = String(src);
-    s = s.replace(/\u2212/g, '-').replace(/\u00b7|\u00d7|\u2219/g, '*').replace(/,/g, '.').replace(/\u221a/g, 'sqrt');
-    s = s.replace(/\u03c0/g, 'pi').replace(/\u00b2/g, '^2').replace(/\u00b3/g, '^3');
-    s = s.replace(/\[/g, '(').replace(/\]/g, ')').replace(/\{/g, '(').replace(/\}/g, ')');
-    var tokens = [], i = 0, ch, rest;
-    while (i < s.length) {
-      ch = s[i];
-      if (/\s/.test(ch)) { i++; continue; }
-      if (/[0-9.]/.test(ch)) {
-        rest = /^\d*\.?\d*(e[-+]?\d+)?/i.exec(s.slice(i))[0];
-        if (!rest || rest === '.') throw new Error('bad number');
-        tokens.push({ type: 'num', value: parseFloat(rest) });
-        i += rest.length;
-        continue;
-      }
-      rest = /^[a-zA-Zа-яА-Я_]+/.exec(s.slice(i));
-      if (rest) {
-        var name = rest[0].toLowerCase();
-        tokens.push({ type: 'name', value: name });
-        i += name.length;
-        continue;
-      }
-      if ('+-*/^%()!'.indexOf(ch) >= 0) { tokens.push({ type: 'op', value: ch }); i++; continue; }
-      throw new Error('bad symbol ' + ch);
-    }
-    return tokens;
-  }
-
-  /** Рекурсивный разбор (без eval): сложение и вычитание, умножение и деление,
-   *  возведение в степень (правоассоциативно) и унарный минус. */
-  function parseTokens(tokens) {
-    var pos = 0;
-    function peek() { return tokens[pos]; }
-    function next() { return tokens[pos++]; }
-
-    function parseExpression() {
-      var node = parseTerm();
-      while (peek() && peek().type === 'op' && (peek().value === '+' || peek().value === '-')) {
-        var op = next().value;
-        var right = parseTerm();
-        node = { op: op, a: node, b: right };
-      }
-      return node;
-    }
-    function parseTerm() {
-      var node = parseUnary();
-      for (;;) {
-        var tok = peek();
-        if (tok && tok.type === 'op' && (tok.value === '*' || tok.value === '/' || tok.value === '%')) {
-          var op = next().value;
-          node = { op: op, a: node, b: parseUnary() };
-          continue;
-        }
-        // неявное умножение: «6√2» → 6·√2, «2π» → 2·π, «3(4+1)»
-        if (startsAtom(tok)) { node = { op: '*', a: node, b: parseUnary() }; continue; }
-        return node;
-      }
-    }
-
-    function startsAtom(tok) {
-      if (!tok) return false;
-      if (tok.type === 'num' || tok.type === 'name') return true;
-      return tok.type === 'op' && tok.value === '(';
-    }
-    function parseUnary() {
-      var tok = peek();
-      if (tok && tok.type === 'op' && (tok.value === '-' || tok.value === '+')) {
-        next();
-        var operand = parseUnary();
-        return tok.value === '-' ? { op: 'neg', a: operand } : operand;
-      }
-      return parsePower();
-    }
-    function parsePower() {
-      var base = parseAtom();
-      var tok = peek();
-      if (tok && tok.type === 'op' && tok.value === '^') {
-        next();
-        return { op: '^', a: base, b: parseUnary() };
-      }
-      return base;
-    }
-    function parseAtom() {
-      var tok = next();
-      if (!tok) throw new Error('unexpected end');
-      if (tok.type === 'num') return { num: tok.value };
-      if (tok.type === 'name') {
-        if (CONSTANTS[tok.value] !== undefined && !(peek() && peek().type === 'op' && peek().value === '(')) {
-          return { num: CONSTANTS[tok.value] };
-        }
-        if (CONSTANTS[tok.value] !== undefined) {
-          next();
-          parseExpression();
-          expect(')');
-          return { num: CONSTANTS[tok.value] };
-        }
-        if (!FUNCTIONS[tok.value]) throw new Error('unknown name ' + tok.value);
-        if (!(peek() && peek().type === 'op' && peek().value === '(')) {
-          // функция без скобок: «√2» — это sqrt(2), «2π» и «6√2» — умножение
-          return { fn: tok.value, a: parsePower() };
-        }
-        next();
-        var arg = parseExpression();
-        expect(')');
-        return { fn: tok.value, a: arg };
-      }
-      if (tok.type === 'op' && tok.value === '(') {
-        var inner = parseExpression();
-        expect(')');
-        return inner;
-      }
-      throw new Error('unexpected token');
-    }
-    function expect(value) {
-      var tok = next();
-      if (!tok || tok.value !== value) throw new Error('expected ' + value);
-    }
-
-    var tree = parseExpression();
-    if (pos < tokens.length) throw new Error('trailing input');
-    return tree;
-  }
-
-  function evalNode(node, x) {
-    if (node.num !== undefined) return node.num;
-    if (node.fn) return FUNCTIONS[node.fn](evalNode(node.a, x));
-    switch (node.op) {
-      case '+': return evalNode(node.a, x) + evalNode(node.b, x);
-      case '-': return evalNode(node.a, x) - evalNode(node.b, x);
-      case '*': return evalNode(node.a, x) * evalNode(node.b, x);
-      case '/': return evalNode(node.a, x) / evalNode(node.b, x);
-      case '%': return evalNode(node.a, x) % evalNode(node.b, x);
-      case '^': return Math.pow(evalNode(node.a, x), evalNode(node.b, x));
-      case 'neg': return -evalNode(node.a, x);
-      default: throw new Error('bad node');
-    }
-  }
-
-  /** Разобрать выражение один раз (для графиков). */
-  M.parse = function (source) {
-    var tree = parseTokens(tokenize(source));
-    return {
-      value: function (x) { return evalNode(tree, x); },
-      source: String(source),
-    };
-  };
-
-  /** Значение выражения; null при ошибке. */
-  M.value = function (source) {
-    try {
-      var parsed = M.parse(source);
-      var v = parsed.value(0);
-      return isFinite(v) ? v : null;
-    } catch (e) { return null; }
-  };
-
-  /** Число или строка «= 2.5» / «ошибка». */
-  M.eval = function (source) {
-    var v = M.value(source);
-    if (v === null) return null;
-    return U.round(v, 10);
-  };
-
-  /** Точки для графика y = f(x) на [xmin; xmax]. */
-  M.sample = function (source, xmin, xmax, steps) {
-    var parsed, points = [], i, x, y, step;
-    try { parsed = M.parse(source); } catch (e) { return points; }
-    xmin = typeof xmin === 'number' ? xmin : -10;
-    xmax = typeof xmax === 'number' ? xmax : 10;
-    steps = steps || 240;
-    step = (xmax - xmin) / steps;
-    for (i = 0; i <= steps; i++) {
-      x = xmin + i * step;
-      try { y = parsed.value(x); } catch (e) { y = NaN; }
-      if (!isFinite(y)) { points.push(null); continue; }
-      if (Math.abs(y) > 1e4) { points.push(null); continue; }
-      points.push({ x: U.round(x, 6), y: U.round(y, 6) });
-    }
-    return points;
-  };
-
-  M.CONSTANTS = CONSTANTS;
-  M.FUNCTIONS = FUNCTIONS;
-
-  /* --------------------------------------------------------------------- *
-   * 5. Загрузка контента / content
-   * --------------------------------------------------------------------- */
+  CT.SUBJECT = 'russian';
+  CT.PACKAGE = 'by.ziv.ctrussian';
   var C = CT.content = {
-    bank: [], analogous: [], formulas: [], mistakes: { errors: {}, checklist: [] },
-    topics: {}, order: [], counts: {}, byYear: {}, tools: {}, meta: {}, vectors: [],
-    study: {}, lessons: {}, figures: {},
+    bank: [], analogous: [], rules: [], mistakes: { errors: {}, checklist: [] },
+    topics: {}, order: [], sections: {}, blueprint: [], lessons: {}, figures: {}, study: {}, sources: {},
+    memos: [], meta: {}, periods: [], specification: {}, disclaimer: {}, ruleMeta: {},
     loaded: false,
+
+    /** A content pack belongs to this tutor only if subject and package match. */
+    subjectOk: function (meta) {
+      return !!meta && meta.subject === CT.SUBJECT && (!meta.package || meta.package === CT.PACKAGE);
+    },
 
     load: function () {
       var self = this;
       return Promise.all([
         B.getContent('bank'), B.getContent('analogous'), B.getContent('topics'),
-        B.getContent('formulas'), B.getContent('ui_strings'), B.getContent('mistakes'),
+        B.getContent('rules'), B.getContent('ui_strings'), B.getContent('mistakes'),
       ]).then(function (data) {
-        var bank = data[0], analog = data[1], topics = data[2];
+        var bank = data[0] || {}, analog = data[1] || {}, topics = data[2] || {};
+        if (!self.subjectOk(bank.meta) || !self.subjectOk(analog.meta) || topics.subject !== CT.SUBJECT) {
+          throw new Error('foreign content pack rejected: subject must be ' + CT.SUBJECT);
+        }
         self.bank = bank.tasks || [];
         self.analogous = analog.tasks || [];
         self.topics = topics.topics || {};
         self.order = topics.order || Object.keys(self.topics);
-        self.tools = topics.tools || {};
-        self.byYear = topics.byYear || {};
+        self.sections = topics.sections || {};
+        self.blueprint = topics.blueprint || [];
         self.study = topics.study || {};
         self.lessons = topics.lessons || {};
         self.figures = topics.figures || {};
-        self.formulas = (data[3] && data[3].groups) || [];
+        self.sources = topics.sources || {};
+        self.memos = topics.memos || [];
+        self.ruleMeta = topics.rules || {};
+        self.periods = topics.periods || [];
+        self.specification = topics.specification || {};
+        self.disclaimer = topics.disclaimer || {};
+        self.rules = (data[3] && data[3].groups) || [];
         I.strings = (data[4] && data[4].strings) || {};
         self.mistakes = data[5] || { errors: {}, checklist: [] };
         self.meta = bank.meta || {};
@@ -637,49 +469,52 @@
           if (a.part !== b.part) return a.part === 'A' ? -1 : 1;
           return a.n - b.n;
         });
-        return {
-          year: Number(year), key: 'year-' + year, tasks: list,
+        return { year: Number(year), key: 'year-' + year, tasks: list,
           partA: list.filter(function (t) { return t.part === 'A'; }).length,
-          partB: list.filter(function (t) { return t.part === 'B'; }).length,
-        };
+          partB: list.filter(function (t) { return t.part === 'B'; }).length };
       }).reverse();
     },
+    /** A mixed exam: one task per blueprint slot from random variants. */
+    mixedExam: function () {
+      var bySlot = {};
+      this.bank.forEach(function (task) { var slot = task.part + task.n; (bySlot[slot] = bySlot[slot] || []).push(task); });
+      return this.blueprint.map(function (entry) {
+        var pool = bySlot[entry.slot] || [];
+        return pool[Math.floor(Math.random() * pool.length)];
+      }).filter(Boolean);
+    },
     topicTitle: function (key) { return I.pick(this.topics[key]) || key; },
-    toolTitle: function (key) { return I.pick(this.tools[key]) || key; },
+    ruleTitle: function (id) { return I.pick((this.ruleMeta[id] || {}).title) || id; },
     tasksByTopic: function (topic) { return this.bank.filter(function (t) { return t.topic === topic; }); },
     analogByTopic: function (topic) { return this.analogous.filter(function (t) { return t.topic === topic; }); },
-
-    /** Конспект темы («что изучить»), который открывается при неверном ответе. */
+    analogByRule: function (rule) { return this.analogous.filter(function (t) { return t.rule === rule; }); },
+    tasksByRule: function (rule) {
+      return this.bank.concat(this.analogous).filter(function (t) { return (t.rules || [t.rule]).indexOf(rule) >= 0; });
+    },
+    rulesOfTopic: function (topic) { return (this.study[topic] || {}).lessons || []; },
     studyFor: function (topic) { return this.study[topic] || null; },
     lessonById: function (id) { return this.lessons[id] || null; },
     figureById: function (id) { return this.figures[id] || null; },
 
-    /** Detailed explanations for a formula section, in its authoring order. */
-    lessonsForGroup: function (group) {
-      var self = this, seen = {};
-      return (group.lessons || []).map(function (id) {
-        if (seen[id]) return null;
-        seen[id] = true;
-        return self.lessonById(id);
-      }).filter(Boolean);
+    /** Rules to remediate: those of misjudged items when known, else all rules of the task. */
+    rulesFor: function (task, user) {
+      if (!task) return [];
+      var wrong = A.misjudged(user, task);
+      if (wrong && wrong.length) {
+        var out = [];
+        wrong.forEach(function (index) {
+          var rule = task.itemRules[index - 1];
+          if (rule && out.indexOf(rule) < 0) out.push(rule);
+        });
+        if (out.length) return out;
+      }
+      return (task.rules || [task.rule]).slice();
     },
 
-    /** Разделы сборника формул, относящиеся к теме задания. */
-    formulaGroupsFor: function (topic) {
-      var entry = this.studyFor(topic);
-      if (!entry || !entry.formulas) return [];
-      var byId = {};
-      this.formulas.forEach(function (group) { byId[group.id] = group; });
-      return entry.formulas.map(function (id) { return byId[id]; }).filter(Boolean);
-    },
-
-    /** Диагноз типичной ошибки по тегам задания. */
-    diagnoses: function (task) {
-      var out = [], errors = this.mistakes.errors || {};
-      (task && task.tags || []).forEach(function (tag) {
-        if (errors[tag] && out.indexOf(errors[tag]) < 0) out.push(errors[tag]);
-      });
-      if (!out.length && errors.__default) out.push(errors.__default);
+    /** Typical-error diagnoses for the given rules. */
+    diagnoses: function (rules) {
+      var errors = this.mistakes.errors || {}, out = [];
+      (rules || []).forEach(function (rule) { if (errors[rule] && out.indexOf(errors[rule]) < 0) out.push(errors[rule]); });
       return out;
     },
   };
@@ -698,6 +533,7 @@
       seconds: 0,
       byTopic: {},       // topic → { correct, total }
       byYear: {},        // year  → { correct, total }
+      byRule: {},        // rule  → { correct, total } — remediation by concrete rule
       daily: {},         // «ГГГГ-ММ-ДД» → число заданий
       streak: 0,
       best: 0,
@@ -761,6 +597,25 @@
     return stats;
   };
 
+  /** Статистика по правилам: rule → { correct, total, rate }. */
+  AN.ruleStats = function (progress) {
+    var source = (progress || {}).byRule || {}, stats = {};
+    Object.keys(source).forEach(function (rule) {
+      var entry = source[rule] || {}, total = entry.total || 0, correct = entry.correct || 0;
+      stats[rule] = { correct: correct, total: total, rate: total ? correct / total : 0 };
+    });
+    return stats;
+  };
+
+  /** Самые слабые правила (не меньше двух попыток). */
+  AN.weakRules = function (progress, limit) {
+    var stats = AN.ruleStats(progress);
+    return Object.keys(stats).map(function (rule) { return { rule: rule, rate: stats[rule].rate, total: stats[rule].total }; })
+      .filter(function (item) { return item.total >= 2 && item.rate < 1; })
+      .sort(function (a, b) { return a.rate - b.rate || b.total - a.total; })
+      .slice(0, limit || 5);
+  };
+
   /** Слабые темы (не меньше трёх заданий), начиная с самой слабой. */
   AN.weakTopics = function (progress, limit) {
     var stats = AN.topicStats(progress);
@@ -809,6 +664,14 @@
     var topicEntry = progress.byTopic[topic] = progress.byTopic[topic] || { correct: 0, total: 0 };
     topicEntry.total++;
     if (correct) topicEntry.correct++;
+
+    var rule = (task && task.rule) || '';
+    if (rule) {
+      progress.byRule = progress.byRule || {};
+      var ruleEntry = progress.byRule[rule] = progress.byRule[rule] || { correct: 0, total: 0 };
+      ruleEntry.total++;
+      if (correct) ruleEntry.correct++;
+    }
 
     var year = task && task.year ? task.year : 0;
     if (year) {

@@ -4,7 +4,7 @@ into both applications.
 
     webapp/*            → windows/web/                         (embedded with go:embed)
     webapp/*            → android/app/src/main/assets/webapp/  (WebViewAssetLoader)
-    dist/content/*.json → <both>/content/                      (bank, formulas, ui, ...)
+    dist/content/*.json → <both>/content/                      (bank, rules, ui, ...)
 
 Run it locally after editing ``webapp/`` or the content sources::
 
@@ -41,8 +41,13 @@ EXTRA_FILES = [
 SKIP_NAMES = {".DS_Store", "Thumbs.db"}
 
 
-def copy_tree_into(src: Path, dst: Path) -> int:
+def copy_tree_into(src: Path, dst: Path, keep: set[str] = frozenset()) -> int:
+    """Exact mirror: stale files (e.g. a removed bank) are deleted from the copy."""
     dst.mkdir(parents=True, exist_ok=True)
+    wanted = {item.name for item in src.iterdir() if item.name not in SKIP_NAMES} | set(keep)
+    for stale in sorted(dst.iterdir()):
+        if stale.name not in wanted:
+            shutil.rmtree(stale) if stale.is_dir() else stale.unlink()
     count = 0
     for item in sorted(src.iterdir()):
         if item.name in SKIP_NAMES:
@@ -74,11 +79,13 @@ def compare_manifest(src: Path, dst: Path) -> bool:
     return left == right
 
 
-def compare_tree(src: Path, dst: Path) -> list[str]:
+def compare_tree(src: Path, dst: Path, keep: set[str] = frozenset()) -> list[str]:
     """Return a list of human-readable differences (empty = identical)."""
     problems: list[str] = []
     if not dst.exists():
         return [f"missing directory {dst.relative_to(ROOT)}"]
+    wanted = {item.name for item in src.iterdir() if item.name not in SKIP_NAMES} | set(keep)
+    problems += [f"stale {item.relative_to(ROOT)}" for item in sorted(dst.iterdir()) if item.name not in wanted]
     for item in sorted(src.iterdir()):
         if item.name in SKIP_NAMES:
             continue
@@ -120,11 +127,11 @@ def main() -> int:
     for label, web_target in TARGETS:
         content_target = web_target / "content"
         if args.check:
-            problems += compare_tree(WEBAPP, web_target)
+            problems += compare_tree(WEBAPP, web_target, keep={"content"})
             problems += compare_tree(CONTENT, content_target)
             print(f"  · checking {label}: {web_target.relative_to(ROOT)}")
         else:
-            files = copy_tree_into(WEBAPP, web_target)
+            files = copy_tree_into(WEBAPP, web_target, keep={"content"})
             files += copy_tree_into(CONTENT, content_target)
             print(f"  · {label}: {files} files → {web_target.relative_to(ROOT)}/")
 

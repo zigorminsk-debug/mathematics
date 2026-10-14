@@ -1,244 +1,2075 @@
 {
+ "schema": 2,
  "cases": [
   {
-   "user": "  − 7 ",
-   "accept": [
-    "-7"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v001",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "так же",
+   "expect": true,
+   "why": "exact phrase"
   },
   {
-   "user": "X = 12",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v002",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "также",
+   "expect": false,
+   "why": "deleting the significant space changes the word"
   },
   {
-   "user": "х = 12",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v003",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "  так   же  ",
+   "expect": true,
+   "why": "trim + one space for a run of spaces"
   },
   {
-   "user": "ответ: 12",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v004",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "так же",
+   "expect": true,
+   "why": "no-break space is a space"
   },
   {
-   "user": "(12)",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v005",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "так​же",
+   "expect": false,
+   "why": "zero-width space is invisible, not a space"
   },
   {
-   "user": "1 000",
-   "accept": [
-    "1000"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v006",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "так﻿же",
+   "expect": false,
+   "why": "U+FEFF is not whitespace"
   },
   {
-   "user": "-1/3",
-   "accept": [
-    "−1/3"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v007",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "Так же",
+   "expect": true,
+   "why": "case-insensitive policy"
   },
   {
-   "user": "6√2",
-   "accept": [
-    "6√2"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v008",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "так-же",
+   "expect": false,
+   "why": "a hyphen is not a space"
   },
   {
-   "user": "6√2",
-   "accept": [
-    "6√3"
-   ],
-   "answerType": "short",
-   "expect": false
+   "id": "v009",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "так же.",
+   "expect": false,
+   "why": "extra punctuation is not ignored"
   },
   {
+   "id": "v010",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "так же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
    "user": "",
-   "accept": [
-    "4"
-   ],
-   "answerType": "short",
-   "expect": false
+   "expect": false,
+   "why": "empty answer"
   },
   {
-   "user": "4",
-   "accept": [
-    "4"
-   ],
-   "answerType": "choice",
-   "expect": true
+   "id": "v011",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "также",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "также",
+   "expect": true,
+   "why": "conjunction"
   },
   {
+   "id": "v012",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "также",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "так же",
+   "expect": false,
+   "why": "adverb + particle is a different answer"
+  },
+  {
+   "id": "v013",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "то же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "то же",
+   "expect": true,
+   "why": "pronoun + particle"
+  },
+  {
+   "id": "v014",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "то же",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "тоже",
+   "expect": false,
+   "why": "conjunction is a different answer"
+  },
+  {
+   "id": "v015",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "чтобы",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "чтобы",
+   "expect": true,
+   "why": "conjunction"
+  },
+  {
+   "id": "v016",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "чтобы",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "что бы",
+   "expect": false,
+   "why": "pronoun + particle is a different answer"
+  },
+  {
+   "id": "v017",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "по-новому",
+   "expect": true,
+   "why": "ASCII hyphen-minus"
+  },
+  {
+   "id": "v018",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "по‐новому",
+   "expect": true,
+   "why": "U+2010 hyphen under the typographic policy"
+  },
+  {
+   "id": "v019",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "по‑новому",
+   "expect": true,
+   "why": "U+2011 non-breaking hyphen under the typographic policy"
+  },
+  {
+   "id": "v020",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "по–новому",
+   "expect": false,
+   "why": "en dash is not a hyphen"
+  },
+  {
+   "id": "v021",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "по—новому",
+   "expect": false,
+   "why": "em dash is not a hyphen"
+  },
+  {
+   "id": "v022",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "по−новому",
+   "expect": false,
+   "why": "minus sign is not a hyphen"
+  },
+  {
+   "id": "v023",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "по новому",
+   "expect": false,
+   "why": "hyphen is never erased"
+  },
+  {
+   "id": "v024",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "поновому",
+   "expect": false,
+   "why": "hyphen is never erased"
+  },
+  {
+   "id": "v025",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "по - новому",
+   "expect": false,
+   "why": "spaces around a hyphen are significant"
+  },
+  {
+   "id": "v026",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "strict"
+   },
+   "user": "по‐новому",
+   "expect": false,
+   "why": "strict policy keeps only the canonical hyphen"
+  },
+  {
+   "id": "v027",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "по-новому",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "strict"
+   },
+   "user": "по-новому",
+   "expect": true,
+   "why": "strict policy, canonical hyphen"
+  },
+  {
+   "id": "v028",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "ёлка",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "ёлка",
+   "expect": true,
+   "why": "exact"
+  },
+  {
+   "id": "v029",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "ёлка",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "елка",
+   "expect": false,
+   "why": "strict ё policy"
+  },
+  {
+   "id": "v030",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "ёлка",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "ЁЛКА",
+   "expect": true,
+   "why": "case-insensitive"
+  },
+  {
+   "id": "v031",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "ёлка",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "ёлка",
+   "expect": true,
+   "why": "decomposed ё is composed by NFC"
+  },
+  {
+   "id": "v032",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "всё",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "все",
+   "expect": false,
+   "why": "всё and все are different words"
+  },
+  {
+   "id": "v033",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "решённый",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "e-equals-yo",
+    "hyphen": "typographic"
+   },
+   "user": "решенный",
+   "expect": true,
+   "why": "explicit e-equals-yo policy"
+  },
+  {
+   "id": "v034",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "решённый",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "e-equals-yo",
+    "hyphen": "typographic"
+   },
+   "user": "решённый",
+   "expect": true,
+   "why": "explicit e-equals-yo policy"
+  },
+  {
+   "id": "v035",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "решённый",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "e-equals-yo",
+    "hyphen": "typographic"
+   },
+   "user": "решеный",
+   "expect": false,
+   "why": "Н/НН is still checked"
+  },
+  {
+   "id": "v036",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "Минск",
+    "accept": [],
+    "case": "sensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "Минск",
+   "expect": true,
+   "why": "proper name"
+  },
+  {
+   "id": "v037",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "Минск",
+    "accept": [],
+    "case": "sensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "минск",
+   "expect": false,
+   "why": "case-sensitive policy"
+  },
+  {
+   "id": "v038",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "Минск",
+    "accept": [],
+    "case": "sensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "МИНСК",
+   "expect": false,
+   "why": "case-sensitive policy"
+  },
+  {
+   "id": "v039",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "замок",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "замок",
+   "expect": true,
+   "why": "plain word"
+  },
+  {
+   "id": "v040",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "замок",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "за́мок",
+   "expect": false,
+   "why": "stress mark is never deleted as noise"
+  },
+  {
+   "id": "v041",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "замок",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "замо̀к",
+   "expect": false,
+   "why": "grave mark is rejected"
+  },
+  {
+   "id": "v042",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "пятьюстами сорока восемью",
+    "accept": [
+     "пятьюстами сорока восьмью"
+    ],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic",
+    "acceptWhy": {
+     "ru": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ],
+     "en": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ]
+    }
+   },
+   "user": "пятьюстами сорока восемью",
+   "expect": true,
+   "why": "canonical form"
+  },
+  {
+   "id": "v043",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "пятьюстами сорока восемью",
+    "accept": [
+     "пятьюстами сорока восьмью"
+    ],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic",
+    "acceptWhy": {
+     "ru": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ],
+     "en": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ]
+    }
+   },
+   "user": "пятьюстами сорока восьмью",
+   "expect": true,
+   "why": "documented equivalent form"
+  },
+  {
+   "id": "v044",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "пятьюстами сорока восемью",
+    "accept": [
+     "пятьюстами сорока восьмью"
+    ],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic",
+    "acceptWhy": {
+     "ru": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ],
+     "en": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ]
+    }
+   },
+   "user": "пятьюстами  сорока восемью",
+   "expect": true,
+   "why": "double space collapses to one"
+  },
+  {
+   "id": "v045",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "пятьюстами сорока восемью",
+    "accept": [
+     "пятьюстами сорока восьмью"
+    ],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic",
+    "acceptWhy": {
+     "ru": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ],
+     "en": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ]
+    }
+   },
+   "user": "пятьюстамисорока восемью",
+   "expect": false,
+   "why": "missing significant space"
+  },
+  {
+   "id": "v046",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "пятьюстами сорока восемью",
+    "accept": [
+     "пятьюстами сорока восьмью"
+    ],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic",
+    "acceptWhy": {
+     "ru": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ],
+     "en": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ]
+    }
+   },
+   "user": "сорока пятьюстами восемью",
+   "expect": false,
+   "why": "word order"
+  },
+  {
+   "id": "v047",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "пятьюстами сорока восемью",
+    "accept": [
+     "пятьюстами сорока восьмью"
+    ],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic",
+    "acceptWhy": {
+     "ru": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ],
+     "en": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ]
+    }
+   },
+   "user": "пятистами сорока восемью",
+   "expect": false,
+   "why": "wrong case form"
+  },
+  {
+   "id": "v048",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "пятьюстами сорока восемью",
+    "accept": [
+     "пятьюстами сорока восьмью"
+    ],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic",
+    "acceptWhy": {
+     "ru": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ],
+     "en": [
+      "Лопатин В. В. (ред.), Русский орфографический словарь РАН: восемью и восьмью — равноправные формы"
+     ]
+    }
+   },
+   "user": "пятьюстами сорока восемь",
+   "expect": false,
+   "why": "wrong case form"
+  },
+  {
+   "id": "v049",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "сломя голову",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "сломя голову",
+   "expect": true,
+   "why": "exact phraseological unit"
+  },
+  {
+   "id": "v050",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "сломя голову",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "бежать сломя голову",
+   "expect": false,
+   "why": "extra word is not accepted"
+  },
+  {
+   "id": "v051",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "сломя голову",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "сломя",
+   "expect": false,
+   "why": "missing word is not accepted"
+  },
+  {
+   "id": "v052",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "сломя голову",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "голову сломя",
+   "expect": false,
+   "why": "word order"
+  },
+  {
+   "id": "v053",
+   "check": {
+    "type": "word",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "чайка",
+    "accept": [],
+    "case": "insensitive",
+    "yo": "strict",
+    "hyphen": "typographic"
+   },
+   "user": "чайка",
+   "expect": true,
+   "why": "decomposed й is composed by NFC"
+  },
+  {
+   "id": "v054",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звони́т",
+   "expect": true,
+   "why": "acute after the stressed vowel"
+  },
+  {
+   "id": "v055",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звонИт",
+   "expect": true,
+   "why": "capitalised stressed vowel"
+  },
+  {
+   "id": "v056",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "зво́нит",
+   "expect": false,
+   "why": "wrong syllable"
+  },
+  {
+   "id": "v057",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звОнит",
+   "expect": false,
+   "why": "wrong syllable"
+  },
+  {
+   "id": "v058",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звонит",
+   "expect": false,
+   "why": "no stress marked"
+  },
+  {
+   "id": "v059",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "ЗВОНИТ",
+   "expect": false,
+   "why": "all capitals mark nothing"
+  },
+  {
+   "id": "v060",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "Звонит",
+   "expect": false,
+   "why": "a capital consonant marks nothing"
+  },
+  {
+   "id": "v061",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звони́́т",
+   "expect": false,
+   "why": "two stress marks"
+  },
+  {
+   "id": "v062",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звонѝт",
+   "expect": false,
+   "why": "grave accent is not the stress mark"
+  },
+  {
+   "id": "v063",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звон́ит",
+   "expect": false,
+   "why": "stress mark after a consonant"
+  },
+  {
+   "id": "v064",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звони́т ",
+   "expect": true,
+   "why": "trailing space is trimmed"
+  },
+  {
+   "id": "v065",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "звонит",
+    "answer": 4,
+    "display": "звони́т"
+   },
+   "user": "звоня́т",
+   "expect": false,
+   "why": "a different word form"
+  },
+  {
+   "id": "v066",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "каталог",
+    "answer": 5,
+    "display": "катало́г"
+   },
+   "user": "катало́г",
+   "expect": true,
+   "why": "acute after the stressed vowel"
+  },
+  {
+   "id": "v067",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "каталог",
+    "answer": 5,
+    "display": "катало́г"
+   },
+   "user": "ката́лог",
+   "expect": false,
+   "why": "wrong syllable"
+  },
+  {
+   "id": "v068",
+   "check": {
+    "type": "stress",
+    "scoring": "exact",
+    "order": "n/a",
+    "word": "каталог",
+    "answer": 5,
+    "display": "катало́г"
+   },
+   "user": "каталОг",
+   "expect": true,
+   "why": "capitalised stressed vowel"
+  },
+  {
+   "id": "v069",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "13",
+   "expect": true,
+   "why": "concatenated digits"
+  },
+  {
+   "id": "v070",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "31",
+   "expect": true,
+   "why": "any order"
+  },
+  {
+   "id": "v071",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "1,3",
+   "expect": true,
+   "why": "comma separator"
+  },
+  {
+   "id": "v072",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "3; 1",
+   "expect": true,
+   "why": "semicolon separator"
+  },
+  {
+   "id": "v073",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "13 ",
+   "expect": true,
+   "why": "trailing space"
+  },
+  {
+   "id": "v074",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "1",
+   "expect": false,
+   "why": "missing selection"
+  },
+  {
+   "id": "v075",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "134",
+   "expect": false,
+   "why": "extra selection never equals the correct subset"
+  },
+  {
+   "id": "v076",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "113",
+   "expect": false,
+   "why": "duplicates are invalid, not de-duplicated"
+  },
+  {
+   "id": "v077",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "136",
+   "expect": false,
+   "why": "option out of range"
+  },
+  {
+   "id": "v078",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "0 1 3",
+   "expect": false,
+   "why": "zero is not an option"
+  },
+  {
+   "id": "v079",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "13 x",
+   "expect": false,
+   "why": "garbage"
+  },
+  {
+   "id": "v080",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "１３",
+   "expect": false,
+   "why": "full-width digits are not accepted"
+  },
+  {
+   "id": "v081",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     1,
+     3
+    ]
+   },
+   "user": "1 3 5",
+   "expect": false,
+   "why": "extra selection"
+  },
+  {
+   "id": "v082",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     2,
+     4,
+     5
+    ]
+   },
+   "user": "542",
+   "expect": true,
+   "why": "any order"
+  },
+  {
+   "id": "v083",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     2,
+     4,
+     5
+    ]
+   },
+   "user": "24",
+   "expect": false,
+   "why": "missing selection"
+  },
+  {
+   "id": "v084",
+   "check": {
+    "type": "multi",
+    "scoring": "exact",
+    "order": "unordered",
+    "options": 5,
+    "answer": [
+     2,
+     4,
+     5
+    ]
+   },
+   "user": "2345",
+   "expect": false,
+   "why": "extra selection"
+  },
+  {
+   "id": "v085",
+   "check": {
+    "type": "single",
+    "scoring": "exact",
+    "order": "n/a",
+    "options": 4,
+    "answer": 2
+   },
+   "user": "2",
+   "expect": true,
+   "why": "single option"
+  },
+  {
+   "id": "v086",
+   "check": {
+    "type": "single",
+    "scoring": "exact",
+    "order": "n/a",
+    "options": 4,
+    "answer": 2
+   },
+   "user": "02",
+   "expect": false,
+   "why": "leading zero"
+  },
+  {
+   "id": "v087",
+   "check": {
+    "type": "single",
+    "scoring": "exact",
+    "order": "n/a",
+    "options": 4,
+    "answer": 2
+   },
+   "user": "2 2",
+   "expect": false,
+   "why": "duplicate"
+  },
+  {
+   "id": "v088",
+   "check": {
+    "type": "single",
+    "scoring": "exact",
+    "order": "n/a",
+    "options": 4,
+    "answer": 2
+   },
+   "user": "23",
+   "expect": false,
+   "why": "two options for a single choice"
+  },
+  {
+   "id": "v089",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 6,
+    "answer": [
+     2,
+     5
+    ]
+   },
+   "user": "25",
+   "expect": true,
+   "why": "concatenated, max <= 9"
+  },
+  {
+   "id": "v090",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 6,
+    "answer": [
+     2,
+     5
+    ]
+   },
+   "user": "52",
+   "expect": true,
+   "why": "unordered"
+  },
+  {
+   "id": "v091",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 6,
+    "answer": [
+     2,
+     5
+    ]
+   },
+   "user": "2, 5",
+   "expect": true,
+   "why": "separated"
+  },
+  {
+   "id": "v092",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 6,
+    "answer": [
+     2,
+     5
+    ]
+   },
+   "user": "2 5 6",
+   "expect": false,
+   "why": "extra place"
+  },
+  {
+   "id": "v093",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 6,
+    "answer": [
+     2,
+     5
+    ]
+   },
+   "user": "2",
+   "expect": false,
+   "why": "missing place"
+  },
+  {
+   "id": "v094",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 12,
+    "answer": [
+     3,
+     11
+    ]
+   },
+   "user": "3 11",
+   "expect": true,
+   "why": "separated two-digit place"
+  },
+  {
+   "id": "v095",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 12,
+    "answer": [
+     3,
+     11
+    ]
+   },
+   "user": "11, 3",
+   "expect": true,
+   "why": "unordered"
+  },
+  {
+   "id": "v096",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 12,
+    "answer": [
+     3,
+     11
+    ]
+   },
+   "user": "311",
+   "expect": false,
+   "why": "concatenation is ambiguous when max >= 10"
+  },
+  {
+   "id": "v097",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 12,
+    "answer": [
+     3,
+     11
+    ]
+   },
+   "user": "3,11,",
+   "expect": true,
+   "why": "trailing separator"
+  },
+  {
+   "id": "v098",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 12,
+    "answer": [
+     3,
+     11
+    ]
+   },
+   "user": "03 11",
+   "expect": false,
+   "why": "leading zero"
+  },
+  {
+   "id": "v099",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "unordered",
+    "max": 12,
+    "answer": [
+     3,
+     11
+    ]
+   },
+   "user": "3 11 12",
+   "expect": false,
+   "why": "extra place"
+  },
+  {
+   "id": "v100",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "ordered",
+    "max": 5,
+    "answer": [
+     2,
+     1,
+     3,
+     5,
+     4
+    ]
+   },
+   "user": "21354",
+   "expect": true,
+   "why": "ordered sequence"
+  },
+  {
+   "id": "v101",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "ordered",
+    "max": 5,
+    "answer": [
+     2,
+     1,
+     3,
+     5,
+     4
+    ]
+   },
+   "user": "2 1 3 5 4",
+   "expect": true,
+   "why": "ordered sequence, separated"
+  },
+  {
+   "id": "v102",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "ordered",
+    "max": 5,
+    "answer": [
+     2,
+     1,
+     3,
+     5,
+     4
+    ]
+   },
+   "user": "12345",
+   "expect": false,
+   "why": "order is the answer"
+  },
+  {
+   "id": "v103",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "ordered",
+    "max": 5,
+    "answer": [
+     2,
+     1,
+     3,
+     5,
+     4
+    ]
+   },
+   "user": "2135",
+   "expect": false,
+   "why": "missing element"
+  },
+  {
+   "id": "v104",
+   "check": {
+    "type": "numbers",
+    "scoring": "exact",
+    "order": "ordered",
+    "max": 5,
+    "answer": [
+     2,
+     1,
+     3,
+     5,
+     4
+    ]
+   },
+   "user": "213544",
+   "expect": false,
+   "why": "duplicate element"
+  },
+  {
+   "id": "v105",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "А3Б1В4Г2",
+   "expect": true,
+   "why": "canonical"
+  },
+  {
+   "id": "v106",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "а3б1в4г2",
+   "expect": true,
+   "why": "labels are case-insensitive"
+  },
+  {
+   "id": "v107",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "А3 Б1 В4 Г2",
+   "expect": true,
+   "why": "spaces"
+  },
+  {
+   "id": "v108",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "Г2В4Б1А3",
+   "expect": true,
+   "why": "pairs in any order"
+  },
+  {
+   "id": "v109",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "А-3, Б-1, В-4, Г-2",
+   "expect": true,
+   "why": "hyphen/comma separators"
+  },
+  {
+   "id": "v110",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "А3Б1В4",
+   "expect": false,
+   "why": "missing label"
+  },
+  {
+   "id": "v111",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "А3Б1В4Г2А3",
+   "expect": false,
+   "why": "duplicate label"
+  },
+  {
+   "id": "v112",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "А3Б1В4Г6",
+   "expect": false,
+   "why": "number out of range"
+  },
+  {
+   "id": "v113",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "A3Б1В4Г2",
+   "expect": false,
+   "why": "Latin A is not the Cyrillic label"
+  },
+  {
+   "id": "v114",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "А3Б1В4Г2Д5",
+   "expect": false,
+   "why": "unknown label"
+  },
+  {
+   "id": "v115",
+   "check": {
+    "type": "match",
+    "scoring": "exact",
+    "order": "by-label",
+    "labels": [
+     "А",
+     "Б",
+     "В",
+     "Г"
+    ],
+    "right": 5,
+    "answer": {
+     "А": 3,
+     "Б": 1,
+     "В": 4,
+     "Г": 2
+    }
+   },
+   "user": "А3Б1В2Г4",
+   "expect": false,
+   "why": "wrong mapping"
+  },
+  {
+   "id": "v116",
+   "check": {
+    "type": "integer",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": 3
+   },
    "user": "3",
-   "accept": [
-    "4"
-   ],
-   "answerType": "choice",
-   "expect": false
+   "expect": true,
+   "why": "integer"
   },
   {
-   "user": "8/2",
-   "accept": [
-    "4"
-   ],
-   "answerType": "choice",
-   "expect": false
+   "id": "v117",
+   "check": {
+    "type": "integer",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": 3
+   },
+   "user": " 3 ",
+   "expect": true,
+   "why": "trimmed"
   },
   {
-   "user": "0,8",
-   "accept": [
-    "4/5"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v118",
+   "check": {
+    "type": "integer",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": 3
+   },
+   "user": "03",
+   "expect": false,
+   "why": "leading zero"
   },
   {
-   "user": "0.80",
-   "accept": [
-    "4/5"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v119",
+   "check": {
+    "type": "integer",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": 3
+   },
+   "user": "+3",
+   "expect": false,
+   "why": "sign"
   },
   {
-   "user": "8/10",
-   "accept": [
-    "0,8"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v120",
+   "check": {
+    "type": "integer",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": 3
+   },
+   "user": "3.0",
+   "expect": false,
+   "why": "decimal"
   },
   {
-   "user": "12,0",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v121",
+   "check": {
+    "type": "integer",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": 3
+   },
+   "user": "три",
+   "expect": false,
+   "why": "word"
   },
   {
-   "user": "12.",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v122",
+   "check": {
+    "type": "integer",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": 3
+   },
+   "user": "",
+   "expect": false,
+   "why": "empty"
   },
   {
-   "user": "2,5",
-   "accept": [
-    "5/2"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "2,51",
-   "accept": [
-    "5/2"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "0,833",
-   "accept": [
-    "5/6"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "0,8",
-   "accept": [
-    "5/6"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "0,333",
-   "accept": [
-    "1/3"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "0,33",
-   "accept": [
-    "1/3"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "1000,5",
-   "accept": [
-    "1000"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "0,707",
-   "accept": [
-    "√2/2"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "0,7",
-   "accept": [
-    "√2/2"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "√2/2",
-   "accept": [
-    "0,707"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "6,28",
-   "accept": [
-    "2π"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "8,49",
-   "accept": [
-    "6√2"
-   ],
-   "answerType": "short",
-   "expect": true
+   "id": "v123",
+   "check": {
+    "type": "formula",
+    "scoring": "exact",
+    "order": "n/a",
+    "answer": "x"
+   },
+   "user": "x",
+   "expect": false,
+   "why": "unknown check type"
   }
  ]
 }

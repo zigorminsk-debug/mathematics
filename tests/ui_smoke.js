@@ -1,312 +1,301 @@
 #!/usr/bin/env node
-/* tests/ui_smoke.js — end-to-end smoke test of the shared interface.
+/* tests/ui_smoke.js — whole-interface journeys in jsdom through the Windows code
+ * path (fetch to the loopback API, content from windows/web/content):
+ * training with every answer type, exam, wrong answer → rule card → analogs,
+ * results/mistakes/reinforcement, report, statistics, offline, Back, rule search,
+ * RU/EN with untranslated Russian material, settings (dark, font 1.3), diagrams.
  *
- * Boots webapp/index.html in jsdom, feeds it the real bank from windows/web/content
- * (the copies produced by tools/sync_assets.py), and walks the main user journey:
- * language switch → variant → wrong answer → mistake breakdown → analogous task →
- * tools (calculator, formulas) → exam → results → statistics → contacts → settings.
- *
- * jsdom is an optional development dependency; when it is missing the test skips
- * itself instead of failing the build.  Install it with:
- *     npm install --no-save jsdom
- *
- * Usage:  node tests/ui_smoke.js
+ * Usage: npm install --no-save jsdom && node tests/ui_smoke.js
  */
 'use strict';
 
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
 let JSDOM, VirtualConsole;
 try {
   ({ JSDOM, VirtualConsole } = require('jsdom'));
-} catch (error) {
+} catch (_) {
   console.log('· ui_smoke: jsdom is not installed — skipping (npm install --no-save jsdom)');
   process.exit(0);
 }
 
-const fs = require('fs');
-const path = require('path');
-
 const root = path.join(__dirname, '..');
-const web = path.join(root, 'webapp');
-const contentDir = path.join(root, 'windows', 'web', 'content');
-
-if (!fs.existsSync(path.join(contentDir, 'bank.json'))) {
-  console.error('✗ ui_smoke: windows/web/content is missing — run tools/sync_assets.py');
-  process.exit(1);
-}
-
-let failures = 0;
-const check = (name, condition, extra) => {
-  console.log((condition ? '✓ ' : '✗ ') + name + (condition ? '' : '  ' + (extra || '')));
-  if (!condition) failures += 1;
-};
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
+const web = path.join(root, 'windows', 'web');
+const read = (file) => fs.readFileSync(path.join(web, file), 'utf8');
+const errors = [];
 const virtualConsole = new VirtualConsole();
-virtualConsole.on('jsdomError', (error) => { console.log('✗ jsdom error:', error.message); failures += 1; });
-virtualConsole.on('error', (message) => { console.log('✗ console error:', message); failures += 1; });
-
-const html = fs.readFileSync(path.join(web, 'index.html'), 'utf8');
-const dom = new JSDOM(html, {
-  url: 'http://localhost/index.html',
-  runScripts: 'outside-only',
-  pretendToBeVisual: true,
-  virtualConsole,
-});
+virtualConsole.on('jsdomError', (error) => errors.push(error.message));
+virtualConsole.on('error', (error) => errors.push(String(error)));
+const dom = new JSDOM(read('index.html'), { url: 'http://127.0.0.1:8123/index.html', runScripts: 'outside-only',
+  pretendToBeVisual: true, virtualConsole });
 const { window } = dom;
 const doc = window.document;
-
-// jsdom has no canvas: give the charts a no-op 2d context and no scrolling.
-window.HTMLCanvasElement.prototype.getContext = function () {
-  return new Proxy({}, {
-    get: () => () => ({
-      setTransform() {}, clearRect() {}, fillRect() {}, strokeRect() {},
-      beginPath() {}, moveTo() {}, lineTo() {}, arc() {}, stroke() {}, fill() {},
-      fillText() {}, save() {}, restore() {}, measureText: () => ({ width: 10 }),
-    }),
-  });
-};
 window.scrollTo = () => {};
-window.fetch = async (url) => {
-  const file = path.join(contentDir, String(url).split('/').pop());
-  if (!fs.existsSync(file)) return { ok: false, status: 404, json: async () => { throw new Error('404'); } };
-  return { ok: true, status: 200, json: async () => JSON.parse(fs.readFileSync(file, 'utf8')) };
+window.HTMLElement.prototype.scrollIntoView = function () {};
+
+const blobs = { settings: JSON.stringify({ autoUpdate: false, autoAdvance: false, lang: 'ru' }) };
+const requests = [], reports = [];
+const respond = (body, status) => Promise.resolve({ ok: (status || 200) < 400, status: status || 200,
+  json: () => Promise.resolve(typeof body === 'string' ? JSON.parse(body) : body),
+  text: () => Promise.resolve(typeof body === 'string' ? body : JSON.stringify(body)) });
+window.fetch = (url, options) => {
+  requests.push(String(url));
+  if (/^[a-z]+:\/\//i.test(String(url))) return Promise.reject(new Error('unexpected network request ' + url));
+  const [route, query] = String(url).split('?');
+  if (route === 'api/state') return respond({ app: { platform: 'windows', dataDir: 'C:\\Users\\u\\AppData\\Roaming\\CTRussianTutor',
+    version: '2026.10.1', subject: 'russian' }, content: { version: '2026.10.1', overlay: {}, channel: 'russian-v' } });
+  if (route === 'api/blob') {
+    const key = decodeURIComponent(query.split('=')[1]);
+    if (options && options.method === 'POST') { blobs[key] = options.body; return respond({ ok: true }); }
+    return respond(blobs[key] || '');
+  }
+  if (route === 'api/report') { reports.push(JSON.parse(options.body)); return respond({ path: 'C:\\reports\\r.html' }); }
+  if (route === 'api/update') return respond({ status: 'uptodate', version: '2026.10.1' });
+  if (route.indexOf('content/') === 0) return respond(read(route));
+  return respond({ error: 'not found' }, 404);
 };
+window.eval(read('core.js'));
+window.eval(read('app.js'));
 
-window.eval(fs.readFileSync(path.join(web, 'core.js'), 'utf8'));
-window.eval(fs.readFileSync(path.join(web, 'app.js'), 'utf8'));
+const sleep = (ms = 8) => new Promise((resolve) => setTimeout(resolve, ms));
+const $ = (selector, scope) => (scope || doc).querySelector(selector);
+const $$ = (selector, scope) => Array.from((scope || doc).querySelectorAll(selector));
+const view = () => doc.getElementById('view');
+const click = (node, message) => { assert(node, message || 'expected a clickable element'); node.click(); };
+const button = (label, scope) => $$('button', scope).find((node) => node.textContent.trim() === label);
+const route = async (hash) => {
+  if (window.location.hash === hash) window.CT.render(); else window.location.hash = hash;
+  await sleep(15);
+};
+const modalOpen = () => doc.getElementById('modal').classList.contains('open');
+const type = (input, value) => { input.value = value; input.dispatchEvent(new window.Event('input', { bubbles: true })); };
+let passed = 0;
+const step = (name) => { passed += 1; console.log('✓ ' + name); };
 
-const text = () => (doc.getElementById('view') || {}).textContent || '';
-const bodyText = () => doc.body.textContent || '';
-const click = (node) => { node.dispatchEvent(new window.MouseEvent('click', { bubbles: true })); };
-const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b) => b.textContent.trim() === label);
+function sample(spec) {
+  if (spec.type === 'multi' || spec.type === 'numbers') return spec.answer.join(' ');
+  if (spec.type === 'single' || spec.type === 'integer') return String(spec.answer);
+  if (spec.type === 'word') return spec.answer;
+  if (spec.type === 'stress') return spec.display;
+  return spec.labels.map((label) => label + spec.answer[label]).join('');
+}
+
+/** Answer the visible task card through its own controls. */
+function answerCard(card, task, correct) {
+  const spec = task.check;
+  if (spec.type === 'multi' || spec.type === 'single') {
+    const wanted = correct ? (spec.type === 'multi' ? spec.answer : [spec.answer]) : [spec.type === 'multi' ? spec.answer[0] : (spec.answer % spec.options) + 1];
+    wanted.forEach((n) => click($(`.option[data-index="${n}"]`, card)));
+  } else if (spec.type === 'numbers') {
+    if (correct && spec.order === 'unordered') spec.answer.forEach((n) => click($(`.chip[data-n="${n}"]`, card)));
+    else type($('.answer-control input', card), correct ? sample(spec) : String(spec.max) + ' ' + String(spec.max));
+  } else if (spec.type === 'stress') {
+    click($(`.stress-letter[data-i="${correct ? spec.answer : (spec.answer + 1) % spec.word.length}"]`, card) ||
+      $$('.stress-letter.vowel', card).find((node) => Number(node.getAttribute('data-i')) !== spec.answer));
+  } else if (spec.type === 'match') {
+    spec.labels.forEach((label, index) => {
+      const select = $$('.match-select', card)[index];
+      select.value = String(correct ? spec.answer[label] : (spec.answer[label] % spec.right) + 1);
+      select.dispatchEvent(new window.Event('change', { bubbles: true }));
+    });
+  } else {
+    type($('.answer-control input', card), correct ? '  ' + sample(spec) + '  ' : sample(spec).replace(/ /g, '') + 'x');
+  }
+}
 
 (async () => {
-  for (let i = 0; i < 80 && !window.CT.content.bank.length; i++) await sleep(50);
-  check('bank loaded into the interface', window.CT.content.bank.length === 180, String(window.CT.content.bank.length));
-  check('analogous bank loaded', window.CT.content.analogous.length > 300, String(window.CT.content.analogous.length));
-  check('formula sheet loaded', window.CT.content.formulas.length >= 5);
-  check('bilingual error catalogue loaded', Object.keys(window.CT.content.mistakes.errors || {}).length >= 50);
-  check('interface strings loaded', Object.keys(window.CT.i18n.strings || {}).length >= 100);
+  for (let i = 0; i < 200 && !window.CT.content.loaded; i++) await sleep(10);
+  await sleep(30);
+  const CT = window.CT;
+  assert(CT.content.loaded, 'content loaded through the Windows API');
+  assert.strictEqual(CT.content.meta.subject, 'russian');
+  const nav = doc.getElementById('mainnav').textContent;
+  ['Главная', 'Варианты', 'Тренировка', 'Изучение', 'Правила', 'Статистика', 'Инструменты', 'О программе']
+    .forEach((label) => assert(nav.indexOf(label) >= 0, 'navigation has ' + label));
+  assert(nav.indexOf('Формул') < 0, 'no maths formula sheet in the navigation');
+  assert.strictEqual(doc.title, 'Репетитор ЦТ: Русский язык');
+  step('boot: Russian tutor, eight sections, «Правила» instead of formulas');
 
-  await sleep(60);
-  check('home screen rendered', /Репетитор ЦТ/.test(text()), text().slice(0, 60));
-
-  // ---- язык / language toggle ------------------------------------------------
-  click(doc.getElementById('lang-toggle'));
-  await sleep(40);
-  check('language switches to English', window.CT.store.settings.lang === 'en' && /Tests/.test(doc.getElementById('mainnav').textContent));
-  check('interface strings follow the language', /Tasks solved|Tests/.test(text()) || /CT Maths Tutor/.test(doc.getElementById('brand-name').textContent),
-    doc.getElementById('brand-name').textContent);
-  click(doc.getElementById('lang-toggle'));
-  await sleep(40);
-  check('language switches back to Russian', window.CT.store.settings.lang === 'ru');
-
-  // ---- вариант: тренировка и разбор ошибки -----------------------------------
-  window.location.hash = '#/tests';
-  await sleep(80);
-  check('variant list rendered', /Вариант 2024/.test(text()), text().slice(0, 80));
-  check('variant 2026 is offered', /Вариант 2026/.test(text()), text().slice(0, 120));
-  const cardFor = (year) => Array.from(doc.querySelectorAll('.card'))
-    .find((card) => card.querySelector('h3') && card.querySelector('h3').textContent.indexOf(String(year)) >= 0);
-  const card2024 = cardFor(2026);
-  check('each year has its card with exam and train buttons', !!card2024 && !!card2024.querySelector('button'));
-  const trainBtn = Array.from(card2024.querySelectorAll('button')).find((b) => b.textContent.trim() === 'Тренировка');
-  click(trainBtn);
-  await sleep(80);
-  check('train runner opened', /Задание 1 из 30/.test(text()), text().slice(0, 90));
-
-  const session = window.CT.store.session;
-  const task = window.CT.content.taskById(session.order[session.index]) || window.CT.content.bank[0];
-  check('session has 30 tasks', session.order.length === 30, String(session.order.length));
-
-  // отвечаем заведомо неверно
-  if (task.answerType === 'choice') {
-    const wrong = Array.from(doc.querySelectorAll('.option')).find((option) => {
-      const value = option.querySelector('.option-value').textContent;
-      return !window.CT.answer.check(value, task);
-    });
-    click(wrong);
-  } else {
-    const input = doc.querySelector('.answer-input');
-    input.value = '0,000001';
-    input.dispatchEvent(new window.Event('input', { bubbles: true }));
+  for (const hash of ['#/home', '#/tests', '#/exam', '#/practice', '#/study', '#/rules', '#/stats', '#/tools', '#/settings', '#/about']) {
+    await route(hash);
+    assert(!/\b[a-z]+_[a-z_]+\b/.test(view().textContent), 'no raw string keys on ' + hash);
   }
-  await sleep(40);
-  click(buttonWith('Проверить'));
-  await sleep(80);
-  check('wrong answer is reported', /Пока неверно/.test(bodyText()), bodyText().slice(0, 120));
-  check('mistake breakdown shown', /Типичная причина|Правильное решение|Верный ответ/.test(bodyText()));
-  // при неверном ответе открывается тема, к которой относится задание
-  const studyBlock = doc.querySelector('.study-topic');
-  check('wrong answer opens the topic to study', !!studyBlock && /Изучить тему/.test(studyBlock.textContent)
-    && studyBlock.getAttribute('data-topic') === task.topic,
-    studyBlock ? studyBlock.textContent.slice(0, 80) : 'no .study-topic');
-  check('the opened topic shows its formulas', !!studyBlock && studyBlock.querySelectorAll('.formula-row').length >= 1,
-    studyBlock ? String(studyBlock.querySelectorAll('.formula-row').length) : '0');
-  check('analogous task offered', doc.querySelectorAll('.analogous-item').length >= 1,
-    String(doc.querySelectorAll('.analogous-item').length));
+  await route('#/tools');
+  assert(!/Калькулятор|График|Calculator/.test(view().textContent), 'calculator/plotter hidden');
+  step('every screen renders translated strings; calculator and plotter are gone');
 
-  const savedRunId = window.CT.store.session.id;
-  const savedAnswer = window.CT.store.session.answers[task.id];
-  click(Array.from(studyBlock.querySelectorAll('button')).find((b) => b.textContent === 'Открыть тему'));
-  await sleep(50);
-  check('the study link opens the full topic', window.location.hash === '#/study/' + task.topic);
-  click(doc.getElementById('lang-toggle'));
-  await sleep(20);
-  check('study notes switch to English', /What to revise/.test(text()));
-  click(doc.getElementById('lang-toggle'));
-  await sleep(20);
-  click(buttonWith('Вернуться к заданию'));
-  await sleep(50);
-  check('return from studying preserves the run and answer', window.CT.store.session.id === savedRunId
-    && window.CT.store.session.answers[task.id] === savedAnswer && window.location.hash === '#/run');
+  // training: every task of a variant answered correctly through its control
+  const variant = CT.content.variants().find((v) => v.year === 2026);
+  CT.runner.startVariant(variant, 'train');
+  await route('#/run');
+  const types = new Set();
+  for (let index = 0; index < variant.tasks.length; index++) {
+    CT.runner.jump(index); CT.render(); await sleep(2);
+    const task = CT.runner.current();
+    const card = $('.task-card');
+    answerCard(card, task, true);
+    click(button('Проверить', card));
+    await sleep(2);
+    assert(/Верно/.test($('.feedback').textContent), `${task.id} (${task.check.type}) correct through the UI`);
+    types.add(task.check.type);
+  }
+  ['multi', 'numbers', 'word', 'match'].forEach((kind) => assert(types.has(kind), 'variant uses ' + kind));
+  step('training: all 40 tasks of variant 2026 answered through multi/number/word/match controls');
 
-  const analog = doc.querySelector('.analogous-item');
-  if (analog) {
-    const known = window.CT.content.analogous.find((item) => analog.textContent.indexOf(item.text.ru.slice(0, 24)) >= 0);
-    check('the analogous task comes from the bank', !!known);
-    if (known) {
-      const input = analog.querySelector('.answer-input');
-      const button = Array.from(analog.querySelectorAll('button')).find((b) => b.textContent === 'Проверить');
-      input.value = 'incorrect';
-      click(button);
-      const analogStudy = analog.querySelector('.study-topic');
-      check('a wrong analogous answer also opens its study topic', !!analogStudy
-        && analogStudy.getAttribute('data-topic') === known.topic && !analogStudy.parentElement.classList.contains('hidden'));
-      input.value = known.answer.ru;
-      click(button);
-      check('a correct analogous answer closes automatic remediation', analogStudy.parentElement.classList.contains('hidden'));
-      await sleep(40);
-      check('the analogous task accepts the stored answer', /Верно/.test(analog.textContent), analog.textContent.slice(0, 80));
-    }
+  // wrong answer → misjudged options, typical error, rule card, analogs by rule
+  const second = CT.content.variants().find((v) => v.year === 2025);
+  CT.runner.startVariant(second, 'train');
+  await route('#/run');
+  let task = CT.runner.current();
+  answerCard($('.task-card'), task, false);
+  click(button('Проверить', $('.task-card')));
+  await sleep(10);
+  assert(/Неверно/.test($('.feedback').textContent));
+  assert($('.breakdown .banner.bad'), 'misjudged options are named');
+  assert($('.breakdown .why'), 'typical error diagnosis shown');
+  const remedy = $('.remedy-rule-link');
+  const ruleId = remedy.getAttribute('data-lesson');
+  assert(task.rules.indexOf(ruleId) >= 0 || task.itemRules.indexOf(ruleId) >= 0, 'remediation names a rule of the task');
+  remedy.focus(); click(remedy); await sleep(5);
+  assert(modalOpen() && $('.rule-card[data-lesson="' + ruleId + '"]'), 'the rule card opens');
+  ['.theory-rules', '.theory-exceptions', '.theory-everyday', '.theory-example', '.theory-steps', '.theory-sources']
+    .forEach((selector) => assert($(selector), 'rule card section ' + selector));
+  assert.strictEqual(CT.onAndroidBack(), null);
+  assert(!modalOpen() && doc.activeElement === remedy, 'Back closes the card and restores focus');
+  const analogs = $$('.analogous-item');
+  assert(analogs.length >= 1, 'analogous exercises offered');
+  const analogTask = CT.content.taskById(analogs[0].getAttribute('data-task-id'));
+  assert(C_rules(task, analogTask), 'the analog drills one of the misjudged rules');
+  answerCard(analogs[0], analogTask, true);
+  click(button('Проверить', analogs[0])); await sleep(5);
+  assert(/good/.test($('.feedback', analogs[0]).className), 'analog checked in place');
+  step('wrong answer: misjudged options, diagnosis, rule card with Back/focus, analog of the same rule');
+
+  function C_rules(original, analog) {
+    return CT.content.rulesFor(original, CT.store.session.answers[original.id]).indexOf(analog.rule) >= 0;
   }
 
-  // ---- инструменты -----------------------------------------------------------
-  const toolButtons = Array.from(doc.querySelectorAll('.tools-strip button')).map((b) => b.textContent.trim());
-  check('tools are offered during the task', toolButtons.length >= 4, toolButtons.join(' | '));
-  const calcTool = Array.from(doc.querySelectorAll('.tools-strip button')).find((b) => /Калькулятор/.test(b.textContent));
-  click(calcTool);
-  await sleep(60);
-  const calcInput = doc.querySelector('.calc-display');
-  if (calcInput) {
-    calcInput.value = '2*(3+4)+√9';
-    click(buttonWith('='));
-    await sleep(30);
-    const result = doc.querySelector('.calc-result');
-    check('calculator evaluates roots and brackets', result && /17/.test(result.textContent), result && result.textContent);
-  } else {
-    check('calculator opens', false, 'no input found');
+  // significant spaces/hyphens are part of the answer
+  const wordTask = CT.content.bank.find((t) => t.check.type === 'word' && / /.test(t.check.answer));
+  CT.runner.startSet([wordTask], 'word', 'train'); await route('#/run');
+  type($('.answer-control input'), wordTask.check.answer.replace(/ /g, ''));
+  click(button('Проверить', $('.task-card'))); await sleep(5);
+  assert(/Неверно/.test($('.feedback').textContent), 'deleting a significant space is wrong');
+  const input = $('.answer-control input');
+  assert.strictEqual(input.getAttribute('autocorrect'), 'off');
+  assert.strictEqual(input.getAttribute('spellcheck'), 'false');
+  assert.strictEqual(input.getAttribute('autocapitalize'), 'none');
+  step('word answers: significant space checked; autocorrect/spellcheck/capitalisation off');
+
+  // stress task through letter buttons; ordered sequence through chips
+  const stressTask = CT.content.analogous.find((t) => t.check.type === 'stress');
+  const sequenceTask = CT.content.analogous.find((t) => t.check.type === 'numbers' && t.check.order === 'ordered');
+  CT.runner.startSet([stressTask, sequenceTask], 'mixed', 'train'); await route('#/run');
+  click($(`.stress-letter[data-i="${stressTask.check.answer}"]`));
+  assert.strictEqual($('.answer-control input').value, stressTask.check.display);
+  click(button('Проверить', $('.task-card'))); await sleep(5);
+  assert(/Верно/.test($('.feedback').textContent), 'stress tapped');
+  CT.runner.step(1); CT.render(); await sleep(5);
+  sequenceTask.check.answer.forEach((n) => click($(`.chip[data-n="${n}"]`)));
+  assert.strictEqual($('.chip[data-n="' + sequenceTask.check.answer[0] + '"] .chip-order').textContent, '1');
+  click(button('Проверить', $('.task-card'))); await sleep(5);
+  assert(/Верно/.test($('.feedback').textContent), 'ordered sequence through chips');
+  step('stress by tapping the vowel; ordered sequence keeps the click order');
+
+  // exam: timer, no checking/hints, result, mistakes, reinforcement by rule, report
+  await route('#/exam');
+  click(button('2024')); await sleep(15);
+  assert(/Задание 1 из 40/.test(view().textContent));
+  assert(/\d+ мин/.test($('#run-timer').textContent), 'exam timer runs (120 minutes by default)');
+  assert.strictEqual(CT.store.settings.examMinutes, 120);
+  assert(!button('Проверить', $('.task-card')), 'no check button in an exam');
+  assert(button('Подсказка').disabled, 'hints disabled in an exam');
+  const examTasks = CT.content.variants().find((v) => v.year === 2024).tasks;
+  for (let index = 0; index < 10; index++) {
+    CT.runner.jump(index); CT.render(); await sleep(2);
+    answerCard($('.task-card'), examTasks[index], index % 2 === 0);
   }
-  window.CT.closeModal();
-  await sleep(20);
+  click(button('Завершить')); await sleep(5);
+  click($$('.sheet button').pop()); await sleep(20);
+  assert(/Результат/.test(view().textContent) && /Верно 5 из 40/.test(view().textContent), view().textContent.slice(0, 200));
+  click($$('button', view()).find((node) => /Разобрать ошибки/.test(node.textContent))); await sleep(20);
+  assert(/Разбор ошибок/.test(view().textContent) && $('.plan-rule-link'), 'mistakes screen with a rule plan');
+  click(button('Закрепить: аналогичные упражнения')); await sleep(15);
+  const reinforcement = CT.store.session;
+  assert(reinforcement.kind === 'set' && reinforcement.order.every((id) => id.indexOf('an-') === 0), 'reinforcement uses analogs');
+  step('exam: 120-minute timer, no hints/checks, result 5/40, mistakes by rule, reinforcement with analogs');
 
-  const formulaTool = Array.from(doc.querySelectorAll('.tools-strip button')).find((b) => /Формулы/.test(b.textContent));
-  click(formulaTool);
-  await sleep(60);
-  check('formula sheet opens over the task', doc.querySelectorAll('.formula-group').length >= 5,
-    String(doc.querySelectorAll('.formula-group').length));
-  const search = doc.querySelector('.sheet .answer-input');
-  if (search) {
-    search.value = 'Виета';
-    search.dispatchEvent(new window.Event('input', { bubbles: true }));
-    await sleep(40);
-    check('formula search filters the list', /Виета/.test(doc.body.textContent));
-  }
-  window.CT.closeModal();
-  await sleep(20);
+  await route('#/stats');
+  assert(/По областям программы/.test(view().textContent) && $('.bar-row'), 'statistics by area');
+  click(button('Сохранить отчёт')); await sleep(15);
+  assert(reports.length === 1 && /Отчёт о подготовке: русский язык/.test(reports[0].html), 'report saved through the API');
+  assert(/lang="ru"/.test(reports[0].html), 'correct answers in the report are marked Russian');
+  step('statistics and a self-contained HTML report');
 
-  // ---- экзамен: завершаем сразу ----------------------------------------------
-  window.location.hash = '#/exam';
-  await sleep(60);
-  const yearBtn = Array.from(doc.querySelectorAll('button')).find((b) => b.textContent.trim() === '2023');
-  click(yearBtn);
-  await sleep(80);
-  const viewButtons = () => Array.from(doc.getElementById('view').querySelectorAll('button')).map((b) => b.textContent.trim());
-  check('exam mode hides the check button', viewButtons().indexOf('Проверить') < 0, viewButtons().join(' | '));
-  const finish = buttonWith('Завершить тест');
-  check('finish button available', !!finish);
-  click(finish);
-  await sleep(40);
-  const confirm = Array.from(doc.querySelectorAll('.sheet button')).pop();
-  click(confirm);
-  await sleep(120);
-  check('results screen shown', /Результат/.test(text()), text().slice(0, 80));
-  const progress = window.CT.store.progress;
-  check('attempt stored', progress.attempts.length === 1, String(progress.attempts.length));
-  const attempt = progress.attempts[0];
-  check('attempt holds 30 graded results', attempt.results.length === 30);
-  // 1 задание решено в тренировке + 30 в экзамене
-  // 30 экзаменационных + 1 неверный ответ в тренировке + 2 проверки аналога
-  check('statistics counters updated', progress.tasksDone === 33 && Object.keys(progress.byTopic).length > 4,
-    'tasksDone=' + progress.tasksDone);
-  check('daily activity matches the solved tasks',
-    Object.values(progress.daily).reduce((a, b) => a + b, 0) === progress.tasksDone,
-    JSON.stringify(progress.daily));
-  check('topic statistics are filled', Object.keys(progress.byTopic).length >= 5, JSON.stringify(Object.keys(progress.byTopic)));
+  // rules: search, language switch keeps the query, Russian examples stay Russian
+  await route('#/rules');
+  type($('input[type="search"]'), 'тоже');
+  const rows = $$('.rule-row');
+  assert(rows.length >= 1 && rows.every((row) => /тоже|ТОЖЕ|Тоже/i.test(row.textContent)), 'search finds the тоже/то же rule');
+  click(doc.getElementById('lang-toggle')); await sleep(15);
+  assert.strictEqual($('input[type="search"]').value, 'тоже', 'the query survives the language switch');
+  assert(/Rules/.test(doc.getElementById('mainnav').textContent));
+  assert(/Я тоже пойду\./.test(view().textContent), 'Russian examples are not translated');
+  click($('.rule-row')); await sleep(5);
+  assert(modalOpen() && $('.rule-table') && $('.rule-table caption') && $$('.rule-table th[scope="col"]').length >= 2,
+    'contrast table is semantic HTML with caption and headers');
+  assert.strictEqual(CT.onAndroidBack(), null);
+  step('«Правила»: search, EN switch keeps query, Russian examples untranslated, semantic tables');
 
-  // ---- разбор ошибок и закрепление -------------------------------------------
-  const review = Array.from(doc.querySelectorAll('button')).find((b) => /Разобрать ошибки/.test(b.textContent));
-  check('mistake review button offered', !!review);
-  if (review) {
-    click(review);
-    await sleep(100);
-    check('mistake screen shows the breakdown', /Разбор ошибок|Заданий с ошибками/.test(text()), text().slice(0, 80));
-    const reinforce = Array.from(doc.querySelectorAll('button')).find((b) => /Закрепить/.test(b.textContent));
-    check('reinforcement button offered', !!reinforce);
-    if (reinforce) {
-      click(reinforce);
-      await sleep(100);
-      check('reinforcement screen starts a set of analogous tasks',
-        doc.querySelectorAll('.task-card').length >= 1, String(doc.querySelectorAll('.task-card').length));
-    }
-  }
+  // EN interface keeps the checked Russian material
+  CT.runner.startVariant(CT.content.variants().find((v) => v.year === 2023), 'train');
+  await route('#/run');
+  task = CT.runner.current();
+  assert.strictEqual($('.task-text').textContent, task.instruction.en, 'instruction in English');
+  $$('.option-value').forEach((node, index) => {
+    assert.strictEqual(node.textContent, task.items[index], 'Russian option stays Russian');
+    assert.strictEqual(node.getAttribute('lang'), 'ru');
+  });
+  click(doc.getElementById('lang-toggle')); await sleep(15);
+  step('EN interface: English instruction, untranslated Russian items with lang="ru"');
 
-  // ---- статистика -------------------------------------------------------------
-  window.location.hash = '#/stats';
-  await sleep(140);
-  check('statistics screen rendered', /Статистика/.test(text()), text().slice(0, 80));
-  check('topic statistics drawn as bars', doc.querySelectorAll('.bar-row').length >= 5,
-    String(doc.querySelectorAll('.bar-row').length));
-  check('attempt ledger shown', /Последние попытки/.test(text()), text().slice(0, 120));
+  // decision tree and SVG figure inside rule cards
+  CT.ui = undefined;
+  await route('#/study/spelling-ne');
+  click($$('.study-point-link').find((node) => node.getAttribute('data-lesson') === 'ne-parts')); await sleep(5);
+  assert($('.decision-tree .tree-question') && $('.tree-yes') && $('.tree-no'), 'decision tree with yes/no branches');
+  assert.strictEqual(CT.onAndroidBack(), null);
+  await route('#/study/phonetics');
+  click($$('.study-point-link').find((node) => node.getAttribute('data-lesson') === 'stress')); await sleep(5);
+  const svg = $('.theory-figure svg');
+  assert(svg && svg.getAttribute('viewBox') === '0 0 420 280' && !svg.querySelector('script, image, foreignObject, use, a'));
+  assert($('.diagram-accent'), 'the stressed vowel is highlighted');
+  assert.strictEqual(CT.onAndroidBack(), null);
+  step('decision trees and safe SVG schemes in rule cards');
 
-  // ---- формулы и контакты ------------------------------------------------------
-  window.location.hash = '#/formulas';
-  await sleep(100);
-  check('standalone formula sheet rendered', doc.querySelectorAll('.formula-group').length >= 5);
+  // settings: dark theme and font scale 1.3
+  await route('#/settings');
+  click(button('Тёмное')); await sleep(5);
+  assert.strictEqual(doc.documentElement.getAttribute('data-theme'), 'dark');
+  click(button('Очень крупный')); await sleep(5);
+  assert.strictEqual(doc.documentElement.style.getPropertyValue('--font-scale'), '1.3');
+  step('dark theme and text scale 1.3');
 
-  window.location.hash = '#/about';
-  await sleep(80);
-  const contacts = Array.from(doc.querySelectorAll('a')).map((a) => a.getAttribute('href') || '');
-  check('email is a clickable mailto link', contacts.some((href) => href.startsWith('mailto:ziv@csl.by')), contacts.join(' '));
-  check('phone is a clickable tel link', contacts.includes('tel:+3753371412'));
-  check('WhatsApp link present', contacts.some((href) => href.indexOf('https://wa.me/3753371412') === 0));
-  check('developer name shown', /Захаревич Игорь|Zakharevich Igor/.test(text()));
+  // Back navigation and offline behaviour
+  await route('#/rules');
+  assert.strictEqual(CT.onAndroidBack(), null);
+  await sleep(10);
+  assert.strictEqual(window.location.hash, '#/home');
+  assert.strictEqual(CT.onAndroidBack(), 'exit');
+  assert(requests.every((url) => !/^[a-z]+:\/\//i.test(url)), 'only relative local API/content requests');
+  step('Back returns home then exits; no external network requests');
 
-  // ---- тренировка по теме и настройки -----------------------------------------
-  window.location.hash = '#/practice/planimetry';
-  await sleep(120);
-  check('topic practice renders a task', !!doc.querySelector('.answer-input') || !!doc.querySelector('.option'));
-
-  // ---- изучение темы -------------------------------------------------------
-  window.location.hash = '#/study/planimetry';
-  await sleep(100);
-  check('study screen opens the topic', /Изучить тему/.test(text()) && doc.querySelectorAll('.formula-group').length >= 1,
-    text().slice(0, 120));
-  check('study screen has worked examples', doc.querySelectorAll('.study-example').length >= 1,
-    String(doc.querySelectorAll('.study-example').length));
-
-  window.location.hash = '#/settings';
-  await sleep(80);
-  check('settings screen rendered', /Настройки/.test(text()), text().slice(0, 80));
-  check('theme control present', /Оформление|Theme/.test(text()));
-  check('font size control present', /Размер шрифта|Font size/.test(text()), text().slice(0, 200));
-
-  // ---- системная кнопка «назад» ------------------------------------------------
-  const backHome = window.CT.onAndroidBack();
-  check('hardware back leaves settings for home', backHome === null && window.location.hash === '#/home', String(backHome));
-  const backExit = window.CT.onAndroidBack();
-  check('hardware back exits only from home', backExit === 'exit', String(backExit));
-
-  console.log(failures ? `\n✗ ${failures} interface check(s) failed` : '\n✓ interface smoke test passed');
-  process.exit(failures ? 1 : 0);
-})();
+  assert.deepStrictEqual(errors, [], 'no runtime errors');
+  console.log(`\n✓ ui_smoke: ${passed} journeys passed`);
+  process.exit(0);
+})().catch((error) => {
+  console.error('✗ ui_smoke failed:', error && error.stack || error);
+  console.error('runtime errors:', errors.slice(0, 5));
+  process.exit(1);
+});

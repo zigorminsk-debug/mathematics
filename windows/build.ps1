@@ -1,4 +1,4 @@
-# Windows build script — produces a single self-contained CTMathsTutor.exe
+# Windows build script — produces a single self-contained CTRussianTutor.exe
 # Usage:  powershell -ExecutionPolicy Bypass -File windows\build.ps1
 #         powershell -ExecutionPolicy Bypass -File windows\build.ps1 -Console -Arch arm64
 param(
@@ -29,7 +29,7 @@ if (-not $Console) { $ldflags = "$ldflags -H=windowsgui" }
 
 $outDir = Join-Path $root $Out
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-$exe = Join-Path $outDir "CTMathsTutor-$Arch.exe"
+$exe = Join-Path $outDir "CTRussianTutor-$Arch.exe"
 
 Push-Location (Join-Path $root "windows")
 try {

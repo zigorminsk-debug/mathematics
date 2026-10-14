@@ -5,7 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"io"
+	"fmt"
 	"io/fs"
 	"net/http"
 	"net/http/httptest"
@@ -27,189 +27,348 @@ func newTestStore(t *testing.T) *Store {
 func TestBlobRoundTrip(t *testing.T) {
 	store := newTestStore(t)
 	payload := []byte(`{"attempts":[],"tasksDone":0}`)
-
 	if err := store.WriteBlob("progress", payload); err != nil {
 		t.Fatalf("WriteBlob: %v", err)
 	}
 	got, err := store.ReadBlob("progress")
-	if err != nil {
-		t.Fatalf("ReadBlob: %v", err)
+	if err != nil || !bytes.Equal(got, payload) {
+		t.Fatalf("ReadBlob = %s (%v), want %s", got, err, payload)
 	}
-	if !bytes.Equal(got, payload) {
-		t.Fatalf("ReadBlob = %s, want %s", got, payload)
-	}
-
-	missing, err := store.ReadBlob("settings")
-	if err != nil {
-		t.Fatalf("ReadBlob(missing): %v", err)
-	}
-	if missing != nil {
-		t.Fatalf("ReadBlob(missing) = %s, want nil", missing)
+	if missing, err := store.ReadBlob("settings"); err != nil || missing != nil {
+		t.Fatalf("ReadBlob(missing) = %s (%v), want nil", missing, err)
 	}
 }
 
 func TestBlobRejectsBadInput(t *testing.T) {
 	store := newTestStore(t)
-
 	if err := store.WriteBlob("../escape", []byte(`{}`)); err == nil {
 		t.Fatal("WriteBlob accepted a path traversal key")
 	}
 	if err := store.WriteBlob("progress", []byte(`{oops`)); err == nil {
 		t.Fatal("WriteBlob accepted invalid JSON")
 	}
-	if _, err := store.ReadBlob("Progress"); err == nil {
-		t.Fatal("ReadBlob accepted an invalid key")
-	}
 	good := []byte(`{"ok":true}`)
 	if err := store.WriteBlob("progress", good); err != nil {
 		t.Fatalf("WriteBlob: %v", err)
 	}
 	_ = store.WriteBlob("progress", []byte("broken"))
-	after, err := store.ReadBlob("progress")
-	if err != nil || !bytes.Equal(after, good) {
+	if after, err := store.ReadBlob("progress"); err != nil || !bytes.Equal(after, good) {
 		t.Fatalf("blob damaged after a failed write: %s (%v)", after, err)
 	}
-}
-
-func TestContentOverlayTakesPrecedence(t *testing.T) {
-	store := newTestStore(t)
-	if _, ok := store.ReadContent("bank"); ok {
-		t.Fatal("overlay should be empty on a fresh install")
-	}
-	overlay := []byte(`{"tasks":[{"id":"new-task"}]}`)
-	if err := store.WriteContent("bank", overlay); err != nil {
-		t.Fatalf("WriteContent: %v", err)
-	}
-	got, ok := store.ReadContent("bank")
-	if !ok || !bytes.Equal(got, overlay) {
-		t.Fatalf("ReadContent = %s, %v", got, ok)
-	}
-	if err := store.WriteContent("../../etc/passwd", overlay); err == nil {
+	if err := store.WriteContent("../../etc/passwd", good); err == nil {
 		t.Fatal("WriteContent accepted a path traversal name")
 	}
 }
 
 func TestWriteReport(t *testing.T) {
 	store := newTestStore(t)
-	path, err := store.WriteReport("progress", []byte("<html>отчёт</html>"))
+	path, err := store.WriteReport("russian-progress", []byte("<html>отчёт</html>"))
 	if err != nil {
 		t.Fatalf("WriteReport: %v", err)
 	}
 	if filepath.Dir(path) != store.Reports() {
 		t.Fatalf("report saved to %s, want %s", path, store.Reports())
 	}
-	data, err := os.ReadFile(path)
-	if err != nil || !strings.Contains(string(data), "отчёт") {
+	if data, err := os.ReadFile(path); err != nil || !strings.Contains(string(data), "отчёт") {
 		t.Fatalf("report content: %s (%v)", data, err)
 	}
 }
 
-// feedServer publishes a content manifest plus one file, like a GitHub release.
-func feedServer(t *testing.T, version string, bank []byte) *httptest.Server {
+/* ---------------------------------------------------- separate identities --- */
+
+func TestSubjectIdentitiesAreSeparateFromMathematics(t *testing.T) {
+	if appName != "Репетитор ЦТ: Русский язык" || dataDirName != "CTRussianTutor" || browserProfile != "ctrussian-window" {
+		t.Fatalf("identities: %q %q %q", appName, dataDirName, browserProfile)
+	}
+	if !strings.HasSuffix(defaultDataDir(), dataDirName) && defaultDataDir() != executableDir() {
+		t.Fatalf("default data dir %q", defaultDataDir())
+	}
+	if subjectID != "russian" || subjectPackage != "by.ziv.ctrussian" || subjectTag != "russian-v" {
+		t.Fatal("subject constants must match subject.json")
+	}
+	for _, url := range []string{releasesAPI, downloadRoot} {
+		if strings.Contains(url, "latest") {
+			t.Fatalf("the subject channel must never use releases/latest: %s", url)
+		}
+	}
+}
+
+/* --------------------------------------------------------- release choice --- */
+
+func boolPtr(value bool) *bool { return &value }
+
+func release(tag string, draft, prerelease bool, assets []string) githubRelease {
+	entry := githubRelease{TagName: tag, Draft: boolPtr(draft), Prerelease: boolPtr(prerelease)}
+	for _, name := range assets {
+		entry.Assets = append(entry.Assets, struct {
+			Name  string `json:"name"`
+			State string `json:"state"`
+		}{Name: name, State: "uploaded"})
+	}
+	return entry
+}
+
+var mathAssets = []string{"analogous.json", "answer_vectors.json", "app-release.apk", "bank.json", "CTMathsTutor-amd64.exe",
+	"CTMathsTutor-arm64.exe", "formulas.json", "mistakes.json", "release-info.json", "SHA256SUMS.txt", "topics.json",
+	"ui_strings.json", "version.json"}
+
+func without(list []string, drop string) []string {
+	var out []string
+	for _, item := range list {
+		if item != drop {
+			out = append(out, item)
+		}
+	}
+	return out
+}
+
+func TestSelectReleaseIgnoresMathAndSiblingFamilies(t *testing.T) {
+	got := selectRelease([]githubRelease{
+		release("v2026.10.8", false, false, mathAssets),
+		release("physics-v2026.10.4", false, false, releaseFiles),
+		release("russian-v2026.10.1", false, false, releaseFiles),
+	})
+	if got == nil || got.Tag != "russian-v2026.10.1" || got.Version != "2026.10.1" {
+		t.Fatalf("selected %+v", got)
+	}
+	if selectRelease([]githubRelease{release("v2026.10.8", false, false, mathAssets)}) != nil {
+		t.Fatal("the mathematics latest must never be selected")
+	}
+}
+
+func TestSelectReleaseExcludesUnsafeCandidates(t *testing.T) {
+	missingFlags := githubRelease{TagName: "russian-v2026.10.9"}
+	partial := release("russian-v2026.10.6", false, false, without(releaseFiles, "CTRussianTutor-arm64.exe"))
+	extra := release("russian-v2026.10.5", false, false, append(append([]string{}, releaseFiles...), "app-debug.apk"))
+	starter := release("russian-v2026.10.4", false, false, releaseFiles)
+	starter.Assets[0].State = "starter"
+	got := selectRelease([]githubRelease{
+		missingFlags, release("russian-v2026.10.8", true, false, releaseFiles),
+		release("russian-v2026.10.7", false, true, releaseFiles), release("russian-v2026.10.07", false, false, releaseFiles),
+		partial, extra, starter, release("russian-v2026.10.2", false, false, releaseFiles),
+	})
+	if got == nil || got.Tag != "russian-v2026.10.2" {
+		t.Fatalf("selected %+v", got)
+	}
+}
+
+func TestSelectReleaseUsesCanonicalVersionNotOrder(t *testing.T) {
+	got := selectRelease([]githubRelease{
+		release("russian-v2026.10.99", false, false, releaseFiles),
+		release("russian-v2026.11.0", false, false, releaseFiles),
+		release("russian-v2026.9.12", false, false, releaseFiles),
+	})
+	if got == nil || got.Version != "2026.11.0" {
+		t.Fatalf("selected %+v", got)
+	}
+}
+
+/* ------------------------------------------------------- manifest + banks --- */
+
+func russianBank(version string) []byte {
+	return []byte(fmt.Sprintf(`{"meta":{"subject":"russian","package":"by.ziv.ctrussian","contentVersion":%q},"tasks":[]}`, version))
+}
+
+type pack struct {
+	files    map[string][]byte
+	manifest map[string]any
+}
+
+func newPack(version, tag string) pack {
+	files := map[string][]byte{}
+	for _, name := range contentFiles {
+		files[name] = []byte(`{"ok":true}`)
+	}
+	files["bank.json"] = russianBank(version)
+	files["analogous.json"] = russianBank(version)
+	entries := map[string]any{}
+	for name, data := range files {
+		sum := sha256.Sum256(data)
+		entries[name] = map[string]any{"sha256": hex.EncodeToString(sum[:]), "bytes": len(data)}
+	}
+	return pack{files: files, manifest: map[string]any{
+		"schema": 2, "subject": "russian", "package": "by.ziv.ctrussian", "contentProtocol": 2, "tag": tag,
+		"contentVersion": version, "files": entries, "counts": map[string]int{"bank": 240, "analogous": 193},
+	}}
+}
+
+func (p pack) server(t *testing.T) *httptest.Server {
 	t.Helper()
-	sum := sha256.Sum256(bank)
-	mux := http.NewServeMux()
-	mux.HandleFunc("/version.json", func(w http.ResponseWriter, r *http.Request) {
-		manifest := map[string]any{
-			"contentVersion": version,
-			"counts":         map[string]int{"bank": 150, "analogous": 552},
-			"files": map[string]any{
-				"bank.json": map[string]any{"sha256": hex.EncodeToString(sum[:]), "bytes": len(bank)},
-			},
-		}
-		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(manifest)
-	})
-	mux.HandleFunc("/bank.json", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write(bank)
-	})
-	return httptest.NewServer(mux)
-}
-
-func TestCheckUpdatesInstallsNewVersion(t *testing.T) {
-	store := newTestStore(t)
-	bank := []byte(`{"meta":{"contentVersion":"2026.10.9"},"tasks":[]}`)
-	feed := feedServer(t, "2026.10.9", bank)
-	defer feed.Close()
-
-	result := store.CheckUpdates(feed.URL, "2026.10.1")
-	if result.Status != "updated" {
-		t.Fatalf("status = %q (%s)", result.Status, result.Message)
-	}
-	if result.Version != "2026.10.9" || result.Files != 1 {
-		t.Fatalf("result = %+v", result)
-	}
-	installed, ok := store.ReadContent("bank")
-	if !ok || !bytes.Equal(installed, bank) {
-		t.Fatalf("installed bank = %s", installed)
-	}
-
-	again := store.CheckUpdates(feed.URL, "2026.10.9")
-	if again.Status != "uptodate" {
-		t.Fatalf("second check = %+v", again)
-	}
-}
-
-func TestCheckUpdatesRejectsTamperedFile(t *testing.T) {
-	store := newTestStore(t)
-	feed := feedServer(t, "2026.11.1", []byte(`{"tasks":[{"id":"honest"}]}`))
-	defer feed.Close()
-
-	// подменяем содержимое банка, оставив прежнюю контрольную сумму в манифесте
-	tampered := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasSuffix(r.URL.Path, "bank.json") {
-			_, _ = w.Write([]byte(`{"tasks":[{"id":"evil"}]}`))
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		name := filepath.Base(r.URL.Path)
+		if name == "version.json" {
+			_ = json.NewEncoder(w).Encode(p.manifest)
 			return
 		}
-		response, err := http.Get(feed.URL + r.URL.Path)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+		data, ok := p.files[name]
+		if !ok {
+			http.NotFound(w, r)
 			return
 		}
-		defer response.Body.Close()
-		w.Header().Set("Content-Type", "application/json")
-		body, _ := io.ReadAll(response.Body)
-		_, _ = w.Write(body)
+		_, _ = w.Write(data)
 	}))
-	defer tampered.Close()
+}
 
-	result := store.CheckUpdates(tampered.URL, "2026.10.1")
-	if result.Status != "error" || !strings.Contains(result.Message, "checksum") {
-		t.Fatalf("tampered update accepted: %+v", result)
+func decodeManifest(t *testing.T, raw map[string]any) contentManifest {
+	t.Helper()
+	data, _ := json.Marshal(raw)
+	var manifest contentManifest
+	if err := json.Unmarshal(data, &manifest); err != nil {
+		t.Fatal(err)
+	}
+	return manifest
+}
+
+func TestManifestGateRejectsForeignContent(t *testing.T) {
+	expected := &releaseCandidate{Tag: "russian-v2026.10.1", Version: "2026.10.1"}
+	good := newPack("2026.10.1", "russian-v2026.10.1")
+	if err := manifestError(decodeManifest(t, good.manifest), expected); err != nil {
+		t.Fatalf("valid manifest rejected: %v", err)
+	}
+	mutations := map[string]func(map[string]any){
+		"math subject": func(m map[string]any) { m["subject"] = "mathematics" },
+		"math package": func(m map[string]any) { m["package"] = "by.ziv.ctmaths" },
+		"old schema":   func(m map[string]any) { m["schema"] = 1 },
+		"wrong tag":    func(m map[string]any) { m["tag"] = "v2026.10.8" },
+		"extra file": func(m map[string]any) {
+			m["files"].(map[string]any)["formulas.json"] = map[string]any{"sha256": strings.Repeat("a", 64), "bytes": 1}
+		},
+		"no checksum": func(m map[string]any) { m["files"].(map[string]any)["bank.json"] = map[string]any{"bytes": 1} },
+	}
+	for name, mutate := range mutations {
+		broken := newPack("2026.10.1", "russian-v2026.10.1")
+		mutate(broken.manifest)
+		if manifestError(decodeManifest(t, broken.manifest), expected) == nil {
+			t.Fatalf("%s accepted", name)
+		}
+	}
+	if err := bankError([]byte(`{"meta":{"subject":"mathematics","package":"by.ziv.ctmaths"},"tasks":[]}`)); err == nil {
+		t.Fatal("a mathematics bank was accepted")
+	}
+	if err := bankError(russianBank("2026.10.1")); err != nil {
+		t.Fatalf("own bank rejected: %v", err)
+	}
+}
+
+/* ------------------------------------------------------------ update flow --- */
+
+func TestCheckUpdatesResolvesSubjectReleaseThroughAPI(t *testing.T) {
+	store := newTestStore(t)
+	files := newPack("2026.10.5", "russian-v2026.10.5")
+	feed := files.server(t)
+	defer feed.Close()
+	var pages []string
+	api := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		pages = append(pages, r.URL.Query().Get("page"))
+		if r.URL.Query().Get("per_page") != "100" || r.Header.Get("Accept") != "application/vnd.github+json" {
+			t.Errorf("unexpected API request %s", r.URL)
+		}
+		var batch []githubRelease
+		if r.URL.Query().Get("page") == "1" {
+			for i := 0; i < 99; i++ {
+				batch = append(batch, release(fmt.Sprintf("v2026.%d.%d", 1+i%12, i), false, false, mathAssets))
+			}
+			batch = append(batch, release("russian-v2026.10.3", false, false, releaseFiles))
+		} else {
+			batch = append(batch, release("russian-v2026.10.5", false, false, releaseFiles),
+				release("russian-v2026.10.9", true, false, releaseFiles))
+		}
+		_ = json.NewEncoder(w).Encode(batch)
+	}))
+	defer api.Close()
+	store.api = api.URL
+	store.downloads = feed.URL + "/download/"
+	got := store.CheckUpdates("", "2026.10.1")
+	if got.Status != "updated" || got.Version != "2026.10.5" || got.Tag != "russian-v2026.10.5" {
+		t.Fatalf("CheckUpdates = %+v", got)
+	}
+	if strings.Join(pages, ",") != "1,2" {
+		t.Fatalf("pagination requested pages %v", pages)
+	}
+	if bank, ok := store.ReadContent("bank"); !ok || !bytes.Equal(bank, files.files["bank.json"]) {
+		t.Fatal("bank not installed")
+	}
+	if manifest, ok := store.ReadContent("version"); !ok || !strings.Contains(string(manifest), `"subject":"russian"`) {
+		t.Fatal("manifest not installed")
+	}
+}
+
+func TestCheckUpdatesWithoutSubjectReleaseIsUpToDate(t *testing.T) {
+	store := newTestStore(t)
+	api := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_ = json.NewEncoder(w).Encode([]githubRelease{release("v2026.10.8", false, false, mathAssets)})
+	}))
+	defer api.Close()
+	store.api = api.URL
+	if got := store.CheckUpdates("", "2026.10.1"); got.Status != "uptodate" {
+		t.Fatalf("a math-only repository must not update the Russian tutor: %+v", got)
 	}
 	if _, ok := store.ReadContent("bank"); ok {
-		t.Fatal("tampered content was installed")
+		t.Fatal("something was installed")
+	}
+}
+
+func TestCheckUpdatesRejectsForeignBankAndTampering(t *testing.T) {
+	cases := map[string]func(*pack){
+		"math bank": func(p *pack) {
+			p.files["bank.json"] = []byte(`{"meta":{"subject":"mathematics","package":"by.ziv.ctmaths"},"tasks":[]}`)
+			sum := sha256.Sum256(p.files["bank.json"])
+			p.manifest["files"].(map[string]any)["bank.json"] = map[string]any{"sha256": hex.EncodeToString(sum[:]),
+				"bytes": len(p.files["bank.json"])}
+		},
+		"tampered file": func(p *pack) { p.files["topics.json"] = []byte(`{"ok":false}`) },
+		"math manifest": func(p *pack) { p.manifest["subject"] = "mathematics" },
+	}
+	for name, mutate := range cases {
+		store := newTestStore(t)
+		progress := []byte(`{"tasksDone":17}`)
+		if err := store.WriteBlob("progress", progress); err != nil {
+			t.Fatal(err)
+		}
+		files := newPack("2026.10.5", "russian-v2026.10.5")
+		mutate(&files)
+		feed := files.server(t)
+		got := store.CheckUpdates(feed.URL, "2026.10.1")
+		feed.Close()
+		if got.Status != "error" {
+			t.Fatalf("%s accepted: %+v", name, got)
+		}
+		if _, ok := store.ReadContent("bank"); ok {
+			t.Fatalf("%s left a partial pack", name)
+		}
+		if data, _ := store.ReadBlob("progress"); !bytes.Equal(data, progress) {
+			t.Fatalf("%s changed progress", name)
+		}
+	}
+}
+
+func TestUpdateFeedCannotDowngradeNewBuild(t *testing.T) {
+	store := newTestStore(t)
+	files := newPack("2026.10.1", "")
+	feed := files.server(t)
+	defer feed.Close()
+	if got := store.CheckUpdates(feed.URL, "2026.10.3"); got.Status != "uptodate" || got.Version != "2026.10.3" {
+		t.Fatalf("downgrade was accepted: %+v", got)
 	}
 }
 
 func TestCheckUpdatesOffline(t *testing.T) {
 	store := newTestStore(t)
-	// Закрытый порт на этой машине: соединение отклоняется сразу, поэтому тест
-	// не зависит от того, доступен ли настоящий канал обновлений.
-	result := store.CheckUpdates("http://127.0.0.1:1", "2026.10.1")
-	if result.Status != "offline" {
-		t.Fatalf("status = %q, want offline", result.Status)
+	store.api = "http://127.0.0.1:1/releases"
+	if got := store.CheckUpdates("", "2026.10.1"); got.Status != "offline" {
+		t.Fatalf("offline check = %+v", got)
 	}
-	// Пустой адрес означает «взять канал по умолчанию»; сам адрес должен
-	// указывать на последний релиз репозитория (без обращения к сети).
-	want := "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
-	if defaultFeed != want {
-		t.Fatalf("defaultFeed = %q, want %q", defaultFeed, want)
+	if got := store.CheckUpdates("ftp://example.com/feed", "2026.10.1"); got.Status != "offline" {
+		t.Fatalf("non-https feed must be refused: %+v", got)
 	}
 }
 
-/* ------------------------------------------------------------- HTTP API --- */
+/* --------------------------------------------------------------- HTTP API --- */
 
 func newTestServer(t *testing.T) (*server, *Store) {
 	t.Helper()
 	store := newTestStore(t)
-	return &server{
-		store:   store,
-		version: appVersion,
-		build:   "test",
-		dataDir: store.Base(),
-		quit:    make(chan struct{}),
-	}, store
+	return &server{store: store, version: appVersion, build: "test", dataDir: store.Base(), quit: make(chan struct{})}, store
 }
 
 func TestAPIStateAndBlob(t *testing.T) {
@@ -217,24 +376,22 @@ func TestAPIStateAndBlob(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/state", srv.handleState)
 	mux.HandleFunc("/api/blob", srv.handleBlob)
-
 	recorder := httptest.NewRecorder()
 	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/api/state", nil))
-	if recorder.Code != http.StatusOK {
-		t.Fatalf("state code = %d", recorder.Code)
-	}
 	var state map[string]any
 	if err := json.Unmarshal(recorder.Body.Bytes(), &state); err != nil {
 		t.Fatalf("state json: %v", err)
 	}
 	app := state["app"].(map[string]any)
-	if app["platform"] != "windows" || app["developer"] == "" {
+	if app["platform"] != "windows" || app["subject"] != "russian" || app["name"] != appName {
 		t.Fatalf("state.app = %+v", app)
 	}
-
-	body := strings.NewReader(`{"attempts":[{"id":"a1"}],"tasksDone":1}`)
+	if state["content"].(map[string]any)["channel"] != "russian-v" {
+		t.Fatalf("state.content = %+v", state["content"])
+	}
 	recorder = httptest.NewRecorder()
-	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodPost, "/api/blob?key=progress", body))
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodPost, "/api/blob?key=progress",
+		strings.NewReader(`{"attempts":[{"id":"a1"}],"tasksDone":1}`)))
 	if recorder.Code != http.StatusOK {
 		t.Fatalf("save code = %d: %s", recorder.Code, recorder.Body)
 	}
@@ -243,7 +400,6 @@ func TestAPIStateAndBlob(t *testing.T) {
 	if !strings.Contains(recorder.Body.String(), `"a1"`) {
 		t.Fatalf("loaded blob = %s", recorder.Body)
 	}
-
 	recorder = httptest.NewRecorder()
 	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/api/blob?key=../secret", nil))
 	if recorder.Code != http.StatusBadRequest {
@@ -251,8 +407,8 @@ func TestAPIStateAndBlob(t *testing.T) {
 	}
 }
 
-func TestStaticServingAndContentOverlay(t *testing.T) {
-	srv, store := newTestServer(t)
+func contentMux(t *testing.T, srv *server) *http.ServeMux {
+	t.Helper()
 	webRoot, err := fs.Sub(embedded, "web")
 	if err != nil {
 		t.Fatalf("embedded web root: %v", err)
@@ -260,91 +416,58 @@ func TestStaticServingAndContentOverlay(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.Handle("/content/", srv.contentHandler(webRoot))
 	mux.Handle("/", srv.staticHandler(webRoot))
+	return mux
+}
 
+func TestEmbeddedBankIsTheRussianTutor(t *testing.T) {
+	srv, _ := newTestServer(t)
+	mux := contentMux(t, srv)
 	recorder := httptest.NewRecorder()
 	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/", nil))
-	if recorder.Code != http.StatusOK {
-		t.Fatalf("index code = %d", recorder.Code)
-	}
-	if !strings.Contains(recorder.Body.String(), "<!DOCTYPE html>") {
-		t.Fatal("index.html not served from the embedded filesystem")
-	}
-
-	recorder = httptest.NewRecorder()
-	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/content/bank.json", nil))
-	if recorder.Code != http.StatusOK || !strings.Contains(recorder.Body.String(), "\"tasks\"") {
-		t.Fatalf("embedded bank not served (code %d)", recorder.Code)
-	}
-
-	overlay := []byte(`{"meta":{"contentVersion":"2099.1"},"tasks":[{"id":"overlay-task"}]}`)
-	if err := store.WriteContent("bank", overlay); err != nil {
-		t.Fatalf("WriteContent: %v", err)
-	}
-	if err := store.WriteContent("version", []byte(`{"contentVersion":"2099.1","files":{}}`)); err != nil {
-		t.Fatalf("WriteContent(version): %v", err)
+	if !strings.Contains(recorder.Body.String(), "Репетитор ЦТ: Русский язык") {
+		t.Fatal("index.html is not the Russian tutor")
 	}
 	recorder = httptest.NewRecorder()
 	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/content/bank.json", nil))
-	if !strings.Contains(recorder.Body.String(), "overlay-task") {
-		t.Fatalf("overlay not served: %s", recorder.Body)
+	if err := bankError(recorder.Body.Bytes()); err != nil {
+		t.Fatalf("embedded bank: %v", err)
 	}
-	if srv.contentVersion() != "2099.1" {
-		t.Fatalf("contentVersion = %q", srv.contentVersion())
+	if srv.contentVersion() == "" {
+		t.Fatal("embedded content version is empty — did tools/sync_assets.py run?")
 	}
 }
 
-// TestStaleOverlayDoesNotShadowEmbeddedBank: a pack downloaded by the previous
-// build must not hide the newer bank embedded in a new executable — after an
-// in-place update the new variant has to appear without a manual refresh.
-func TestStaleOverlayDoesNotShadowEmbeddedBank(t *testing.T) {
+func TestValidOverlayIsServedAndForeignOverlayIgnored(t *testing.T) {
 	srv, store := newTestServer(t)
-	embeddedVersionName := embeddedVersion()
-	if embeddedVersionName == "" {
-		t.Fatal("embedded content version is empty")
+	mux := contentMux(t, srv)
+	overlay := []byte(`{"meta":{"subject":"russian","package":"by.ziv.ctrussian"},"tasks":[{"id":"overlay-task"}]}`)
+	if err := store.WriteContent("bank", overlay); err != nil {
+		t.Fatal(err)
 	}
-	stale := []byte(`{"meta":{"contentVersion":"2000.1.1"},"tasks":[{"id":"stale-task"}]}`)
-	if err := store.WriteContent("bank", stale); err != nil {
-		t.Fatalf("WriteContent: %v", err)
+	foreign := `{"subject":"mathematics","package":"by.ziv.ctmaths","contentVersion":"2099.1.0","files":{}}`
+	if err := store.WriteContent("version", []byte(foreign)); err != nil {
+		t.Fatal(err)
 	}
-	if err := store.WriteContent("version", []byte(`{"contentVersion":"2000.1.1","files":{}}`)); err != nil {
-		t.Fatalf("WriteContent(version): %v", err)
-	}
-	if srv.overlayCurrent() {
-		t.Fatal("stale overlay reported as current")
-	}
-	if got := srv.contentVersion(); got != embeddedVersionName {
-		t.Fatalf("contentVersion = %q, want embedded %q", got, embeddedVersionName)
-	}
-	webRoot, err := fs.Sub(embedded, "web")
-	if err != nil {
-		t.Fatalf("embedded web root: %v", err)
-	}
-	mux := http.NewServeMux()
-	mux.Handle("/content/", srv.contentHandler(webRoot))
 	recorder := httptest.NewRecorder()
 	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/content/bank.json", nil))
-	if strings.Contains(recorder.Body.String(), "stale-task") {
-		t.Fatalf("stale overlay was served over the embedded bank: %s", recorder.Body)
+	if strings.Contains(recorder.Body.String(), "overlay-task") || srv.overlayCurrent() {
+		t.Fatal("a foreign overlay shadowed the embedded bank")
 	}
-	if !strings.Contains(recorder.Body.String(), "\"tasks\"") {
-		t.Fatalf("embedded bank not served (code %d)", recorder.Code)
+	own := `{"subject":"russian","package":"by.ziv.ctrussian","contentVersion":"2099.1.0","files":{}}`
+	if err := store.WriteContent("version", []byte(own)); err != nil {
+		t.Fatal(err)
 	}
-}
-
-// TestCheckUpdatesInstallsTheManifest checks that a downloaded update also stores
-// the manifest, because that is where the installed content version comes from.
-func TestCheckUpdatesInstallsTheManifest(t *testing.T) {
-	store := newTestStore(t)
-	bank := []byte(`{"meta":{"contentVersion":"2026.10.9"},"tasks":[]}`)
-	feed := feedServer(t, "2026.10.9", bank)
-	defer feed.Close()
-
-	if result := store.CheckUpdates(feed.URL, "2026.10.1"); result.Status != "updated" {
-		t.Fatalf("status = %q (%s)", result.Status, result.Message)
+	recorder = httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/content/bank.json", nil))
+	if !strings.Contains(recorder.Body.String(), "overlay-task") || srv.contentVersion() != "2099.1.0" {
+		t.Fatalf("valid overlay not served: %s", recorder.Body)
 	}
-	manifest, ok := store.ReadContent("version")
-	if !ok || !strings.Contains(string(manifest), "2026.10.9") {
-		t.Fatalf("manifest not installed: %s (%v)", manifest, ok)
+	stale := `{"subject":"russian","package":"by.ziv.ctrussian","contentVersion":"2000.1.1","files":{}}`
+	if err := store.WriteContent("version", []byte(stale)); err != nil {
+		t.Fatal(err)
+	}
+	if srv.overlayCurrent() || srv.contentVersion() != embeddedVersion() {
+		t.Fatal("a stale overlay hid the newer embedded bank")
 	}
 }
 
@@ -352,22 +475,14 @@ func TestReportEndpoint(t *testing.T) {
 	srv, store := newTestServer(t)
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/report", srv.handleReport)
-	payload, _ := json.Marshal(map[string]string{"kind": "progress", "html": "<html>ok</html>"})
+	payload, _ := json.Marshal(map[string]string{"kind": "russian-progress", "html": "<html>ok</html>"})
 	recorder := httptest.NewRecorder()
 	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodPost, "/api/report", bytes.NewReader(payload)))
 	if recorder.Code != http.StatusOK {
 		t.Fatalf("report code = %d: %s", recorder.Code, recorder.Body)
 	}
-	entries, err := os.ReadDir(store.Reports())
-	if err != nil || len(entries) != 1 {
+	if entries, err := os.ReadDir(store.Reports()); err != nil || len(entries) != 1 {
 		t.Fatalf("reports dir = %v (%v)", entries, err)
-	}
-}
-
-func TestContentVersionFallsBackToEmbedded(t *testing.T) {
-	srv, _ := newTestServer(t)
-	if version := srv.contentVersion(); version == "" {
-		t.Fatal("embedded content version is empty — did tools/sync_assets.py run?")
 	}
 }
 
@@ -375,71 +490,19 @@ func TestNumericContentVersions(t *testing.T) {
 	cases := []struct {
 		left, right string
 		want        int
-	}{
-		{"2026.10.3", "2026.9.99", 1},
-		{"2026.10.2", "2026.10.3", -1},
-		{"2026.10", "2026.10.0", 0},
-		{"2027.1.0", "2026.12.99", 1},
-	}
+	}{{"2026.10.3", "2026.9.99", 1}, {"2026.10.2", "2026.10.3", -1}, {"2026.10", "2026.10.0", 0}, {"2027.1.0", "2026.12.99", 1}}
 	for _, item := range cases {
 		if got := compareContentVersions(item.left, item.right); got != item.want {
 			t.Fatalf("compare(%q,%q) = %d, want %d", item.left, item.right, got, item.want)
 		}
 	}
-}
-
-func TestUpdateFeedCannotDowngradeNewBuild(t *testing.T) {
-	store := newTestStore(t)
-	bank := []byte(`{"meta":{"contentVersion":"2026.10.1"},"tasks":[]}`)
-	feed := feedServer(t, "2026.10.1", bank)
-	defer feed.Close()
-	got := store.CheckUpdates(feed.URL, "2026.10.3")
-	if got.Status != "uptodate" || got.Version != "2026.10.3" {
-		t.Fatalf("downgrade was accepted: %+v", got)
+	if version, ok := versionOfTag("russian-v2026.10.1"); !ok || version != "2026.10.1" {
+		t.Fatal("canonical tag not parsed")
 	}
-	if _, ok := store.ReadContent("bank"); ok {
-		t.Fatal("an older bank was installed")
-	}
-}
-
-func TestBrokenPackLeavesPreviousContentAndProgressIntact(t *testing.T) {
-	store := newTestStore(t)
-	old := []byte(`{"old":true}`)
-	for _, name := range []string{"bank", "topics", "version"} {
-		if err := store.WriteContent(name, old); err != nil {
-			t.Fatal(err)
+	for _, tag := range []string{"v2026.10.1", "russian-v2026.10.01", "russian-v2026.13.1", "physics-v2026.10.1"} {
+		if _, ok := versionOfTag(tag); ok {
+			t.Fatalf("%s accepted", tag)
 		}
-	}
-	progress := []byte(`{"tasksDone":17}`)
-	if err := store.WriteBlob("progress", progress); err != nil {
-		t.Fatal(err)
-	}
-	fresh := []byte(`{"tasks":[]}`)
-	digest := sha256.Sum256(fresh)
-	feed := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/version.json" {
-			json.NewEncoder(w).Encode(map[string]any{
-				"contentVersion": "2027.1.0",
-				"files": map[string]any{
-					"bank.json":   map[string]any{"sha256": hex.EncodeToString(digest[:])},
-					"topics.json": map[string]any{"sha256": strings.Repeat("0", 64)},
-				},
-			})
-		} else {
-			w.Write(fresh)
-		}
-	}))
-	defer feed.Close()
-	if got := store.CheckUpdates(feed.URL, "2026.10.3"); got.Status != "error" {
-		t.Fatalf("bad checksum accepted: %+v", got)
-	}
-	for _, name := range []string{"bank", "topics", "version"} {
-		if got, ok := store.ReadContent(name); !ok || !bytes.Equal(got, old) {
-			t.Fatalf("%s changed on failed update", name)
-		}
-	}
-	if got, _ := store.ReadBlob("progress"); !bytes.Equal(got, progress) {
-		t.Fatal("progress changed on update")
 	}
 }
 

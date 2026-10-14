@@ -1,155 +1,96 @@
-# Agent handoff — CT Maths Tutor
+# Agent handoff — «Репетитор ЦТ: Русский язык» (CT Russian Tutor)
 
-Read this file, `docs/WORKLOG.md` and `docs/RELEASE.md` before changing the project.
-The worklog is a dated human record, not a live release-status database. The
-actual source is Git; the actual publication state is GitHub Actions/Releases.
+Read this file, `docs/WORKLOG.md`, `docs/RELEASE.md` and `docs/CONTENT.md` before
+changing the project. The worklog is a dated human record; the actual source is
+Git, the actual publication state is GitHub Actions/Releases.
+
+**This branch is the Russian-language tutor**, a standalone app built from the
+verified mathematics tutor (history from `v2026.10.8`, commit `b261274`). It
+shares the repository `zigorminsk-debug/mathematics` with the mathematics tutor
+(branch `arena/d7e34c80-mathematics`, tags `v…`, which owns the repository-wide
+GitHub *latest*). Subject identity is explicit in `subject.json` — never guessed
+from a branch name.
 
 ## Standing user requirements (2026-10-14)
 
 > «публикуй автоматически все сборки сразу после внесения изменений, и
 > документируй все действия чтобы любой агент продолжил работу»
 
-- After a trusted push to `zigorminsk-debug/mathematics`, CI must automatically
-  publish the signed release APK, **both** Windows EXEs, and the content feed
-  **after all checks pass**. Do not revert to artifact-only/manual publication.
-- Record material changes, commands, validation results, failures, commit/PR/run
-  identities, publication outcome and remaining uncertainties in
-  `docs/WORKLOG.md`. Keep this handoff/runbook accurate when architecture changes.
-- Every published release automatically carries `release-info.json` and
-  `SHA256SUMS.txt`; Actions also keeps `release-audit` and step summaries.
-  The same JSON ledger is also mirrored in Release body (API-readable even when
-  binary asset redirects are blocked). These immutable records avoid an endless bot-commit → release → bot-commit loop.
-- A new documentation-only push also produces a release. A rerun of an already
-  published source is idempotent: never replace public assets or move a version tag.
+> «реализуй» — the specification `docs/subjects/RUSSIAN.md` + `docs/subjects/README.md`.
+
+- After a trusted push of this branch, CI automatically publishes the signed
+  release APK, **both** Windows EXEs and the content feed **after all checks pass**
+  — as a SUBJECT release `russian-vYYYY.M.P` with `make_latest=false`.
+- Record changes, commands, validation results, failures, commit/run/release
+  identities and remaining uncertainties in `docs/WORKLOG.md`.
+- Never publish anything through the mathematics latest pipeline; never change the
+  mathematics package `by.ziv.ctmaths`, its key/certificate, statistics, its branch,
+  `main`, or the repository latest. No sibling branches, no new repositories, no PR
+  merge/close without an explicit request. Never recommend uninstalling an app.
+- Do not present authored tasks as official RIKZ materials; do not claim a release
+  before the actual CI run succeeded; never ask for credentials; mark phone/Windows
+  installation as **not tested** unless it was really tested.
+
+## Identities (subject.json — single source; tests assert YAML and code agree)
+
+| Property | Russian tutor (this branch) | Mathematics (do not touch) |
+|---|---|---|
+| subject | `russian` | `mathematics` |
+| Android package | `by.ziv.ctrussian` (debug `by.ziv.ctrussian.debug`) | `by.ziv.ctmaths` |
+| Certificate SHA-256 | `DE:65:1A:CC:…:83:B6:6A:3D` (`android/keystore/expected-cert-sha256.txt`) | `B2:BD:B4:…:C5:14:65` |
+| Windows | `CTRussianTutor-amd64.exe` / `CTRussianTutor-arm64.exe`, data `%APPDATA%\CTRussianTutor`, profile `ctrussian-window` | `CTMathsTutor…` |
+| Tag family | `russian-vYYYY.M.P`, `make_latest=false` | `vYYYY.M.P`, latest |
+| CI lock | `ctrussian-release-pipeline` | `ctmaths-release-pipeline` |
+| Update channel | Releases API, family `russian-v`, tag-specific URLs | `releases/latest/download` |
 
 ## Repository and source of truth
 
-- Android: `android/`, Kotlin/Gradle; Windows: `windows/`, Go.
-- Shared UI: **edit `webapp/`**, then regenerate/sync platform copies.
-- Authored RU/EN content: **edit `content_src/`**, not generated JSON/resources.
-- `tools/build_content.py` verifies all task answers with exact arithmetic;
-  `tools/sync_assets.py` distributes the shared interface and data.
-- `VERSION` is the **minimum source/build version**, not necessarily the latest
-  published version. CI allocates a higher effective version automatically,
-  applies it to runner checkouts only, and uses it for all three artifacts.
-  Never commit CI-generated release output or bump a version merely to log a run.
-- `dist/`, `release/`, `staging/`, native builds, `.venv/`, `node_modules/`,
-  `scratch/` are disposable/ignored. Do not commit binaries, caches or credentials.
-- Honour the branch fixed by the active Arena session. This session is
-  `arena/d7e34c80-mathematics`, PR #4 against `main`. Do not switch/create/push
-  another branch here; do not merge/close a PR unless the user asks. Until PR #4
-  is merged, old main does not contain these workflows/handoff documents; start
-  from this working branch or integrate its published history before continuing.
+- Shared UI: **edit `webapp/`**; authored content: **edit `content_src/`**. Then
+  `python3 tools/build_content.py && python3 tools/sync_assets.py` (CI fails on
+  stale copies). Generated: `dist/`, `android/.../assets/webapp/`, `windows/web/`,
+  `android/.../res/values*/strings.xml`, `android/app/src/test/resources/answer_vectors.json`.
+- Content model: 13 areas × 54 rule cards, 6 authored variants × 40 tasks by the
+  RIKZ 2026 specification (40 tasks: A 18 + B 22, 120 min), 193 analogous exercises
+  (≥3 per rule). Details: `docs/CONTENT.md`.
+- Answer checking is the subject checker (`content_src/checker.py` = `webapp/core.js`
+  `CT.answer` = `AnswerChecker.kt`), never the maths normaliser.
+- `VERSION` is the minimum source version of THIS subject (first: `2026.10.1`);
+  CI allocates the effective version per family and applies it in runner checkouts.
 
-## Future Physics/Russian work (user decision 2026-10-14)
+## Local gates (all must pass before a push)
 
-The user requested separate Physics and Russian tutor branches, then selected
-**separate Arena sessions with their own working branches**, not two app folders
-in this Mathematics branch. Handoff/specifications/prompts live in
-`docs/subjects/README.md`, `PHYSICS.md`, `RUSSIAN.md`. **No subject branch, APK,
-EXE or subject release has been created by this handoff.** Do not mistake the
-specifications or a Mathematics documentation release for a finished tutor.
-
-A new subject session must begin from this updated history (old main lacks it),
-honour its own assigned branch, and establish package/storage/update/publication
-isolation **before its first subject push**. Repository Releases/latest is
-shared across branches: never publish a renamed subject APK through the inherited
-math latest pipeline. The handoff describes namespaced tags, subject manifests,
-subject-scoped planner/resolver/upgrade checks and `make_latest=false` promotion.
-Do not create a new repository, change main, merge PR #4 or launch sibling branches
-without an explicit authorised task/environment.
-
-## Invariants — do not regress
-
-1. Stable Android package: **`by.ziv.ctmaths`**. Permanent certificate:
-   **`B2:BD:B4:D1:26:B8:88:C7:D8:AF:50:80:F6:7E:CF:E1:E4:3F:EB:F2:8E:5D:1A:E6:61:D6:D7:AE:70:C5:14:65`**.
-   Keep `android/keystore/ctmaths-release.p12` and the expected certificate unchanged.
-   It is a public/demo key; do not substitute a private key for this installed app.
-2. Effective version `YYYY.month.patch` has patch 0–99. APK code is
-   `(year-2000)*10000 + month*100 + patch`. New public codes must strictly increase
-   and both APK signatures/package IDs must match the previous stable APK.
-3. Debug APK is development-only, package `by.ziv.ctmaths.debug`, and is **not**
-   a phone update or a public Release asset. It remains a separate CI artifact.
-4. Never suggest uninstalling to fix an update: that removes local statistics.
-   Diagnose installed package, certificate and code first. Do not claim a physical
-   phone installation was tested when only CI/browser checks were run.
-5. Six **authored practice**, not official RIKZ papers, cover 2021–2026; 2026 has
-   18 A + 12 B tasks. Keep RU/EN statements, hints, worked solutions and checks.
-6. Wrong practice/analogous answers open relevant study; exam remediation happens
-   after finishing. Revision points, formula groups and rows must open offline
-   definitions/rules/theorems/examples. Back/language changes preserve session,
-   answer, search, scroll and focus. Study has 56 lessons/18 topics; every lesson
-   includes bilingual everyday explanations, with 52 offline SVG figures in 51
-   lessons. Keep `intuition.py`/`diagrams.py` typed primitives, captions, units and
-   math checks; no raw SVG/HTML/eval/external images. Zoom/pan/Back/language must
-   not alter answers/progress and must preserve parent scroll/focus.
-7. Preserve atomic/checksummed content updates and protection against older
-   downloaded banks hiding newer built-in content. Settings/statistics must survive.
-8. Do not publish from a PR/fork or bypass any failed/skipped build/check job.
-   Publication must reuse **same-run checked artifacts**, not rebuild separately.
-   `BUILD_JOBS` in `tools/release_plan.py` must match CI job names if renamed.
-
-## Start / check / finish
-
-```bash
-pwd; git branch --show-current; git status --short; git log -5 --oneline
-# Actual publication and Actions state, not stale prose/VERSION:
-gh api repos/zigorminsk-debug/mathematics/releases/latest \
-  --jq '{tag: .tag_name, url: .html_url, source: .target_commitish, assets: [.assets[].name]}'
-gh run list --workflow ci.yml --branch arena/d7e34c80-mathematics --limit 8 \
-  --json databaseId,headSha,event,status,conclusion,url
-
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-dev.txt
-python3 tools/build_content.py
-python3 tools/sync_assets.py
-python3 tools/sync_assets.py --check
+```
+python3 tools/build_content.py && python3 tools/sync_assets.py --check
+python3 -m pip install -r requirements-dev.txt     # PyYAML, tree-sitter, pymorphy3 (+dicts)
+python3 -m unittest discover -s tests -p 'test_*.py'
 node --check webapp/core.js && node --check webapp/app.js
-node tests/answer_parity.js
-node tests/content_schema.js
-.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
-.venv/bin/python tools/check_syntax.py --require
-npm install --no-save jsdom
-node tests/ui_smoke.js && node tests/native_smoke.js && node tests/theory_smoke.js
-git diff --check
-# Also go vet/test and Gradle/Kotlin/APK gates when local toolchains exist;
-# regardless, wait for actual native CI checks and publication before claiming success.
+node tests/answer_parity.js && node tests/content_schema.js
+npm install --no-save jsdom && node tests/ui_smoke.js && node tests/native_smoke.js && node tests/rules_smoke.js
+python3 tools/check_syntax.py --require
+python3 tools/check_signature.py --require --keystore android/keystore/ctrussian-release.p12
 ```
 
-After editing, update the worklog with what actually ran (distinguish local/CI,
-planned/completed, device/browser). Commit/push only the session branch. A push
-starts publication automatically: watch the run and verify latest contains all
-13 expected assets, its tag targets the pushed SHA, and its audit reports the
-same effective version/code. Report stable user download links, not expiring
-Actions artifacts, when publication is confirmed. A failed run is not a release.
+Optional local native/browser tools found to work in the build sandbox (egress only
+to GitHub/npm/PyPI): Go from PyPI `go-bin` (`go vet`, `go test`, both EXEs);
+`kotlin-compiler` from npm + JRE from PyPI `jdk4py` (pure Kotlin classes/tests with
+local org.json/JUnit stand-ins — Android classes only compile in CI); Chromium from
+npm `@sparticuz/chromium` + `puppeteer-core` for `tests/mobile_check.mjs`
+(393 px touch, RU/EN, dark, text 1.3, real Go backend via `BASE_URL`). Commands are
+in `docs/WORKLOG.md`.
 
-To continue after failure: follow `docs/RELEASE.md` recovery; query checks and
-annotations rather than repeatedly downloading unavailable full logs. Never
-force-publish an incomplete draft, weaken certificate/code gates, repoint a tag,
-or bypass a stale-history error. A publishing branch must descend from the most
-recent public release; integrate that history on the allowed working branch.
+## Release/recovery rules
 
-## Known Arena/environment limitations (dated 2026-10-14)
+See `docs/RELEASE.md`. Never move/replace a published tag or asset; a rerun of a
+published source is idempotent; failed/skipped gates block publication; PR/fork
+runs never publish; the publisher verifies its own release by id and that the
+repository latest is identical before/after (and restores it if GitHub moved it).
+If CI fails, fix and push again — every failing run publishes nothing.
 
-- `gh workflow run release.yml ...` returned **403 Resource not accessible by
-  integration** (manual Actions-dispatch permission missing). Push-triggered CI
-  does not need this permission and publishes with its own scoped `GITHUB_TOKEN`.
-  If required GitHub operations still fail auth/permissions, tell the user to
-  reconnect GitHub in Arena; never request/store passwords, PATs, OAuth or 2FA.
-- Old local `gh pr edit` hits deprecated GraphQL Projects(classic). Update PR #4
-  with REST instead: `gh api --method PATCH repos/zigorminsk-debug/mathematics/pulls/4 -F body=@scratch/pr-body.md`.
-- Old `gh run list` lacks `--commit`: query `headSha` JSON and filter it.
-- Artifact/APK/full-log redirects and binary tool downloads may be blocked by
-  sandbox egress; GitHub-hosted runners and user-browser download links work.
-  Local Go/JDK/Gradle were unavailable. Do not silently label native tests local.
-- An Arena checkout may be shallow. If a known published ancestor appears
-  unrelated, first `git rev-parse --is-shallow-repository`; when true, run
-  `git fetch --unshallow origin`, then retry ancestry/plan. Do not merge an
-  actually related tag or weaken the gate just because local history is incomplete.
-- Runners are pinned to `ubuntu-24.04`; CI reported `ubuntu-latest` migrating
-  to Ubuntu 26 on 2026-10-19. Upgrade intentionally only with native verification.
-- `actionlint-py` locally could not fetch its binary; actionlint v1.7.12 also
-  predates the documented Actions `queue` key. Workflow contracts/YAML parsing
-  are tested here, and the real GitHub run is the authoritative validation.
-- Preview binds to `0.0.0.0`; browser-facing APIs use relative URLs. Any scratch
-  preview/mobile-test process is temporary, not the durable project handoff.
+## Known limits (be honest)
+
+- Physical phone and real Windows installation: **not tested** by agents.
+- `gh workflow run` returns HTTP 403 in agent sessions (no manual dispatch);
+  `gh pr edit` was unreliable (use REST). Release asset downloads redirect to a host
+  outside the sandbox egress; read `release-info.json` via the Release body/API.
+- Actions secrets are not writable here (403), so the subject key is committed like
+  the mathematics key — see `android/keystore/README.md` for the trade-off.

@@ -171,6 +171,7 @@ pre { white-space: pre-wrap; word-break: break-word; }
 .hero { padding: 8px 0 4px; }
 .hero h1 { font-size: 1.7rem; margin-bottom: 4px; }
 .hero-actions, .rowline { display: flex; gap: 8px; align-items: center; }
+.hero-actions { flex-wrap: wrap; }
 .rowline.wrap { flex-wrap: wrap; }
 .rowline.end { justify-content: flex-end; }
 .rowline.center { justify-content: center; }
@@ -178,7 +179,7 @@ pre { white-space: pre-wrap; word-break: break-word; }
 /* -------------------------------------------------------------- buttons --- */
 .btn {
   appearance: none; cursor: pointer;
-  padding: 10px 14px; min-height: 42px;
+  padding: 10px 14px; min-height: 44px;
   border: 1px solid var(--border); border-radius: var(--radius-sm);
   background: var(--surface); color: var(--text);
   font-size: .95rem; font-weight: 550;
@@ -189,7 +190,7 @@ pre { white-space: pre-wrap; word-break: break-word; }
 .btn.primary:hover:not(:disabled) { filter: brightness(1.07); background: var(--primary); }
 .btn.ghost { background: transparent; }
 .btn.big { padding: 16px 14px; font-size: 1.02rem; }
-.btn.small { padding: 5px 9px; min-height: 32px; font-size: .85rem; }
+.btn.small { padding: 5px 9px; min-height: 44px; min-width: 44px; font-size: .95rem; }
 .tool-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .tool-icon { font-size: 1.5rem; }
 .topic-btn { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; }
@@ -234,8 +235,8 @@ pre { white-space: pre-wrap; word-break: break-word; }
 .progress { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .progress-fill { height: 100%; background: var(--primary); border-radius: 999px; }
 .tools-strip { padding: 10px; }
-.run-nav { display: flex; gap: 8px; align-items: center; }
-.run-nav .btn { flex: 1; }
+.run-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.run-nav .btn { width: 100%; min-width: 0; overflow-wrap: anywhere; }
 .feedback { padding: 10px 12px; border-radius: var(--radius-sm); font-weight: 600; }
 .feedback.good { background: var(--good-soft); color: var(--good); }
 .feedback.bad { background: var(--bad-soft); color: var(--bad); }
@@ -295,15 +296,6 @@ pre { white-space: pre-wrap; word-break: break-word; }
 .attempt-score { font-weight: 700; }
 .attempt-row .muted:first-of-type { grid-column: 1; }
 
-/* ------------------------------------------------------------- formulas --- */
-.formula-list { display: grid; gap: 10px; }
-.formula-list.in-modal { max-height: 62vh; overflow: auto; }
-.formula-group h3 { margin-top: 0; color: var(--primary); }
-.formula-row { display: grid; gap: 2px; padding: 7px 0; border-top: 1px dashed var(--border); }
-.formula-row:first-of-type { border-top: 0; }
-.formula-name { font-size: .84rem; color: var(--muted); }
-.formula-body { font-size: .98rem; font-variant-numeric: tabular-nums; }
-
 /* --------------------------------------------------------- study topic --- */
 .study-topic {
   margin-top: 12px; padding: 12px;
@@ -313,11 +305,9 @@ pre { white-space: pre-wrap; word-break: break-word; }
 .study-topic h4 { margin: 0 0 6px; color: var(--primary); }
 .study-topic h5 { margin: 10px 0 4px; }
 .study-points { margin: 4px 0 0; padding-left: 20px; display: grid; gap: 4px; }
-.study-formulas { margin-top: 6px; }
-.formula-group-title { font-weight: 700; color: var(--primary); margin-top: 6px; }
 .study-example .task-text { margin-top: 0; }
 
-/* Clickable summaries, section titles and individual formulas. */
+/* Clickable rule links: study points, remediation, the «Правила» reference. */
 .theory-trigger {
   appearance: none; background: transparent; border: 0; border-radius: 8px;
   color: inherit; font: inherit; text-align: left; cursor: pointer;
@@ -325,25 +315,16 @@ pre { white-space: pre-wrap; word-break: break-word; }
 }
 .theory-trigger:hover { background: var(--primary-soft); }
 .theory-trigger:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-.study-point-link, .formula-group-link {
+.study-point-link, .remedy-rule-link, .plan-rule-link {
   display: flex; gap: 10px; align-items: center; width: 100%;
   padding: 8px; color: var(--primary);
 }
 .study-points li::marker { color: var(--primary); }
-.formula-group-link { font-weight: 650; }
 .theory-arrow { color: var(--primary); font-size: 1.4rem; line-height: 1; flex-shrink: 0; margin-left: auto; }
-.formula-row.formula-link {
-  width: 100%; padding: 10px 8px; min-height: 58px;
-  grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px;
-  border-top: 1px dashed var(--border);
-}
-.formula-link .formula-name, .formula-link .formula-body { grid-column: 1; }
-.formula-link .theory-arrow { grid-column: 2; grid-row: 1 / 3; align-self: center; }
 .theory-content { line-height: 1.65; overflow-wrap: anywhere; }
-.theory-formula { white-space: pre-line; font-size: 1.05rem; }
 .theory-lesson + .theory-lesson { border-top: 1px solid var(--border); margin-top: 18px; padding-top: 12px; }
 .theory-lesson > * + * { margin-top: 12px; }
-.theory-definitions, .theory-rules, .theory-example { padding: 12px; border-radius: var(--radius-sm); background: var(--surface-2); }
+.theory-exceptions, .theory-rules, .theory-example, .theory-steps, .theory-sources { padding: 12px; border-radius: var(--radius-sm); background: var(--surface-2); }
 .theory-example { background: var(--primary-soft); }
 .theory-lesson h3 { margin-top: 0; }
 .theory-lesson li { margin: 8px 0; white-space: pre-line; }
@@ -398,24 +379,11 @@ pre { white-space: pre-wrap; word-break: break-word; }
 .diagram-viewport .diagram-svg { max-width: none; flex-shrink: 0; }
 
 /* ---------------------------------------------------------------- tools --- */
-.calc-display { width: 100%; }
-.calc-result { font-size: 1.2rem; font-weight: 700; min-height: 28px; margin: 8px 0; }
-.calc-result.bad { color: var(--bad); }
-.calc-keys { display: grid; gap: 6px; }
-.calc-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.calc-key {
-  min-height: 48px; font-size: 1.05rem;
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  background: var(--surface); color: var(--text); cursor: pointer;
-}
-.calc-key:hover { background: var(--surface-2); }
-.calc-key.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
 .scratch {
   width: 100%; min-height: 240px; padding: 10px;
   border: 1px solid var(--border); border-radius: var(--radius-sm);
   background: var(--surface); color: var(--text); font-size: 1rem; resize: vertical;
 }
-.plot { width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
 .field { display: block; font-size: .84rem; color: var(--muted); margin-top: 10px; }
 
 /* ------------------------------------------------------- settings/about --- */
@@ -459,10 +427,13 @@ body.modal-open { overflow: hidden; }
   max-width: 1000px; margin: 0 auto; padding: 12px 14px;
   display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
 }
+.footer-inner > * { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+#app-folder { word-break: break-all; }
 
 /* ---------------------------------------------------------- wide screens --- */
 @media (min-width: 900px) {
   body { padding-bottom: 0; }
+  .run-nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .view { padding: 22px 24px 40px; }
   .mainnav {
     position: static; flex-wrap: wrap; padding: 8px 16px;
@@ -477,3 +448,74 @@ body.modal-open { overflow: hidden; }
   body { padding: 0; }
   .card { box-shadow: none; break-inside: avoid; }
 }
+
+/* ------------------------------------------------- Russian tutor parts --- */
+.task-material { margin-top: 10px; }
+.task-original {
+  padding: 10px 12px; border-left: 3px solid var(--primary); background: var(--surface-2);
+  border-radius: var(--radius-sm); line-height: 1.7; overflow-wrap: anywhere;
+}
+.task-items { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.task-items li {
+  display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 6px; align-items: baseline;
+  padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow-wrap: anywhere;
+}
+.task-items li::before { content: attr(data-n) ")"; font-weight: 700; color: var(--primary); }
+.answer-control { margin-top: 12px; }
+.option .option-value { overflow-wrap: anywhere; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+.chip {
+  position: relative; min-width: 48px; min-height: 48px; padding: 0 12px; font: inherit; font-weight: 700;
+  border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--text); cursor: pointer;
+}
+.chip.selected { background: var(--primary); border-color: var(--primary); color: #fff; }
+.chip-order { position: absolute; top: -6px; right: -4px; font-size: .7rem; min-width: 18px; border-radius: 9px;
+  background: var(--warn); color: #000; line-height: 18px; }
+.chip-order:empty { display: none; }
+.stress-letters { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; font-size: 1.35rem; }
+.stress-letter { min-width: 40px; min-height: 48px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px; color: var(--muted); }
+button.stress-letter { border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; cursor: pointer; }
+button.stress-letter.selected { background: var(--warn-soft); border-color: var(--warn); color: var(--text); font-weight: 700;
+  text-decoration: underline; text-decoration-thickness: 3px; }
+.match-choices { margin: 6px 0; padding-left: 22px; }
+.match-grid { display: grid; gap: 8px; }
+.match-row { display: grid; grid-template-columns: minmax(0, 1fr) 96px; gap: 8px; align-items: center; }
+.match-select { min-height: 44px; font: inherit; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); padding: 0 8px; }
+.examples-good, .examples-bad { padding-left: 4px; list-style: none; }
+.examples-good li { color: var(--good); }
+.examples-bad .wrong { color: var(--bad); text-decoration: line-through; }
+.examples-bad .right { color: var(--good); font-weight: 650; }
+.theory-steps .steps, .sources { padding-left: 22px; }
+.sources li { font-size: .88rem; color: var(--muted); }
+.rule-drill { width: 100%; min-height: 44px; }
+.diagram-svg .diagram-accent { stroke: var(--warn); fill: var(--warn-soft); stroke-width: 2.5; }
+.diagram-key.diagram-accent { border-top-color: var(--warn); }
+.table-scroll { overflow-x: auto; max-width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.table-scroll:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.rule-table { border-collapse: collapse; width: 100%; min-width: 320px; font-size: .92rem; }
+.rule-table caption { caption-side: top; text-align: left; padding: 8px 10px; color: var(--muted); }
+.rule-table th, .rule-table td { border-top: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top;
+  overflow-wrap: anywhere; }
+.rule-table thead th { background: var(--surface-2); border-top: 0; }
+.rule-table tbody th { font-weight: 650; }
+.decision-tree { font-size: .95rem; }
+.tree-node { border-left: 3px solid var(--primary); padding-left: 10px; }
+.tree-question { font-weight: 650; margin: 4px 0; }
+.tree-branches { list-style: none; margin: 0; padding: 0 0 0 6px; display: grid; gap: 8px; }
+.tree-label { display: inline-block; min-width: 36px; font-weight: 700; margin-right: 6px; }
+.tree-yes > .tree-label { color: var(--good); }
+.tree-no > .tree-label { color: var(--bad); }
+.tree-result { padding: 6px 8px; background: var(--surface-2); border-radius: var(--radius-sm); display: inline-block; }
+.tree-examples { color: var(--muted); }
+.rule-list { display: grid; gap: 10px; }
+.rule-group h3 { margin-top: 0; color: var(--primary); }
+.rule-row { display: grid; width: 100%; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 10px 8px;
+  border-top: 1px dashed var(--border); }
+.rule-row .rule-name { font-weight: 650; color: var(--primary); grid-column: 1; }
+.rule-row .rule-summary, .rule-row .rule-examples { grid-column: 1; font-size: .9rem; }
+.rule-row .theory-arrow { grid-column: 2; grid-row: 1 / 4; align-self: center; }
+.memos { display: grid; gap: 12px; }
+.memo-list { columns: 2 140px; padding-left: 18px; margin: 4px 0; }
+.disclaimer { margin-top: 18px; }

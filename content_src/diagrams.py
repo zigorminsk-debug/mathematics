@@ -1,9 +1,17 @@
-"""Deterministic, offline mathematical figures as safe typed SVG primitives.
+"""diagrams.py — offline visual aids for the rule cards.
 
-No raw SVG/HTML, scripts, images, paths, CSS or external URLs in content.
-Plot curves are sampled from named Python functions (never evaluated in JS).
-Coordinates are viewport units; geometry marked as a perspective sketch is not
-meant for measuring physical lengths. See tests/test_diagrams.py for math gates.
+Three strictly typed kinds (no markup, no URLs, no code):
+
+* ``svg``   — short schemes drawn from a fixed primitive allowlist inside a
+              420×280 viewBox (stress, letters/sounds, morpheme parsing, word
+              chains, sentence base, phrase links, complex-sentence schemes);
+* ``table`` — contrast tables rendered as semantic HTML ``<table>`` (large text
+              stays real text, never tiny SVG labels);
+* ``tree``  — rule decision trees rendered as nested lists with yes/no branches
+              (an accessible linear description by construction).
+
+Russian material inside figures is language-neutral (the same string for RU and
+EN); captions/labels are bilingual. Colour is always accompanied by words.
 """
 from __future__ import annotations
 
@@ -11,556 +19,624 @@ from copy import deepcopy
 import math
 
 WIDTH, HEIGHT = 420, 280
-ROLES = {"axis", "grid", "primary", "secondary", "helper", "region", "point", "openpoint", "text"}
-FIELDS = {
-    "line": {"x1", "y1", "x2", "y2"}, "polyline": {"points"}, "polygon": {"points"},
-    "circle": {"cx", "cy", "r"}, "ellipse": {"cx", "cy", "rx", "ry"},
-    "rect": {"x", "y", "width", "height"}, "text": {"x", "y", "text", "anchor"},
-}
-FUNCTIONS = {
-    "square": lambda x: x*x, "cube": lambda x: x*x*x,
-    "parabola-roots": lambda x: (x-1)*(x-3),
-    "shifted-square": lambda x: (x-1)**2-1,
-    "linear": lambda x: 2*x+1, "taxi": lambda x: 2*x+5, "distance": lambda x: 4*x, "tangent": lambda x: 2*x-1,
-    "speed-tangent": lambda x: 4*x-4,
-    "reciprocal": lambda x: 4/x, "square-root": lambda x: math.sqrt(x-1),
-    "sine": math.sin, "cosine": math.cos,
-    "exponential": lambda x: 2**x, "logarithm": math.log2,
-    "extrema": lambda x: x**3-3*x,
-    "segment": lambda x: (x-2)**2-1,
-    "constant-half": lambda x: 0.5, "constant-eight": lambda x: 8,
-    "parameter-low": lambda x: (x-2)**2-1,
-    "parameter-zero": lambda x: (x-2)**2,
-    "parameter-high": lambda x: (x-2)**2+1,
-}
+ROLES = {"axis", "grid", "primary", "secondary", "helper", "region", "point", "openpoint", "text", "accent"}
+FIELDS = {"line": {"x1", "y1", "x2", "y2"}, "circle": {"cx", "cy", "r"}, "ellipse": {"cx", "cy", "rx", "ry"},
+          "rect": {"x", "y", "width", "height"}, "polyline": {"points"}, "polygon": {"points"},
+          "text": {"x", "y", "text", "anchor"}}
 
 
 def bi(ru, en=None):
-    return {"ru": str(ru), "en": str(ru if en is None else en)}
+    return {"ru": ru, "en": ru if en is None else en}
 
 
-def n(value):
-    return round(float(value), 5)
+# --------------------------------------------------------------- primitives
+def text(x, y, ru, en=None, anchor="middle"):
+    return {"kind": "text", "role": "text", "filled": False, "x": round(x, 1), "y": round(y, 1), "text": bi(ru, en),
+            "anchor": anchor}
 
 
-def shape(kind, role="primary", filled=False, **coordinates):
-    return {"kind": kind, "role": role, "filled": filled, **coordinates}
-
-
-def line(x1, y1, x2, y2, role="primary"):
-    return shape("line", role, x1=n(x1), y1=n(y1), x2=n(x2), y2=n(y2))
-
-
-def poly(points, role="primary", filled=False, closed=False):
-    return shape("polygon" if closed else "polyline", role, filled,
-                 points=[[n(x), n(y)] for x, y in points])
-
-
-def circle(x, y, r, role="primary", filled=False):
-    return shape("circle", role, filled, cx=n(x), cy=n(y), r=n(r))
-
-
-def ellipse(x, y, rx, ry, role="primary"):
-    return shape("ellipse", role, cx=n(x), cy=n(y), rx=n(rx), ry=n(ry))
+def line(x1, y1, x2, y2, role="helper"):
+    return {"kind": "line", "role": role, "filled": False, "x1": round(x1, 1), "y1": round(y1, 1),
+            "x2": round(x2, 1), "y2": round(y2, 1)}
 
 
 def rect(x, y, w, h, role="region", filled=False):
-    return shape("rect", role, filled, x=n(x), y=n(y), width=n(w), height=n(h))
+    return {"kind": "rect", "role": role, "filled": filled, "x": round(x, 1), "y": round(y, 1),
+            "width": round(w, 1), "height": round(h, 1)}
 
 
-def text(x, y, label, en=None, anchor="middle", role="text"):
-    return shape("text", role, x=n(x), y=n(y), text=bi(label, en), anchor=anchor)
+def circle(cx, cy, r, role="point", filled=True):
+    return {"kind": "circle", "role": role, "filled": filled, "cx": round(cx, 1), "cy": round(cy, 1), "r": r}
 
 
-def arrow(x1, y1, x2, y2, role="primary"):
-    angle = math.atan2(y2-y1, x2-x1)
-    a = (x2-10*math.cos(angle-.4), y2-10*math.sin(angle-.4))
-    b = (x2-10*math.cos(angle+.4), y2-10*math.sin(angle+.4))
-    return [line(x1, y1, x2, y2, role), poly([a, (x2, y2), b], role, True, True)]
+def poly(points, role="primary", closed=False):
+    return {"kind": "polygon" if closed else "polyline", "role": role, "filled": False,
+            "points": [[round(x, 1), round(y, 1)] for x, y in points]}
 
 
-def figure(key, title, caption, drawing, *, legend=None, model=None):
-    result = {"id": key, "title": bi(*title), "caption": bi(*caption),
-              "width": WIDTH, "height": HEIGHT, "drawing": drawing}
+def arrow(x1, y1, x2, y2, role="helper"):
+    angle = math.atan2(y2 - y1, x2 - x1)
+    head = [(x2, y2), (x2 - 9 * math.cos(angle - .45), y2 - 9 * math.sin(angle - .45)),
+            (x2 - 9 * math.cos(angle + .45), y2 - 9 * math.sin(angle + .45))]
+    shape = poly(head, role, closed=True)
+    shape["filled"] = True
+    return [line(x1, y1, x2, y2, role), shape]
+
+
+def underline(x1, x2, y, kind):
+    if kind == "single":
+        return [line(x1, y, x2, y, "primary")]
+    if kind == "double":
+        return [line(x1, y, x2, y, "primary"), line(x1, y + 5, x2, y + 5, "primary")]
+    if kind == "wavy":
+        steps = max(4, int((x2 - x1) / 6))
+        return [poly([(x1 + (x2 - x1) * i / steps, y + (3 if i % 2 else -3)) for i in range(steps + 1)], "primary")]
+    if kind == "dashed":
+        return [line(x1, y, x2, y, "helper")]
+    if kind == "dashdot":
+        out, x = [], x1
+        while x < x2 - 2:
+            out.append(line(x, y, min(x + 12, x2), y, "axis"))
+            if x + 17 < x2:
+                out.append(circle(x + 16, y, 1.6, "point"))
+            x += 21
+        return out
+    raise ValueError(kind)
+
+
+def letters_row(word, x0, y, step=34, highlight=(), height=36):
+    out = []
+    for index, char in enumerate(word):
+        x = x0 + index * step
+        out.append(rect(x, y, step - 4, height, "accent" if index in highlight else "region", index in highlight))
+        out.append(text(x + (step - 4) / 2, y + height / 2 + 6, char))
+    return out
+
+
+def svg(key, title, caption, drawing, legend=None):
+    entry = {"id": key, "kind": "svg", "title": bi(*title), "caption": bi(*caption), "width": WIDTH, "height": HEIGHT,
+             "drawing": drawing}
     if legend:
-        result["legend"] = [{"role": role, "text": bi(*label)} for role, label in legend]
-    if model:
-        result["model"] = model
-    return result
+        entry["legend"] = [{"role": role, "text": bi(*label)} for role, label in legend]
+    return entry
 
 
-def plot(key, title, caption, bounds, series, *, xticks=None, yticks=None, markers=None, legend=None):
-    xmin, xmax, ymin, ymax = bounds
-    frame = [48, 28, 324, 204]
-    left, top, width, height = frame
+def table(key, title, caption, columns, rows):
+    return {"id": key, "kind": "table", "title": bi(*title), "caption": bi(*caption),
+            "columns": [bi(*column) if isinstance(column, tuple) else bi(column) for column in columns],
+            "rows": [[bi(*cell) if isinstance(cell, tuple) else cell for cell in row] for row in rows]}
 
-    def pos(x, y):
-        return left+(x-xmin)/(xmax-xmin)*width, top+(ymax-y)/(ymax-ymin)*height
 
-    def label(value):
-        common = f"{value:g}".replace("-", "−")
-        return bi(common.replace(".", ","), common)
+def tree(key, title, caption, root):
+    return {"id": key, "kind": "tree", "title": bi(*title), "caption": bi(*caption), "root": root}
 
+
+def node(q_ru, q_en, yes, no):
+    return {"q": bi(q_ru, q_en), "yes": yes, "no": no}
+
+
+def leaf(ru, en, *examples):
+    return {"result": bi(ru, en), "examples": list(examples)}
+
+
+# ------------------------------------------------------------------ figures
+def _stress():
+    word, accent = "звонит", 4
+    x0 = 108
+    drawing = letters_row(word, x0, 90, 34, highlight=(accent,))
+    ax = x0 + accent * 34 + 15
+    drawing += [line(ax - 4, 80, ax + 6, 66, "primary"), text(210, 50, "звони́т")]
+    drawing += [line(x0, 150, x0 + 3 * 34 - 4, 150, "axis"), line(x0 + 3 * 34, 150, x0 + 6 * 34 - 4, 150, "axis"),
+                text(x0 + 49, 172, "1-й слог", "syllable 1"), text(x0 + 151, 172, "2-й слог: ударный", "syllable 2: stressed")]
+    drawing += [text(210, 222, "так же: звоня́т, звони́шь, позвони́т", "likewise: звоня́т, звони́шь, позвони́т")]
+    return svg("stress-zvonit", ("Ударение: звони́т", "Stress: звони́т"),
+               ("Ударный гласный выделен цветом и знаком ударения: звони́т — ударение на втором слоге, во всех формах на окончании.",
+                "The stressed vowel is highlighted and marked: звони́т — stress on the second syllable, on the ending in all forms."),
+               drawing, legend=[("accent", ("ударный гласный", "stressed vowel"))])
+
+
+def _sounds():
+    drawing = letters_row("ёлка", 140, 50, 36)
+    sounds = ["й'", "о", "л", "к", "а"]
+    for index, sound in enumerate(sounds):
+        x = 96 + index * 50
+        drawing += [rect(x, 160, 40, 36, "region"), text(x + 20, 184, sound)]
+    links = [(0, 0), (0, 1), (1, 2), (2, 3), (3, 4)]
+    for letter, sound in links:
+        drawing.append(line(140 + letter * 36 + 16, 86, 96 + sound * 50 + 20, 160, "primary" if letter == 0 else "helper"))
+    drawing += [text(46, 74, "буквы", "letters", "middle"), text(46, 184, "звуки", "sounds", "middle"),
+                text(210, 240, "4 буквы — 5 звуков [й'олка]", "4 letters — 5 sounds [й'олка]")]
+    return svg("letters-sounds", ("Буквы и звуки: ёлка", "Letters and sounds: ёлка"),
+               ("Буква ё в начале слова обозначает два звука [й'о], поэтому звуков на один больше, чем букв.",
+                "Word-initial ё stands for two sounds [й'о], so there is one sound more than letters."),
+               drawing, legend=[("primary", ("одна буква — два звука", "one letter — two sounds"))])
+
+
+def _morphemes():
+    word = "подоконник"
+    x0, step, y = 40, 30, 120
+    drawing = letters_row(word, x0, y, step)
+    drawing += [poly([(x0, 104), (x0 + 3 * step - 4, 104), (x0 + 3 * step - 4, 114)])]  # prefix ⌐
+    arc = [(x0 + 3 * step + (4 * step - 4) * i / 12, 104 - 12 * math.sin(math.pi * i / 12)) for i in range(13)]
+    drawing += [poly(arc)]  # root ⌒
+    sx = x0 + 7 * step
+    drawing += [poly([(sx, 114), (sx + (3 * step - 4) / 2, 98), (sx + 3 * step - 4, 114)])]  # suffix ^
+    drawing += [rect(x0 + 10 * step + 4, y, 26, 36, "primary"), text(x0 + 10 * step + 17, y + 24, "∅")]
+    drawing += [text(x0 + 43, 186, "приставка", "prefix"), text(x0 + 3 * step + 58, 186, "корень", "root"),
+                text(x0 + 7 * step + 43, 186, "суффикс", "suffix"), text(x0 + 10 * step + 17, 210, "окончание", "ending"),
+                text(210, 248, "окно → под- + окон + -ник: приставочно-суффиксальный", "окно → под- + окон + -ник: prefix + suffix")]
+    return svg("morpheme-podokonnik", ("Морфемный разбор: подоконник", "Morpheme parsing: подоконник"),
+               ("Приставка под-, корень -окон- (окно), суффикс -ник-, нулевое окончание (подоконника).",
+                "Prefix под-, root -окон- (окно), suffix -ник-, zero ending (подоконника)."), drawing)
+
+
+def _chain():
+    boxes = [("учить", 22), ("учитель", 152), ("учительница", 282)]
     drawing = []
-    xticks = xticks if xticks is not None else list(range(math.ceil(xmin), math.floor(xmax)+1))
-    yticks = yticks if yticks is not None else list(range(math.ceil(ymin), math.floor(ymax)+1))
-    for tick in xticks:
-        x, tx = tick if isinstance(tick, tuple) else (tick, label(tick))
-        px, _ = pos(x, 0)
-        if left <= px <= left+width:
-            drawing.append(line(px, top, px, top+height, "grid"))
-            item = text(px, top+height+21, "")
-            item["text"] = tx
-            drawing.append(item)
-    for tick in yticks:
-        y, tx = tick if isinstance(tick, tuple) else (tick, label(tick))
-        _, py = pos(0, y)
-        if top <= py <= top+height:
-            drawing.append(line(left, py, left+width, py, "grid"))
-            item = text(left-9, py+5, "", anchor="end")
-            item["text"] = tx
-            drawing.append(item)
-    axis_y = pos(0, min(ymax, max(ymin, 0)))[1]
-    axis_x = pos(min(xmax, max(xmin, 0)), 0)[0]
-    drawing += arrow(left, axis_y, left+width+12, axis_y, "axis")
-    drawing += arrow(axis_x, top+height, axis_x, top-12, "axis")
-    drawing += [text(left+width+24, axis_y+6, "x"), text(axis_x+14, top-10, "y")]
-    descriptions = []
-    for fn, role, domains in series:
-        count = 0
-        for a, b in domains:
-            segment = []
-            for index in range(121):
-                x = a+(b-a)*index/120
-                try:
-                    y = FUNCTIONS[fn](x)
-                except (ValueError, ZeroDivisionError, OverflowError):
-                    y = float("nan")
-                if math.isfinite(y) and xmin <= x <= xmax and ymin <= y <= ymax:
-                    segment.append(pos(x, y))
-                else:
-                    if len(segment) >= 2:
-                        drawing.append(poly(segment, role))
-                        count += 1
-                    segment = []
-            if len(segment) >= 2:
-                drawing.append(poly(segment, role))
-                count += 1
-        descriptions.append({"function": fn, "role": role, "segments": count})
-    for x, y, label_text, dx, dy in markers or []:
-        px, py = pos(x, y)
-        label = text(px+dx, py+dy, *label_text) if isinstance(label_text, tuple) else text(px+dx, py+dy, label_text)
-        drawing += [circle(px, py, 4, "point", True), label]
-    return figure(key, title, caption, drawing, legend=legend,
-                  model={"type": "plot", "bounds": list(bounds), "frame": frame, "series": descriptions})
+    for word, x in boxes:
+        drawing += [rect(x, 110, 116, 44, "region"), text(x + 58, 138, word)]
+    drawing += arrow(140, 132, 150, 132) + arrow(270, 132, 280, 132)
+    drawing += [text(145, 96, "-тель", "-тель"), text(275, 96, "-ниц-", "-ниц-"),
+                text(210, 200, "каждый шаг — суффиксальный способ", "each step is suffixal")]
+    return svg("chain-uchit", ("Словообразовательная цепочка", "Word-formation chain"),
+               ("учить → учитель (суффикс -тель) → учительница (суффикс -ниц-): каждое слово образовано от предыдущего.",
+                "учить → учитель → учительница: each word is formed from the previous one."), drawing)
 
 
-FIGURES = {}
+def _root_check():
+    drawing = letters_row("з.лотой", 90, 60, 34, highlight=(1,))
+    drawing[3]["text"] = bi("?")
+    drawing += letters_row("золото", 107, 170, 34, highlight=(1,))
+    drawing += [text(124 + 34, 160, "´")] + arrow(158, 160, 158, 102, "primary")
+    drawing += [text(210, 40, "з..лотой", "з..лотой"), text(210, 236, "зо́лото: о под ударением → золотой",
+                                                                "зо́лото: stressed о → золотой")]
+    return svg("root-check", ("Проверка безударной гласной", "Checking an unstressed vowel"),
+               ("Однокоренное слово с ударением на том же слоге показывает букву: зо́лото → золотой.",
+                "A cognate stressed on the same syllable shows the letter: зо́лото → золотой."), drawing,
+               legend=[("accent", ("проверяемая гласная", "checked vowel"))])
 
 
-def add(entry):
-    if entry["id"] in FIGURES:
-        raise ValueError("duplicate diagram id")
-    FIGURES[entry["id"]] = entry
+def _sentence():
+    words = [("Старый", 40, "wavy"), ("парк", 128, "single"), ("спал", 196, "double"), ("под снегом.", 262, "dashdot")]
+    widths = {"Старый": 62, "парк": 42, "спал": 42, "под снегом.": 96}
+    drawing = []
+    for word, x, kind in words:
+        drawing.append(text(x, 120, word, word, "start"))
+        drawing += underline(x, x + widths[word], 130, kind)
+    drawing += arrow(150, 100, 70, 100) + arrow(220, 96, 160, 96)
+    drawing += [text(108, 86, "какой?", "which?"), text(190, 82, "что сделал?", "did what?"),
+                text(210, 190, "грамматическая основа: парк спал", "subject + predicate: парк спал"),
+                text(210, 222, "определение ~~~, обстоятельство — · —", "attribute ~~~, adverbial — · —")]
+    return svg("sentence-base", ("Грамматическая основа и члены предложения", "Sentence base and parts"),
+               ("Подлежащее подчёркнуто одной чертой, сказуемое — двумя, определение — волнистой, обстоятельство — штрихпунктиром.",
+                "Subject: one line; predicate: two lines; attribute: wavy; adverbial: dash-dot."), drawing,
+               legend=[("primary", ("основа: одна черта — подлежащее, две — сказуемое", "base: one line subject, two predicate")),
+                       ("axis", ("обстоятельство — штрихпунктир", "adverbial — dash-dot"))])
 
 
-add(plot("parabola-roots", ("Корни — пересечения с осью", "Roots are x-axis intersections"),
-         ("y = (x − 1)(x − 3). Корни 1 и 3, вершина (2;−1). Для y ≤ 0 берём [1;3], включая обе границы.",
-          "y = (x − 1)(x − 3). Roots 1 and 3, vertex (2,−1). For y ≤ 0 choose [1,3], including both endpoints."),
-         (0, 4, -2, 4), [("parabola-roots", "primary", [(0,4)])],
-         markers=[(1,0,"(1;0)",-15,-14),(3,0,"(3;0)",18,-14),(2,-1,"(2;−1)",0,24)],
-         yticks=[-2,-1,0,2,4]))
-add(plot("domain-root", ("Где определён квадратный корень", "Where the square root is defined"),
-         ("y = √(x − 1) начинается в (1;0): допустимы x ≥ 1, значения y ≥ 0. Слева от 1 действительного графика нет.",
-          "y = √(x − 1) begins at (1,0): x ≥ 1 is allowed and y ≥ 0 is the range. No real graph exists to the left of 1."),
-         (-1,5,-.5,2.5), [("square-root","primary",[(1,5)])], yticks=[0,1,2],
-         markers=[(1,0,"(1;0)",18,-14),(5,2,"(5;2)",-24,-12)]))
-add(plot("graph-shift", ("Сдвиг вправо и вниз", "Shift right and down"),
-         ("Сплошная: y = x². Пунктирная: y = (x − 1)² − 1. Каждая точка переместилась на (1;−1), вершина стала (1;−1).",
-          "Solid: y = x². Dashed: y = (x − 1)² − 1. Every point moves by (1,−1); the new vertex is (1,−1)."),
-         (-2,4,-2,5), [("square","primary",[(-2,4)]),("shifted-square","secondary",[(-2,4)])],
-         yticks=[-2,0,2,4], markers=[(0,0,"(0;0)",-20,-12),(1,-1,"(1;−1)",20,24)],
-         legend=[("primary",("y = x²","y = x²")),("secondary",("y = (x − 1)² − 1","y = (x − 1)² − 1"))]))
-add(plot("linear-graph", ("Постоянная прибавка: прямая", "Constant increase: a line"),
-         ("y = 2x + 1. При увеличении x на 1 значение y растёт на 2. Начальное значение при x = 0 равно 1.",
-          "y = 2x + 1. Increasing x by 1 increases y by 2. The starting value at x = 0 is 1."),
-         (-2,3,-4,8), [("linear","primary",[(-2,3)])], yticks=[-4,-2,0,2,4,6,8],
-         markers=[(0,1,"(0;1)",28,-7),(1,3,"(1;3)",26,-7)]))
-add(plot("hyperbola", ("Обратная пропорциональность", "Inverse proportionality"),
-         ("y = 4/x, x ≠ 0. Чем больше положительный x, тем меньше доля 4/x. Ветви не соединены через ноль: там функция не определена.",
-          "y = 4/x, x ≠ 0. A larger positive x gives a smaller share 4/x. The branches are not connected across zero, where the function is undefined."),
-         (-5,5,-5,5), [("reciprocal","primary",[(-5,-.1),(.1,5)])],
-         xticks=[-4,-2,0,2,4], yticks=[-4,-2,0,2,4],
-         markers=[(2,2,"(2;2)",-20,-15),(4,1,"(4;1)",-4,-16)]))
-add(plot("even-odd", ("Чётная и нечётная функции", "Even and odd functions"),
-         ("y = x² симметричен относительно оси y. y = x³ симметричен относительно начала: у (−1;−1) и (1;1) координаты противоположны.",
-          "y = x² is symmetric about the y-axis. y = x³ is symmetric about the origin: (−1,−1) and (1,1) have opposite coordinates."),
-         (-2,2,-4,4), [("square","primary",[(-2,2)]),("cube","secondary",[(-2,2)])],
-         yticks=[-4,-2,0,2,4],
-         legend=[("primary",("y = x²","y = x²")),("secondary",("y = x³","y = x³"))]))
-add(plot("sine-solutions", ("Две высоты за оборот", "Two crossings per turn"),
-         ("sin x = 1/2 на [0;2π]: пересечения с уровнем 1/2 при π/6 и 5π/6. За границами выбранного оборота периодические решения продолжаются.",
-          "sin x = 1/2 on [0,2π]: crossings with height 1/2 occur at π/6 and 5π/6. Periodic solutions continue beyond the selected turn."),
-         (0,2*math.pi,-1.25,1.25), [("sine","primary",[(0,2*math.pi)]),("constant-half","secondary",[(0,2*math.pi)])],
-         xticks=[(0,bi("0")),(math.pi/2,bi("π/2")),(math.pi,bi("π")),(3*math.pi/2,bi("3π/2")),(2*math.pi,bi("2π"))], yticks=[-1,0,1],
-         markers=[(math.pi/6,.5,"π/6",0,-15),(5*math.pi/6,.5,"5π/6",0,-15)],
-         legend=[("primary",("y = sin x","y = sin x")),("secondary",("y = 1/2","y = 1/2"))]))
-add(plot("sine-cosine", ("Проекции вращения", "Projections of rotation"),
-         ("За один оборот 0…2π координаты точки sin x и cos x повторяют свои значения. Синус в нуле равен 0, косинус — 1; обе функции принимают значения от −1 до 1.",
-          "During one turn 0…2π, point coordinates sin x and cos x repeat. At zero sine is 0 and cosine 1; both range from −1 to 1."),
-         (0,2*math.pi,-1.25,1.25), [("sine","primary",[(0,2*math.pi)]),("cosine","secondary",[(0,2*math.pi)])],
-         xticks=[(0,bi("0")),(math.pi/2,bi("π/2")),(math.pi,bi("π")),(3*math.pi/2,bi("3π/2")),(2*math.pi,bi("2π"))], yticks=[-1,0,1],
-         legend=[("primary",("y = sin x","y = sin x")),("secondary",("y = cos x","y = cos x"))]))
-add(plot("exponential", ("Сколько удвоений до восьми", "How many doublings to eight"),
-         ("Кривая y = 2ˣ достигает уровня y = 8 при x = 3. Точка (3;8) одновременно объясняет 2³ = 8 и log₂ 8 = 3.",
-          "Curve y = 2ˣ reaches y = 8 at x = 3. Point (3,8) explains both 2³ = 8 and log₂ 8 = 3."),
-         (-1,3.5,0,12), [("exponential","primary",[(-1,3.5)]),("constant-eight","secondary",[(-1,3.5)])], yticks=[0,2,4,8,12],
-         markers=[(0,1,"(0;1)",24,0),(3,8,"(3;8)",0,-16)],
-         legend=[("primary",("y = 2ˣ","y = 2ˣ")),("secondary",("y = 8","y = 8"))]))
-add(plot("logarithm", ("Логарифм — обратный вопрос", "A logarithm asks the inverse question"),
-         ("y = log₂ x определён только при x > 0. В точке (1;0) удвоений не нужно, (2;1) означает одно, (4;2) — два.",
-          "y = log₂ x is defined only for x > 0. At (1,0) no doublings are needed; (2,1) means one, (4,2) means two."),
-         (0,5,-3,3), [("logarithm","primary",[(.125,5)])], yticks=[-2,0,2],
-         markers=[(1,0,"(1;0)",22,-13),(2,1,"(2;1)",23,-10),(4,2,"(4;2)",-18,-14)]))
-add(plot("tangent", ("Касательная в точке (1;1)", "Tangent at (1,1)"),
-         ("Для y = x² касательная в (1;1) — y = 2x − 1, наклон 2. Равенство x² = 2x − 1 даёт (x − 1)² = 0, один двукратный корень.",
-          "For y = x² the tangent at (1,1) is y = 2x − 1, slope 2. Equating them gives (x − 1)² = 0, one double root."),
-         (-1,3,-3,7), [("square","primary",[(-1,3)]),("tangent","secondary",[(-1,3)])], yticks=[-2,0,2,4,6],
-         markers=[(1,1,"(1;1)",33,0)],
-         legend=[("primary",("y = x²","y = x²")),("secondary",("y = 2x − 1","y = 2x − 1"))]))
-add(plot("speed-tangent", ("Мгновенное изменение", "Instantaneous rate of change"),
-         ("В модели s(t) = t² при t = 2: s = 4, наклон касательной 4. Если t — секунды, s — метры, производная измеряется в м/с; ось x изображает t, ось y — s.",
-          "For s(t) = t² at t = 2, s = 4 and tangent slope is 4. With seconds and metres, the derivative uses m/s; the x-axis represents t and y represents s."),
-         (0,3,-1,9), [("square","primary",[(0,3)]),("speed-tangent","secondary",[(0,3)])], yticks=[0,2,4,6,8],
-         markers=[(2,4,"(2;4)",30,0)],
-         legend=[("primary",("s = t²","s = t²")),("secondary",("s = 4t − 4","s = 4t − 4"))]))
-add(plot("extrema", ("Где рост меняется на убывание", "Where increase becomes decrease"),
-         ("y = x³ − 3x: местный максимум (−1;2), минимум (1;−2). Знак производной 3x² − 3: +, затем −, затем +. Эти экстремумы не являются глобальными на всей прямой.",
-          "y = x³ − 3x has local maximum (−1,2) and minimum (1,−2). Its derivative 3x² − 3 has signs +, then −, then +. These are not global extrema on the entire real line."),
-         (-2.2,2.2,-4,4), [("extrema","primary",[(-2.2,2.2)])], xticks=[-2,-1,0,1,2], yticks=[-4,-2,0,2,4],
-         markers=[(-1,2,"(−1;2)",-3,-15),(1,-2,"(1;−2)",3,24)]))
-add(plot("segment-extrema", ("Проверяем также концы отрезка", "Check the endpoints too"),
-         ("y = (x − 2)² − 1, 0 ≤ x ≤ 3. Минимум −1 при x = 2; максимум 3 на левой границе x = 0. На рисунке показана только заданная часть графика.",
-          "y = (x − 2)² − 1 for 0 ≤ x ≤ 3. Minimum −1 at x = 2; maximum 3 at left endpoint x = 0. Only the specified graph segment is drawn."),
-         (-.5,3.5,-2,4), [("segment","primary",[(0,3)])], xticks=[0,1,2,3], yticks=[-2,-1,0,2,4],
-         markers=[(0,3,"(0;3)",25,-12),(2,-1,"(2;−1)",0,24),(3,0,"(3;0)",10,-14)]))
-for suffix, fn, p, label in [("two","parameter-low",3,"D > 0"),("one","parameter-zero",4,"D = 0"),("none","parameter-high",5,"D < 0")]:
-    count_ru, count_en = {3:("Два корня","Two roots"),4:("Один двукратный корень","One double root"),5:("Действительных корней нет","No real roots")}[p]
-    add(plot("parameter-"+suffix, (count_ru, count_en),
-             (f"y = x² − 4x + {p}, {label}. Параметр меняет высоту параболы; корни — пересечения с осью x.",
-              f"y = x² − 4x + {p}, {label}. The parameter changes the parabola's height; roots are x-axis intersections."),
-             (0,4,-2,5), [(fn,"primary",[(0,4)])], yticks=[-2,0,2,4]))
+def _phrases():
+    rows = [("высокий", "дом", "согласование", "agreement", "какой?"), ("книгу", "читать", "управление", "government", "что?"),
+            ("быстро", "бежать", "примыкание", "adjunction", "как?")]
+    drawing = []
+    for index, (dep, head, ru, en, q) in enumerate(rows):
+        y = 60 + index * 70
+        drawing += [text(70, y, head), text(200, y, dep)] + arrow(98, y - 5, 168, y - 5, "primary")
+        drawing += [text(134, y - 14, q), text(330, y, ru, en)]
+    return svg("phrase-links", ("Виды связи в словосочетании", "Links in phrases"),
+               ("Стрелка идёт от главного слова к зависимому; вопрос задаётся от главного. Тип связи подписан словами.",
+                "The arrow goes from the head to the dependent; the type is written in words."), drawing)
 
 
-def discrete(key, title, caption, values, ylabel):
-    d = []
-    left, base, step, scale = 76, 223, 64, 160/max(values)
-    d += arrow(left-22,base,left+step*(len(values)-1)+22,base,"axis")
-    d += arrow(left-22,base,left-22,35,"axis")
-    d += [text(385,base+5,"n"),text(26,28,ylabel)]
-    for index, value in enumerate(values):
-        x, y = left+step*index, base-scale*value
-        d += [line(x,base,x,y,"helper"),circle(x,y,5,"point",True),text(x,y-12,str(value)),text(x,base+23,str(index+1))]
-    return figure(key,title,caption,d, model={"type":"sequence","values":values,"joined":False})
+def _bracket(x, w, y, label=None, round_=False):
+    if round_:
+        out = [poly([(x + 8, y - 18), (x, y), (x + 8, y + 18)]), poly([(x + w - 8, y - 18), (x + w, y), (x + w - 8, y + 18)])]
+    else:
+        out = [poly([(x + 8, y - 18), (x, y - 18), (x, y + 18), (x + 8, y + 18)]),
+               poly([(x + w - 8, y - 18), (x + w, y - 18), (x + w, y + 18), (x + w - 8, y + 18)])]
+    if label:
+        out.append(text(x + w / 2, y + 5, label))
+    return out
 
 
-add(discrete("arithmetic-dots", ("Одинаковая прибавка", "Equal increments"),
-             ("Взносы 10, 15, 20, 25, 30 рублей: между соседними точками прибавка 5. n — номер недели, целое число. Всего за пять недель 100 рублей.",
-              "Payments 10,15,20,25,30 rubles: each adjacent value adds 5. n is an integer week number. The five-week total is 100 rubles."), [10,15,20,25,30],"aₙ"))
-add(discrete("geometric-dots", ("Одинаковый множитель", "Equal multipliers"),
-             ("1, 2, 4, 8, 16: соседние значения отличаются в 2 раза, а прибавки растут. Пять значений дают сумму 31. Точки не соединены: n принимает только целые номера.",
-              "1,2,4,8,16: adjacent values have ratio 2, but increments grow. Five values sum to 31. Points are not joined because n takes integer indices only."), [1,2,4,8,16],"aₙ"))
-
-add(plot("taxi-cost", ("Переводим цену в уравнение", "Turn a price into an equation"),
-         ("Плата 5 + 2x рублей при x километрах. Точка (6;17) показывает: поездка за 17 рублей имеет длину 6 км. Ось x — км, y — рубли; модель действует при x ≥ 0.",
-          "Cost is 5 + 2x rubles for x kilometres. Point (6,17) shows a 17-ruble trip covers 6 km. x is km, y rubles; the model requires x ≥ 0."),
-         (0,7,0,20), [("taxi","primary",[(0,7)])], xticks=[0,2,4,6], yticks=[0,5,10,15,20],
-         markers=[(0,5,"(0;5)",27,-7),(6,17,"(6;17)",-2,-15)]))
-add(plot("constant-speed", ("Постоянная скорость: путь растёт равномерно", "Constant speed: distance grows evenly"),
-         ("s = 4t: за 1,5 часа пройдено 6 км. Ось x изображает t в часах, y — s в километрах. Прямая через начало относится к движению с постоянной скоростью и нулевым начальным путём.",
-          "s = 4t: 1.5 hours covers 6 km. x represents t in hours and y distance s in kilometres. A line through the origin models constant speed with zero initial distance."),
-         (0,2,0,8), [("distance","primary",[(0,2)])], xticks=[0,.5,1,1.5,2], yticks=[0,2,4,6,8],
-         markers=[(1.5,6,("(1,5;6)","(1.5,6)"),-20,-15)]))
-# Drawings for fractions, intervals and geometry are below; all are local data.
-add(figure("fraction-bar", ("Три восьмых одного целого", "Three eighths of one whole"),
-           ("Вся полоска — одно целое, восемь равных частей. Закрашены три: 3/8. Четыре части из восьми составляют половину.",
-            "The whole strip is one unit in eight equal parts. Three are shaded: 3/8. Four eighths make one half."),
-           [rect(42+42*i,100,42,64,"region" if i<3 else "helper") for i in range(8)] +
-           [text(105,80,"3/8"),line(42,186,210,186,"secondary"),text(126,211,"4/8 = 1/2"),text(210,258,"Одна и та же единица","The same whole")],
-           model={"type":"fraction","parts":8,"shaded":3}))
-add(figure("identity-areas", ("Из чего состоит (a + b)²", "Pieces of (a + b)²"),
-           ("a = 5, b = 2. Большой квадрат состоит из a² = 25, двух прямоугольников ab = 10 и b² = 4: всего 49. Все длины на этой схеме в одном масштабе.",
-            "a = 5, b = 2. The large square has a² = 25, two rectangles ab = 10 and b² = 4: total 49. All lengths use one scale."),
-           [rect(102,36,140,140,"region"),rect(242,36,56,140,"secondary"),rect(102,176,140,56,"secondary"),rect(242,176,56,56,"region"),
-            text(172,110,"a² = 25"),text(270,110,"ab"),text(172,210,"ab = 10"),text(270,210,"b²"),
-            text(172,26,"a = 5"),text(270,26,"b = 2"),text(200,265,"25 + 10 + 10 + 4 = 49")],
-           model={"type":"identity","a":5,"b":2,"scale":28}))
+def _schemes():
+    drawing = []
+    drawing += _bracket(30, 150, 60, "Солнце скрылось") + [text(190, 66, ", и")] + _bracket(214, 170, 60, "подул ветер")
+    drawing += [text(210, 104, "ССП: [ ], и [ ].", "compound: [ ], и [ ].")]
+    drawing += _bracket(30, 120, 160, "Я знаю") + [text(156, 166, ",")] + _bracket(170, 200, 160, "что ты придёшь", round_=True)
+    drawing += arrow(90, 182, 250, 182, "helper") + [text(170, 200, "(что?)", "(what?)")]
+    drawing += [text(210, 236, "СПП: [ ], (что …).", "complex: [ ], (что …).")]
+    return svg("scheme-ssp-spp", ("Схемы ССП и СПП", "Compound and complex schemes"),
+               ("Квадратные скобки — главные (равноправные) части, круглые — придаточная; стрелка показывает вопрос от главной части.",
+                "Square brackets: main clauses; round: subordinate; the arrow shows the question."), drawing)
 
 
-def numberline(key,title,caption,marks,segments):
-    # Fixed real interval [-5,5], same scale for all marks.
-    left,right,y,scale=42,378,144,33.6
-    px=lambda x: left+(x+5)*scale
-    d=arrow(left,y,right+10,y,"axis")
-    for value in range(-5,6):
-        d += [line(px(value),y-4,px(value),y+4,"axis"),text(px(value),y+24,str(value).replace('-','−'))]
-    for a,b,label_text,role in segments:
-        d += [line(px(a),y-22,px(b),y-22,role),text((px(a)+px(b))/2,y-42,label_text)]
-    for x,closed in marks:
-        d.append(circle(px(x),y,6,"point" if closed else "openpoint",closed))
-    return figure(key,title,caption,d,model={"type":"numberline","marks":[{"x":x,"closed":closed} for x,closed in marks]})
+def _bsp():
+    drawing = []
+    drawing += _bracket(20, 140, 70, "Я знаю") + [text(172, 76, ":")] + _bracket(186, 210, 70, "ты придёшь")
+    drawing += [text(210, 116, "= что: пояснение → двоеточие", "= что: explanation → colon")]
+    drawing += _bracket(20, 140, 176, "Лес рубят") + [text(172, 182, "—")] + _bracket(186, 210, 176, "щепки летят")
+    drawing += [text(210, 222, "= поэтому: следствие → тире", "= поэтому: result → dash")]
+    return svg("scheme-bsp", ("Знаки в бессоюзном предложении", "Marks in asyndetic sentences"),
+               ("Подставьте союз: «что», «потому что» — двоеточие; «поэтому», «если», «а» — тире.",
+                "Insert a conjunction: «что/потому что» → colon; «поэтому/если/а» → dash."), drawing)
 
 
-add(numberline("absolute-distance", ("Расстояние без направления", "Distance without direction"),
-               ("Точки −4 и 4 на одинаковом расстоянии от нуля: |−4| = |4| = 4. Координаты разные, расстояния одинаковые.",
-                "Points −4 and 4 are equally far from zero: |−4| = |4| = 4. Coordinates differ, distances agree."),
-               [(-4,True),(0,True),(4,True)],[(-4,0,"4","primary"),(0,4,"4","secondary")]))
-add(numberline("absolute-interval", ("Не дальше двух единиц от трёх", "Within two units of three"),
-               ("|x − 3| ≤ 2 означает [1;5]. Обе крайние точки включены: они ровно на расстоянии 2 от центра 3.",
-                "|x − 3| ≤ 2 means [1,5]. Both endpoints are included, exactly 2 units from centre 3."),
-               [(1,True),(3,True),(5,True)],[(1,5,"[1;5]","primary")]))
-add(numberline("interval-signs", ("Знак дроби и запрещённая точка", "A fraction's signs and excluded point"),
-               ("(x − 1)/(x + 2) ≥ 0: решение (−∞;−2) ∪ [1;+∞). Пустая точка −2 запрещена знаменателем; закрашенная 1 даёт ноль. Стрелки оси продолжаются за рисунок.",
-                "(x − 1)/(x + 2) ≥ 0 has solution (−∞,−2) ∪ [1,+∞). Open point −2 is excluded by the denominator; filled 1 gives zero. The number line continues beyond the drawing."),
-               [(-2,False),(1,True)],[(-5,-2,"+","primary"),(-2,1,"−","secondary"),(1,5,"+","primary")]))
-
-add(figure("percent-stages", ("Проценты от новой базы", "Percentages use the new base"),
-           ("100 рублей → скидка 20% → 80 → наценка 10% от 80 → 88. Последний столбец ниже первого: общая потеря 12%, не 10%.",
-            "100 rubles → 20% discount → 80 → 10% increase on 80 → 88. The final bar is below the first: total decrease 12%, not 10%."),
-           [line(50,222,374,222,"axis"),rect(65,52,64,170,"region"),rect(176,86,64,136,"secondary"),rect(287,72.4,64,149.6,"region"),
-            text(97,40,"100"),text(208,74,"80"),text(319,61,"88"),text(97,247,"До","Before"),text(208,247,"−20%"),text(319,247,"+10%"),text(210,20,"рубли","rubles")],
-           model={"type":"percentages","values":[100,80,88]}))
+def _dash():
+    drawing = [text(110, 80, "Москва"), text(210, 80, "—"), text(310, 80, "столица"),
+               text(110, 108, "сущ., И. п.", "noun, nom."), text(310, 108, "сущ., И. п.", "noun, nom."),
+               text(110, 180, "Он"), text(310, 180, "студент"), text(210, 180, "—"),
+               line(196, 168, 224, 190, "secondary"), line(224, 168, 196, 190, "secondary"),
+               text(110, 208, "личное мест.", "personal pron."), text(210, 246, "тире нет", "no dash")]
+    drawing += underline(76, 144, 88, "single") + underline(270, 350, 88, "double")
+    drawing += underline(96, 124, 188, "single") + underline(272, 348, 188, "double")
+    return svg("dash-subject", ("Тире между подлежащим и сказуемым", "Dash between subject and predicate"),
+               ("Существительное — существительное в И. п. без связки: тире. Подлежащее — личное местоимение: тире нет.",
+                "Noun — noun in the nominative without a link: dash. A personal pronoun subject: no dash."), drawing,
+               legend=[("secondary", ("крест — знак не ставится", "cross — no mark"))])
 
 
-def circle_point(angle,cx=210,cy=150,r=86):
-    return cx+r*math.cos(angle),cy-r*math.sin(angle)
+def _isolation():
+    drawing = [text(20, 70, "Дорога, ведущая к лесу, заросла.", "Дорога, ведущая к лесу, заросла.", "start"),
+               rect(84, 48, 140, 30, "accent", True)]
+    drawing += arrow(150, 86, 50, 86, "primary") + [text(250, 110, "оборот после слова → запятые", "after its noun → commas")]
+    drawing += [text(20, 180, "Ведущая к лесу дорога заросла.", "Ведущая к лесу дорога заросла.", "start"),
+                rect(16, 158, 128, 30, "accent", True)]
+    drawing += arrow(80, 196, 172, 196, "primary") + [text(250, 222, "оборот перед словом → без запятых",
+                                                             "before its noun → no commas")]
+    return svg("isolation-position", ("Место причастного оборота", "Position of a participial phrase"),
+               ("Стрелка ведёт от оборота к определяемому слову. После слова оборот обособляется, перед ним — нет.",
+                "The arrow points to the noun. After it the phrase is set off, before it — not."), drawing,
+               legend=[("accent", ("причастный оборот", "participial phrase"))])
 
 
-def arc(start,end,cx=210,cy=150,r=86,role="secondary"):
-    return poly([circle_point(start+(end-start)*i/60,cx,cy,r) for i in range(61)],role)
+def _text_structure():
+    drawing = []
+    for index, (ru, en) in enumerate([("Тезис", "Thesis"), ("Доказательства", "Arguments"), ("Вывод", "Conclusion")]):
+        x = 20 + index * 135
+        drawing += [rect(x, 100, 120, 50, "region"), text(x + 60, 131, ru, en)]
+        if index < 2:
+            drawing += arrow(x + 120, 125, x + 134, 125)
+    drawing += [text(80, 180, "(2)", "(2)"), text(215, 180, "(3)–(5)", "(3)–(5)"), text(350, 180, "(6) Поэтому…", "(6) Поэтому…"),
+                text(210, 236, "рассуждение: почему так?", "reasoning: why?")]
+    return svg("text-reasoning", ("Строение рассуждения", "Structure of reasoning"),
+               ("Тезис → доказательства → вывод; в тексте о чтении это предложения 2, 3–5 и 6.",
+                "Thesis → arguments → conclusion; in the reading text these are sentences 2, 3–5 and 6."), drawing)
 
 
-cx,cy,r=210,146,86
-px,py=circle_point(math.pi/6,cx,cy,r)
-add(figure("unit-circle", ("Синус и косинус — координаты", "Sine and cosine are coordinates"),
-           ("Единичный радиус OP = 1, угол 30°. P = (√3/2;1/2). Горизонтальная проекция — cos 30°, вертикальная — sin 30°; сумма их квадратов 1.",
-            "Unit radius OP = 1, angle 30°. P = (√3/2,1/2). Horizontal projection is cos 30°, vertical is sin 30°; their squares sum to 1."),
-           [circle(cx,cy,r),*arrow(96,cy,328,cy,"axis"),*arrow(cx,246,cx,43,"axis"),line(cx,cy,px,py),line(px,py,px,cy,"secondary"),line(cx,py,px,py,"helper"),
-            circle(px,py,4,"point",True),arc(0,math.pi/6,cx,cy,30),text(cx-14,cy+19,"O"),text(px+13,py-8,"P"),text(344,cy+5,"x"),text(cx+16,42,"y"),
-            text(250,172,"√3/2"),text(311,126,"1/2"),text(249,136,"30°"),text(175,56,"OP = 1")],
-           model={"type":"unit-circle","angle":math.pi/6,"point":[math.cos(math.pi/6),math.sin(math.pi/6)]}))
-add(figure("radian-arc", ("Дуга и радианы", "Arc length and radians"),
-           ("Красная дуга — 60° = π/3 радиан, треть π и шестая часть оборота. При R = 6 её длина R · π/3 = 2π. Радиус и дуга — разные величины.",
-            "The highlighted arc is 60° = π/3 radians, one sixth of a turn. With R = 6, length R × π/3 = 2π. Radius and arc length are different quantities."),
-           [circle(210,145,88),line(210,145,298,145),line(210,145,*circle_point(math.pi/3,210,145,88)),arc(0,math.pi/3,210,145,88),arc(0,math.pi/3,210,145,28),
-            text(233,132,"60°"),text(265,166,"R = 6"),text(329,92,"2π"),text(210,261,"α = π/3, L = Rα")],
-           model={"type":"arc","radius":6,"angle":math.pi/3,"length":2*math.pi}))
-pa=circle_point(math.pi/6,210,148,86)
-pb=circle_point(5*math.pi/6,210,148,86)
-add(figure("circle-two-solutions", ("Одна высота, два угла", "One height, two angles"),
-           ("На единичной окружности высоту 1/2 имеют две точки: углы π/6 и 5π/6. За каждый полный оборот они повторяются, давая два семейства решений sin x = 1/2.",
-            "Two unit-circle points have height 1/2, at π/6 and 5π/6. Each full turn repeats them, producing two families for sin x = 1/2."),
-           [circle(210,148,86),*arrow(103,148,326,148,"axis"),*arrow(210,245,210,42,"axis"),line(115,105,305,105,"secondary"),line(210,148,*pa),line(210,148,*pb),
-            circle(*pa,4,"point",True),circle(*pb,4,"point",True),text(308,95,"π/6"),text(112,95,"5π/6"),text(339,110,"1/2"),text(210,263,"sin x = 1/2")],
-           model={"type":"sine-solutions","angles":[math.pi/6,5*math.pi/6],"height":.5}))
-
-# Plane diagrams use an honest common scale when asserting metric proportions.
-a,b,c=(70,217),(294,217),(70,49)
-add(figure("ladder-triangle", ("Лестница, стена и пол: 3–4–5", "Ladder, wall and ground: 3–4–5"),
-           ("AB = 4 м, AC = 3 м, BC = 5 м. Угол A прямой. Лестница BC — гипотенуза: 3² + 4² = 5². Все три стороны нарисованы в одном масштабе.",
-            "AB = 4 m, AC = 3 m, BC = 5 m. Angle A is right. Ladder BC is the hypotenuse: 3² + 4² = 5². All sides share one scale."),
-           [poly([a,b,c],closed=True),poly([(70,202),(85,202),(85,217)],"helper"),text(58,237,"A"),text(311,229,"B"),text(55,45,"C"),
-            text(181,241,"4 м","4 m"),text(41,136,"3 м","3 m"),text(199,128,"5 м","5 m"),text(183,27,"3² + 4² = 5²")],
-           model={"type":"right-triangle","legs":[3,4],"hypotenuse":5,"scale":56}))
-# A scalene triangle: altitude, midpoint median, angle-bisector foot are distinct.
-A,B,C=(72,218),(342,218),(153,48)
-ca,cb=math.dist(C,A),math.dist(C,B)
-D=(A[0]+(B[0]-A[0])*ca/(ca+cb),218)
-add(figure("triangle-lines", ("Высота, медиана, биссектриса", "Altitude, median and angle bisector"),
-           ("Из вершины C: высота CH перпендикулярна AB; медиана CM идёт к середине M; биссектриса CD делит угол C поровну. В этом разностороннем треугольнике H, D и M различны.",
-            "From vertex C: altitude CH is perpendicular to AB; median CM reaches midpoint M; bisector CD halves angle C. In this scalene triangle H, D and M differ."),
-           [poly([A,B,C],closed=True),line(*C,153,218,"helper"),line(*C,207,218,"secondary"),line(*C,*D,"primary"),
-            poly([(153,202),(169,202),(169,218)],"helper"),text(59,238,"A"),text(356,237,"B"),text(153,34,"C"),text(147,238,"H"),text(D[0],262,"D"),text(216,238,"M"),
-            line(136,210,136,225,"secondary"),line(280,210,280,225,"secondary")],
-           legend=[("helper",("CH: высота","CH: altitude")),("secondary",("CM: медиана","CM: median")),("primary",("CD: биссектриса","CD: bisector"))],
-           model={"type":"triangle-lines","vertices":[list(A),list(B),list(C)],"altitude":[153,218],"median":[207,218],"bisector":list(D)}))
-add(figure("triangle-area", ("Половина прямоугольника", "Half a rectangle"),
-           ("Прямоугольник 4 × 3 имеет площадь 12. Диагональ делит его на два равных треугольника площадью 6. Высота 3 перпендикулярна основанию 4.",
-            "A 4 × 3 rectangle has area 12. Its diagonal gives two equal triangles of area 6. Height 3 is perpendicular to base 4."),
-           [rect(98,50,224,168,"helper"),poly([(98,218),(322,218),(98,50)],"region",closed=True),
-            text(210,242,"4"),text(75,137,"3"),text(169,171,"S = 6"),text(255,110,"S = 6")],
-           model={"type":"triangle-area","base":4,"height":3,"area":6}))
-add(figure("parallelogram-area", ("Нужна высота, не наклонная сторона", "Use the height, not the sloping side"),
-           ("Основание a = 6, высота h = 3: S = 18. Наклонная сторона b длиннее h. Перенос бокового треугольника даёт прямоугольник с теми же a и h.",
-            "Base a = 6 and height h = 3 give S = 18. Sloping side b is longer than h. Moving a side triangle forms a rectangle with the same a and h."),
-           [poly([(63,218),(297,218),(357,101),(123,101)],"region",closed=True),line(123,101,123,218,"secondary"),
-            poly([(123,202),(139,202),(139,218)],"helper"),text(213,245,"a = 6"),text(148,166,"h = 3"),text(76,155,"b"),text(240,168,"S = 18")],
-           model={"type":"parallelogram","base":6,"height":3,"area":18}))
-add(figure("similar-triangles", ("Длины ×2, площади ×4", "Lengths ×2, areas ×4"),
-           ("Малый треугольник с катетами 3 и 4 имеет площадь 6; большой с 6 и 8 — 24. Одинаковый масштаб чертежа показывает коэффициент подобия 2 и отношение площадей 4.",
-            "The small triangle's legs 3 and 4 give area 6; the large triangle's 6 and 8 give 24. One drawing scale shows similarity factor 2 and area ratio 4."),
-           [poly([(44,218),(124,218),(44,158)],"region",closed=True),poly([(187,218),(347,218),(187,98)],"region",closed=True),
-            text(28,190,"3"),text(82,241,"4"),text(172,162,"6"),text(268,241,"8"),text(64,206,"6"),text(230,195,"24"),text(209,40,"k = 2, S₂/S₁ = 4")],
-           model={"type":"similarity","small":[3,4,5],"large":[6,8,10],"areas":[6,24],"scale":20}))
-# A 120-degree central angle and 60-degree inscribed angle subtend the same minor arc.
-O=(204,146); R=82
-P=circle_point(0,*O,R); Q=circle_point(2*math.pi/3,*O,R); V=circle_point(4*math.pi/3,*O,R)
-add(figure("circle-angles", ("Одна дуга, два угла", "The same arc, two angles"),
-           ("Центральный угол POQ = 120°, вписанный PVQ = 60° опираются на одну дугу PQ. V лежит на другой части окружности. Вписанный угол вдвое меньше.",
-            "Central angle POQ = 120° and inscribed angle PVQ = 60° subtend the same arc PQ. V lies on the other arc. The inscribed angle is half the central angle."),
-           [circle(*O,R),line(*O,*P),line(*O,*Q),line(*V,*P,"secondary"),line(*V,*Q,"secondary"),arc(0,2*math.pi/3,*O,R),
-            text(196,166,"O"),text(P[0]+15,P[1]+5,"P"),text(Q[0]-10,Q[1]-10,"Q"),text(V[0]-15,V[1]+18,"V"),text(224,116,"120°"),text(V[0]+24,V[1]-25,"60°")],
-           model={"type":"circle-angles","central":120,"inscribed":60,"centre":list(O),"radius":R,"points":[list(P),list(Q),list(V)]}))
-add(figure("circle-tangent", ("Радиус перпендикулярен касательной", "Radius is perpendicular to tangent"),
-           ("Окружность с центром O касается прямой в T. OT — радиус, угол с касательной 90°. Хорда AB соединяет две точки окружности; весь внутренний круг — другая фигура, чем только обод.",
-            "A circle centred at O touches the line at T. Radius OT makes 90° with the tangent. Chord AB joins two circle points; the filled disk differs from just the rim."),
-           [circle(206,132,78),line(206,132,206,210),line(71,210,349,210,"secondary"),poly([(206,194),(222,194),(222,210)],"helper"),
-            line(138.45,93,273.55,93,"helper"),text(191,139,"O"),text(205,232,"T"),text(136,82,"A"),text(278,82,"B"),text(231,169,"R"),text(210,264,"OT ⟂ касательной","OT ⟂ tangent")],
-           model={"type":"tangent-circle","centre":[206,132],"radius":78,"contact":[206,210],"lineY":210}))
-
-# Solid figures are labelled perspective sketches, not scale measurements.
-def box_drawing(x=104,y=218,w=166,h=135,dx=54,dy=-39):
-    a,b,c,d=(x,y),(x+w,y),(x+w,y-h),(x,y-h)
-    aa,bb,cc,dd=[(px+dx,py+dy) for px,py in (a,b,c,d)]
-    return [poly([a,b,c,d],closed=True),poly([d,dd,cc,c],closed=True),poly([b,bb,cc,c],closed=True),
-            line(*a,*aa,"helper"),line(*aa,*bb,"helper"),line(*aa,*dd,"helper")]
+def _cohesion():
+    drawing = []
+    labels = [("(3) Хорошая книга учит…", 30), ("(4) Она помогает…", 150), ("(6) Поэтому чтение…", 280)]
+    for ru, x in labels:
+        drawing += [rect(x, 100, 112, 54, "region"), text(x + 56, 132, ru.split(" ", 1)[1][:16])]
+        drawing.append(text(x + 56, 92, ru.split(" ")[0]))
+    drawing += arrow(206, 168, 86, 168, "primary") + [text(146, 190, "она = книга", "она = книга")]
+    drawing += arrow(336, 176, 206, 176, "primary") + [text(272, 210, "поэтому → вывод", "поэтому → conclusion")]
+    return svg("cohesion-chain", ("Средства связи предложений", "Cohesion between sentences"),
+               ("Слово в предложении отсылает к предыдущему: «она» заменяет «книгу», «поэтому» связывает вывод с доводами.",
+                "A word refers back: «она» replaces «книга», «поэтому» links the conclusion to the arguments."), drawing)
 
 
-add(figure("prism-box", ("Коробка: площадь слоя × высота", "A box: layer area × height"),
-           ("Схематическая перспектива прямоугольной призмы: основание 4 × 3 см, высота 5 см. V = 4 · 3 · 5 = 60 см³. Высота перпендикулярна основанию; наклон изображения не меняет её.",
-            "Perspective sketch of a rectangular prism: base 4 × 3 cm, height 5 cm. V = 4 × 3 × 5 = 60 cm³. The height is perpendicular to the base despite the perspective."),
-           box_drawing()+[text(180,241,"4 см","4 cm"),text(304,219,"3 см","3 cm"),text(80,153,"5 см","5 cm"),text(210,28,"V = 60 см³","V = 60 cm³")],
-           model={"type":"prism","base":[4,3],"height":5,"volume":60}))
-add(figure("cylinder", ("Цилиндр: радиус и высота", "Cylinder: radius and height"),
-           ("Схематическая перспектива банки: r = 3 см, h = 6 см. Основания круги (в перспективе эллипсы); V = πr²h = 54π см³. Радиус — половина диаметра.",
-            "Perspective sketch of a can: r = 3 cm, h = 6 cm. Bases are circles (ellipses in perspective); V = πr²h = 54π cm³. Radius is half the diameter."),
-           [ellipse(210,66,73,23),ellipse(210,211,73,23),line(137,66,137,211),line(283,66,283,211),line(210,66,210,211,"helper"),line(210,211,283,211,"secondary"),
-            text(113,148,"h = 6"),text(251,203,"r = 3"),text(210,264,"V = 54π см³","V = 54π cm³")],
-           model={"type":"cylinder","radius":3,"height":6,"volumePi":54}))
-add(figure("pyramid", ("Пирамида: треть объёма призмы", "Pyramid: one third of prism volume"),
-           ("Схематическая перспектива: квадратное основание со стороной 4, перпендикулярная высота h = 9. S основания = 16, V = 16 · 9 / 3 = 48. Высота идёт внутрь, не по боковому ребру.",
-            "Perspective sketch: square base of side 4 and perpendicular height h = 9. Base area is 16; V = 16 × 9 / 3 = 48. Height lies inside, not along a sloping edge."),
-           [poly([(104,211),(214,243),(324,207),(214,177)],"helper",closed=True),line(104,211,214,40),line(214,243,214,40),line(324,207,214,40),line(214,177,214,40,"helper"),
-            line(214,40,214,209,"secondary"),text(244,128,"h = 9"),text(166,243,"4"),text(284,239,"4"),text(211,20,"V = Sₒh/3 = 48")],
-           model={"type":"pyramid","baseArea":16,"height":9,"volume":48}))
-add(figure("cone", ("Высота и образующая — не одно", "Height and slant height differ"),
-           ("Схематическая перспектива конуса: r = 3, h = 4, образующая l = 5. Прямой треугольник внутри даёт l² = r² + h². V = π · 3² · 4 / 3 = 12π.",
-            "Perspective sketch of a cone: r = 3, h = 4, slant height l = 5. The internal right triangle gives l² = r² + h². V = π × 3² × 4 / 3 = 12π."),
-           [ellipse(210,211,80,23),line(130,211,210,41),line(290,211,210,41),line(210,41,210,211,"secondary"),line(210,211,290,211,"secondary"),
-            poly([(210,197),(224,197),(224,211)],"helper"),text(180,137,"h = 4"),text(277,122,"l = 5"),text(257,205,"r = 3"),text(210,264,"V = 12π")],
-           model={"type":"cone","radius":3,"height":4,"slant":5,"volumePi":12}))
-add(figure("sphere", ("Поверхность и объём мяча", "A ball's surface and volume"),
-           ("Схематический шар радиуса R = 3. Сфера — поверхность S = 4πR² = 36π; шар — объём V = 4πR³/3 = 36π. Квадратные и кубические единицы нельзя смешивать.",
-            "Sketch of a ball with R = 3. Its sphere is the surface S = 4πR² = 36π; the solid ball has V = 4πR³/3 = 36π. Square and cubic units must not be mixed."),
-           [circle(210,135,85),ellipse(210,135,85,25,"helper"),line(210,135,295,135,"secondary"),circle(210,135,3,"point",True),text(255,125,"R = 3"),
-            text(210,245,"S = 36π; V = 36π")],
-           model={"type":"sphere","radius":3,"areaPi":36,"volumePi":36}))
-add(figure("cube", ("Куб: грань, объём и диагональ", "Cube: face, volume and diagonal"),
-           ("Схематическая перспектива куба с a = 2. Объём a³ = 8, площадь шести граней 6a² = 24. Пространственная диагональ 2√3 соединяет противоположные вершины через внутренность.",
-            "Perspective sketch of a cube with a = 2. Volume a³ = 8 and six-face area 6a² = 24. Space diagonal 2√3 joins opposite vertices through the interior."),
-           box_drawing(108,220,147,147,55,-34)+[line(108,220,310,39,"secondary"),text(182,243,"a = 2"),text(225,143,"d = 2√3"),text(209,22,"V = 8, S = 24")],
-           model={"type":"cube","edge":2,"volume":8,"area":24,"diagonal":2*math.sqrt(3)}))
-add(figure("three-perpendiculars", ("Наклонная и её проекция", "Sloping segment and its projection"),
-           ("Схематическая плоскость земли. AA₀ ⟂ плоскости, A₀P — ортогональная проекция AP. Прямая l проходит через P, лежит в плоскости и перпендикулярна A₀P, значит l ⟂ AP. Перспективный рисунок не сохраняет видимые углы.",
-            "Perspective sketch of the ground plane. AA₀ is perpendicular to it; A₀P is the orthogonal projection of AP. Line l passes through P in the plane and is perpendicular to A₀P, hence to AP. Perspective does not preserve apparent angles."),
-           [poly([(80,207.5),(284,258.5),(374,168.5),(170,117.5)],"region",closed=True),line(150,51,150,180),line(150,51,286,214,"secondary"),line(150,180,286,214,"helper"),
-            line(250,250,322,178),text(136,45,"A"),text(130,188,"A₀"),text(299,233,"P"),text(337,179,"l"),text(210,24,"AA₀ ⟂ плоскости","AA₀ ⟂ plane")],
-           model={"type":"orthogonal-projection","height":[0,0,3],"projection":[4,0,0],"lineDirection":[0,1,0],
-                  "screenOrigin":[150,180],"screenBasis":[[34,8.5],[18,-18],[0,-43]]}))
+def _boundary():
+    drawing = letters_row("подъезд", 60, 70, 40, highlight=(3,))
+    drawing += [line(60 + 3 * 40 - 2, 56, 60 + 3 * 40 - 2, 120, "secondary"), text(110, 146, "приставка под-", "prefix под-"),
+                text(280, 146, "корень -езд-", "root -езд-")]
+    drawing += letters_row("вьюга", 100, 180, 40, highlight=(1,))
+    drawing += [text(210, 250, "ь — внутри корня, ъ — после приставки", "ь inside a root, ъ after a prefix")]
+    return svg("hard-soft-boundary", ("Ъ на границе, Ь внутри корня", "Ъ at the border, Ь inside the root"),
+               ("Разделительный ъ стоит на границе приставки и корня (под|ъезд), ь — внутри корня (вьюга).",
+                "ъ stands at the prefix–root border (под|ъезд), ь inside the root (вьюга)."), drawing,
+               legend=[("secondary", ("граница приставки и корня", "prefix–root border"))])
 
-# Coordinate/vector figures have equal horizontal and vertical length scales.
-add(figure("vector-displacement", ("Путь по улицам и перемещение", "Street route and displacement"),
-           ("Из O три единицы вправо, четыре вверх: путь 7, прямое перемещение 5. Вектор OP = (3;4), |OP| = 5. По осям один масштаб, прямой угол обозначен.",
-            "From O go 3 units right and 4 up: route length 7, displacement 5. OP = (3,4), |OP| = 5. Both axes use one scale and the right angle is marked."),
-           [*arrow(96,222,278,222,"axis"),*arrow(96,222,96,27,"axis"),line(96,222,222,222,"helper"),line(222,222,222,54,"helper"),*arrow(96,222,222,54),
-            poly([(207,222),(207,207),(222,207)],"helper"),text(79,242,"O"),text(240,50,"P(3;4)"),text(158,243,"3"),text(243,149,"4"),text(140,129,"5"),text(294,226,"x"),text(79,31,"y")],
-           model={"type":"vector","coordinates":[3,4],"length":5,"routeLength":7,"scale":42}))
-vorigin=(188,215); sa=36
-va=(vorigin[0]+3*sa,vorigin[1]-sa); vb=(vorigin[0]-sa,vorigin[1]-3*sa)
-u=(3/math.sqrt(10),-1/math.sqrt(10)); v=(-1/math.sqrt(10),-3/math.sqrt(10))
-rmarker=[(vorigin[0]+u[0]*17,vorigin[1]+u[1]*17),
-         (vorigin[0]+(u[0]+v[0])*17,vorigin[1]+(u[1]+v[1])*17),
-         (vorigin[0]+v[0]*17,vorigin[1]+v[1]*17)]
-add(figure("dot-perpendicular", ("Проверка прямого угла координатами", "Checking a right angle with coordinates"),
-           ("a = (3;1), b = (−1;3): a·b = 3·(−1) + 1·3 = 0. Ненулевые векторы перпендикулярны. Оба нарисованы в одном масштабе, поэтому прямой угол не искажён.",
-            "a = (3,1), b = (−1,3): a·b = 3×(−1) + 1×3 = 0. Non-zero vectors are perpendicular. One scale for both axes preserves their right angle."),
-           [*arrow(*vorigin,*va),*arrow(*vorigin,*vb,"secondary"),poly(rmarker,"helper"),text(310,184,"a = (3;1)"),text(140,83,"b = (−1;3)"),
-            text(188,242,"O"),text(210,38,"a·b = 0")],
-           model={"type":"dot-product","a":[3,1],"b":[-1,3],"dot":0,"scale":36}))
-add(figure("midpoint", ("Середина: две равные половины", "Midpoint: two equal halves"),
-           ("A(1;1), B(5;3), M(3;2). Вектор AM = MB = (2;1). M — середина, координаты усреднены отдельно; одна половина всей стрелки соответствует множителю 1/2.",
-            "A(1,1), B(5,3), M(3,2). AM = MB = (2,1). M is the midpoint; coordinates are averaged separately. One half of the whole vector gives factor 1/2."),
-           [*arrow(54,233,357,233,"axis"),*arrow(54,233,54,58,"axis"),line(96,191,264,107),circle(96,191,4,"point",True),circle(180,149,4,"point",True),circle(264,107,4,"point",True),
-            text(96,215,"A(1;1)"),text(190,176,"M(3;2)"),text(275,91,"B(5;3)"),text(382,238,"x"),text(39,53,"y")],
-           model={"type":"midpoint","a":[1,1],"b":[5,3],"midpoint":[3,2],"scale":42}))
-add(figure("product-area", ("Меняются обе стороны", "Both sides change"),
-           ("У прямоугольника стороны u и v. Если прирастут на Δu и Δv, добавятся две полосы vΔu и uΔv и угол ΔuΔv. В пределе угол не даёт отдельного слагаемого производной: (uv)′ = u′v + uv′.",
-            "If rectangle sides u and v increase by Δu and Δv, new pieces have areas vΔu, uΔv and ΔuΔv. In the limit the corner adds no derivative term: (uv)′ = u′v + uv′."),
-           [rect(77,63,208,125,"region"),rect(285,63,45,125,"secondary"),rect(77,188,208,36,"secondary"),rect(285,188,45,36,"region"),
-            text(180,131,"uv"),text(308,127,"vΔu"),text(180,212,"uΔv"),text(311,241,"ΔuΔv"),text(180,44,"u"),text(43,127,"v"),text(309,44,"Δu"),text(42,215,"Δv")],
-           model={"type":"product-rule","smallCornerOrder":2}))
-add(figure("chain-flow", ("Два последовательных изменения", "Two linked changes"),
-           ("Время t → ребро a = 2t → объём V = a³. Скорости по цепочке перемножаются: dV/dt = (3a²)·2 = 24t². Внутренний множитель 2 не исчезает.",
-            "Time t → edge a = 2t → volume V = a³. Rates multiply along the chain: dV/dt = (3a²)×2 = 24t². The inner factor 2 must not be dropped."),
-           [rect(30,92,90,72,"region"),rect(165,92,90,72,"region"),rect(300,92,90,72,"region"),*arrow(124,128,158,128,"secondary"),*arrow(259,128,293,128,"secondary"),
-            text(75,133,"t"),text(210,133,"a = 2t"),text(345,133,"V = a³"),text(140,74,"×2"),text(277,74,"×3a²"),text(210,218,"dV/dt = 24t²")],
-           model={"type":"chain-rule","edgeRate":2,"volumeRateCoefficient":24}))
-# Colour is redundant: tokens carry R/B letters, and the caption supplies counts.
-add(figure("probability-tokens", ("Три подходящих из пяти", "Three favourable out of five"),
-           ("Пять одинаково вероятных фишек, три R (красные) и две B (синие). P(R) = 3/5. При извлечении без возврата число фишек меняется; при возврате сохраняется.",
-            "Five equally likely tokens: three R (red) and two B (blue). P(R) = 3/5. Drawing without replacement changes the token count; replacement preserves it."),
-           [rect(44,74,332,127,"helper")]+[item for i in range(5) for item in [circle(80+65*i,137,22,"secondary" if i<3 else "primary"),text(80+65*i,143,"R" if i<3 else "B")]]+
-           [text(210,247,"P(R) = 3/5")],
-           model={"type":"probability","total":5,"favourable":3,"probability":[3,5]}))
-add(figure("counting-roles", ("Команда или разные роли", "A team or different roles"),
-           ("Три человека A, B, C. Без ролей выбираем пары AB, AC, BC: 3. Для капитана и помощника порядок важен: AB, AC, BA, BC, CA, CB — 6. Повторять человека в паре нельзя.",
-            "Three people A,B,C. Without roles choose AB,AC,BC: 3. Captain and assistant make order matter: AB,AC,BA,BC,CA,CB, six. A person cannot repeat within a pair."),
-           [text(87,42,"Капитан","Captain"),text(249,42,"Помощник","Assistant")]+[item for i,first in enumerate("ABC") for item in
-            [circle(87,82+66*i,17,"point",True),text(87,88+66*i,first),line(106,82+66*i,203,69+66*i,"helper"),line(106,82+66*i,203,97+66*i,"helper"),
-             text(234,74+66*i," / ".join(x for x in "ABC" if x!=first)),text(327,88+66*i,", ".join(first+x for x in "ABC" if x!=first))]],
-           model={"type":"counting","n":3,"k":2,"ordered":6,"unordered":3}))
-clock=[circle(210,139,87)]
-for hour in range(12):
-    theta=math.pi/2-hour*math.pi/6
-    x,y=circle_point(theta,210,139,98)
-    clock.append(text(x,y+5,str(hour or 12)))
-clock += arrow(210,139,*circle_point(math.pi/2-10*math.pi/6,210,139,68))
-clock += arrow(210,139,*circle_point(math.pi/2-3*math.pi/6,210,139,77),"secondary")
-clock += [text(210,265,"10 + 5 ≡ 3 (mod 12)")]
-add(figure("clock-cycle", ("После полного круга счёт повторяется", "Counting repeats after a full turn"),
-           ("С 10 часов через 5 часов получится 3. Полный круг 12 не меняет положение стрелки. Остаток 0 на рисунке обозначен 12; это одна и та же отметка, не два часа.",
-            "Five hours after 10 it is 3. A full cycle of 12 leaves the hand's position unchanged. Remainder 0 is marked 12, the same clock position, not an extra hour."), clock,
-           legend=[("primary",("Начало: 10","Start: 10")),("secondary",("Через 5 часов: 3","After 5 hours: 3"))],
-           model={"type":"modular","modulus":12,"start":10,"increment":5,"result":3}))
 
-# One figure may serve related lessons without duplicating SVG data in JSON.
+TABLES = [
+    table("table-tozhe", ("Тоже / то же, также / так же", "Тоже / то же, также / так же"),
+          ("Слитно — союз (= и); раздельно — местоимение или наречие с частицей; рядом часто «что», «как».",
+           "Solid: conjunction (= и); separate: pronoun/adverb + particle, often with что/как."),
+          [("Написание", "Spelling"), ("Что это", "What it is"), ("Проверка", "Check"), ("Пример", "Example")],
+          [["тоже", ("союз", "conjunction"), ("= и, также", "= also"), "Я тоже пойду."],
+           ["то же", ("местоимение + частица", "pronoun + particle"), ("рядом «что»; же можно убрать", "with «что»"),
+            "Он заказал то же, что и я."],
+           ["также", ("союз", "conjunction"), ("= и, тоже", "= also"), "Сестра также любит музыку."],
+           ["так же", ("наречие + частица", "adverb + particle"), ("рядом «как»", "with «как»"), "Он поступил так же, как брат."]]),
+    table("table-chtoby", ("Союзы и сочетания-двойники", "Look-alike conjunctions"),
+          ("Союз пишется слитно; местоимение или наречие с частицей/предлогом — раздельно.", "Conjunctions are solid."),
+          [("Слитно", "Solid"), ("Раздельно", "Separate"), ("Как различить", "How to tell")],
+          [["чтобы (цель)", "что бы (бы можно убрать)", ("«для того чтобы» или «что бы ни»", "purpose vs pronoun")],
+           ["зато (= но)", "за то (что)", ("«но» или «за то, что»", "«но» vs «за то, что»")],
+           ["итак (= следовательно)", "и так (= и без того)", ("вывод или усиление", "conclusion vs emphasis")],
+           ["причём (= к тому же)", "при чём (при каком предмете)", ("союз или вопрос", "conjunction vs question")],
+           ["поэтому (= по этой причине)", "по этому (мосту)", ("при существительном — раздельно", "with a noun — separate")]]),
+    table("table-prepositions", ("Производные предлоги", "Derived prepositions"),
+          ("Слитно: вследствие, ввиду, насчёт, несмотря на. Раздельно: в течение, в продолжение (на конце -е).",
+           "Solid: вследствие, ввиду, насчёт, несмотря на. Separate: в течение, в продолжение."),
+          [("Предлог", "Preposition"), ("Значение", "Meaning"), ("Не путать с", "Do not confuse with")],
+          [["в течение недели", ("время", "time"), "в течении реки (сущ.)"],
+           ["в продолжение разговора", ("время", "time"), "в продолжении романа (сущ.)"],
+           ["вследствие болезни", ("причина", "cause"), "в следствии по делу (сущ.)"],
+           ["ввиду погоды", ("причина", "cause"), "иметь в виду"],
+           ["насчёт поездки", ("= о", "= about"), "перевести на счёт фирмы"],
+           ["несмотря на дождь", ("уступка", "concession"), "не смотря под ноги (деепр.)"]]),
+    table("table-pre-pri", ("ПРЕ- и ПРИ-", "ПРЕ- and ПРИ-"),
+          ("Значение приставки решает написание; словарные слова запоминают.", "The prefix meaning decides."),
+          [("Приставка", "Prefix"), ("Значение", "Meaning"), ("Примеры", "Examples")],
+          [["пре-", ("«очень»", "«very»"), "прекрасный, премудрый"], ["пре-", ("«пере-»", "«пере-»"), "преодолеть, прервать"],
+           ["при-", ("приближение, присоединение", "approach, joining"), "приехать, пристроить"],
+           ["при-", ("близость", "nearness"), "прибрежный, привокзальный"],
+           ["при-", ("неполнота действия", "incomplete action"), "приоткрыть, присесть"],
+           [("по словарю", "dictionary"), ("значение не выделяется", "opaque"), "привилегия, пренебрегать, президент"]]),
+    table("table-paronyms", ("Паронимы", "Paronyms"),
+          ("Похожие слова различаются значением и сочетаемостью; в тренажёре проверяется правильный выбор.",
+           "Similar words differ in meaning and collocation."),
+          [("Пароним", "Paronym"), ("Значение", "Meaning"), ("Пример", "Example")],
+          [["одеть", ("кого? (ребёнка)", "someone"), "одеть сына"], ["надеть", ("что? (одежду)", "something"), "надеть шапку"],
+           ["предоставить", ("дать в пользование", "grant"), "предоставить отпуск"],
+           ["представить", ("показать, познакомить", "present"), "представить отчёт"],
+           ["абонемент", ("право пользования", "subscription"), "абонемент в бассейн"],
+           ["абонент", ("тот, кто пользуется", "subscriber"), "абонент недоступен"],
+           ["эффективный", ("действенный", "effective"), "эффективное лекарство"],
+           ["эффектный", ("производящий впечатление", "striking"), "эффектное платье"]]),
+    table("table-alt-oa", ("Корни с чередованием О/А", "Roots alternating О/А"),
+          ("Гласная зависит от согласной после корня, суффикса -а-, ударения или значения — не от проверки ударением.",
+           "The vowel depends on the following consonant, the suffix -а-, stress or meaning."),
+          [("Корень", "Root"), ("Условие", "Condition"), ("Примеры", "Examples"), ("Исключения", "Exceptions")],
+          [["-лаг-/-лож-", ("г — а, ж — о", "г → а, ж → о"), "предлагать, предложение", "—"],
+           ["-раст-/-ращ-/-рос-", ("ст, щ — а; с — о", "ст/щ → а; с → о"), "растение, заросли", "росток, отрасль"],
+           ["-кас-/-кос-", ("суффикс -а- — а", "suffix -а- → а"), "касаться, коснуться", "—"],
+           ["-скак-/-скоч-", ("к — а, ч — о", "к → а, ч → о"), "скакать, выскочить", "скачок, скачу"],
+           ["-гар-/-гор-", ("без ударения — о", "unstressed о"), "загорелый", "выгарки, изгарь"],
+           ["-зар-/-зор-", ("без ударения — а", "unstressed а"), "заря", "зоревать, зорянка"],
+           ["-клан-/-клон-, -твар-/-твор-", ("без ударения — о", "unstressed о"), "поклониться, творение", "утварь"],
+           ["-плав-", ("а", "а"), "поплавок", "пловец, пловчиха, плывуны"],
+           ["-равн-/-ровн-", ("«равный» — а, «ровный» — о", "meaning"), "уравнять, выровнять", "равнина, ровесник, поровну"]]),
+    table("table-alt-ei", ("Корни с чередованием Е/И", "Roots alternating Е/И"),
+          ("Перед суффиксом -а- пишется и, без него — е.", "и before the suffix -а-, otherwise е."),
+          [("Корень", "Root"), ("С -а- → и", "With -а- → и"), ("Без -а- → е", "Without -а- → е")],
+          [["-бер-/-бир-", "собирать", "соберу"], ["-мер-/-мир-", "замирать", "замереть"], ["-тер-/-тир-", "вытирать", "вытереть"],
+           ["-блест-/-блист-", "блистать", "блестеть"], ["-жег-/-жиг-", "зажигать", "зажечь"], ["-стел-/-стил-", "застилать", "застелить"],
+           [("исключения", "exceptions"), "—", "сочетать, сочетание, чета"]]),
+    table("table-n-nn", ("Н и НН", "Н and НН"),
+          ("Сначала определите, от чего образовано слово; затем — приставку, зависимые слова и исключения.",
+           "Find the source word first, then prefix, dependents and exceptions."),
+          [("Случай", "Case"), ("Н/НН", "Н/НН"), ("Примеры", "Examples")],
+          [[("суффиксы -ан-, -ян-, -ин-", "suffixes -ан-, -ян-, -ин-"), "н", "кожаный, серебряный, гусиный"],
+           [("исключения", "exceptions"), "нн", "деревянный, стеклянный, оловянный"],
+           [("суффиксы -енн-, -онн-", "suffixes -енн-, -онн-"), "нн", "клюквенный, традиционный"],
+           [("основа на н + н", "stem in н + н"), "нн", "лимонный, каменный"],
+           [("отглагольное без приставки и зависимых слов", "deverbal, no prefix/dependents"), "н", "жареная картошка"],
+           [("причастие: приставка или зависимые слова", "participle: prefix or dependents"), "нн", "пожаренная, жаренная в масле"],
+           [("краткое причастие", "short participle"), "н", "задача решена"],
+           [("исключения с одной н", "one-н exceptions"), "н", "ветреный, смышлёный"]]),
+    table("table-conjugation", ("Спряжение глаголов", "Verb conjugation"),
+          ("II спряжение: на -ить (кроме брить, стелить) и 11 исключений; остальные — I.",
+           "2nd: verbs in -ить (except брить, стелить) and 11 exceptions; others 1st."),
+          [("Спряжение", "Conjugation"), ("Окончания", "Endings"), ("Глаголы", "Verbs")],
+          [["I", "-ешь, -ет, -ем, -ете, -ут/-ют", ("остальные + брить, стелить", "the rest + брить, стелить")],
+           ["II", "-ишь, -ит, -им, -ите, -ат/-ят", ("на -ить + гнать, держать, дышать, слышать, видеть, обидеть, ненавидеть, "
+                                                   "зависеть, вертеть, терпеть, смотреть", "-ить verbs + 11 exceptions")]]),
+    table("table-declension", ("Три склонения", "Three declensions"),
+          ("Склонение определяют по роду и окончанию в именительном падеже единственного числа.",
+           "Declension is found by gender and nominative singular ending."),
+          [("Склонение", "Declension"), ("Род и окончание", "Gender and ending"), ("Примеры", "Examples")],
+          [["1-е", ("ж. и м. р. на -а, -я", "fem./masc. in -а/-я"), "земля, дядя, юноша"],
+           ["2-е", ("м. р. с нулевым окончанием, ср. р. на -о, -е", "masc. zero ending, neut. -о/-е"), "конь, поле, здание"],
+           ["3-е", ("ж. р. на -ь", "fem. in -ь"), "ночь, мышь, тень"],
+           [("разносклоняемые", "heteroclites"), ("10 слов на -мя и путь", "10 nouns in -мя and путь"), "время, имя, путь"],
+           [("несклоняемые", "indeclinable"), ("одна форма", "one form"), "пальто, кофе, метро"]]),
+    table("table-numerals", ("Склонение составного числительного", "Declining a compound numeral"),
+          ("Каждое слово меняется: 548 по падежам.", "Every word changes: 548 by case."),
+          [("Падеж", "Case"), ("Форма", "Form")],
+          [[("именительный", "nominative"), "пятьсот сорок восемь"], [("родительный", "genitive"), "пятисот сорока восьми"],
+           [("дательный", "dative"), "пятистам сорока восьми"], [("творительный", "instrumental"), "пятьюстами сорока восемью (восьмью)"],
+           [("предложный", "prepositional"), "о пятистах сорока восьми"]]),
+    table("table-styles", ("Стили речи", "Styles of speech"),
+          ("Стиль определяют по сфере общения, задаче и языковым приметам, а не по теме.", "Style: sphere, purpose, language."),
+          [("Стиль", "Style"), ("Задача", "Purpose"), ("Приметы", "Markers")],
+          [[("научный", "scientific"), ("сообщить точные знания", "precise knowledge"), ("термины, логичность, нет оценок", "terms, logic")],
+           [("официально-деловой", "official"), ("регулировать отношения", "regulate"), ("стандартные формулы, точность", "formulas")],
+           [("публицистический", "journalistic"), ("воздействовать, убедить", "persuade"), ("оценка, призыв, общественная тема", "evaluation")],
+           [("художественный", "literary"), ("создать образ", "create images"), ("тропы, эмоциональность", "imagery")],
+           [("разговорный", "colloquial"), ("непринуждённое общение", "casual talk"), ("разговорные слова, диалог", "colloquialisms")]]),
+    table("table-types", ("Типы речи", "Types of speech"),
+          ("Тип речи — по тому, что сообщает текст.", "The type depends on what the text conveys."),
+          [("Тип", "Type"), ("Вопрос", "Question"), ("Признак", "Feature")],
+          [[("повествование", "narration"), ("что произошло?", "what happened?"), ("смена событий во времени", "events in time")],
+           [("описание", "description"), ("какой?", "what is it like?"), ("признаки в один момент", "features at one moment")],
+           [("рассуждение", "reasoning"), ("почему?", "why?"), ("тезис, доводы, вывод", "thesis, arguments, conclusion")]]),
+    table("table-cohesion", ("Средства связи предложений", "Means of cohesion"),
+          ("Средство ищут в данном предложении и связывают с предыдущим.", "Look in the given sentence, link to the previous."),
+          [("Средство", "Means"), ("Пример", "Example")],
+          [[("личное местоимение", "personal pronoun"), "Книга учит… Она помогает…"],
+           [("указательное местоимение", "demonstrative pronoun"), "…не нужны. С этим мнением…"],
+           [("лексический повтор", "repetition"), "…к пруду. Пруд замёрз…"],
+           [("синоним, родовое слово", "synonym, general word"), "…цапля. …провожали птицу…"],
+           [("союз в начале", "initial conjunction"), "Однако с этим трудно согласиться."],
+           [("наречие", "adverb"), "Поэтому чтение… / Тогда дерево…"], [("вводное слово", "parenthetical"), "Например, … / Следовательно, …"],
+           [("однокоренное слово", "cognate"), "…листья? Листопад…"]]),
+    table("table-asyndetic", ("Знаки в бессоюзном предложении", "Marks in asyndetic sentences"),
+          ("Подставьте союз — он подскажет знак.", "Insert a conjunction — it tells the mark."),
+          [("Подставляется", "Insert"), ("Отношение", "Relation"), ("Знак", "Mark"), ("Пример", "Example")],
+          [["и, а также", ("перечисление", "list"), ",", "Ветер стих, небо прояснилось."],
+           ["что, а именно", ("пояснение", "explanation"), ":", "Я знаю: ты придёшь."],
+           ["потому что", ("причина", "reason"), ":", "Мне не спалось: мешал шум."],
+           ["и увидел, что", ("восприятие", "perception"), ":", "Я оглянулся: никого не было."],
+           ["поэтому, так что", ("следствие", "result"), "—", "Лес рубят — щепки летят."],
+           ["если, когда", ("условие, время", "condition, time"), "—", "Приедешь — поговорим."],
+           ["а, но", ("противопоставление", "contrast"), "—", "Хотел выйти — дверь заперта."]]),
+    table("table-direct-speech", ("Схемы прямой речи", "Direct speech patterns"),
+          ("П/п — прямая речь (с прописной/строчной), А/а — слова автора.", "П/п — speech, А/а — author's words."),
+          [("Схема", "Pattern"), ("Пример", "Example")],
+          [["А: «П».", "Брат сказал: «Я приду завтра»."], ["«П», — а.", "«Я приду завтра», — сказал брат."],
+           ["«П?» — а.", "«Ты придёшь?» — спросила мама."], ["«П, — а, — п».", "«Знаешь, — сказала она, — я давно хотела…»"],
+           ["«П, — а. — П».", "«Я устал, — сказал он. — Пойду спать»."],
+           [("цитата в предложении", "built-in quotation"), "По словам Пушкина, «чтение — вот лучшее учение»."]]),
+    table("table-hyphen", ("Слитно, раздельно, через дефис", "Solid, separate, hyphenated"),
+          ("Сложные прилагательные, пол-, наречия.", "Compound adjectives, пол-, adverbs."),
+          [("Написание", "Spelling"), ("Когда", "When"), ("Примеры", "Examples")],
+          [[("через дефис", "hyphen"), ("равноправные основы, цвета, стороны света", "equal stems, colours, compass"),
+            "литературно-художественный, сине-зелёный, северо-западный"],
+           [("слитно", "solid"), ("от подчинительного словосочетания", "from a subordinate phrase"), "железнодорожный, сельскохозяйственный"],
+           [("раздельно", "separate"), ("наречие + прилагательное", "adverb + adjective"), "широко известный"],
+           [("пол- через дефис", "пол- hyphen"), ("перед гласной, л, прописной", "before a vowel, л, capital"), "пол-яблока, пол-лимона, пол-Минска"],
+           [("пол- слитно", "пол- solid"), ("перед другими согласными", "other consonants"), "полчаса, полметра"],
+           [("наречия через дефис", "adverbs, hyphen"), ("по-…-ому, -ски; во-…-ых", "по-…-ому; во-…-ых"), "по-новому, по-братски, во-первых"],
+           [("наречия слитно", "adverbs, solid"), ("предлог + краткое прилагательное и др.", "preposition + short adjective"),
+            "досуха, налево, напоказ, вдвоём"], [("наречия раздельно", "adverbs, separate"), ("сохраняется падеж", "case kept"),
+                                                  "без устали, с разбегу, по двое"]]),
+    table("table-ending", ("Нулевое окончание и отсутствие окончания", "Zero ending vs no ending"),
+          ("Изменяемое слово с невыраженным окончанием — нулевое окончание; неизменяемое слово окончания не имеет.",
+           "A changeable word may have a zero ending; an invariable word has none."),
+          [("Слово", "Word"), ("Окончание", "Ending"), ("Почему", "Why")],
+          [["конь", ("нулевое", "zero"), "коня, коню"], ["читал", ("нулевое", "zero"), "читала, читали"],
+           ["пальто", ("нет", "none"), ("несклоняемое", "indeclinable")], ["красиво", ("нет", "none"), ("наречие", "adverb")],
+           ["читая", ("нет", "none"), ("деепричастие", "verbal adverb")]]),
+    table("table-formation", ("Способы образования слов", "Ways of forming words"),
+          ("Сравнивайте слово с производящим и смотрите, что добавлено.", "Compare with the source word."),
+          [("Способ", "Method"), ("Пример", "Example")],
+          [[("приставочный", "prefixal"), "читать → перечитать"], [("суффиксальный", "suffixal"), "лес → лесник"],
+           [("приставочно-суффиксальный", "prefix + suffix"), "окно → подоконник"], [("постфиксальный", "postfixal"), "мыть → мыться"],
+           [("приставочно-постфиксальный", "prefix + postfix"), "бежать → разбежаться"], [("сложение", "compounding"), "пар + ход → пароход"],
+           [("сложение + суффиксация", "compounding + suffix"), "железная дорога → железнодорожный"]]),
+    table("table-iotated", ("Когда е, ё, ю, я обозначают два звука", "When е, ё, ю, я give two sounds"),
+          ("Два звука — в начале слова, после гласной и после ъ, ь; после согласной — один звук.", "Two sounds initially, "
+           "after a vowel and after ъ/ь."),
+          [("Позиция", "Position"), ("Звуки", "Sounds"), ("Пример", "Example")],
+          [[("начало слова", "word start"), ("два", "two"), "ель [й'эл']"], [("после гласной", "after a vowel"), ("два", "two"), "маяк [май'ак]"],
+           [("после ъ, ь", "after ъ/ь"), ("два", "two"), "вьюга [в'й'уга]"], [("после согласной", "after a consonant"), ("один", "one"),
+                                                                              "мясо [м'аса]"]]),
+    table("table-stress", ("Памятка ударений", "Stress memo"),
+          ("Слова с одним нормативным ударением (по орфоэпическому словарю).", "Words with one normative stress."),
+          [("Слово", "Word"), ("Ударный слог", "Stressed syllable")],
+          [["звони́т", "2"], ["катало́г", "3"], ["кварта́л", "2"], ["краси́вее", "2"], ["ку́хонный", "1"], ["щаве́ль", "2"],
+           ["жалюзи́", "3"], ["то́рты", "1"], ["взяла́", "2"], ["при́нял", "1"], ["обеспе́чение", "3"], ["облегчи́ть", "3"]]),
+    table("table-soft-sign", ("Ь после шипящих", "Ь after hushing consonants"),
+          ("Решают часть речи и род, а не звучание.", "Part of speech and gender decide."),
+          [("Часть речи", "Part of speech"), ("Ь", "Ь"), ("Примеры", "Examples")],
+          [[("сущ. ж. р., 3-е скл.", "fem. noun, 3rd decl."), ("пишется", "yes"), "ночь, мощь"],
+           [("сущ. м. р.", "masc. noun"), ("нет", "no"), "плач, калач"], [("Р. п. мн. ч.", "gen. pl."), ("нет", "no"), "туч, задач"],
+           [("глагол", "verb"), ("пишется", "yes"), "читаешь, печь, режь"], [("наречие", "adverb"), ("пишется", "yes"), "настежь, сплошь"],
+           [("искл.: уж, замуж, невтерпёж", "exc.: уж, замуж, невтерпёж"), ("нет", "no"), "уж, замуж"],
+           [("краткое прил.", "short adj."), ("нет", "no"), "горяч, хорош"]]),
+    table("table-predicates", ("Типы сказуемого", "Predicate types"),
+          ("Смотрите на состав сказуемого.", "Look at the composition."),
+          [("Тип", "Type"), ("Строение", "Structure"), ("Пример", "Example")],
+          [[("простое глагольное", "simple verbal"), ("глагол в любой форме", "a verb form"), "Мы гуляли. Он будет работать."],
+           [("составное глагольное", "compound verbal"), ("вспомогательный глагол + инфинитив", "aux + infinitive"), "Я начал читать."],
+           [("составное именное", "compound nominal"), ("связка + именная часть", "link + nominal"), "Вечер был тихим. Брат — студент."]]),
+    table("table-complex-types", ("Виды сложных предложений", "Types of complex sentences"),
+          ("Тип — по средству связи частей.", "The type depends on the link."),
+          [("Вид", "Type"), ("Связь", "Link"), ("Пример", "Example")],
+          [[("ССП", "compound"), ("сочинительный союз", "coordinating"), "Наступила весна, и растаял снег."],
+           [("СПП", "complex"), ("подчинительный союз, союзное слово", "subordinating"), "Когда наступила весна, растаял снег."],
+           [("БСП", "asyndetic"), ("без союзов", "none"), "Наступила весна — растаял снег."],
+           [("с разными видами связи", "mixed"), ("несколько видов", "several"), "Я позвонил, но он не ответил, потому что уехал."]]),
+    table("table-introductory", ("Вводные и не вводные слова", "Parenthetical or not"),
+          ("Список «не вводных» помогает не ставить лишние запятые.", "The «never parenthetical» list saves extra commas."),
+          [("Вводные (выделяются)", "Parenthetical"), ("Не вводные (не выделяются)", "Not parenthetical")],
+          [["конечно, наверное, кажется", "вдруг, вряд ли, едва ли"], ["к счастью, к сожалению", "даже, именно, ведь"],
+           ["во-первых, значит, итак", "будто бы, как будто, приблизительно"], ["говорят, по-моему, по-видимому", "однако (в начале = но)"]]),
+    table("table-ne", ("НЕ: слитно или раздельно", "НЕ: solid or separate"),
+          ("Сначала часть речи, потом условия.", "Part of speech first, then conditions."),
+          [("Слитно", "Solid"), ("Раздельно", "Separate")],
+          [["без НЕ не употребляется: ненавидеть, небрежный", "с глаголом и деепричастием: не читая, не заметил"],
+           ["есть синоним без НЕ: невесёлый (= грустный)", "противопоставление с А: не весёлый, а грустный"],
+           ["полное причастие без зависимых слов: нерешённая задача", "причастие с зависимыми словами: не решённая ещё задача"],
+           ["отрицательные местоимения: некого, нечего", "краткое причастие: не решена; далеко не простой"]]),
+]
+
+TREES = [
+    tree("tree-ne", ("Как писать НЕ", "How to write НЕ"),
+         ("Пройдите вопросы сверху вниз; ответ — внизу ветки.", "Answer the questions top-down."),
+         node("Слово — глагол или деепричастие?", "Is it a verb or a verbal adverb?",
+              leaf("Раздельно (кроме слов без НЕ: ненавидеть).", "Separate (except words without НЕ: ненавидеть).", "не читая", "не заметил"),
+              node("Есть противопоставление с союзом А?", "Is there a contrast with А?",
+                   leaf("Раздельно.", "Separate.", "не весёлый, а грустный"),
+                   node("Это причастие с зависимыми словами или краткое причастие?", "A participle with dependents or a short one?",
+                        leaf("Раздельно.", "Separate.", "не решённая ещё задача", "задача не решена"),
+                        leaf("Слитно, если слово без НЕ не употребляется или есть синоним без НЕ.",
+                             "Solid if the word does not exist without НЕ or has a synonym without НЕ.", "небрежный", "невесёлый вид"))))),
+    tree("tree-n-nn", ("Н или НН в отглагольном слове", "Н or НН in a deverbal word"),
+         ("Для отыменных прилагательных смотрите таблицу суффиксов.", "For denominal adjectives see the suffix table."),
+         node("Есть приставка (кроме не-)?", "Is there a prefix (other than не-)?", leaf("НН.", "НН.", "покрашенный пол"),
+              node("Есть зависимые слова?", "Are there dependent words?", leaf("НН.", "НН.", "жаренная в масле картошка"),
+                   node("Это краткая форма?", "Is it a short form?", leaf("Н.", "Н.", "задача решена"),
+                        leaf("Н (проверьте исключения: желанный, медленный, нежданный — НН).",
+                             "Н (check exceptions: желанный, медленный — НН).", "жареная картошка", "кованый сундук"))))),
+    tree("tree-tsya", ("-ТСЯ или -ТЬСЯ", "-ТСЯ or -ТЬСЯ"), ("Вопрос задаётся от главного слова.", "Ask from the head word."),
+         node("Глагол отвечает на вопрос «что делать?» / «что сделать?»", "Does the verb answer «что делать?/что сделать?»",
+              leaf("-ться (в вопросе есть ь).", "-ться (the question has ь).", "нужно научиться", "любят купаться"),
+              leaf("-тся («что делает?» / «что сделает?»).", "-тся («что делает?»).", "ему не терпится", "ветка качается"))),
+    tree("tree-dash", ("Нужно ли тире между подлежащим и сказуемым", "Is a dash needed"),
+         ("Тире ставится только без связки.", "A dash only without a linking verb."),
+         node("Подлежащее — личное местоимение, есть НЕ, союз «как» или связка?", "Personal pronoun, НЕ, «как» or a link?",
+              leaf("Тире не ставится.", "No dash.", "Он студент.", "Бедность не порок."),
+              node("Оба главных члена — существительные в И. п., числительные или инфинитивы?",
+                   "Both are nominative nouns, numerals or infinitives?",
+                   leaf("Ставится тире.", "Dash.", "Москва — столица России.", "Дважды два — четыре."),
+                   leaf("Тире не ставится (например, сказуемое — прилагательное).", "No dash (e.g. an adjective predicate).",
+                        "Вода холодная.")))),
+    tree("tree-comma-i", ("Запятая перед И", "Comma before И"), ("Сначала посчитайте основы.", "Count the clauses first."),
+         node("И соединяет две грамматические основы?", "Does И join two clauses?",
+              node("Есть общий второстепенный член или общая придаточная часть?", "Is there a shared part?",
+                   leaf("Запятая не ставится.", "No comma.", "Вдруг солнце скрылось и подул ветер."),
+                   leaf("Запятая ставится.", "Comma.", "Солнце скрылось, и подул ветер.")),
+              leaf("Это однородные члены или однородные придаточные — запятая не ставится.",
+                   "Homogeneous parts/clauses — no comma.", "Он открыл окно и выглянул."))),
+    tree("tree-o-yo", ("О или Ё после шипящих", "О or Ё after hushing consonants"),
+         ("Сначала определите морфему с пропуском.", "Find the morpheme first."),
+         node("Пропуск в корне?", "Is the gap in the root?",
+              node("Есть однокоренное слово с е?", "Is there a cognate with е?", leaf("Ё.", "Ё.", "чёрный — чернеть"),
+                   leaf("О (словарное слово, заимствование, беглая гласная).", "О (dictionary word, loan, fleeting vowel).",
+                        "шорох", "шоколад", "шов")),
+              node("Это суффикс или окончание существительного, прилагательного или наречия под ударением?",
+                   "A stressed noun/adjective/adverb suffix or ending?",
+                   leaf("О.", "О.", "плащом", "медвежонок", "горячо"),
+                   leaf("Ё (глагольные формы и слова от них, суффикс -ёр-).", "Ё (verbal forms, -ёр-).", "дирижёр", "тушёнка")))),
+    tree("tree-pre-pri", ("ПРЕ- или ПРИ-", "ПРЕ- or ПРИ-"), ("Определите значение приставки.", "Find the prefix meaning."),
+         node("Можно заменить на «очень» или «пере-»?", "Replaceable by «очень» or «пере-»?",
+              leaf("ПРЕ-.", "ПРЕ-.", "прекрасный", "преодолеть"),
+              node("Значение — приближение, присоединение, близость, неполнота действия?",
+                   "Approach, joining, nearness or an incomplete action?",
+                   leaf("ПРИ-.", "ПРИ-.", "приехать", "прибрежный", "приоткрыть"),
+                   leaf("Проверьте по словарю.", "Check the dictionary.", "привилегия", "пренебрегать")))),
+    tree("tree-asyndetic", ("Знак в бессоюзном предложении", "Mark in an asyndetic sentence"),
+         ("Вставьте подходящий союз.", "Insert a fitting conjunction."),
+         node("Подходит «что», «а именно» или «потому что»?", "Does «что/а именно/потому что» fit?",
+              leaf("Двоеточие.", "Colon.", "Я знаю: ты придёшь.", "Мне не спалось: мешал шум."),
+              node("Подходит «поэтому», «если», «когда», «а», «но»?", "Does «поэтому/если/когда/а/но» fit?",
+                   leaf("Тире.", "Dash.", "Лес рубят — щепки летят.", "Приедешь — поговорим."),
+                   leaf("Запятая (перечисление).", "Comma (listing).", "Ветер стих, небо прояснилось.")))),
+    tree("tree-alt-ei", ("Е или И в корне с чередованием", "Е or И in an alternating root"),
+         ("Корни: -бер-, -дер-, -мер-, -пер-, -тер-, -блест-, -жег-, -стел-, -чет-.", "Roots: -бер-, -дер-, …"),
+         node("После корня стоит суффикс -а-?", "Does the suffix -а- follow the root?",
+              leaf("И (исключения: сочетать, сочетание).", "И (exceptions: сочетать, сочетание).", "собирать", "блистать"),
+              leaf("Е.", "Е.", "соберу", "блестеть"))),
+]
+
+SVGS = [_stress(), _sounds(), _morphemes(), _chain(), _root_check(), _sentence(), _phrases(), _schemes(), _bsp(), _dash(),
+        _isolation(), _text_structure(), _cohesion(), _boundary()]
+FIGURES = {entry["id"]: entry for entry in SVGS + TABLES + TREES}
+
 LESSON_FIGURES = {
-    "fractions":["fraction-bar"], "powers":["geometric-dots","cube"],
-    "roots-absolute":["absolute-distance"], "identities":["identity-areas"],
-    "linear-equations":["taxi-cost"], "quadratic":["parabola-roots"],
-    "equation-domain":["domain-root","hyperbola"], "linear-inequalities":["absolute-interval"],
-    "intervals":["interval-signs"], "quadratic-inequalities":["parabola-roots"],
-    "function-domain-range":["domain-root"], "graph-transformations":["graph-shift"],
-    "function-properties":["linear-graph","hyperbola","even-odd"],
-    "arithmetic-progression":["arithmetic-dots"], "geometric-progression":["geometric-dots"],
-    "progression-sums":["arithmetic-dots","geometric-dots"], "motion-work":["constant-speed"],
-    "percentages":["percent-stages"], "trig-identities":["unit-circle","ladder-triangle"],
-    "trig-values":["radian-arc","unit-circle"], "trig-formulas":["unit-circle","sine-cosine"],
-    "trig-equations":["circle-two-solutions","sine-solutions"], "trig-selection":["sine-solutions"],
-    "log-definition":["exponential","logarithm"], "log-properties":["logarithm"],
-    "exponential-equations":["exponential"], "plane-figures":["triangle-lines"],
-    "right-triangle":["ladder-triangle"], "plane-areas":["triangle-area","parallelogram-area"],
-    "circle-theorems":["circle-angles","circle-tangent","radian-arc"], "similarity":["similar-triangles"],
-    "prism-cylinder":["prism-box","cylinder"], "pyramid-cone":["pyramid","cone"],
-    "sphere-cube":["sphere","cube"], "solid-perpendiculars":["three-perpendiculars"],
-    "derivative-table":["speed-tangent"], "derivative-rules":["product-area"],
-    "chain-rule":["chain-flow"], "derivative-point":["tangent"],
-    "extrema":["extrema","even-odd"], "segment-extrema":["segment-extrema"],
-    "counting":["counting-roles"], "probability":["probability-tokens"],
-    "factorials":["counting-roles"], "vector-coordinates":["vector-displacement"],
-    "dot-product":["dot-perpendicular"], "midpoint-collinearity":["midpoint"],
-    "parameters":["parameter-two","parameter-one","parameter-none"],
-    "parameter-tangency":["tangent"], "sequences":["arithmetic-dots"], "modular-cycles":["clock-cycle"],
+    "sounds-letters": ["letters-sounds", "table-iotated"], "stress": ["stress-zvonit", "table-stress"],
+    "word-meaning": ["table-paronyms"], "synonyms-antonyms": ["table-paronyms"], "paronyms": ["table-paronyms"],
+    "phraseology": ["table-styles"], "pleonasm": ["table-paronyms"], "morphemes": ["morpheme-podokonnik", "table-ending"],
+    "word-formation": ["chain-uchit", "table-formation"], "root-vowels": ["root-check"], "root-alt-oa": ["table-alt-oa"],
+    "root-alt-ei": ["table-alt-ei", "tree-alt-ei"], "consonants": ["root-check"], "double-consonants": ["table-hyphen"],
+    "prefix-z-s": ["table-pre-pri"], "prefix-pre-pri": ["table-pre-pri", "tree-pre-pri"], "y-after-prefix": ["hard-soft-boundary"],
+    "hard-soft-sign": ["hard-soft-boundary"], "soft-sign-sibilants": ["table-soft-sign"], "noun-endings": ["table-declension"],
+    "noun-adj-suffixes": ["table-n-nn"], "o-yo-sibilants": ["tree-o-yo"], "verb-endings": ["table-conjugation"],
+    "tsya": ["tree-tsya"], "participle-suffixes": ["table-conjugation"], "adjectives": ["phrase-links"],
+    "function-words": ["table-prepositions"], "verb-aspect": ["table-predicates"], "n-nn": ["table-n-nn", "tree-n-nn"],
+    "ne-parts": ["table-ne", "tree-ne"], "ne-ni": ["table-ne"], "hyphen-compounds": ["table-hyphen"], "adverbs": ["table-hyphen"],
+    "prep-conj-particles": ["table-tozhe", "table-chtoby", "table-prepositions"], "noun-declension": ["table-declension"],
+    "numerals": ["table-numerals"], "government": ["phrase-links"], "participial-gerund": ["isolation-position"],
+    "phrases": ["phrase-links"], "sentence-members": ["sentence-base", "table-predicates"], "dash-subject": ["dash-subject", "tree-dash"],
+    "homogeneous": ["sentence-base"], "isolation": ["isolation-position"], "introductory": ["table-introductory"],
+    "kak": ["table-introductory"], "compound": ["scheme-ssp-spp", "tree-comma-i"], "complex": ["scheme-ssp-spp"],
+    "asyndetic": ["scheme-bsp", "table-asyndetic", "tree-asyndetic"], "mixed": ["scheme-ssp-spp"],
+    "complex-types": ["table-complex-types"], "direct-speech": ["table-direct-speech"],
+    "text-subtopics": ["text-reasoning"], "text-cohesion": ["cohesion-chain", "table-cohesion"],
+    "text-styles": ["table-styles", "table-types"],
 }
 
 
@@ -568,46 +644,104 @@ def payload():
     return deepcopy(FIGURES)
 
 
+def _bilingual(value):
+    return isinstance(value, dict) and set(value) == {"ru", "en"} and all(
+        isinstance(value[lang], str) and value[lang].strip() for lang in ("ru", "en"))
+
+
+def _cell(value):
+    return (isinstance(value, str) and value.strip()) or _bilingual(value)
+
+
+def _tree(entry, depth=0):
+    if depth > 6 or not isinstance(entry, dict):
+        raise ValueError("invalid decision tree")
+    if set(entry) == {"result", "examples"}:
+        if not _bilingual(entry["result"]) or not isinstance(entry["examples"], list) or any(
+                not isinstance(example, str) or not example.strip() for example in entry["examples"]):
+            raise ValueError("invalid decision tree leaf")
+        return
+    if set(entry) != {"q", "yes", "no"} or not _bilingual(entry["q"]):
+        raise ValueError("invalid decision tree node")
+    _tree(entry["yes"], depth + 1)
+    _tree(entry["no"], depth + 1)
+
+
+UNSAFE = ("<", ">", "://", "javascript:", "data:")
+
+
+def _strings(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for item in value.values():
+            yield from _strings(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from _strings(item)
+
+
 def validate(figures):
-    """Strict JSON-to-SVG contract. Fail closed even for a broken last shape."""
-    if not isinstance(figures,dict) or not figures:
+    """Strict JSON contract for all three kinds. Fail closed even for a broken last item."""
+    if not isinstance(figures, dict) or not figures:
         raise ValueError("diagram catalogue is empty")
-    for key,entry in figures.items():
+    for key, entry in figures.items():
+        if any(marker in text.lower() for text in _strings(entry) for marker in UNSAFE):
+            raise ValueError(f"diagram {key}: markup or URLs are not allowed in figure text")
         if entry.get("id") != key or not key or any(c not in "abcdefghijklmnopqrstuvwxyz0123456789-" for c in key):
             raise ValueError("invalid diagram id")
-        if set(entry)-{"id","title","caption","width","height","drawing","legend","model"}:
+        kind = entry.get("kind")
+        if not _bilingual(entry.get("title")) or not _bilingual(entry.get("caption")):
+            raise ValueError(f"diagram {key} needs bilingual title and caption")
+        if kind == "table":
+            if set(entry) != {"id", "kind", "title", "caption", "columns", "rows"}:
+                raise ValueError("unexpected table field")
+            columns, rows = entry["columns"], entry["rows"]
+            if not isinstance(columns, list) or not 2 <= len(columns) <= 5 or not all(_bilingual(c) for c in columns):
+                raise ValueError("invalid table header")
+            if not isinstance(rows, list) or not 1 <= len(rows) <= 30 or any(
+                    not isinstance(row, list) or len(row) != len(columns) or not all(_cell(cell) for cell in row) for row in rows):
+                raise ValueError(f"invalid table rows in {key}")
+            continue
+        if kind == "tree":
+            if set(entry) != {"id", "kind", "title", "caption", "root"}:
+                raise ValueError("unexpected tree field")
+            _tree(entry["root"])
+            continue
+        if kind != "svg":
+            raise ValueError("unknown diagram kind")
+        if set(entry) - {"id", "kind", "title", "caption", "width", "height", "drawing", "legend"}:
             raise ValueError("unexpected diagram field")
-        for field in ("title","caption"):
-            if not isinstance(entry.get(field),dict) or any(not isinstance(entry[field].get(lang),str) or not entry[field][lang].strip() for lang in ("ru","en")):
-                raise ValueError(f"diagram {key} needs bilingual {field}")
-        if entry.get("width")!=WIDTH or entry.get("height")!=HEIGHT:
+        if entry.get("width") != WIDTH or entry.get("height") != HEIGHT:
             raise ValueError("invalid diagram viewport")
-        drawing=entry.get("drawing")
-        if not isinstance(drawing,list) or not 1<=len(drawing)<=250:
+        drawing = entry.get("drawing")
+        if not isinstance(drawing, list) or not 1 <= len(drawing) <= 250:
             raise ValueError("invalid diagram drawing")
         for item in drawing:
-            kind=item.get("kind")
-            if kind not in FIELDS or set(item)-({"kind","role","filled"}|FIELDS[kind]) or FIELDS[kind]-set(item):
+            shape = item.get("kind")
+            if shape not in FIELDS or set(item) - ({"kind", "role", "filled"} | FIELDS[shape]) or FIELDS[shape] - set(item):
                 raise ValueError("unsafe or incomplete diagram primitive")
-            if item.get("role") not in ROLES or not isinstance(item.get("filled"),bool):
+            if item.get("role") not in ROLES or not isinstance(item.get("filled"), bool):
                 raise ValueError("invalid diagram styling")
-            for field in FIELDS[kind]-{"points","text","anchor"}:
-                v=item[field]
-                if isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or not 0<=v<=(HEIGHT if field.startswith("y") or field in {"cy","height","ry"} else WIDTH):
-                    raise ValueError("invalid diagram coordinate")
-                if field in {"r","rx","ry","width","height"} and v<=0:
+            for field in FIELDS[shape] - {"points", "text", "anchor"}:
+                value = item[field]
+                bound = HEIGHT if field.startswith("y") or field in {"cy", "height", "ry"} else WIDTH
+                if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not 0 <= value <= bound:
+                    raise ValueError(f"invalid diagram coordinate in {key}")
+                if field in {"r", "rx", "ry", "width", "height"} and value <= 0:
                     raise ValueError("invalid diagram size")
-            if kind in {"polyline","polygon"}:
-                pts=item["points"]
-                if not isinstance(pts,list) or not (3 if kind=="polygon" else 2)<=len(pts)<=500:
+            if shape in {"polyline", "polygon"}:
+                points = item["points"]
+                if not isinstance(points, list) or not (3 if shape == "polygon" else 2) <= len(points) <= 500:
                     raise ValueError("invalid diagram points")
-                for point in pts:
-                    if not isinstance(point,list) or len(point)!=2 or any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) for v in point) or not (0<=point[0]<=WIDTH and 0<=point[1]<=HEIGHT):
-                        raise ValueError("invalid diagram point")
-            if kind=="text":
-                if item["anchor"] not in {"start","middle","end"} or not isinstance(item["text"],dict) or any(not isinstance(item["text"].get(lang),str) or not item["text"][lang].strip() for lang in ("ru","en")):
-                    raise ValueError("invalid bilingual diagram label")
-        for item in entry.get("legend",[]):
-            if set(item)!={"role","text"} or item["role"] not in ROLES or not isinstance(item["text"],dict) or any(not isinstance(item["text"].get(lang),str) or not item["text"][lang].strip() for lang in ("ru","en")):
+                for point in points:
+                    if not isinstance(point, list) or len(point) != 2 or any(
+                            isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in point) \
+                            or not (0 <= point[0] <= WIDTH and 0 <= point[1] <= HEIGHT):
+                        raise ValueError(f"invalid diagram point in {key}")
+            if shape == "text" and (item["anchor"] not in {"start", "middle", "end"} or not _bilingual(item["text"])):
+                raise ValueError("invalid bilingual diagram label")
+        for item in entry.get("legend", []):
+            if set(item) != {"role", "text"} or item["role"] not in ROLES or not _bilingual(item["text"]):
                 raise ValueError("invalid diagram legend")
     return figures

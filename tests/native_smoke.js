@@ -66,11 +66,13 @@ const reports = [];
 const toasts = [];
 let keepScreenOn = null;
 let updateStatus = 'uptodate';
+let foreignBank = false;
 let availableVersion = fs.readFileSync(path.join(root, 'VERSION'), 'utf8').trim();
 const vibrated = [];
 
 const readSource = () => fs.readFileSync(path.join(web, 'core.js'), 'utf8');
 const nativeSource = () => fs.readFileSync(path.join(web, 'app.js'), 'utf8');
+// (core.js/app.js are read from webapp/; content from the Android assets copy)
 
 window.CTNative = {
   getState() {
@@ -78,11 +80,12 @@ window.CTNative = {
     return JSON.stringify({
       app: {
         version: '2026.10.1', build: '1', os: 'Android 14 (API 34)',
-        platform: 'android', shell: 'webview', dataDir: '/data/user/0/by.ziv.ctmaths/files/data',
-        contentDir: '/data/user/0/by.ziv.ctmaths/files/content', reportsDir: '/storage/emulated/0/Android/data/by.ziv.ctmaths/files/reports',
+        platform: 'android', shell: 'webview', dataDir: '/data/user/0/by.ziv.ctrussian/files/data',
+        contentDir: '/data/user/0/by.ziv.ctrussian/files/content', reportsDir: '/storage/emulated/0/Android/data/by.ziv.ctrussian/files/reports',
         repo: 'https://github.com/zigorminsk-debug/mathematics', email: 'ziv@csl.by', phone: '+3753371412',
+        subject: 'russian', package: 'by.ziv.ctrussian',
       },
-      content: { version: '2026.10.1', overlay: false },
+      content: { version: '2026.10.1', overlay: false, channel: 'russian-v' },
       blobs: ['progress', 'settings', 'session'],
     });
   },
@@ -94,6 +97,7 @@ window.CTNative = {
     if (!fs.existsSync(file)) return null;
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
     if (data.meta) data.meta.contentVersion = availableVersion;
+    if (foreignBank && data.meta) { data.meta.subject = 'mathematics'; data.meta.package = 'by.ziv.ctmaths'; }
     return JSON.stringify(data);
   },
   checkUpdatesAsync(baseUrl, current, requestId) {
@@ -130,9 +134,10 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
 
   check('state requested from the native side', called.getState === 1, String(called.getState));
   check('platform reported as android', window.CT.bridge.platform === 'android', window.CT.bridge.platform);
-  check('data folder from the native state', window.CT.bridge.info.dataDir === '/data/user/0/by.ziv.ctmaths/files/data');
-  check('content read through the native bridge', window.CT.content.bank.length === 180, String(window.CT.content.bank.length));
-  check('footer shows the native data folder', /by\.ziv\.ctmaths/.test(doc.getElementById('app-folder').textContent),
+  check('data folder from the native state', window.CT.bridge.info.dataDir === '/data/user/0/by.ziv.ctrussian/files/data');
+  check('content read through the native bridge', window.CT.content.bank.length === 240, String(window.CT.content.bank.length));
+  check('the embedded bank belongs to this subject', window.CT.content.meta.subject === 'russian' && window.CT.content.meta.package === 'by.ziv.ctrussian');
+  check('footer shows the native data folder', /by\.ziv\.ctrussian/.test(doc.getElementById('app-folder').textContent),
     doc.getElementById('app-folder').textContent);
 
   // a blob round trip: settings changed by the user must be stored natively
@@ -162,7 +167,7 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   click(updateBtn);
   await sleep(60);
   check('checkUpdates reached the native side', called.checkUpdatesAsync > updatesBeforeClick, String(called.checkUpdatesAsync));
-  check('up-to-date message rendered', /актуальн/i.test(text()), text().slice(0, 120));
+  check('up-to-date message rendered', /последняя версия/i.test(text()), text().slice(0, 120));
   check('network checks use the asynchronous native bridge', !called.checkUpdates);
   const readsBeforeUpdate = called.getContent;
   updateStatus = 'updated';
@@ -178,11 +183,11 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   await sleep(60);
   click(Array.from(doc.querySelectorAll('button')).find((b) => b.textContent.trim() === '2026'));
   await sleep(80);
-  check('exam screen opened', /Задание 1 из 30/.test(text()), text().slice(0, 90));
+  check('exam screen opened', /Задание 1 из 40/.test(text()), text().slice(0, 90));
   const options = doc.querySelectorAll('.option');
   if (options.length) click(options[0]);
   await sleep(40);
-  click(buttonWith('Завершить тест'));
+  click(buttonWith('Завершить'));
   await sleep(40);
   click(Array.from(doc.querySelectorAll('.sheet button')).pop());
   await sleep(120);
@@ -204,9 +209,9 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
   await sleep(80);
   check('keep screen on requested during a run', keepScreenOn === true, String(keepScreenOn));
   const task = window.CT.runner.current();
-  const wrong = Array.from(doc.querySelectorAll('.option')).find((option) =>
-    !window.CT.answer.check(option.querySelector('.option-value').textContent, task));
-  click(wrong);
+  // part A needs several options: a single choice is always incomplete (wrong)
+  click(doc.querySelectorAll('.option')[0]);
+  check('first task of a variant is part A with five options', task.part === 'A' && doc.querySelectorAll('.option').length === 5);
   await sleep(20);
   click(buttonWith('Проверить'));
   await sleep(30);
@@ -215,6 +220,13 @@ const buttonWith = (label) => Array.from(doc.querySelectorAll('button')).find((b
 
   const back = window.CT.onAndroidBack();
   check('back from the run screen stays inside the app', back === null, String(back));
+
+  // a foreign (mathematics) bank delivered through the bridge is rejected by the client
+  foreignBank = true;
+  let rejected = false;
+  await window.CT.content.load().catch((error) => { rejected = /foreign content/.test(String(error && error.message)); });
+  check('the client rejects a mathematics bank', rejected);
+  foreignBank = false;
 
   console.log(failures ? `\n✗ ${failures} native bridge check(s) failed` : '\n✓ native bridge smoke test passed');
   process.exit(failures ? 1 : 0);

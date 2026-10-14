@@ -1,10 +1,12 @@
 name: CI
 
-# Every repository push builds, verifies, and automatically publishes the
-# release APK, both Windows EXEs and the content feed. PR/fork runs only test.
-# queue:max preserves up to 100 pending runs; ordinary single-slot concurrency
-# would silently cancel intermediate pushes. A shared lock covers planning
-# through publication. Reusable Release calls use a DIFFERENT child lock.
+# «Репетитор ЦТ: Русский язык» (subject.json: russian, by.ziv.ctrussian).
+# Every trusted push of this branch builds, verifies, and automatically
+# publishes the APK, both Windows EXEs and the content feed as a SUBJECT
+# release (tag family russian-v…, make_latest=false — the repository-wide
+# latest stays with the mathematics tutor). PR/fork runs only test.
+# queue:max preserves pending runs. The subject lock (ctrussian-release-pipeline)
+# never blocks the mathematics lock; reusable Release calls use a child lock.
 on:
   push:
     branches: ['**']
@@ -41,7 +43,7 @@ defaults:
     shell: bash  # explicit bash enables -e -o pipefail, including go vet | sed
 
 concurrency:
-  group: ${{ inputs.release_request && format('ci-release-child-{0}', github.run_id) || (github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && github.ref_type == 'branch') && 'ctmaths-release-pipeline' || format('ci-{0}-{1}', github.repository, github.ref) }}
+  group: ${{ inputs.release_request && format('ci-release-child-{0}', github.run_id) || (github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && github.ref_type == 'branch') && 'ctrussian-release-pipeline' || format('ci-{0}-{1}', github.repository, github.ref) }}
   queue: max
   cancel-in-progress: false
 
@@ -67,7 +69,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REQUESTED_TAG: ${{ inputs.tag }}
-          ALLOW_PUBLICATION: ${{ github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && (github.ref_type == 'branch' || (inputs.release_request && startsWith(github.ref, 'refs/tags/v'))) && (github.event_name == 'push' || inputs.publish == true) }}
+          ALLOW_PUBLICATION: ${{ github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && (github.ref_type == 'branch' || (inputs.release_request && startsWith(github.ref, 'refs/tags/russian-v'))) && (github.event_name == 'push' || inputs.publish == true) }}
         run: |
           if [ "$ALLOW_PUBLICATION" = "true" ]; then
             python3 tools/release_plan.py --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
@@ -92,7 +94,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Verify every task with exact arithmetic
+      - name: Build and verify the Russian content (blueprint, rules, Unicode, vectors)
         run: python3 tools/build_content.py
 
       - name: Ensure the committed assets match the sources
@@ -123,10 +125,10 @@ jobs:
       - name: Answer-checker parity (Python ↔ JS ↔ Kotlin vectors)
         run: node tests/answer_parity.js
 
-      - name: Content schema, periods and interface strings
+      - name: Content schema, blueprint, rules and interface strings
         run: node tests/content_schema.js
 
-      - name: Android update checks (metadata and signature gate tests)
+      - name: Python gates (checker, content, dictionary, diagrams, release isolation, Android build)
         run: python3 -m unittest discover -s tests -p 'test_*.py'
 
       - name: Syntax gate (Go, Kotlin, Kotlin DSL)
@@ -138,7 +140,7 @@ jobs:
           npm install --no-save jsdom
           node tests/ui_smoke.js
           node tests/native_smoke.js
-          node tests/theory_smoke.js
+          node tests/rules_smoke.js
 
       - name: Upload the content bank
         uses: actions/upload-artifact@v4
@@ -196,14 +198,14 @@ jobs:
         run: |
           CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath \
             -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u -d @${SOURCE_DATE_EPOCH} +%Y%m%d%H%M)" \
-            -o ../dist/CTMathsTutor-amd64.exe .
+            -o ../dist/CTRussianTutor-amd64.exe .
 
       - name: Build (windows/arm64)
         working-directory: windows
         run: |
           CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -trimpath \
             -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u -d @${SOURCE_DATE_EPOCH} +%Y%m%d%H%M)" \
-            -o ../dist/CTMathsTutor-arm64.exe .
+            -o ../dist/CTRussianTutor-arm64.exe .
 
       - uses: actions/upload-artifact@v4
         with:
@@ -247,7 +249,7 @@ jobs:
           python3 tools/sync_assets.py
 
       - name: The permanent signing key still matches the committed fingerprint
-        run: python3 tools/check_signature.py --require --keystore android/keystore/ctmaths-release.p12
+        run: python3 tools/check_signature.py --require --keystore android/keystore/ctrussian-release.p12
 
       - name: Unit tests (answer checker parity, Kotlin)
         working-directory: android
@@ -294,7 +296,7 @@ jobs:
             --apk app/build/outputs/apk/release/app-release.apk \
             --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2"
 
-      - name: Verify signature and increasing code against the previous published APK
+      - name: Verify signature and increasing code against the previous published APK of THIS subject
         if: ${{ needs.prepare.outputs.publish == 'true' && needs.prepare.outputs.already_published != 'true' && env.PREVIOUS_TAG != '' }}
         env:
           GH_TOKEN: ${{ github.token }}
@@ -319,7 +321,7 @@ jobs:
           if-no-files-found: error
 
   publish:
-    name: Publish verified builds automatically
+    name: Publish verified subject release automatically
     needs: [prepare, content, windows, android]
     if: ${{ success() && github.repository == 'zigorminsk-debug/mathematics' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && needs.prepare.outputs.publish == 'true' && needs.prepare.outputs.already_published != 'true' }}
     permissions:

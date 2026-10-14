@@ -4,3 +4,8 @@ PyYAML==6.0.3
 tree-sitter==0.26.0
 tree-sitter-go==0.25.0
 tree-sitter-kotlin==1.1.0
+# Independent dictionary check of the spelling material (tests/test_lexicon.py):
+# OpenCorpora morphology via pymorphy3 (pinned for a reproducible gate).
+pymorphy3==2.0.6
+pymorphy3-dicts-ru==2.4.417150.4580142
+DAWG2-Python==0.9.0

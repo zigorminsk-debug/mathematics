@@ -1,72 +1,69 @@
-"""periods.py — периоды (годы) ЦТ, представленные в базе заданий.
+"""periods.py — authored practice periods and the verified exam structure.
 
-Один источник правды о том, какие варианты входят в банк: как называется модуль
-автора, сколько заданий в каждой части и сколько времени отводится на вариант.
-``tools/build_content.py`` берёт отсюда список модулей (``YEAR_MODULES``) и
-записывает свойства периодов в ``dist/content/version.json``, чтобы интерфейс
-показывал годы и состав варианта, не зашивая их в код.
+The structure of the Russian-language CE/CT is NOT inherited from mathematics
+(18A + 12B, 180 min). It was checked against the official specification:
 
-Добавить следующий год — значит дописать одну запись здесь и создать
-``content_src/task_bank_<год>.py`` (см. docs/CONTENT.md).
+    Спецификация экзаменационной (тестовой) работы по учебному предмету
+    «Русский язык» для проведения централизованного экзамена и
+    централизованного тестирования в 2026 году. Утверждена Министром
+    образования Республики Беларусь 03.11.2025, опубликована РИКЗ 05.11.2025:
+    https://rikc.by/ru/specification/2026/01.pdf  (прочитано 2026-10-14)
 
-Exam periods (years) covered by the task bank: one record per variant, used both
-by the content pipeline and by the applications.
+    40 заданий: часть A — 18 (закрытые, выбор нескольких верных из пяти),
+    часть B — 22 (открытые: слово, несколько цифр или буквы + цифры);
+    120 минут; разделы: орфография 13, пунктуация 9, лексика 2,
+    культура речи 3, фонетика 1, состав слова 2, морфология 4,
+    синтаксис 3, текст 3.
+
+The six variants labelled 2021–2026 are AUTHORED training sets. All of them
+follow the 2026 specification; the year is only the name of the set, not a
+copy of that year's exam, and nothing here is an official RIKZ material.
 """
-
 from __future__ import annotations
 
-#: Сколько времени отводится на вариант в тренажёре (совпадает со значением по
-#: умолчанию в настройках приложения: 180 минут).
-DEFAULT_MINUTES = 180
+DEFAULT_MINUTES = 120
 
-#: Материалы не являются официальными заданиями РИКЗ: это варианты, составленные
-#: автором по мотивам соответствующего года (дисклеймер — в README).
-DISCLAIMER = {
-    "ru": "Задания составлены по мотивам ЦТ соответствующего года и не являются "
-          "официальными материалами РИКЗ.",
-    "en": "The tasks follow the format of the corresponding CT year and are not "
-          "official RIKZ materials.",
+SPECIFICATION = {
+    "title": {
+        "ru": "Спецификация экзаменационной (тестовой) работы по учебному предмету «Русский язык» "
+              "для проведения ЦЭ и ЦТ в 2026 году (утв. 03.11.2025, опубл. РИКЗ 05.11.2025)",
+        "en": "RIKZ specification of the 2026 CE/CT test in Russian (approved 03.11.2025, "
+              "published 05.11.2025)",
+    },
+    "url": "https://rikc.by/ru/specification/2026/01.pdf",
+    "checked": "2026-10-14",
+    "tasks": 40, "parts": {"A": 18, "B": 22}, "minutes": 120,
+    "partA": {"ru": "закрытые задания: выбор нескольких правильных ответов из пяти",
+              "en": "closed tasks: choose several correct answers out of five"},
+    "partB": {"ru": "открытые задания: ответ — слово, несколько цифр или сочетание букв и цифр",
+              "en": "open tasks: the answer is a word, several digits or letters with digits"},
+    "levels": {"I": 4, "II": 10, "III": 16, "IV": 6, "V": 4},
 }
 
+DISCLAIMER = {
+    "ru": "Варианты 2021–2026 — авторская тренировочная практика по структуре спецификации РИКЗ 2026 года "
+          "(40 заданий, 120 минут). Год — название набора, а не копия экзамена; это не официальные материалы РИКЗ.",
+    "en": "Variants 2021–2026 are authored practice sets built on the structure of the 2026 RIKZ specification "
+          "(40 tasks, 120 minutes). The year only names the set; these are not official RIKZ materials.",
+}
+
+YEARS = [2021, 2022, 2023, 2024, 2025, 2026]
+
 PERIODS: list[dict] = [
-    {"year": 2021, "module": "task_bank_2021", "parts": {"A": 18, "B": 12},
-     "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2021", "en": "Variant 2021"}},
-    {"year": 2022, "module": "task_bank_2022", "parts": {"A": 18, "B": 12},
-     "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2022", "en": "Variant 2022"}},
-    {"year": 2023, "module": "task_bank_2023", "parts": {"A": 18, "B": 12},
-     "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2023", "en": "Variant 2023"}},
-    {"year": 2024, "module": "task_bank_2024", "parts": {"A": 18, "B": 12},
-     "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2024", "en": "Variant 2024"}},
-    {"year": 2025, "module": "task_bank_2025", "parts": {"A": 18, "B": 12},
-     "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2025", "en": "Variant 2025"}},
-    {"year": 2026, "module": "task_bank_2026", "parts": {"A": 18, "B": 12},
-     "minutes": DEFAULT_MINUTES, "label": {"ru": "Вариант 2026", "en": "Variant 2026"}},
+    {"year": year, "parts": {"A": 18, "B": 22}, "minutes": DEFAULT_MINUTES,
+     "label": {"ru": f"Вариант {year} (авторский)", "en": f"Variant {year} (authored)"}}
+    for year in YEARS
 ]
 
 
 def years() -> list[int]:
-    """Годы, для которых в базе есть целый вариант."""
-    return [period["year"] for period in PERIODS]
-
-
-def modules() -> list[str]:
-    """Имена модулей автора — их импортирует ``tools/build_content.py``."""
-    return [period["module"] for period in PERIODS]
+    return list(YEARS)
 
 
 def payload() -> dict:
-    """Часть манифеста ``version.json``: периоды и общий дисклеймер."""
     return {
-        "periods": [
-            {
-                "year": period["year"],
-                "label": period["label"],
-                "parts": period["parts"],
-                "minutes": period["minutes"],
-                "tasks": period["parts"]["A"] + period["parts"]["B"],
-            }
-            for period in PERIODS
-        ],
+        "periods": [dict(period, tasks=period["parts"]["A"] + period["parts"]["B"]) for period in PERIODS],
         "disclaimer": DISCLAIMER,
         "examMinutes": DEFAULT_MINUTES,
+        "specification": SPECIFICATION,
     }

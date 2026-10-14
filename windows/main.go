@@ -1,9 +1,10 @@
-// Command CTMathsTutor — Windows-версия приложения «Репетитор ЦТ: Математика».
+// Command CTRussianTutor — Windows-версия приложения «Репетитор ЦТ: Русский язык».
 //
 // Программа запускает локальный HTTP-сервер только на loopback-адресе, отдаёт
 // встроенный (через go:embed) интерфейс и банк заданий, хранит прогресс в
-// %APPDATA%\CTMathsTutor и открывает окно приложения в Edge или Chrome в режиме
-// --app (без адресной строки), а при их отсутствии — в браузере по умолчанию.
+// %APPDATA%\CTRussianTutor (отдельно от других репетиторов) и открывает окно
+// приложения в Edge или Chrome в режиме --app с собственным профилем
+// ctrussian-window, а при их отсутствии — в браузере по умолчанию.
 //
 // The Windows front-end: one self-contained executable that serves the shared
 // offline interface on a loopback port, keeps the progress JSON files and opens
@@ -44,8 +45,15 @@ var buildStamp = "dev"
 // The shell version tracks the VERSION of its embedded bank.
 var appVersion = embeddedVersion()
 
+// Separate identities: data directory and browser profile never overlap with
+// the mathematics (CTMathsTutor / ctmaths-window) or physics tutors.
 const (
-	appName   = "Репетитор ЦТ: Математика"
+	dataDirName    = "CTRussianTutor"
+	browserProfile = "ctrussian-window"
+)
+
+const (
+	appName   = "Репетитор ЦТ: Русский язык"
 	appRepo   = "https://github.com/zigorminsk-debug/mathematics"
 	developer = "Захаревич Игорь (Zakharevich Igor)"
 	devEmail  = "ziv@csl.by"
@@ -70,12 +78,12 @@ func main() {
 
 	var (
 		addr       = flag.String("addr", "127.0.0.1:0", "адрес локального сервера (loopback)")
-		dataDir    = flag.String("data", "", "каталог данных (по умолчанию %APPDATA%\\CTMathsTutor)")
+		dataDir    = flag.String("data", "", "каталог данных (по умолчанию %APPDATA%\\"+dataDirName+")")
 		portable   = flag.Bool("portable", false, "хранить данные рядом с приложением (портативный режим)")
 		noBrowser  = flag.Bool("no-browser", false, "не открывать окно приложения")
 		idleMin    = flag.Int("idle-exit", 60, "выйти после N минут без запросов (0 — не выходить)")
 		printVer   = flag.Bool("version", false, "показать версию и выйти")
-		feedURL    = flag.String("feed", defaultFeed, "адрес потока обновлений банка заданий")
+		feedURL    = flag.String("feed", "", "явный каталог выпуска с version.json (по умолчанию — выпуск russian-v… через GitHub Releases API)")
 		openFolder = flag.String("open", "", "открыть каталог данных (data|reports) и выйти")
 	)
 	flag.Parse()
@@ -189,43 +197,43 @@ func (s *server) handleState(w http.ResponseWriter, r *http.Request) {
 			"os": runtime.GOOS, "platform": "windows", "arch": runtime.GOARCH,
 			"shell": "windows-go", "dataDir": s.dataDir,
 			"repo": appRepo, "developer": developer, "email": devEmail, "phone": devPhone,
+			"subject": subjectID, "package": subjectPackage,
 			"startedAt": s.started.Format(time.RFC3339),
 		},
-		"content": map[string]any{"version": s.contentVersion(), "overlay": overlay},
+		"content": map[string]any{"version": s.contentVersion(), "overlay": overlay, "channel": subjectTag},
 		"blobs":   []string{"progress", "settings", "session", "history"},
 	}
 	writeJSON(w, http.StatusOK, payload)
 }
 
-// overlayCurrent reports whether the downloaded pack may shadow the bank
-// embedded in this executable: only when it is not older. A stale overlay
-// must not hide a newer bank shipped inside a new EXE/APK — otherwise the
-// new variant would never appear after an in-place update.
-func (s *server) overlayVersion() string {
-	if data, ok := s.store.ReadContent("version"); ok {
-		var manifest contentManifest
-		if json.Unmarshal(data, &manifest) == nil && manifest.ContentVersion != "" {
-			return manifest.ContentVersion
-		}
+// overlayManifest returns the stored manifest of the downloaded pack when it
+// belongs to this subject/package. A foreign or legacy pack without a valid
+// manifest is ignored entirely (the embedded bank is served instead).
+func (s *server) overlayManifest() (contentManifest, bool) {
+	var manifest contentManifest
+	data, ok := s.store.ReadContent("version")
+	if !ok || json.Unmarshal(data, &manifest) != nil || overlayManifestError(manifest) != nil {
+		return manifest, false
 	}
-	// Legacy Android-style/manual packs sometimes had no version.json.
-	if data, ok := s.store.ReadContent("bank"); ok {
-		var bank struct {
-			Meta struct {
-				Version string `json:"contentVersion"`
-			} `json:"meta"`
-		}
-		if json.Unmarshal(data, &bank) == nil {
-			return bank.Meta.Version
-		}
+	return manifest, true
+}
+
+func (s *server) overlayVersion() string {
+	if manifest, ok := s.overlayManifest(); ok {
+		return manifest.ContentVersion
 	}
 	return ""
 }
 
+// overlayCurrent: a valid pack of this subject that is not older than the bank
+// embedded in this executable (a stale pack must not hide a newer EXE bank).
 func (s *server) overlayCurrent() bool {
 	version := s.overlayVersion()
+	if version == "" {
+		return false
+	}
 	embeddedVersionName := embeddedVersion()
-	return version == "" || embeddedVersionName == "" || compareContentVersions(version, embeddedVersionName) >= 0
+	return embeddedVersionName == "" || compareContentVersions(version, embeddedVersionName) >= 0
 }
 
 // contentVersion is the newest of the embedded and downloaded banks.
@@ -300,7 +308,7 @@ func (s *server) handleUpdate(w http.ResponseWriter, r *http.Request) {
 		_ = json.Unmarshal(body, &request)
 	}
 	if request.BaseURL == "" {
-		request.BaseURL = s.feed
+		request.BaseURL = s.feed // empty: resolve the newest russian-v… release via the API
 	}
 	// Do not let an outdated page's version request a downgrade of a newer build.
 	if installed := s.contentVersion(); compareContentVersions(installed, request.Current) > 0 {
@@ -474,7 +482,7 @@ func shutdown(httpServer *http.Server) {
 
 func defaultDataDir() string {
 	if dir, err := os.UserConfigDir(); err == nil && dir != "" {
-		return filepath.Join(dir, "CTMathsTutor")
+		return filepath.Join(dir, dataDirName)
 	}
 	return executableDir()
 }
@@ -495,7 +503,7 @@ func openUI(url string) error {
 		for _, candidate := range browserCandidates() {
 			if _, err := os.Stat(candidate); err == nil {
 				cmd := exec.Command(candidate, "--app="+url, "--window-size=1280,900",
-					"--user-data-dir="+filepath.Join(os.TempDir(), "ctmaths-window"))
+					"--user-data-dir="+filepath.Join(os.TempDir(), browserProfile))
 				if err := cmd.Start(); err == nil {
 					return nil
 				}

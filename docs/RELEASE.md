@@ -1,239 +1,101 @@
-# Автоматический выпуск / Automatic releases
+# Release pipeline — «Репетитор ЦТ: Русский язык»
 
-## Постоянное правило
+The repository `zigorminsk-debug/mathematics` hosts two independent tutors. The
+mathematics tutor (tags `v…`) owns GitHub's repository-wide *latest*; this
+branch publishes the Russian tutor as a **subject release** that must never touch
+that channel. All identities come from `subject.json`.
 
-После **каждого push в исходный репозиторий** `zigorminsk-debug/mathematics`
-GitHub Actions проверяет контент/интерфейс, собирает Windows amd64 + arm64 и Android
-и **сам публикует** APK, оба EXE и банк заданий. Отдельный ручной запуск, тег от
-агента или разрешение пользователя перед каждым выпуском не нужны. Это прямо
-запрошено пользователем 2026-10-14; не возвращайте публикацию к ручной схеме.
-
-Конфигурация сейчас внесена в `arena/d7e34c80-mathematics` / PR #4. Ветки должны
-содержать новые workflow файлы. Пока PR #4 не слит, `main`/ветки от старого main
-содержат прежний CI и сами не унаследуют эту автоматизацию. Публикации рабочей
-ветки уже могут обновлять общий Releases/latest. Слияние PR требует отдельного
-решения пользователя; в этой работе main не меняется напрямую.
-
-PR (включая PR из самого репозитория) и fork выполняют проверки, но **не публикуют**.
-Таким образом, push исходной ветки и его PR — не два одинаковых публичных выпуска.
-Изменения документации тоже являются новым push и публикуются после проверок.
-
-## Один проверенный pipeline
-
-- `.github/workflows/ci.yml`: подготовка версии → три параллельных обязательных
-  jobs → публикация. Тесты контента, арифметики, JS/schema/parity, Python, native
-  syntax, UI/native/theory journeys, Go vet/tests, Kotlin tests, сборки APK/EXE.
-- `.github/workflows/publish.yml`: reusable workflow, получает **артефакты этого
-  же запуска** `content-bank`, `windows-exe`, `android-release-apk`; не пересобирает
-  APK/EXE и не скачивает чужие PR-артефакты.
-- `.github/workflows/release.yml`: необязательные tag/manual recovery entry points;
-  вызывают **тот же полный CI**, а не укороченную отдельную сборку.
-- Только job публикации имеет `contents: write`; проверочные jobs и планировщик —
-  `contents: read`. Для проверки результата jobs publisher имеет `actions: read`.
-  Runner закреплён на `ubuntu-24.04`, не `ubuntu-latest`: проверенная среда не
-  сменится автоматически на Ubuntu 26 (migration warning на 2026-10-19).
-  У tag/manual wrapper есть write ceiling для nested reusable publisher.
-
-Publisher дополнительно через API сверяет repository, SHA/run/event/ref и
-успешное завершение **всех трёх** обязательных build jobs. Failed, cancelled,
-skipped или отсутствующий job блокирует выпуск. Переименование job требует
-синхронизации `BUILD_JOBS` в `tools/release_plan.py`; это покрыто тестами.
-
-## Автоматический номер — не забывайте о VERSION floor
-
-`VERSION` (исходный минимум сейчас `2026.10.5`) **не равен обязательно** текущему
-публичному номеру. `tools/release_plan.py` выбирает effective version:
-
-1. Не ниже исходного `VERSION` и текущего месяца по `Europe/Moscow`.
-2. Для нового source SHA — строго выше максимальной стабильной опубликованной
-   версии, даже если агент не изменил `VERSION`.
-3. Чужие зарезервированные draft/tag номера пропускаются, не перезаписываются.
-   Прерванную резервацию того же SHA можно продолжить, если она выше stable.
-4. Уже опубликованный source SHA с полным набором assets — идемпотентный rerun:
-   тот же номер, без новой публикации/замены публичных файлов.
-   SHA уже выпущенного source определяется по неизменяемому тегу, а не по
-   подвижному branch name, который GitHub иногда сохраняет в `target_commitish`.
-5. При patch 99 следующий номер — первый patch следующего месяца; после декабря
-   следующий год. Формат `YYYY.month.patch`, patch 0–99, year 2000–2099.
-   При большом числе выпусков месяц номера может опередить календарный месяц.
-
-Подготовленный номер передаётся во все jobs. Они временно применяют его к
-`VERSION` **только в checkout runner** и регенерируют встраиваемые банки. APK
-`versionName`, code и банк EXE/feed используют один номер. Source `VERSION` и
-сгенерированные копии в Git остаются исходным минимумом; нет bot commits и цикла
-автопубликации. До применения effective version Content job проверяет также,
-что исходные сгенерированные assets уже синхронизированы/закоммичены.
-
-Код APK: `(year-2000)*10000 + month*100 + patch`, например
-`2026.10.5` → **261005**, `2026.10.6` → **261006**. CI проверяет фактические
-метаданные через `aapt2`, а также рост относительно предыдущего опубликованного
-APK (не только относительно тега). Для already-published rerun строгий previous
-comparison пропускается: code закономерно равен тому же release; self
-package/version/certificate gates остаются включёнными, повторная публикация выключена.
-
-Публикующая ветка обязана **содержать историю последнего стабильного release**.
-Если другая ветка выпустила более новый код, старую нельзя выдать за новое
-обновление только увеличением номера. Планировщик и publisher проверяют ancestry
-тега; при ошибке нужно интегрировать опубликованную историю в разрешённую рабочую
-ветку. Сама версия не заменяет проверку происхождения кода.
-
-## Очередь и безопасная публикация
-
-Все доверенные branch CI и tag/manual Release используют общий outer lock
-`ctmaths-release-pipeline` **от выбора версии до публикации**. `queue: max`,
-`cancel-in-progress: false` сохраняют до **100** ожидающих запусков, вместо
-обычной очереди из одного места, которая отменяла бы промежуточные pushes.
-GitHub обрабатывает очередь по времени начала ожидания, не гарантирует порядок
-самих dispatch событий; ancestry gate защищает от отката при обгоне/разных ветках.
-Сверх 100 ожидающих запусков действует лимит платформы — проверьте Actions и
-повторите отменённый запуск. Дочерний reusable CI из Release использует другой
-lock (`ci-release-child-<run id>`), иначе возникла бы взаимная блокировка.
-
-Publisher:
-
-1. Проверяет полный набор файлов, версии JSON, SHA-256 и размеры контента.
-2. Резервирует неизменяемый `v<effective version>` на **точном source SHA**
-   через Actions token; затем создаёт private draft. Непубличный тег-резервация
-   позволяет следующему read-only планировщику обойти прерванный чужой номер.
-3. Загружает все assets в draft, сверяет точный inventory, uploaded state/размер
-   и server digest (когда GitHub отдаёт digest).
-4. Только после полной проверки **одним API PATCH** снимает draft и делает release
-   latest. Затем проверяет API latest и полный inventory.
-
-Если upload/проверка до финального PATCH не прошли, прежний latest/feed остаётся
-нетронутым. `--clobber` разрешён **только для draft того же SHA** при восстановлении.
-Публичные releases/assets и чужие теги/черновики не перезаписываются. Tags,
-созданные `GITHUB_TOKEN`, не запускают второй release workflow: нет рекурсии.
-
-## Публичные файлы и автоматический журнал
-
-Каждый новый Release содержит **13 assets**:
-
-- `app-release.apk`;
-- `CTMathsTutor-amd64.exe`, `CTMathsTutor-arm64.exe`;
-- `bank.json`, `analogous.json`, `topics.json`, `formulas.json`, `ui_strings.json`,
-  `mistakes.json`, `answer_vectors.json`;
-- `version.json` — версия, SHA-256/размеры и immutable version-specific URLs;
-- `release-info.json` — source commit/floor/effective version, run/attempt/URL,
-  результаты и время трёх обязательных jobs, сертификат/code, предыдущий stable
-  tag, SHA-256/размеры payloads и стратегия публикации;
-- `SHA256SUMS.txt` — контрольные суммы всех остальных 12 файлов, включая журнал.
-
-`verifiedAt` — время проверки, не обещание публикации; фактические `draft=false`,
-`published_at` и latest проверяются по Release API. Статус и адрес опубликованного
-релиза также записываются в Actions summary. `release-audit` содержит manifest,
-журнал и суммы даже при прерванной публикации, если файлы уже были подготовлены.
-Тот же JSON-журнал продублирован в свёрнутом блоке Release body: агент может
-прочитать его через `gh api .../releases/latest --jq .body`, даже если скачивание
-бинарных assets в sandbox запрещено.
-Человеческий журнал команд/решений/ошибок — [WORKLOG.md](WORKLOG.md); инструкции
-новому агенту — [../AGENTS.md](../AGENTS.md).
-
-Стабильные ссылки для пользователя:
-
-- [Последний release](https://github.com/zigorminsk-debug/mathematics/releases/latest)
-- [Android APK](https://github.com/zigorminsk-debug/mathematics/releases/latest/download/app-release.apk)
-- [Windows amd64](https://github.com/zigorminsk-debug/mathematics/releases/latest/download/CTMathsTutor-amd64.exe)
-- [Windows arm64](https://github.com/zigorminsk-debug/mathematics/releases/latest/download/CTMathsTutor-arm64.exe)
-- [Банк: version.json](https://github.com/zigorminsk-debug/mathematics/releases/latest/download/version.json)
-- [Автоматический журнал](https://github.com/zigorminsk-debug/mathematics/releases/latest/download/release-info.json)
-
-## Подпись и обновление поверх существующего приложения
-
-Не менять `applicationId = by.ziv.ctmaths`, постоянный
-`android/keystore/ctmaths-release.p12` и ожидаемый отпечаток
-`android/keystore/expected-cert-sha256.txt`:
+## What a trusted push does
 
 ```
-B2:BD:B4:D1:26:B8:88:C7:D8:AF:50:80:F6:7E:CF:E1:E4:3F:EB:F2:8E:5D:1A:E6:61:D6:D7:AE:70:C5:14:65
+push (this branch) ─► prepare: tools/release_plan.py  (family russian-v, per-subject counter)
+                  ├─► content: build/verify content, tests, parity, jsdom journeys, syntax
+                  ├─► windows: go vet, go test, CTRussianTutor-amd64.exe / -arm64.exe
+                  ├─► android: key pin, Kotlin unit tests, debug APK, signed release APK,
+                  │            package/versionCode gate, previous SUBJECT APK gate
+                  └─► publish (publish.yml → tools/publish_release.py), only if all succeeded
 ```
 
-CI требует `check_signature.py --require` для ключа/нового APK и предыдущего
-публичного APK; `check_apk_update.py --previous` сверяет один пакет и строго
-возрастающий code. Другой сертификат/пакет либо равный/меньший code блокируют
-публикацию. Ключ в Git демонстрационный и публичный; не менять его у уже
-распространяемого приложения без согласованной миграции. Для совершенно нового
-приложения до первой публикации нужен собственный приватный ключ в секретах.
+- `concurrency: ctrussian-release-pipeline` (queue max, no cancellation) — never the
+  mathematics lock; the reusable Release caller uses a child lock (no deadlock).
+- PR and fork runs only test (`--local` plan, publication disabled). The tag entry
+  point `release.yml` reacts only to `russian-v*` tags; `v*` tags are invisible here.
 
-В новый public Release входит **только `app-release.apk`**. Debug-пакет
-`by.ziv.ctmaths.debug` остаётся development artifact, устанавливается рядом и не
-является обновлением стабильного приложения. Старые releases .1/.2 исторически
-содержат debug — не предлагайте его пользователю и не переписывайте старые assets.
+## Versioning (per subject)
 
-**Устанавливать release APK поверх, не удаляя приложение**: удаление стирает
-локальную статистику. При проблеме получить точный текст ошибки и параметры
-установленного APK. CI-проверка совместимости не является тестом на физическом
-телефоне. Windows EXE заменяется без удаления `%APPDATA%\CTMathsTutor`.
+- Canonical `YYYY.M.P` (patch 0–99), Android `versionCode = (YYYY−2000)·10000 + M·100 + P`.
+- `VERSION` is the source floor (first release `2026.10.1`, code `261001`). The planner
+  allocates `max(floor, current month .0, previous russian release + 1)`, skipping
+  tags/drafts reserved by other commits; a rerun of a published commit is idempotent.
+- `release_version()` accepts only canonical `russian-v…` tags; mathematics `v…` and
+  `physics-v…` releases, drafts and prereleases are ignored for the counter, the
+  previous stable release, idempotency and lineage. `git tag --list "russian-v*"`
+  reservations protect interrupted publishers.
+- The first subject release has no previous stable release, so it is NOT compared with
+  the mathematics APK; later releases must keep package + certificate and raise the code
+  (`check_apk_update.py --previous`, `check_signature.py --apk previous`).
 
-## Обновление базы внутри приложений
+## Publication (`tools/publish_release.py`)
 
-Стабильный канал:
-`https://github.com/zigorminsk-debug/mathematics/releases/latest/download/version.json`.
+1. Validates the run: same repository/commit, `push`/`workflow_dispatch`, a branch ref or
+   the exact `russian-v…` tag, the three build jobs succeeded.
+2. Assembles exactly the same-run artifacts: 7 content JSON files, `version.json`,
+   `app-release.apk`, two EXEs; the manifest must name subject `russian`, package
+   `by.ziv.ctrussian`, schema 2, protocol 2; banks must name the subject too.
+   Manifest URLs are tag-specific (`…/releases/download/russian-vX/…`), plus `tag`.
+3. Writes `release-info.json` (subject/package/tag, run, checks, certificate, digests,
+   repository latest before) and `SHA256SUMS.txt`; mirrors the JSON in the Release body.
+4. Snapshots `/releases/latest` (expected: the mathematics release), reserves the tag,
+   creates the draft with **`make_latest: "false"`**, uploads, verifies the inventory
+   (names, uploaded state, server digests).
+5. Promotes with PATCH `{"draft": false, "prerelease": false, "make_latest": "false"}`,
+   then verifies **its own** release by id (not draft/prerelease, tag, inventory, tag →
+   commit) — never through `/releases/latest`.
+6. Reads `/releases/latest` again: it must be identical to the snapshot and must not be a
+   `russian-v…` release. If GitHub made the subject release latest, the publisher restores
+   the previous latest (`make_latest: "true"` on that release id) and fails the run.
 
-Android `NativeBridge` и Windows `Store.CheckUpdates()` сравнивают
-`contentVersion`, проверяют SHA-256/размеры и устанавливают только целиком
-проверенный временный пакет. Статистика/настройки не затрагиваются; старая
-скачанная база не скрывает более новую встроенную. Автопроверка зависит от
-настройки приложения; ручная кнопка — «Проверить обновления».
+Inventory (13 files): `analogous.json`, `answer_vectors.json`, `bank.json`,
+`mistakes.json`, `rules.json`, `topics.json`, `ui_strings.json`, `version.json`,
+`release-info.json`, `SHA256SUMS.txt`, `app-release.apk`, `CTRussianTutor-amd64.exe`,
+`CTRussianTutor-arm64.exe`.
 
-Manifest содержит version-specific URLs; нынешние native клиенты получают файлы
-из выбранного base URL и проверяют суммы. Если latest сменился во время загрузки,
-проверка не позволит установить смесь выпусков: предыдущая база сохранится,
-повторная проверка загрузит новую. Публикация APK не означает автоматическую
-установку APK на телефоне: это по-прежнему установка скачанного release APK поверх.
+## Client update channel (subject-scoped)
 
-## Проверить результат / восстановить после ошибки
+Android (`UpdateFeed.kt` + `NativeBridge.kt`) and Windows (`store.go`) never use
+`releases/latest`:
 
-```bash
-# Поменяйте branch только на разрешённую текущей сессией; здесь она фиксирована.
-gh run list --workflow ci.yml --branch arena/d7e34c80-mathematics --limit 8 \
-  --json databaseId,headSha,event,status,conclusion,url
-gh run view <run-id> --json jobs,conclusion,url
-gh api repos/zigorminsk-debug/mathematics/releases/latest \
-  --jq '{tag: .tag_name, source: .target_commitish, draft: .draft, published: .published_at, assets: [.assets[] | {name, size, digest}]}'
-gh api repos/zigorminsk-debug/mathematics/git/ref/tags/<published-tag> --jq '.object'
-```
+1. Page through `https://api.github.com/repos/zigorminsk-debug/mathematics/releases?per_page=100&page=N`
+   (≤10 pages).
+2. Keep non-draft, non-prerelease releases whose tag is a canonical `russian-v…` and whose
+   assets are exactly the 13 expected, fully uploaded files; choose the highest version.
+3. Download `version.json` from that tag; require subject/package/schema/protocol, tag and
+   version equal to the release, exactly the 7 content files with SHA-256 and size.
+4. Download each file from the tag URL, verify SHA-256/size/JSON; `bank.json` and
+   `analogous.json` must name the subject; stage and install atomically. Never downgrade a
+   newer embedded bank; progress/settings are never touched.
+5. A stored overlay is served only if its manifest names this subject/package and it is
+   not older than the embedded bank (a foreign or stale pack is ignored).
 
-Не заменяйте `<run-id>`/`<published-tag>` выдуманным ID: возьмите из предыдущих
-ответов API. Сверьте source SHA с push, все gates SUCCESS, 13 assets, отсутствие
-`app-debug.apk`, effective version/code в журнале. При ошибке изучите check-run
-annotations; полный лог/бинарные redirects в Arena могут быть недоступны.
+The web layer additionally rejects a foreign bank (`CT.content.subjectOk`).
+Tests: `tests/test_release.py` (planner/publisher/workflows), `UpdateFeedTest.kt`,
+`windows/main_test.go`, `tests/native_smoke.js`, `tests/content_schema.js`.
 
-- **Проверки красные:** исправить причину, регенерировать/sync, выполнить локальные
-  gates, записать результат в worklog, push текущей ветки. Не выпускать принудительно.
-- **Публикация прервана:** rerun **всего CI**, не только job публикации: он заново
-  проверит источник и сформирует outputs/artifacts. Тот же SHA продолжит draft/tag,
-  если номер ещё выше stable; новый SHA получит свободный более высокий номер.
-  Если rerun permission в Arena отсутствует, исправляющий push автоматически
-  запускает CI; старый draft остаётся непубличным, latest не ломается.
-- **Ancestry error в shallow checkout:** сначала `git rev-parse --is-shallow-repository`;
-  если `true`, `git fetch --unshallow origin`, затем повторить plan. Такой локальный
-  false negative уже был обнаружен/устранён; CI checkout использует fetch-depth 0.
-- **Старый branch не содержит latest source:** интегрировать историю в разрешённую
-  рабочую ветку; не повышать номер поверх старого кода и не менять тег.
-- **403 при manual dispatch / git/gh auth:** reconnect GitHub в Arena с нужными
-  правами. Не запрашивать токены/пароли/2FA и не подменять auth-конфиг.
-  2026-10-14 manual `gh workflow run release.yml` уже вернул 403; обычный push
-  разрешён, автоматический publisher использует отдельный Actions `GITHUB_TOKEN`.
-- **Already published:** не менять release и его assets; проверить готовый URL.
+## Signing
 
-Дополнительный manual entry point (обычно не нужен): Actions → Release → Run
-workflow на рабочей ветке, `tag` оставить пустым для автонумерации. Или
-`gh workflow run release.yml --ref arena/d7e34c80-mathematics` при наличии Actions
-write permissions. Не создавать вручную тег со старым `VERSION` floor: точный
-requested tag должен равняться автоматически выделенному номеру.
+`android/keystore/ctrussian-release.p12` (alias `ctrussian`, PKCS#12, RSA 3072, valid
+to 2056), fingerprint pinned in `android/keystore/expected-cert-sha256.txt` **before the
+first release**. The mathematics key is not present in this branch. Environment
+overrides `ANDROID_KEYSTORE_FILE/PASSWORD`, `ANDROID_KEY_ALIAS/PASSWORD` remain supported
+for a future move to secrets (only before wide distribution — a different key cannot
+update an installed app; Android 9+ allows v3 key rotation only).
 
-Для **локального APK для обновления телефона** сначала получить актуальный номер
-через `tools/release_plan.py --repo zigorminsk-debug/mathematics` (нужны gh/git и
-история/теги), временно `--apply-version <effective-version>`, затем build/sync и
-native gates. Не ставить локальный floor APK поверх более высокого public code.
-Runner-only версии не нужно коммитить; исходные copies перед следующим commit
-регенерировать для исходного VERSION floor. Проще и надёжнее скачать checked latest APK.
+## Recovery
 
-## Документация GitHub для queue: max
-
-Поддержка multi-pending concurrency подтверждена официальным `github/docs`
-(commit `ba6f6f9b9b31c4f0a991fbcb1005080526424804`, проверено 2026-10-14):
-[actions-group-concurrency.md](https://github.com/github/docs/blob/ba6f6f9b9b31c4f0a991fbcb1005080526424804/data/reusables/actions/actions-group-concurrency.md).
-Feature `actions-nga` включён для GitHub.com (`fpt`, `ghec`);
-`queue: max` нельзя сочетать с `cancel-in-progress: true`.
+- Failed gate → nothing is published; fix, commit, push again.
+- Interrupted publisher after the tag/draft was created → rerun CI for the same commit:
+  the planner resumes the own draft; a different commit skips the reserved version.
+- Published but audit doubts → read the Release body JSON (`gh api repos/…/releases/tags/<tag>`).
+- Never delete/move a published tag or replace assets. If the repository latest were ever
+  moved to a subject release, restore it with
+  `gh api -X PATCH repos/zigorminsk-debug/mathematics/releases/<math-id> -f make_latest=true`.

@@ -20,5 +20,5 @@ fi
 mkdir -p "$out"
 cd "$here"
 CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.buildStamp=$(date +%Y%m%d%H%M)" \
-  -o "$out/CTMathsTutor-$arch" .
-echo "==> built $out/CTMathsTutor-$arch"
+  -o "$out/CTRussianTutor-$arch" .
+echo "==> built $out/CTRussianTutor-$arch"

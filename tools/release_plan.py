@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Resolve a monotonically increasing release version without bot commits.
 
+Subject-scoped: this branch publishes «Репетитор ЦТ: Русский язык» in its own
+tag family (subject.json → ``russian-v``). Counter, reservations, idempotency,
+lineage and the previous stable APK are looked up ONLY in that family; the
+mathematics family (``v…``) and siblings are invisible to this planner.
+
 VERSION is the source's minimum version. Trusted CI builds resolve an effective
 version against published releases and apply it only in the runner checkout.
 The APK, EXEs and JSON feed all use that exact effective version. Re-running an
@@ -19,11 +24,13 @@ import sys
 from zoneinfo import ZoneInfo
 
 from check_apk_update import version_code
+import subject
 
 ROOT = Path(__file__).resolve().parents[1]
-CONTENT_FILES = {"bank.json", "analogous.json", "topics.json", "formulas.json",
+TAG_PREFIX = subject.TAG_PREFIX
+CONTENT_FILES = {"bank.json", "analogous.json", "topics.json", "rules.json",
                  "ui_strings.json", "mistakes.json", "answer_vectors.json"}
-INSTALLERS = {"app-release.apk", "CTMathsTutor-amd64.exe", "CTMathsTutor-arm64.exe"}
+INSTALLERS = {"app-release.apk", *subject.WINDOWS_EXES}
 RELEASE_FILES = CONTENT_FILES | INSTALLERS | {"version.json", "release-info.json", "SHA256SUMS.txt"}
 BUILD_JOBS = ("Content & web (verify, parity, assets)", "Windows app (Go)", "Android app (APK)")
 
@@ -45,13 +52,15 @@ def next_version(version: str) -> str:
 
 
 def release_version(release: dict) -> str | None:
+    """Canonical version of a release of THIS family; any other tag → None."""
     tag = release.get("tag_name", "")
-    if not tag.startswith("v"):
+    if not tag.startswith(TAG_PREFIX):
         return None
     try:
-        return canonical(tag[1:])
+        version = canonical(tag[len(TAG_PREFIX):])
     except ValueError:
         return None
+    return version if TAG_PREFIX + version == tag else None
 
 
 def stable_releases(releases: list[dict]) -> list[dict]:
@@ -91,16 +100,16 @@ def choose_version(source: str, releases: list[dict], commit: str,
         # An interrupted draft for this source can be resumed. Never replace a
         # draft reserved by a different source commit, or a prerelease tag.
         by_tag = {entry["tag_name"]: entry for entry in releases}
-        while "v" + version in by_tag:
-            reserved = by_tag["v" + version]
+        while TAG_PREFIX + version in by_tag:
+            reserved = by_tag[TAG_PREFIX + version]
             if reserved.get("draft") and reserved.get("_source_sha", reserved.get("target_commitish")) == commit:
                 break
             version = next_version(version)
         already, url = False, ""
-    tag = "v" + version
+    tag = TAG_PREFIX + version
     if requested_tag and requested_tag != tag:
         raise ValueError(f"requested tag {requested_tag} must be {tag}; no downgrades or tag rewrites")
-    return {"version": version, "tag": tag, "source_version": source,
+    return {"version": version, "tag": tag, "source_version": source, "subject": subject.SUBJECT,
             "source_sha": commit, "already_published": already, "release_url": url,
             "previous_tag": previous["tag_name"] if previous else "",
             "previous_version": release_version(previous) if previous else "", "publish": True}
@@ -171,7 +180,7 @@ def resolve_release_sources(releases: list[dict]) -> None:
 def unpublished_tag_reservations(releases: list[dict]) -> list[dict]:
     """Keep read-only planning aware of tags reserved by interrupted publishers."""
     known = {entry["tag_name"] for entry in releases}
-    tags = subprocess.check_output(["git", "tag", "--list", "v*"], cwd=ROOT, text=True).splitlines()
+    tags = subprocess.check_output(["git", "tag", "--list", TAG_PREFIX + "*"], cwd=ROOT, text=True).splitlines()
     reservations = []
     for tag in tags:
         if tag not in known and release_version({"tag_name": tag}):
@@ -237,8 +246,8 @@ def main() -> int:
         if not re.fullmatch(r"[0-9a-f]{40}", commit) or commit != git_commit("HEAD"):
             raise ValueError("the release source must be the exact checked-out commit")
         if args.local:
-            plan = {"version": source, "source_version": source, "source_sha": commit,
-                    "tag": "v" + source, "publish": False, "already_published": False, "release_url": ""}
+            plan = {"version": source, "source_version": source, "source_sha": commit, "subject": subject.SUBJECT,
+                    "tag": TAG_PREFIX + source, "publish": False, "already_published": False, "release_url": ""}
         else:
             if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip():
                 raise ValueError("commit source changes before allocating a public build; checkout must be clean")
@@ -254,8 +263,9 @@ def main() -> int:
         summary = os.environ.get("GITHUB_STEP_SUMMARY")
         if summary:
             with Path(summary).open("a", encoding="utf-8") as output:
-                output.write("## Release plan\n\n")
-                output.write(f"Source: `{commit}`; VERSION floor: `{source}`; effective version: `{plan['version']}`.\n\n")
+                output.write(f"## Release plan — subject `{subject.SUBJECT}`, family `{TAG_PREFIX}…`\n\n")
+                output.write(f"Source: `{commit}`; VERSION floor: `{source}`; effective version: `{plan['version']}`; "
+                             f"tag: `{plan['tag']}`. The repository-wide latest (mathematics) is never changed.\n\n")
                 if plan["already_published"]:
                     output.write(f"Already published; assets will not be overwritten: {plan['release_url']}\n")
                 elif plan["publish"]:

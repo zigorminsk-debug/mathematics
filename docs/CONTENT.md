@@ -1,178 +1,87 @@
-# Как пополнять базу заданий / Adding new tasks
+# Content model — «Репетитор ЦТ: Русский язык»
 
-База растёт двумя способами: **новые варианты по прошедшим годам ЦТ** и **новые однотипные
-задания** для закрепления. Оба пути описаны ниже; сборка сама проверит математику.
+## Verified exam structure (not inherited from mathematics)
 
-## 1. Новый вариант по мотивам очередного ЦТ
+Spec: «Спецификация экзаменационной (тестовой) работы по учебному предмету «Русский язык»
+для проведения ЦЭ и ЦТ в 2026 году», approved 03.11.2025, published by RIKZ 05.11.2025,
+<https://rikc.by/ru/specification/2026/01.pdf>, read **2026-10-14**:
 
-1. Скопируйте последний по году вариант, например `content_src/task_bank_2026.py`, в `content_src/task_bank_2027.py`.
-2. Замените в файле `CT = "по мотивам ЦТ 2027"`, год в каждом `Task(...)` и содержимое заданий.
-   Структура: 18 заданий части А (`part="A"`, ровно пять вариантов, правильный ровно один)
-   и 12 заданий части В (`part="B"`, короткий ответ).
-3. Допишите год в `content_src/periods.py` — это единственный список периодов:
+- 40 tasks: part A — 18 closed tasks (choose **several** correct answers out of five),
+  part B — 22 open tasks (a word, several digits, or letters + digits); **120 minutes**;
+- sections and quotas: орфография 13, пунктуация 9, лексика 2, культура речи 3,
+  фонетика 1, состав слова/образование слов 2, морфология 4, синтаксис 3, текст 3;
+- difficulty levels I-4, II-10, III-16, IV-6, V-4.
 
-   ```python
-   {"year": 2027, "module": "task_bank_2027", "parts": {"A": 18, "B": 12},
-    "minutes": 180, "label": {"ru": "Вариант 2027", "en": "Variant 2027"}},
-   ```
+The slot themes of the authored blueprint (A1…A18, B1…B22) were cross-checked with
+Adukar's list of the 2025 test themes (read 2026-10-14). The six variants labelled
+2021–2026 are **authored practice sets that all follow the 2026 structure**; the year is
+only a name, nothing is an official RIKZ material. The app counts correct tasks and does
+not simulate the official primary→test score conversion.
 
-   `tools/build_content.py` сам возьмёт модуль из этого списка, а состав частей,
-   время и подписи попадут в `dist/content/version.json` (раздел `periods`) — интерфейсу
-   править ничего не нужно.
+## Sources of truth (`content_src/`)
 
-4. Запустите проверку:
+| File | Purpose |
+|---|---|
+| `kit.py` | 13 study areas, 9 RIKZ sections with quotas, 54 rule ids, 40-slot blueprint and levels, `task()` / `validate_task()` |
+| `checker.py` | the subject answer checker (reference) and its check-object contract |
+| `vectors.py` | 123 hand-written checker vectors (minimal pairs) shared with JS and Kotlin |
+| `pools_spelling.py` | gap pools (letters/Н-НН/Ь/Ъ/prefixes…) and bracket pools (НЕ, hyphen, conjunctions) with reason codes |
+| `pools_punctuation.py` | sentences with braced tested marks, direct-speech statements, numbered B13 sentences |
+| `pools_language.py` | phonetics (transcriptions), stress, vocabulary, idioms, paronyms, pleonasms, numerals, grammar norms, morphology, syntax, morphemes, word formation |
+| `texts.py` | original short texts with sentence-by-sentence cohesion annotations, styles, types, statements, subtopics |
+| `generate.py` | builds 6 × 40 variant tasks and 193 analogous exercises (seeded, deterministic) |
+| `rules_a.py`, `rules_b.py`, `rules.py` | 54 rule cards, study lists per area, the «Правила» reference |
+| `diagrams.py` | 49 figures: 14 typed SVG schemes, 26 semantic tables, 9 decision trees |
+| `mistakes.py` | a typical-error diagnosis per rule + exam checklist |
+| `sources.py` | normative sources with an honest status (checked / automated / reference) |
+| `ui_strings.py` | all RU/EN interface strings |
+| `periods.py` | the six authored periods, the specification record and the disclaimer |
 
-   ```bash
-   python3 tools/build_content.py --check
-   ```
+## Task schema
 
-   Пока не будут пройдены **все** проверки, банк не соберётся — это защита от опечаток
-   в ответах.
+Every task: `id`, `kind` (variant/analog), `topic` (area), `rule` + `rules`, optional
+`itemRules` (rule per option — remediation by the misjudged options), bilingual
+`instruction`, **Russian material** `text` / `items` (plain strings, never translated),
+optional bilingual `choices` (metalanguage options), `check`, bilingual `solution`
+(worked analysis, ≥2 steps) and `hints`, `src: authored`; variant tasks also `year`,
+`part`, `n`, `section`, `level`.
 
-## 2. Обязательные элементы задания
+`check` declares explicitly: `type` (multi | single | numbers | word | stress | match |
+integer), `scoring: exact`, `order` (unordered/ordered/by-label/n/a) and for words
+`case`, `yo` (strict | e-equals-yo), `hyphen` (strict | typographic), `accept` +
+`acceptWhy` (justified alternatives only). Contract details: docstring of `checker.py`.
+Key rules: a significant space/hyphen is never removed; a run of whitespace becomes one
+space; only U+2010/U+2011 may become "-"; stress/grave marks in a word answer never
+match; extra/missing/duplicate selections never match; concatenated digits only while
+`max ≤ 9`; no keyword or regex leniency.
 
-```python
-Task(
-    id="ct-2026-a7",            # уникальный, никогда не переиспользуйте старые id
-    year=2026, part="A", n=7,   # место в варианте
-    topic="wordproblems",       # ключ из kit.TOPICS
-    ru="Условие задачи.", en="Task statement.",
-    options=[F(3), F(6), F(5), F(15), F(2)],   # только для части А; можно строки
-    answer=F(3),                # обязательно присутствует среди options
-    ru_sol=["шаг 1", "шаг 2", "шаг 3"],        # коротко, по делу — это «разбор»
-    en_sol=["step 1", "step 2", "step 3"],
-    ru_hints=["подсказка 1", "подсказка 2"],   # необязательно
-    en_hints=["hint 1", "hint 2"],
-    tools=("calc", "sheet", "scratch"),        # доступные инструменты
-    tags=["движение по реке"],                 # по тегам подбирается типичная ошибка
-    check=lambda: (F(18) - F(12)) / 2 == 3,    # ТОЧНАЯ арифметика, обязательна
-)
-```
+## Gates
 
-* Числа форматируются автоматически: `F(7, 12)` → «7/12», русская запятая в десятичных.
-* Для части В строковые ответы поддерживаются («√2/2», «(−1; 3)»); продублируйте то, что
-  ученик может набрать руками, в `accept=["0,707", "0.707"]`.
-* `check()` обязан возвращать `True` и не зависеть от округлений: используйте `Fraction`,
-  `math.isqrt`, `pow(a, b, m)`, точные тождества.
+`tools/build_content.py` fails on: invalid task/check contract, canonical answer rejected
+by the checker, blueprint/quota/level/part violations, text tasks not sharing one text,
+missing rule cards/links, < 3 analogs for a rule, non-NFC strings, invisible/bidi/control
+characters, a vector graded differently than expected. Tests add independent derivations:
 
-## 3. Новые однотипные задания (генератор)
+- `tests/test_content.py` — B13 sentences rebuilt from their comma positions must equal
+  the authored correct sentence; transcriptions agree with the е/ё/ю/я rule (count of [й']);
+  stress marks single and on vowels; texts fully annotated; paronym sets have one error;
+  no maths leftovers; every interface key exists;
+- `tests/test_lexicon.py` — OpenCorpora (pymorphy3): every correct spelling exists, every
+  wrong completion is unknown unless listed in `HOMONYMS`/`FORM_POOLS` (stale allowances
+  fail), bracket spellings exist, numerals equal pymorphy's inflection, verb aspect and
+  noun declension agree with dictionary tags. This gate found real authoring errors
+  (отрасль, загорелый, тротуар, ясный, разливается) before the first release;
+- `tests/test_checker.py`, `answer_parity.js`, `AnswerCheckerTest.kt` — the vector corpus
+  in Python, JavaScript and Kotlin.
 
-Файл `content_src/templates.py`: добавьте функцию-генератор и внесите её в `_GENERATORS`.
-Пример:
+Disputed norms are excluded instead of being made artificially unambiguous (stress words
+with two accepted variants, disputed word-formation derivations, «в обнимку» etc.).
+The only accepted alternative (`восемью`/`восьмью`) cites its checked source.
 
-```python
-def gen_my_family(count=10):
-    out = []
-    for i in range(count):
-        a = RNG.randint(2, 9)              # детерминированный генератор
-        ...
-        out.append(_t(f"gen-myf-{i + 1:03d}", "expressions",
-                      ru=f"Вычислите {a}·({a} + 1).", en=f"Evaluate {a}·({a} + 1).",
-                      answer=F(a * (a + 1)),
-                      ru_sol=["Раскроем скобки.", f"{a}·{a} + {a} = {a * a + a}."],
-                      en_sol=["Expand the brackets.", f"{a * a} + {a} = {a * a + a}."],
-                      check=lambda a=a: a * (a + 1) == a * a + a,
-                      difficulty=2, tags=["раскрытие скобок"]))
-    return out
-```
+## Adding content
 
-Правила: `year=0` (это не вариант ЦТ), `part="B"` (короткий ответ), решение обязано
-содержать ход мысли, а `check()` — точное тождество.
-
-## 4. Тема для изучения (открывается при ошибке)
-
-`content_src/study.py` — конспект по каждой теме из `kit.TOPICS`: что повторить
-(RU/EN, не короче двух пунктов) и разделы сборника формул (`formulas` — ключи
-групп из `formulas.py`). При неверном ответе приложение сразу показывает эту
-тему в разборе и ведёт на экран «Изучение». Сборка падает, если у темы нет
-конспекта или указан несуществующий раздел формул, поэтому новая тема в
-`kit.TOPICS` обязана получить запись и здесь.
-
-### Кликабельные определения и теоремы
-
-`content_src/theory.py` — подробный офлайн-каталог (56 материалов). Каждый
-материал имеет постоянный ключ, двуязычный `title`, списки `definitions` и
-`rules` (формулировки и условия применимости), а также `examples` с условием и
-пошаговым решением. `_lesson(...)` принимает пары RU/EN и экспортирует одинаковое
-число абзацев на обоих языках.
-
-* `STUDY_LESSONS[topic]` — по одному ключу материала на каждый пункт конспекта,
-  в том же порядке, что `STUDY[topic]["ru"]` и `["en"]`. При экспорте это
-  `topics.json → study[topic].lessons`.
-* `FORMULA_LESSONS[group]` — по одному ключу на каждую формулу, в порядке
-  `formulas.GROUPS[group]["items"]`. Экспортируется как `items[].lesson`;
-  уникальные ключи раздела — как `group.lessons`.
-* Весь каталог находится в `topics.json → lessons`. Новых JSON-файлов или
-  нативных методов для Android/Windows не нужно; материалы входят в обычный
-  пакет обновления с SHA-256.
-
-Сборка отклоняет отсутствующее определение/теорему/пример, несовпадающие списки
-RU/EN, мёртвую ссылку, формулу без ссылки или недоступный из интерфейса материал.
-При добавлении пункта или формулы обязательно добавьте соответствующую ссылку.
-`tests/test_theory.py` проверяет эти запреты; `tests/theory_smoke.js` нажимает
-все пункты, разделы и формулы на обоих языках и проверяет возврат без потери ввода.
-
-### Бытовые объяснения и наглядные схемы
-
-`content_src/intuition.py` содержит по два параллельных абзаца RU/EN для **всех
-56** материалов. Первый — конкретная знакомая ситуация (покупка, пицца, лестница,
-карта, коробка, часы), второй связывает её с обозначениями и ограничениями модели.
-В экспорте: `lessons[id].everyday.ru/en`. Аналогия **не заменяет** точное определение,
-условия теоремы и решение. Сохраняйте единицы, ОДЗ, равновероятность/независимость,
-постоянство скоростей и предел применимости линейной оценки.
-
-`content_src/diagrams.py` — **52** детерминированных графика/чертежа, экспортируемые
-единожды в `topics.json → figures`. `LESSON_FIGURES` задаёт стабильные ссылки для
-51 материала (`lessons[id].figures`); схемы можно повторно использовать без копий.
-Для пяти чисто текстовых/арифметических материалов не добавлен искусственный график.
-
-- Figure: `id`, bilingual `title/caption`, viewport 420×280, `drawing`, optional
-  bilingual `legend`, mathematical `model` для независимых тестов.
-- Допустимые примитивы: `line`, `polyline`, `polygon`, `circle`, `ellipse`, `rect`,
-  `text`. Только конечные числовые координаты, семантические роли, текст RU/EN.
-  **Никаких SVG/HTML строк, path d, script, foreignObject, href, URLs, inline styles
-  или on* attributes.** Renderer создаёт DOM через `createElementNS` и `textContent`.
-- Графики рассчитываются в Python по известным функциям. Не соединять ветви через
-  полюс/разрыв. Последовательности — отдельные точки, не непрерывные кривые.
-- Оси/масштаб, корни, открытые/закрытые точки и ключевые длины подписываются.
-  Геометрия 3–4–5, подобие и векторы нарисованы в одинаковом масштабе по осям;
-  объёмные фигуры явно отмечены как схематическая перспектива (не измерять по рисунку).
-- При добавлении схемы перевести caption/labels/legend, связать с уроком, добавить
-  математическую проверку в `tests/test_diagrams.py`, проверить мобильные подписи
-  (не пересекаются/не обрезаны), светлую/тёмную тему и viewer zoom/pan.
-
-Builder отклоняет непереведённые/пустые объяснения, опасные/повреждённые примитивы,
-мёртвые/дублированные diagram refs и недоступные из уроков схемы. Python tests
-проверяют каждую точку графика, масштабы/Пифагора/углы/подобие/объёмы/векторы.
-`theory_smoke.js` открывает все 52 схемы на RU/EN (104 zoom journeys), проверяет
-одноуровневый Back, язык/scale/focus/scroll, отсутствие сетевых обращений и XSS.
-Все данные внутри существующего topics.json: новых native endpoints, внешних
-библиотек изображений или дополнительных Release assets нет.
-
-## 5. Новые типичные ошибки
-
-`content_src/mistakes.py` — словарь `TYPICAL_ERRORS` ключ → диагноз (RU/EN). Ключ должен
-совпадать с тегом задания; при разборе ошибки показываются все диагнозы по тегам неверно
-решённого задания. Плюс общий `CHECKLIST` из вопросов для самопроверки.
-
-## 6. Формулы и интерфейсные строки
-
-* `content_src/formulas.py` — группы справочника формул (`GROUPS`) и их ссылки на теорию, доступны в любом режиме.
-* `content_src/ui_strings.py` — все подписи интерфейса. Ключи, оканчивающиеся на `_fmt`,
-  содержат `%s` и превращаются в Android-строки с позиционными аргументами (`%1$s`, `%2$s`).
-
-## 7. Публикация
-
-```bash
-python3 tools/build_content.py      # проверка + сборка dist/content
-python3 tools/sync_assets.py        # разложить по приложениям
-node tests/answer_parity.js         # сверка алгоритма проверки ответов
-git commit -am "content: variant 2027" && git push
-```
-
-После trusted push в ветку с обновлённым CI **автоматически** публикуются checked
-APK, оба EXE и банк, только после всех проверок. Effective version повышается
-автоматически (`VERSION` — source floor); вручную bump/dispatch/tag не нужны.
-PR/fork не публикуют. Приложения получают банк из latest, сохраняя прогресс.
-Новые UI-функции (например viewer схем) требуют установки нового APK/EXE поверх,
-не только обновления банка. См. [RELEASE.md](RELEASE.md) и [../AGENTS.md](../AGENTS.md).
+1. Add items to a pool (with a reason code) or a text/rule card; keep RU/EN parallel.
+2. `python3 tools/build_content.py` and `python3 -m unittest tests.test_content tests.test_lexicon`.
+3. If a wrong completion is a real word, either disambiguate the item with context or add
+   it to `HOMONYMS` with a reason; never weaken the gate.
+4. `python3 tools/sync_assets.py`, then the JS journeys. Commit sources and generated copies.
