@@ -107,3 +107,35 @@
    (tag `physics-v…`, `make_latest=false`, инвентарь с `phyzics.apk` и двумя EXE,
    SHA256SUMS, audit), убедиться, что математический latest не изменился, и
    записать результат сюда.
+
+## 2026-10-14 — первый автозапуск CI физики (фактический результат)
+
+* Push ветки `arena/f7b88593-mathematics`, коммит `1fff615`.
+* Run [38548137521](https://github.com/zigorminsk-debug/mathematics/actions/runs/38548137521)
+  — итог `failure`, и это **ожидаемое** состояние середины миграции:
+  * «Resolve effective build version» — **success**: планировщик отработал по
+    физической семье тегов и не тронул математическую;
+  * «Content & web (verify, parity, assets)» — **failure на шаге
+    «Answer-checker parity (Python ↔ JS ↔ Kotlin vectors)»**; до него успешно
+    прошли `tools/build_content.py`, `tools/sync_assets.py --check`,
+    `git diff --exit-code` по ассетам, `--apply-version` и `node --check`;
+  * «Windows app (Go)» — **success** (`go vet`, `go test`, сборки amd64/arm64);
+    важно: в дереве пока математический Go-код, поэтому такой успех **не**
+    означает готовности физики;
+  * «Android app (APK)» — **failure на шаге «Unit tests (answer checker parity,
+    Kotlin)»**: математический тест векторов ещё читает старый формат векторов;
+  * «Publish verified builds automatically» — **skipped**: релиза физики нет.
+* Математика не затронута: repository latest по-прежнему `v2026.10.8`
+  (13 ассетов, опубликован 2026-10-14T09:09:31Z), тегов `physics-v*` не существует.
+
+### Следующие ворота (в порядке прохождения CI)
+
+1. `webapp/core.js`: физический чекер по `spec` + `tests/answer_parity.js` на
+   `dist/content/answer_vectors.json` → шаг парности перестанет падать.
+2. `tests/content_schema.js` и `python3 -m unittest discover -s tests` — под
+   физическую схему и `tools/subject.py`.
+3. `webapp/app.js` + `tests/*_smoke.js` — экраны под `given/unit/spec/model`.
+4. `android/` (пакет, лейбл, `AnswerChecker.kt`, ресурсы) и `windows/`
+   (идентичность, каталоги данных, subject-scoped обновление).
+5. Только после этого — первый `physics-v*` Release с `make_latest=false`, два
+   EXE и `phyzics.apk`, и проверка, что математический latest не изменился.
