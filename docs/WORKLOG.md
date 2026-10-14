@@ -273,3 +273,24 @@ Run **[38562589780](https://github.com/zigorminsk-debug/mathematics/actions/runs
 * `MainActivity.kt`/`NativeBridge.kt` локально не компилируются (Android API) —
   их собирает Gradle в CI; юнит-тесты Kotlin прогнаны на локальном стенде
   (21 тест: `AnswerChecker`, `ContentVersions`, `ReleaseFeed`).
+
+---
+
+## 2026-10-14 (продолжение 3): второй зелёный прогон и проверка пути обновления
+
+Run **[38563110613](https://github.com/zigorminsk-debug/mathematics/actions/runs/38563110613)**
+(commit `43eae26d`) — снова **success**, и в нём впервые отработал гейт
+обновления: шаг «Verify signature and increasing code against the previous
+published APK» скачал `phyzics.apk` из `physics-v2026.10.1`, проверил подпись
+постоянным сертификатом физики и рост `versionCode` — пройдено. Это
+подтверждает, что **новый APK встаёт поверх уже опубликованного** без смены
+ключа.
+
+* опубликован **`physics-v2026.10.2`** (13 ассетов, 2026-10-14T12:23:34Z),
+  APK versionCode **261002**, пакет `by.ziv.ctphysics`;
+* repository latest по-прежнему **`v2026.10.8`** (математика) — повторное
+  подтверждение изоляции;
+* автопубликация работает как задумано: каждый доверенный push в рабочую ветку
+  даёт следующую версию (`2026.10.3`, …). Если нужен «тихий» push без релиза —
+  такого режима нет намеренно: непроверенная сборка и неопубликованная сборка
+  не должны расходиться.
