@@ -74,8 +74,11 @@ docs/subjects/README.md → docs/subjects/PHYSICS.md /
 108 надписей UI, 480 векторов ответов. Проверки:
 `CT_SUBJECT=english python3 english/tools/build_content.py`, `english/tests/*`
 (parity, схема, jsdom-смоук, тест иконки-облака «EN»), 15 Kotlin-тестов на
-JVM-стенде, Go `vet/test`, `check_syntax.py --require`. Первый публичный выпуск —
-`english-v2026.10.1` от `.github/workflows/english-ci.yml`.
+JVM-стенде, Go `vet/test`, `check_syntax.py --require`. Опубликованы
+`english-v2026.10.1` и `english-v2026.10.3` (13 вложений, `engtutor.apk`, обе EXE,
+feed, audit, sums; `make_latest=false`); тег `english-v2026.10.2` — резерв
+прерванной публикации без релиза (разбор в `docs/WORKLOG.md`, «продолжение 8»).
+Публикует `.github/workflows/english-ci.yml` на каждом доверенном push.
 
 **Русский язык — не начат** (задание: `docs/subjects/RUSSIAN.md`).
 
