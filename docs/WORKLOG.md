@@ -81,15 +81,34 @@ npm install --prefix /tmp/browser @sparticuz/chromium puppeteer-core  # Chromium
 LD_LIBRARY_PATH=/tmp/al2023/lib CHROMIUM=/tmp/chromium PUPPETEER_MODULES=/tmp/browser/node_modules node tests/mobile_check.mjs
 ```
 
-### Push / CI / release
+### Push / CI / release (actual)
 
-Recorded in the next entry after the actual GitHub Actions run (nothing is claimed here).
+- Commit **`564e4e0a57f35e0f143b9279b913f85bfb7221dc`** pushed to `arena/339e10e8-mathematics`
+  (first push of the branch, 11:18 UTC).
+- Push run **[38555641548](https://github.com/zigorminsk-debug/mathematics/actions/runs/38555641548)**:
+  prepare, «Content & web», «Windows app (Go)», «Android app (APK)» (key pin, Kotlin unit tests,
+  debug APK, signed release APK, signature, package/versionCode) and the publisher — all
+  **success**; the previous-subject-APK gate was skipped by design (first release of the family).
+  Full logs are not downloadable from the sandbox (redirect host blocked); step results via API.
+- Release **[russian-v2026.10.1](https://github.com/zigorminsk-debug/mathematics/releases/tag/russian-v2026.10.1)**,
+  id `412633540`, published 2026-10-14T11:20:39Z, not draft/prerelease, tag → `564e4e0`,
+  13 assets uploaded; the 11 payload digests in the body JSON (`release-info.json`) equal the
+  server-side SHA-256 digests and sizes; subject `russian`, package `by.ziv.ctrussian`,
+  versionCode `261001`, certificate `DE:65:1A:CC:…`, `repositoryLatestBefore` = `v2026.10.8`/`412525779`.
+  Sizes: APK 5 103 320 B, amd64 EXE 7 994 880 B, arm64 EXE 7 614 464 B.
+- **Mathematics latest after publication: still `v2026.10.8`, id `412525779`** (unchanged).
+- Live check of the shipped Windows resolver (Linux build with an embedded bank set to
+  2026.10.0): it selected `russian-v2026.10.1` from the real Releases API (ignoring the maths
+  latest) and requested that tag's `version.json`; the asset redirect host is blocked in the
+  sandbox, so it reported `offline` and installed nothing (safe failure).
+- This documentation commit is pushed too and, by the standing rule, publishes the next
+  patch (`russian-v2026.10.2`); its own audit lives in that release (no bot-commit loop).
 
 ### Next steps
 
-1. Push this commit; watch the push run (content, Windows, Android, publish).
-2. Verify the subject release `russian-v2026.10.1`: tag → commit, 13 assets, digests,
-   `release-info.json` (subject/package/certificate), not latest; **maths latest still id
-   `412525779`** (`gh api repos/zigorminsk-debug/mathematics/releases/latest`).
-3. Record run/release identities here (that documentation push publishes the next patch).
-4. Not done/not possible here: installation on a physical phone and on Windows.
+1. Physical-device checks are still open: install the APK on an Android phone next to the
+   mathematics app, update over it with a later `russian-v…` APK; run both EXEs on Windows
+   (x64 and ARM) — **not tested** by agents.
+2. Content can grow: more items per pool/rule, more texts; keep the dictionary gate strict.
+3. If the owner wants a private key before wider distribution, decide it BEFORE many users
+   install the app (a different key cannot update an installed APK).

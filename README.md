@@ -11,7 +11,8 @@
 ## Скачать / Download
 
 Откройте [Releases](https://github.com/zigorminsk-debug/mathematics/releases) и выберите
-самый новый выпуск с тегом `russian-v…` (не тот, что помечен *Latest* — это математика):
+самый новый выпуск с тегом `russian-v…` (не тот, что помечен *Latest* — это математика).
+Первый выпуск: [russian-v2026.10.1](https://github.com/zigorminsk-debug/mathematics/releases/tag/russian-v2026.10.1).
 
 - **Android:** `app-release.apk` — пакет `by.ziv.ctrussian`, ставится рядом с математикой;
   следующие версии устанавливаются поверх (не удаляйте приложение — удалится статистика).
