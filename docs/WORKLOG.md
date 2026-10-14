@@ -437,3 +437,71 @@ Python-тестов (`tests/`, включая `test_subject_profiles.py` и фи
 телефон и установка на Windows не тестировались. Второй прогон (после первого
 релиза) проверит ветку «обновление поверх предыдущего APK» — она включается
 только когда у семейства уже есть предыдущий английский тег.
+
+---
+
+## 2026-10-14 (продолжение 7): `english-v2026.10.1` опубликован автоматически
+
+Первый публичный выпуск английского тренажёра. Push `7ce72b2` → прогон
+**38615132489** (`CI (English)`, push в `arena/f7b88593-mathematics`) — **success**,
+все пять заданий:
+
+| Задание | Время | Итог |
+|---|---|---|
+| Resolve effective English build version | 6s | версия `2026.10.1`, тег `english-v2026.10.1`, publish=true |
+| English content & web (verify, parity, assets) | 36s | сборка контента, изоляция деревьев математики/физики, иконка, схема, parity, общие тесты, синтаксис, jsdom-смоук |
+| Windows app (Go) | 37s | `go vet`, `go test`, обе EXE (amd64/arm64) |
+| Android app (APK) | 2m22s | Kotlin-тесты, debug и signed-release APK, проверка подписи и `versionCode` |
+| Publish the verified English builds automatically | 18s | публикация `make_latest=false` |
+
+Итог публикации: **`english-v2026.10.1`** (2026-10-14T18:29:00Z, не draft, не
+prerelease), 13 вложений, `name = «Репетитор ЦТ: Английский язык 2026.10.1»`,
+тег указывает на коммит `7ce72b2` (проверено через API):
+
+```
+engtutor.apk              4 914 783 B
+CTEnglishTutor-amd64.exe  7 100 416 B
+CTEnglishTutor-arm64.exe  6 719 488 B
+bank.json / analogous.json / topics.json / rules.json / ui_strings.json /
+mistakes.json / answer_vectors.json / version.json / release-info.json /
+SHA256SUMS.txt
+```
+
+Сверили содержимое фида с локальной сборкой: семь из восьми JSON (bank, analogous,
+topics, rules, ui_strings, mistakes, answer_vectors) совпали с локальным
+`english/dist/content/` **до байта** (одинаковые размеры), `version.json` в релизе
+больше локального — его дополняет шаг публикации (тег, дайджесты, дата).
+Сами вложения из песочницы Arena скачать нельзя (хост `release-assets.githubusercontent.com`
+не в списке разрешённых), поэтому дайджесты подтверждены внутри CI шагом
+`publish_release.py`, а не локальным скачиванием — это записано честно.
+
+**Математика не тронута:** `releases/latest` по-прежнему
+`v2026.10.8` («CT Maths Tutor 2026.10.8», 2026-10-14T09:09:31Z, 13 вложений).
+
+**Сопутствующие прогоны физики** (та же ветка, каждое push запускает и её CI):
+`38613974199` (7d6d51c) → `physics-v2026.10.6`, `38614585692` (8420116) →
+`physics-v2026.10.7`, `38615132500` (7ce72b2) → `physics-v2026.10.8` — все success;
+физика публикуется своей семьёй и на общий `latest` не влияет.
+
+**Две неудачи по пути (и их причины).**
+
+1. `38613974252` (7d6d51c): шаг «Repository tests» упал 12 раз — job-level
+   `CT_SUBJECT: english` заставлял общий набор `tests/` (он описывает машинерию
+   физики) видеть английский профиль. Исправлено в `8420116`: у шага явно
+   `CT_SUBJECT: ''`, плюс сторож `test_the_shared_suite_is_physics_scoped`
+   с понятным сообщением. Сборка контента, изоляция, иконка, Android и Windows в
+   том прогоне уже были зелёными.
+2. `38614586045` (8420116): публикация остановилась на «required build/check job did
+   not succeed: Content & web (verify, parity, assets)» — `release_plan.BUILD_JOBS`
+   был жёстко физическим, а английский контент-джоб называется иначе. Исправлено в
+   `7ce72b2`: имена заданий берутся из профиля предмета, добавлена проверка
+   «имя задания профиля существует в workflow предмета».
+
+Обе ошибки не дошли до пользователя: релиза не было ни в одном из неудачных
+прогонов, а теги не переиспользовались.
+
+**Следующий шаг:** второй прогон английского (после появления предыдущего тега)
+включает шаг «Verify signature and increasing code against the previous published
+APK» — он сверяет подпись и `versionCode` новой сборки с `engtutor.apk`
+предыдущего выпуска. Физический телефон и установка на Windows по-прежнему
+**не тестировались**.
