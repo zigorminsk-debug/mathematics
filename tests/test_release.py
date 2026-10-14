@@ -256,8 +256,18 @@ class WorkflowGuards(unittest.TestCase):
 
     def test_publish_workflow_renames_the_apk(self):
         publish = self.workflows["publish.yml"]
-        self.assertIn("mv staging/android/app-release.apk staging/android/phyzics.apk", publish)
+        # Имя файла берётся из профиля предмета, а не из захардкоженной строки:
+        # у физики это phyzics.apk, английский тренажёр переименует свой APK сам.
+        self.assertIn("mv staging/android/app-release.apk", publish)
+        self.assertIn("subject.APK_ASSET", publish)
         self.assertIn("make_latest=false", publish)
+        # общий публикатор вызывается с явным предметом и по умолчанию физикой
+        self.assertIn("default: 'physics'", publish)
+
+    def test_publish_workflow_keeps_the_physics_default(self):
+        publish = self.workflows["publish.yml"]
+        self.assertIn("CT_SUBJECT: ${{ inputs.subject }}", publish)
+        self.assertEqual(subject.APK_ASSET, "phyzics.apk")
 
     def test_ci_downloads_the_previous_physics_apk_only(self):
         ci = self.workflows["ci.yml"]

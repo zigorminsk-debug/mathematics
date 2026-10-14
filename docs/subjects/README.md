@@ -1,10 +1,16 @@
 # Два самостоятельных репетитора: передача в отдельные сессии Arena
 
-**Статус (2026-10-14): подготовка, НЕ готовые приложения.** Пользователь запросил
-отдельную ветку физики и отдельную ветку русского языка «аналогично математике».
-После объяснения ограничения текущей сессии выбрал **отдельные сессии со своими
-ветками**, а не каталоги двух приложений в математической ветке. Здесь новые
-ветки/репозитории не создавались, Android/Windows приложения не клонировались.
+**Статус (2026-10-14).** Пользователь запросил отдельные приложения «аналогично
+математике»; вместо чужих веток они живут самостоятельными каталогами в этой
+ветке сессии: **физика** (`physics`, выпуски `physics-v2026.10.1…10.5`),
+**английский язык** (`english/`, реализация готова, см.
+[docs/subjects/ENGLISH.md](ENGLISH.md)), **русский язык** — ещё не начат
+(задание: [docs/subjects/RUSSIAN.md](RUSSIAN.md)). Математика не переназывалась,
+её `latest`, статистика, подпись и пакет не менялись.
+
+Таблица ниже описывает **исходный план разделения**; фактически реализованные
+значения английского приложения перечислены в `ENGLISH.md` и проверяются
+`tests/test_subject_profiles.py`.
 
 ## Как начать
 
@@ -47,14 +53,14 @@
 
 ## Границы: не испортить математику
 
-| Свойство | Математика — оставить | Физика — предлагается | Русский — предлагается |
-|---|---|---|---|
-| subject ID | `mathematics` | `physics` | `russian` |
-| Android package | `by.ziv.ctmaths` | `by.ziv.ctphysics` | `by.ziv.ctrussian` |
-| debug package | `by.ziv.ctmaths.debug` | `by.ziv.ctphysics.debug` | `by.ziv.ctrussian.debug` |
-| Windows binary stem | `CTMathsTutor` | `CTPhysicsTutor` | `CTRussianTutor` |
-| Windows profile/data | `CTMathsTutor` / `ctmaths-window` | `CTPhysicsTutor` / `ctphysics-window` | `CTRussianTutor` / `ctrussian-window` |
-| stable tag family | `vYYYY.M.P` | `physics-vYYYY.M.P` | `russian-vYYYY.M.P` |
+| Свойство | Математика — оставить | Физика — реализовано | Английский — реализовано | Русский — предлагается |
+|---|---|---|---|---|
+| subject ID | `mathematics` | `physics` | `english` | `russian` |
+| Android package | `by.ziv.ctmaths` | `by.ziv.ctphysics` | `by.ziv.ctenglish` | `by.ziv.ctrussian` |
+| debug package | `by.ziv.ctmaths.debug` | `by.ziv.ctphysics.debug` | `by.ziv.ctenglish.debug` | `by.ziv.ctrussian.debug` |
+| Windows binary stem | `CTMathsTutor` | `CTPhysicsTutor` | `CTEnglishTutor` | `CTRussianTutor` |
+| Windows profile/data | `CTMathsTutor` / `ctmaths-window` | `CTPhysicsTutor` / `ctphysics-window` | `CTEnglishTutor` / `ctenglish-window` | `CTRussianTutor` / `ctrussian-window` |
+| stable tag family | `vYYYY.M.P` | `physics-vYYYY.M.P` | `english-vYYYY.M.P` | `russian-vYYYY.M.P` |
 
 Новые значения — **предлагаемая схема для реализации**, не существующие IDs,
 теги, сертификаты или файлы. Не утверждать, что приложения уже доступны.
@@ -153,6 +159,17 @@ release planner/publisher/contracts и предметный update resolver.
 > physics-v…, make_latest=false, не трогай math latest/статистику/подпись. Все
 > проверенные изменённые сборки публикуй автоматически, каждое действие документируй.
 > Не выдавай авторские задания за РИКЗ; не объявляй успешный выпуск до actual CI.
+
+### Английский язык — запрос выполнен
+
+Черновик задания для этой сессии («создай самостоятельное приложение
+„Репетитор ЦТ: Английский язык“ аналогично математике: отдельные пакет, ключ
+подписи, канал обновления и семья тегов `english-v…`; авторские варианты формата
+РИКЗ-2025 (18 A + 22 B, 120 минут, источник указан в `ENGLISH.md`); языковая, а не
+числовая проверка ответов; RU/EN интерфейс, который не переводит проверяемый
+английский текст; разбор ошибок через правила и однотипные задания; схема-иконка
+облака «EN»; автопубликация проверенных APK/EXE/feed/audit»). Результат и все
+проверки — в [docs/subjects/ENGLISH.md](ENGLISH.md).
 
 ### Русский язык
 

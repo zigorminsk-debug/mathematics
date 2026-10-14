@@ -1,0 +1,1969 @@
+{
+ "topics": {
+  "tenses": {
+   "ru": "Времена и аспекты",
+   "en": "Tenses and aspects",
+   "rule": "tenses"
+  },
+  "modals": {
+   "ru": "Модальные глаголы",
+   "en": "Modal verbs",
+   "rule": "modals"
+  },
+  "passive": {
+   "ru": "Страдательный залог",
+   "en": "Passive voice",
+   "rule": "passive"
+  },
+  "conditionals": {
+   "ru": "Условные предложения и согласование времён",
+   "en": "Conditionals and reported speech",
+   "rule": "conditionals"
+  },
+  "nonfinite": {
+   "ru": "Инфинитив, герундий, причастие",
+   "en": "Infinitive, gerund, participle",
+   "rule": "nonfinite"
+  },
+  "articles": {
+   "ru": "Артикли и определители",
+   "en": "Articles and determiners",
+   "rule": "articles"
+  },
+  "prepositions": {
+   "ru": "Предлоги и фразовые глаголы",
+   "en": "Prepositions and phrasal verbs",
+   "rule": "prepositions"
+  },
+  "pronouns_numerals": {
+   "ru": "Местоимения, числительные, союзы",
+   "en": "Pronouns, numerals, conjunctions",
+   "rule": "pronouns"
+  },
+  "noun_adj_adv": {
+   "ru": "Существительное, прилагательное, наречие",
+   "en": "Nouns, adjectives, adverbs",
+   "rule": "noun_adj_adv"
+  },
+  "word_formation": {
+   "ru": "Словообразование (часть В)",
+   "en": "Word formation (Part B)",
+   "rule": "word_formation"
+  },
+  "gap_fill": {
+   "ru": "Вставка пропущенного слова (часть В)",
+   "en": "Gap fill (Part B)",
+   "rule": "gap_fill"
+  },
+  "extra_word": {
+   "ru": "Поиск лишнего слова (часть В)",
+   "en": "Extra word (Part B)",
+   "rule": "extra_word"
+  },
+  "communication": {
+   "ru": "Чтение, реплики, социокультурный контекст",
+   "en": "Reading, replies, culture",
+   "rule": "communication"
+  }
+ },
+ "order": [
+  "tenses",
+  "modals",
+  "passive",
+  "conditionals",
+  "nonfinite",
+  "articles",
+  "prepositions",
+  "pronouns_numerals",
+  "noun_adj_adv",
+  "word_formation",
+  "gap_fill",
+  "extra_word",
+  "communication"
+ ],
+ "tools": {
+  "train": {
+   "ru": "Тренировка по темам",
+   "en": "Practice by topic"
+  },
+  "exam": {
+   "ru": "Вариант целиком",
+   "en": "Full variant"
+  }
+ },
+ "types": {
+  "choice": {
+   "ru": "выбор одного варианта из пяти",
+   "en": "one option out of five"
+  },
+  "gap": {
+   "ru": "вписать пропущенное слово",
+   "en": "type the missing word"
+  },
+  "form": {
+   "ru": "образовать нужную форму слова",
+   "en": "form the required word"
+  },
+  "extra": {
+   "ru": "найти лишнее слово",
+   "en": "find the extra word"
+  },
+  "translate": {
+   "ru": "перевести фрагмент",
+   "en": "translate the fragment"
+  }
+ },
+ "instructions": {
+  "choice": {
+   "ru": "Выберите правильный вариант.",
+   "en": "Choose the correct option."
+  },
+  "gap": {
+   "ru": "Заполните пропуск одним словом.",
+   "en": "Fill the gap with one word."
+  },
+  "form": {
+   "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+   "en": "Form the correct word from the one given."
+  },
+  "extra": {
+   "ru": "Найдите лишнее слово в строке и впишите его.",
+   "en": "Find the extra word in the line and type it."
+  },
+  "translate": {
+   "ru": "Переведите фрагмент на английский язык.",
+   "en": "Translate the fragment into English."
+  }
+ },
+ "counts": {
+  "tenses": 11,
+  "modals": 9,
+  "passive": 10,
+  "conditionals": 10,
+  "nonfinite": 9,
+  "articles": 9,
+  "prepositions": 10,
+  "pronouns_numerals": 10,
+  "noun_adj_adv": 10,
+  "word_formation": 16,
+  "gap_fill": 14,
+  "extra_word": 14,
+  "communication": 12
+ },
+ "byYear": {
+  "2026": 40
+ },
+ "lessons": {
+  "lesson-tenses": {
+   "id": "lesson-tenses",
+   "topic": "tenses",
+   "rule": "present-simple",
+   "title": {
+    "ru": "Как выбрать время по маркеру",
+    "en": "Choosing the tense by its marker"
+   },
+   "summary": {
+    "ru": "Маркер времени в предложении — главная подсказка: он прямо указывает на форму.",
+    "en": "A time marker in the sentence is the main clue: it points at the form directly."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Сначала найдите в предложении обстоятельство времени и только потом выбирайте форму.",
+     "en": "Find the time expression first and choose the form afterwards."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«She ___ in Minsk since 2019»",
+      "Маркер: since 2019 — точка отсчёта в прошлом.",
+      "Действие длится до сих пор → Present Perfect.",
+      "Ответ: has lived."
+     ],
+     "en": [
+      "“She ___ in Minsk since 2019”",
+      "Marker: since 2019 — a starting point in the past.",
+      "The action still continues → Present Perfect.",
+      "Answer: has lived."
+     ]
+    }
+   ],
+   "figure": "tense-timeline",
+   "everyday": {
+    "ru": "Как строка в квитанции с датой: «с 2019 года» — значит, срок идёт и сейчас.",
+    "en": "Like a date on a receipt: “since 2019” means the period is still running."
+   }
+  },
+  "lesson-modals": {
+   "id": "lesson-modals",
+   "topic": "modals",
+   "rule": "modal-meaning",
+   "title": {
+    "ru": "Модальный глагол: обязанность, совет или вывод",
+    "en": "A modal: obligation, advice or deduction"
+   },
+   "summary": {
+    "ru": "Значение модального глагола определяется ситуацией, а не переводом отдельного слова.",
+    "en": "The meaning of a modal comes from the situation, not from a single translation."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Определите, что выражает предложение: запрет, совет, уверенность или вероятность.",
+     "en": "Decide what the sentence expresses: prohibition, advice, certainty or possibility."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«You should have told me earlier»",
+      "Речь о прошлом, действие не выполнено.",
+      "Упрёк выражается «should have + V3».",
+      "Ответ: should."
+     ],
+     "en": [
+      "“You should have told me earlier”",
+      "The action is in the past and was not done.",
+      "A reproach takes “should have + V3”.",
+      "Answer: should."
+     ]
+    }
+   ],
+   "figure": null,
+   "everyday": {
+    "ru": "Надпись «Не курить» — запрет (mustn't), а «можешь не спешить» — отсутствие необходимости (needn't).",
+    "en": "“No smoking” forbids; “you needn't hurry” removes the necessity."
+   }
+  },
+  "lesson-passive": {
+   "id": "lesson-passive",
+   "topic": "passive",
+   "rule": "passive-forms",
+   "title": {
+    "ru": "Пассив: когда действие важнее исполнителя",
+    "en": "Passive: when the action matters more than the doer"
+   },
+   "summary": {
+    "ru": "Пассив — это «be + V3», а время показывает глагол «be».",
+    "en": "The passive is “be + V3”, and the verb “be” carries the tense."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Проверьте, действует ли подлежащее само: если нет — нужен пассив.",
+     "en": "Check whether the subject acts by itself: if it does not, the passive is needed."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«The window ___ by the storm»",
+      "Окно не действует само — пострадавший предмет.",
+      "Прошедшее время, единственное число → was broken."
+     ],
+     "en": [
+      "“The window ___ by the storm”",
+      "The window does not act — it is affected.",
+      "Past tense, singular → was broken."
+     ]
+    }
+   ],
+   "figure": null,
+   "everyday": {
+    "ru": "Табличка «Дом построен в 1897 году» говорит о доме, а не о строителях.",
+    "en": "A plaque saying the house “was built in 1897” speaks about the house, not the builders."
+   }
+  },
+  "lesson-conditionals": {
+   "id": "lesson-conditionals",
+   "topic": "conditionals",
+   "rule": "conditionals",
+   "title": {
+    "ru": "Условие: реальное, нереальное, невыполненное",
+    "en": "Conditions: real, unreal, unfulfilled"
+   },
+   "summary": {
+    "ru": "Тип условия определяется тем, возможно ли оно: это и задаёт формы.",
+    "en": "The type of condition depends on whether it is possible — that decides the forms."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Спросите себя: условие может исполниться (I), не может сейчас (II) или не исполнилось в прошлом (III)?",
+     "en": "Ask yourself: can the condition come true (I), is it impossible now (II), or did it not happen in the past (III)?"
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«If she ___ earlier, she would have caught the train»",
+      "Речь о прошлом и о несбывшемся условии → III тип.",
+      "В условии III типа: had + V3.",
+      "Ответ: had left."
+     ],
+     "en": [
+      "“If she ___ earlier, she would have caught the train”",
+      "A past condition that did not happen → type III.",
+      "The if-clause takes “had + V3”.",
+      "Answer: had left."
+     ]
+    }
+   ],
+   "figure": null,
+   "everyday": {
+    "ru": "«Если завтра дождь, возьму зонт» — план (I тип). «Если бы я был тобой» — нереальное условие (II тип).",
+    "en": "“If it rains tomorrow, I will take an umbrella” is a real plan; “if I were you” is unreal."
+   }
+  },
+  "lesson-nonfinite": {
+   "id": "lesson-nonfinite",
+   "topic": "nonfinite",
+   "rule": "gerund-vs-infinitive",
+   "title": {
+    "ru": "Герундий или инфинитив",
+    "en": "Gerund or infinitive"
+   },
+   "summary": {
+    "ru": "Форму подсказывает предыдущее слово: предлог и часть глаголов требуют герундий.",
+    "en": "The form is decided by the preceding word: prepositions and some verbs take the gerund."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Посмотрите на слово перед пропуском: предлог → герундий; would like / decide → инфинитив.",
+     "en": "Look at the word before the gap: a preposition takes the gerund; “would like” or “decide” take the infinitive."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«They suggested ___ the meeting»",
+      "С «suggest» инфинитив не употребляется.",
+      "Значит, герундий: postponing."
+     ],
+     "en": [
+      "“They suggested ___ the meeting”",
+      "After “suggest” the infinitive is impossible.",
+      "The gerund is required: postponing."
+     ]
+    }
+   ],
+   "figure": "formation-chain",
+   "everyday": {
+    "ru": "«Люблю плавать» — занятие вообще (герундий), «хочу поплавать сегодня» — конкретное намерение (инфинитив).",
+    "en": "“I enjoy swimming” is the activity in general; “I want to swim today” is a particular intention."
+   }
+  },
+  "lesson-articles": {
+   "id": "lesson-articles",
+   "topic": "articles",
+   "rule": "articles-basic",
+   "title": {
+    "ru": "Артикль как подсказка «какой именно»",
+    "en": "The article as the word “which one”"
+   },
+   "summary": {
+    "ru": "Артикль сообщает собеседнику, знает ли он предмет: любой, известный или неисчисляемый.",
+    "en": "The article tells the listener whether the object is any, known or uncountable."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Проверьте по шагам: предмет исчисляемый? упомянут впервые? известен собеседнику?",
+     "en": "Check step by step: is the object countable? is it mentioned for the first time? is it known to the listener?"
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«He is ___ honest man»",
+      "Существительное в единственном числе, первое упоминание → a/an.",
+      "Звук в начале слова — гласный (h не читается) → an.",
+      "Ответ: an."
+     ],
+     "en": [
+      "“He is ___ honest man”",
+      "A singular noun mentioned first takes a/an.",
+      "The first sound is a vowel (“h” is silent) → an.",
+      "Answer: an."
+     ]
+    }
+   ],
+   "figure": "article-tree",
+   "everyday": {
+    "ru": "В кафе «нужна вилка» (любая) и «дай ту вилку» (та, что видит собеседник) — по-английски это a fork и the fork.",
+    "en": "In a café “I need a fork” means any fork, “the fork” means the one in sight."
+   }
+  },
+  "lesson-prepositions": {
+   "id": "lesson-prepositions",
+   "topic": "prepositions",
+   "rule": "prepositions-collocation",
+   "title": {
+    "ru": "Предлог учится вместе со словом",
+    "en": "Prepositions are learnt with their word"
+   },
+   "summary": {
+    "ru": "Предлог не выбирается по смыслу русского перевода: он закреплён за словом.",
+    "en": "A preposition is not chosen by translating Russian: it is fixed by its word."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Вспомните сочетание целиком: depend on, interested in, good at, responsible for.",
+     "en": "Recall the whole collocation: depend on, interested in, good at, responsible for."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«Our success depends ___ careful planning»",
+      "Глагол «depend» в английском требует «on».",
+      "Ответ: on."
+     ],
+     "en": [
+      "“Our success depends ___ careful planning”",
+      "The verb “depend” takes “on” in English.",
+      "Answer: on."
+     ]
+    }
+   ],
+   "figure": "preposition-map",
+   "everyday": {
+    "ru": "Русское «зависеть от» тянет за собой «от», а английское «depend» — «on». Переводить предлог отдельно нельзя.",
+    "en": "Russian “зависеть от” uses “от”, while English “depend” takes “on” — prepositions are not translated one by one."
+   }
+  },
+  "lesson-pronouns": {
+   "id": "lesson-pronouns",
+   "topic": "pronouns_numerals",
+   "rule": "quantifiers",
+   "title": {
+    "ru": "Исчисляемое и неисчисляемое",
+    "en": "Countable and uncountable"
+   },
+   "summary": {
+    "ru": "Выбор much/many, few/little зависит от того, считаем ли мы предметы.",
+    "en": "Much/many and few/little depend on whether the objects are counted."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Определите, можно ли сказать «одна штука, две штуки»: если да — исчисляемое.",
+     "en": "Ask whether you can say “one, two” of the object: if yes, it is countable."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«There are ___ students than last year»",
+      "Студентов считаем → fewer.",
+      "«Less» осталось для неисчисляемого: less time."
+     ],
+     "en": [
+      "“There are ___ students than last year”",
+      "Students are counted → fewer.",
+      "“Less” is used with uncountable nouns: less time."
+     ]
+    }
+   ],
+   "figure": null,
+   "everyday": {
+    "ru": "Деньги — «много» (much money), монеты — «много» (many coins): считаем не смысл, а штуки.",
+    "en": "Money is “much”, coins are “many”: what matters is whether the objects are counted."
+   }
+  },
+  "lesson-noun-adj-adv": {
+   "id": "lesson-noun-adj-adv",
+   "topic": "noun_adj_adv",
+   "rule": "adjective-adverb",
+   "title": {
+    "ru": "Прилагательное описывает предмет, наречие — действие",
+    "en": "An adjective describes a thing, an adverb an action"
+   },
+   "summary": {
+    "ru": "Смотрите, к какому слову относится определение: к существительному или к глаголу.",
+    "en": "Look at what the word modifies: a noun or a verb."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "После «be, look, feel» обычно прилагательное; после глагола действия — наречие с -ly.",
+     "en": "After “be, look, feel” an adjective is usual; an action verb takes the “-ly” adverb."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«She speaks English ___»",
+      "«Speaks» — глагол действия → наречие.",
+      "Fluent → fluently."
+     ],
+     "en": [
+      "“She speaks English ___”",
+      "“Speaks” is an action verb → the adverb is required.",
+      "Fluent → fluently."
+     ]
+    }
+   ],
+   "figure": "formation-chain",
+   "everyday": {
+    "ru": "«Внимательный водитель» — про человека, «водит внимательно» — про действие. По-английски это разные слова.",
+    "en": "“A careful driver” is about the person, “drives carefully” about the action."
+   }
+  },
+  "lesson-word-formation": {
+   "id": "lesson-word-formation",
+   "topic": "word_formation",
+   "rule": "suffixes",
+   "title": {
+    "ru": "Словообразование по месту в предложении",
+    "en": "Word formation by position in the sentence"
+   },
+   "summary": {
+    "ru": "Сначала часть речи, потом суффикс: место в предложении важнее словаря.",
+    "en": "First the part of speech, then the suffix: the position matters more than the dictionary."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "После «his, my, the» обычно существительное; перед существительным — прилагательное; после глагола — наречие.",
+     "en": "After “his, my, the” a noun is usual; before a noun an adjective; after a verb an adverb."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«Regular exercise improves your ___ (PERFORM)»",
+      "После «your» нужно существительное.",
+      "Perform → performance."
+     ],
+     "en": [
+      "“Regular exercise improves your ___ (PERFORM)”",
+      "“Your” needs a noun.",
+      "Perform → performance."
+     ]
+    }
+   ],
+   "figure": "formation-chain",
+   "everyday": {
+    "ru": "Одно слово собирается по-разному: успех (success), успешный (successful), успешно (successfully).",
+    "en": "One word takes different shapes: success, successful, successfully."
+   }
+  },
+  "lesson-gap-fill": {
+   "id": "lesson-gap-fill",
+   "topic": "gap_fill",
+   "rule": "gap-strategy",
+   "title": {
+    "ru": "Что просит пропуск",
+    "en": "What the gap asks for"
+   },
+   "summary": {
+    "ru": "Пропуск требует ровно одну единицу: предлог, вспомогательный глагол или союз.",
+    "en": "A gap asks for exactly one item: a preposition, an auxiliary verb or a conjunction."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Прочитайте предложение целиком и переведите: чего не хватает по-английски, а не по-русски.",
+     "en": "Read the whole sentence and ask what English misses, not what Russian would need."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«We have known each other ___ childhood»",
+      "Нужна точка отсчёта времени.",
+      "Since + точка, for + отрезок → since."
+     ],
+     "en": [
+      "“We have known each other ___ childhood”",
+      "A starting point in time is missing.",
+      "Since takes a point, for a period → since."
+     ]
+    }
+   ],
+   "figure": null,
+   "everyday": {
+    "ru": "Пазл со стыками: соседние слова сами подсказывают пропущенную деталь.",
+    "en": "Like a puzzle: the neighbouring words suggest the missing piece."
+   }
+  },
+  "lesson-extra-word": {
+   "id": "lesson-extra-word",
+   "topic": "extra_word",
+   "rule": "extra-word-strategy",
+   "title": {
+    "ru": "Лишнее слово в строке",
+    "en": "The extra word in a line"
+   },
+   "summary": {
+    "ru": "В строке ровно одно лишнее слово; чаще всего это предлог, местоимение или артикль.",
+    "en": "Each line has exactly one extra word; usually a preposition, a pronoun or an article."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Уберите подозрительное слово мысленно и проверьте, осталось ли предложение грамматичным.",
+     "en": "Remove the suspected word and check whether the sentence stays grammatical."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«He entered into the room without knocking»",
+      "«Enter» — переходный глагол, предлог не нужен.",
+      "Лишнее слово: into."
+     ],
+     "en": [
+      "“He entered into the room without knocking”",
+      "“Enter” is transitive and takes no preposition.",
+      "The extra word is “into”."
+     ]
+    }
+   ],
+   "figure": "sentence-tree",
+   "everyday": {
+    "ru": "Как лишняя деталь после сборки: всё на месте, кроме одной — её и надо назвать.",
+    "en": "Like an unused piece after assembly: everything fits except one — name it."
+   }
+  },
+  "lesson-communication": {
+   "id": "lesson-communication",
+   "topic": "communication",
+   "rule": "replies",
+   "title": {
+    "ru": "Реплики и объявления: читаем буквально",
+    "en": "Replies and notices: read them literally"
+   },
+   "summary": {
+    "ru": "В разговоре и в объявлениях есть готовые формулы, и понимать их надо точно.",
+    "en": "Conversation and notices use fixed formulas that must be understood exactly."
+   },
+   "sections": [
+    {
+     "kind": "text",
+     "ru": "Различайте благодарность, извинение и предложение: у каждого своя готовая реакция.",
+     "en": "Tell thanks, apologies and offers apart: each has its own fixed reply."
+    },
+    {
+     "kind": "steps",
+     "title": {
+      "ru": "Разбор",
+      "en": "Worked example"
+     },
+     "ru": [
+      "«Last admission is at 17:30; the museum closes at 18:00»",
+      "Вход возможен до последнего допуска, а не до закрытия.",
+      "Ответ: before 17:30."
+     ],
+     "en": [
+      "“Last admission is at 17:30; the museum closes at 18:00”",
+      "Entry is possible until the last admission, not until closing.",
+      "Answer: before 17:30."
+     ]
+    }
+   ],
+   "figure": null,
+   "everyday": {
+    "ru": "Объявление в аэропорту — это правило, а не совет: опоздал на минуту — не пустят.",
+    "en": "An airport notice is a rule, not advice: a minute late means not boarding."
+   }
+  }
+ },
+ "figures": {
+  "sentence-tree": {
+   "id": "sentence-tree",
+   "kind": "tree",
+   "width": 420,
+   "height": 280,
+   "title": {
+    "ru": "Разбор предложения по членам",
+    "en": "Sentence structure"
+   },
+   "caption": {
+    "ru": "Подлежащее называет предмет, сказуемое — действие; лишних членов нет.",
+    "en": "The subject names the object, the predicate the action; there is no extra member."
+   },
+   "nodes": [
+    {
+     "id": "s",
+     "label": {
+      "ru": "My friend",
+      "en": "My friend"
+     },
+     "x": 24,
+     "y": 24,
+     "w": 112,
+     "h": 36,
+     "role": "subject"
+    },
+    {
+     "id": "v",
+     "label": {
+      "ru": "lives",
+      "en": "lives"
+     },
+     "x": 156,
+     "y": 24,
+     "w": 88,
+     "h": 36,
+     "role": "verb"
+    },
+    {
+     "id": "o",
+     "label": {
+      "ru": "in Brest",
+      "en": "in Brest"
+     },
+     "x": 264,
+     "y": 24,
+     "w": 112,
+     "h": 36,
+     "role": "place"
+    },
+    {
+     "id": "x",
+     "label": {
+      "ru": "he (лишнее)",
+      "en": "he (extra)"
+     },
+     "x": 156,
+     "y": 120,
+     "w": 112,
+     "h": 36,
+     "role": "accent"
+    }
+   ],
+   "edges": [
+    {
+     "from": "s",
+     "to": "v",
+     "label": {
+      "ru": "кто?",
+      "en": "who?"
+     }
+    },
+    {
+     "from": "v",
+     "to": "o",
+     "label": {
+      "ru": "где?",
+      "en": "where?"
+     }
+    },
+    {
+     "from": "x",
+     "to": "s",
+     "label": {
+      "ru": "повтор подлежащего",
+      "en": "repeated subject"
+     }
+    }
+   ]
+  },
+  "tense-timeline": {
+   "id": "tense-timeline",
+   "kind": "timeline",
+   "width": 420,
+   "height": 280,
+   "title": {
+    "ru": "Временная ось и маркеры",
+    "en": "Timeline and markers"
+   },
+   "caption": {
+    "ru": "Маркер задаёт место действия на оси, а не «правильность» формы.",
+    "en": "The marker places the action on the timeline; it does not judge the form."
+   },
+   "nodes": [
+    {
+     "id": "past",
+     "label": {
+      "ru": "yesterday\nPast Simple",
+      "en": "yesterday\nPast Simple"
+     },
+     "x": 24,
+     "y": 96,
+     "w": 112,
+     "h": 36,
+     "role": "marker"
+    },
+    {
+     "id": "now",
+     "label": {
+      "ru": "now\nPresent Continuous",
+      "en": "now\nPresent Continuous"
+     },
+     "x": 152,
+     "y": 96,
+     "w": 128,
+     "h": 36,
+     "role": "marker"
+    },
+    {
+     "id": "since",
+     "label": {
+      "ru": "since 2019\nPresent Perfect",
+      "en": "since 2019\nPresent Perfect"
+     },
+     "x": 24,
+     "y": 176,
+     "w": 160,
+     "h": 36,
+     "role": "point"
+    },
+    {
+     "id": "future",
+     "label": {
+      "ru": "by next June\nFuture Perfect",
+      "en": "by next June\nFuture Perfect"
+     },
+     "x": 200,
+     "y": 176,
+     "w": 168,
+     "h": 36,
+     "role": "marker"
+    }
+   ],
+   "edges": [
+    {
+     "from": "past",
+     "to": "now",
+     "label": {
+      "ru": "время идёт",
+      "en": "time passes"
+     }
+    },
+    {
+     "from": "now",
+     "to": "future",
+     "label": {
+      "ru": "время идёт",
+      "en": "time passes"
+     }
+    },
+    {
+     "from": "since",
+     "to": "now",
+     "label": {
+      "ru": "действие продолжается",
+      "en": "the action continues"
+     }
+    }
+   ]
+  },
+  "article-tree": {
+   "id": "article-tree",
+   "kind": "tree",
+   "width": 420,
+   "height": 280,
+   "title": {
+    "ru": "Как выбрать артикль",
+    "en": "Choosing an article"
+   },
+   "caption": {
+    "ru": "Сначала исчисляемость, потом известность: это два независимых вопроса.",
+    "en": "Countability comes first, then familiarity: two independent questions."
+   },
+   "nodes": [
+    {
+     "id": "q1",
+     "label": {
+      "ru": "Считаем штуки?",
+      "en": "Countable?"
+     },
+     "x": 24,
+     "y": 24,
+     "w": 136,
+     "h": 36,
+     "role": "question"
+    },
+    {
+     "id": "yes",
+     "label": {
+      "ru": "да",
+      "en": "yes"
+     },
+     "x": 180,
+     "y": 32,
+     "w": 64,
+     "h": 36,
+     "role": "answer"
+    },
+    {
+     "id": "no",
+     "label": {
+      "ru": "нет",
+      "en": "no"
+     },
+     "x": 180,
+     "y": 112,
+     "w": 64,
+     "h": 36,
+     "role": "answer"
+    },
+    {
+     "id": "q2",
+     "label": {
+      "ru": "Первое упоминание?",
+      "en": "First mention?"
+     },
+     "x": 264,
+     "y": 24,
+     "w": 144,
+     "h": 36,
+     "role": "question"
+    },
+    {
+     "id": "zero",
+     "label": {
+      "ru": "без артикля\nadvice, breakfast",
+      "en": "no article\nadvice, breakfast"
+     },
+     "x": 24,
+     "y": 112,
+     "w": 152,
+     "h": 36,
+     "role": "answer"
+    },
+    {
+     "id": "a",
+     "label": {
+      "ru": "a / an",
+      "en": "a / an"
+     },
+     "x": 264,
+     "y": 96,
+     "w": 144,
+     "h": 36,
+     "role": "answer"
+    },
+    {
+     "id": "the",
+     "label": {
+      "ru": "the (уже известен)",
+      "en": "the (already known)"
+     },
+     "x": 264,
+     "y": 168,
+     "w": 144,
+     "h": 36,
+     "role": "answer"
+    }
+   ],
+   "edges": [
+    {
+     "from": "q1",
+     "to": "yes",
+     "label": null
+    },
+    {
+     "from": "q1",
+     "to": "no",
+     "label": null
+    },
+    {
+     "from": "yes",
+     "to": "q2",
+     "label": null
+    },
+    {
+     "from": "q2",
+     "to": "a",
+     "label": {
+      "ru": "да",
+      "en": "yes"
+     }
+    },
+    {
+     "from": "q2",
+     "to": "the",
+     "label": {
+      "ru": "нет",
+      "en": "no"
+     }
+    },
+    {
+     "from": "no",
+     "to": "zero",
+     "label": null
+    }
+   ]
+  },
+  "formation-chain": {
+   "id": "formation-chain",
+   "kind": "flow",
+   "width": 420,
+   "height": 280,
+   "title": {
+    "ru": "Словообразовательная цепочка",
+    "en": "Word formation chain"
+   },
+   "caption": {
+    "ru": "Форма слова меняется по месту в предложении: значение остаётся, часть речи — нет.",
+    "en": "The form changes with its position: the meaning stays, the part of speech does not."
+   },
+   "nodes": [
+    {
+     "id": "root",
+     "label": {
+      "ru": "success\nсуществительное",
+      "en": "success\nnoun"
+     },
+     "x": 24,
+     "y": 40,
+     "w": 128,
+     "h": 36,
+     "role": "root"
+    },
+    {
+     "id": "adj",
+     "label": {
+      "ru": "successful\nприлагательное",
+      "en": "successful\nadjective"
+     },
+     "x": 176,
+     "y": 40,
+     "w": 152,
+     "h": 36,
+     "role": "derived"
+    },
+    {
+     "id": "adv",
+     "label": {
+      "ru": "successfully\nнаречие",
+      "en": "successfully\nadverb"
+     },
+     "x": 24,
+     "y": 136,
+     "w": 152,
+     "h": 36,
+     "role": "derived"
+    },
+    {
+     "id": "neg",
+     "label": {
+      "ru": "unsuccessful\nотрицание",
+      "en": "unsuccessful\nnegative"
+     },
+     "x": 200,
+     "y": 136,
+     "w": 168,
+     "h": 36,
+     "role": "derived"
+    }
+   ],
+   "edges": [
+    {
+     "from": "root",
+     "to": "adj",
+     "label": {
+      "ru": "-ful",
+      "en": "-ful"
+     }
+    },
+    {
+     "from": "adj",
+     "to": "adv",
+     "label": {
+      "ru": "-ly",
+      "en": "-ly"
+     }
+    },
+    {
+     "from": "adj",
+     "to": "neg",
+     "label": {
+      "ru": "un-",
+      "en": "un-"
+     }
+    }
+   ]
+  },
+  "preposition-map": {
+   "id": "preposition-map",
+   "kind": "flow",
+   "width": 420,
+   "height": 280,
+   "title": {
+    "ru": "Предлоги места и времени",
+    "en": "Prepositions of place and time"
+   },
+   "caption": {
+    "ru": "Место: точка — at, поверхность — on, пространство — in.",
+    "en": "Place: a point takes at, a surface on, a space in."
+   },
+   "nodes": [
+    {
+     "id": "at",
+     "label": {
+      "ru": "at\nточка во времени и пространстве",
+      "en": "at\na point"
+     },
+     "x": 24,
+     "y": 32,
+     "w": 152,
+     "h": 36,
+     "role": "point"
+    },
+    {
+     "id": "on",
+     "label": {
+      "ru": "on\nдень и поверхность",
+      "en": "on\na day and a surface"
+     },
+     "x": 200,
+     "y": 32,
+     "w": 168,
+     "h": 36,
+     "role": "place"
+    },
+    {
+     "id": "in",
+     "label": {
+      "ru": "in\nмесяц, год, пространство",
+      "en": "in\na month, a year, a space"
+     },
+     "x": 24,
+     "y": 152,
+     "w": 184,
+     "h": 36,
+     "role": "time"
+    },
+    {
+     "id": "ex",
+     "label": {
+      "ru": "at school, on Monday,\nin 2026",
+      "en": "at school, on Monday,\nin 2026"
+     },
+     "x": 224,
+     "y": 152,
+     "w": 168,
+     "h": 36,
+     "role": "answer"
+    }
+   ],
+   "edges": [
+    {
+     "from": "at",
+     "to": "ex",
+     "label": {
+      "ru": "пример",
+      "en": "example"
+     }
+    },
+    {
+     "from": "on",
+     "to": "ex",
+     "label": {
+      "ru": "пример",
+      "en": "example"
+     }
+    },
+    {
+     "from": "in",
+     "to": "ex",
+     "label": {
+      "ru": "пример",
+      "en": "example"
+     }
+    }
+   ]
+  }
+ },
+ "rules": {
+  "groups": [
+   {
+    "id": "tenses",
+    "rule": "tenses",
+    "title": {
+     "ru": "Времена и аспекты",
+     "en": "Tenses and aspects"
+    },
+    "items": [
+     {
+      "id": "present-simple",
+      "title": {
+       "ru": "Present Simple и Present Continuous",
+       "en": "Present Simple and Present Continuous"
+      },
+      "formulation": {
+       "ru": "Present Simple — постоянное, повторяющееся действие и расписание. Present Continuous — действие прямо сейчас или временная ситуация.",
+       "en": "Present Simple covers habits, facts and timetables; Present Continuous covers actions happening now and temporary situations."
+      },
+      "conditions": {
+       "ru": "Маркеры Present Simple: every day, usually, always, on Mondays. Маркеры Present Continuous: now, at the moment, Look!, Listen!",
+       "en": "Present Simple markers: every day, usually, always. Present Continuous markers: now, at the moment, Look!, Listen!"
+      },
+      "exceptions": {
+       "ru": "Глаголы состояния (know, like, want, belong) в Continuous обычно не употребляются.",
+       "en": "State verbs (know, like, want, belong) are normally not used in continuous forms."
+      },
+      "examples": [
+       {
+        "text": "The train leaves at 6:40.",
+        "kind": "correct",
+        "note": {
+         "ru": "Расписание — Present Simple.",
+         "en": "A timetable takes the Present Simple."
+        }
+       },
+       {
+        "text": "The train is leaving at 6:40.",
+        "kind": "wrong",
+        "note": {
+         "ru": "Про расписание так не говорят.",
+         "en": "A timetable is not described with the continuous form."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Как расписание электрички на табло: оно повторяется каждый день — Present Simple. А «сейчас поезд отходит от платформы» — это момент, Present Continuous.",
+       "en": "Like the departure board at the station: the timetable repeats every day — Present Simple. “The train is leaving the platform right now” describes the moment — Present Continuous."
+      }
+     },
+     {
+      "id": "perfect-forms",
+      "title": {
+       "ru": "Perfect: результат и длительность",
+       "en": "Perfect: result and duration"
+      },
+      "formulation": {
+       "ru": "Present Perfect — результат к моменту речи; Present Perfect Continuous — длительность до момента речи. Past Perfect — действие раньше другого прошедшего.",
+       "en": "Present Perfect marks a result up to now; Present Perfect Continuous marks a duration up to now; Past Perfect marks an action earlier than another past action."
+      },
+      "conditions": {
+       "ru": "Маркеры: since/for, already/yet/just, by the time, by the end of.",
+       "en": "Markers: since/for, already/yet/just, by the time, by the end of."
+      },
+      "exceptions": {
+       "ru": "С «since» всегда точка отсчёта, с «for» — отрезок времени; их нельзя менять местами.",
+       "en": "“Since” takes a starting point and “for” a period; they are not interchangeable."
+      },
+      "examples": [
+       {
+        "text": "She has lived in Minsk since 2019.",
+        "kind": "correct",
+        "note": {
+         "ru": "Начало в прошлом, длится сейчас.",
+         "en": "It started in the past and still continues."
+        }
+       },
+       {
+        "text": "She lives in Minsk since 2019.",
+        "kind": "wrong",
+        "note": {
+         "ru": "«Since» несовместим с Present Simple.",
+         "en": "“Since” is not used with the Present Simple here."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Отметка в паспорте о регистрации: поставили в 2019 году, а «действует» до сих пор — Present Perfect. Если бы в 2020-м выписались, было бы Past Simple.",
+       "en": "A registration stamp: issued in 2019 and still valid — Present Perfect. If it had been cancelled in 2020, the Past Simple would be right."
+      }
+     }
+    ]
+   },
+   {
+    "id": "modals",
+    "rule": "modals",
+    "title": {
+     "ru": "Модальные глаголы",
+     "en": "Modal verbs"
+    },
+    "items": [
+     {
+      "id": "modal-meaning",
+      "title": {
+       "ru": "Значение модального глагола",
+       "en": "Choosing the right modal"
+      },
+      "formulation": {
+       "ru": "must — обязанность или уверенный вывод; have to — вынужденная необходимость; should — совет; can/could — умение и вежливая просьба; may/might — вероятность и разрешение.",
+       "en": "Must marks obligation or a confident deduction; have to marks necessity; should gives advice; can/could express ability and polite requests; may/might express possibility and permission."
+      },
+      "conditions": {
+       "ru": "После модального — инфинитив без «to» (кроме have to, ought to, be able to). Прошлое — modal + have + V3.",
+       "en": "A modal takes the bare infinitive (except have to, ought to, be able to). The past is modal + have + V3."
+      },
+      "exceptions": {
+       "ru": "mustn't — запрет, needn't — отсутствие необходимости; это не одно и то же.",
+       "en": "Mustn't forbids; needn't says there is no necessity. They are not the same."
+      },
+      "examples": [
+       {
+        "text": "You should have told me earlier.",
+        "kind": "correct",
+        "note": {
+         "ru": "Упрёк о прошлом.",
+         "en": "A reproach about the past."
+        }
+       },
+       {
+        "text": "You should told me earlier.",
+        "kind": "wrong",
+        "note": {
+         "ru": "После should нужен have + V3.",
+         "en": "After should, “have + V3” is required."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Надпись «Не курить» — это mustn't (запрет), а «можешь не спешить» — needn't (необязательно). Оба про одно действие, но смысл противоположный.",
+       "en": "A “No smoking” sign is mustn't (a prohibition), while “you needn't hurry” removes the necessity. Same action, opposite meaning."
+      }
+     }
+    ]
+   },
+   {
+    "id": "passive",
+    "rule": "passive",
+    "title": {
+     "ru": "Страдательный залог",
+     "en": "Passive voice"
+    },
+    "items": [
+     {
+      "id": "passive-forms",
+      "title": {
+       "ru": "Как образуется пассив",
+       "en": "How the passive is built"
+      },
+      "formulation": {
+       "ru": "be + V3: the letter was sent. Время показывает «be», а не смысловой глагол.",
+       "en": "Be + V3: the letter was sent. The tense is carried by “be”, not by the main verb."
+      },
+      "conditions": {
+       "ru": "Пассив уместен, когда важно действие или его результат, а не исполнитель. Исполнитель вводится предлогом by.",
+       "en": "The passive is used when the action or its result matters more than the doer. The doer is introduced with “by”."
+      },
+      "exceptions": {
+       "ru": "Непереходные глаголы (arrive, happen, come) пассив не образуют.",
+       "en": "Intransitive verbs (arrive, happen, come) have no passive form."
+      },
+      "examples": [
+       {
+        "text": "The window was broken by the storm.",
+        "kind": "correct",
+        "note": {
+         "ru": "Окно не действовало само.",
+         "en": "The window did not act by itself."
+        }
+       },
+       {
+        "text": "The window broke by the storm.",
+        "kind": "wrong",
+        "note": {
+         "ru": "Нужен пассив: was broken.",
+         "en": "The passive “was broken” is required."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Объявление «Дом построен в 1897 году»: важно здание и год, а не бригада — поэтому пассив. Если бы рассказывали о бригаде, сказали бы «They built the house».",
+       "en": "A plaque saying the house “was built in 1897” focuses on the building, not the builders — that is the passive. Talking about the builders would use the active."
+      }
+     }
+    ]
+   },
+   {
+    "id": "conditionals",
+    "rule": "conditionals",
+    "title": {
+     "ru": "Условные предложения и косвенная речь",
+     "en": "Conditionals and reported speech"
+    },
+    "items": [
+     {
+      "id": "conditionals",
+      "title": {
+       "ru": "Три типа условий",
+       "en": "Three types of conditions"
+      },
+      "formulation": {
+       "ru": "I: if + Present Simple, will + V (реальное условие). II: if + Past Simple, would + V (нереальное сейчас). III: if + Past Perfect, would have + V3 (нереальное в прошлом).",
+       "en": "I: if + Present Simple, will + V. II: if + Past Simple, would + V. III: if + Past Perfect, would have + V3."
+      },
+      "conditions": {
+       "ru": "В условии I типа будущее не употребляется: «if it rains», а не «if it will rain».",
+       "en": "The first conditional never takes the future in the if-clause."
+      },
+      "exceptions": {
+       "ru": "После «I wish» время сдвигается назад: I wish I knew / I wish I had known.",
+       "en": "After “I wish” the tense shifts back: I wish I knew / I wish I had known."
+      },
+      "examples": [
+       {
+        "text": "If it rains, we will stay at home.",
+        "kind": "correct",
+        "note": {
+         "ru": "Условие I типа.",
+         "en": "A first conditional."
+        }
+       },
+       {
+        "text": "If it will rain, we stay at home.",
+        "kind": "wrong",
+        "note": {
+         "ru": "Двойная ошибка: будущее в условии и Present Simple в главной части.",
+         "en": "Two errors: the future in the if-clause and the present in the main clause."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "План на выходные: «если будет дождь, останемся дома» — реальное условие (I тип). «Если бы я был на твоём месте» — уже нереальное (II тип), потому что я не ты.",
+       "en": "A weekend plan “if it rains, we will stay at home” is a real condition (type I). “If I were you” is unreal (type II) because I am not you."
+      }
+     }
+    ]
+   },
+   {
+    "id": "nonfinite",
+    "rule": "nonfinite",
+    "title": {
+     "ru": "Инфинитив, герундий, причастие",
+     "en": "Infinitive, gerund, participle"
+    },
+    "items": [
+     {
+      "id": "gerund-vs-infinitive",
+      "title": {
+       "ru": "Герундий или инфинитив",
+       "en": "Gerund or infinitive"
+      },
+      "formulation": {
+       "ru": "После предлогов — герундий (interested in learning). После «would like, want, decide, hope» — инфинитив. После «enjoy, avoid, mind, suggest» — герундий.",
+       "en": "Prepositions take the gerund; “would like, want, decide, hope” take the infinitive; “enjoy, avoid, mind, suggest” take the gerund."
+      },
+      "conditions": {
+       "ru": "Герундий отвечает на вопрос «чем заниматься», инфинитив — «что сделать».",
+       "en": "The gerund names the activity; the infinitive names the action to be done."
+      },
+      "exceptions": {
+       "ru": "У некоторых глаголов смысл меняется: stop smoking (бросил) и stop to smoke (остановился, чтобы закурить).",
+       "en": "Some verbs change meaning: stop smoking (quit) versus stop to smoke (pause in order to smoke)."
+      },
+      "examples": [
+       {
+        "text": "Do you mind opening the window?",
+        "kind": "correct",
+        "note": {
+         "ru": "«Mind» + герундий.",
+         "en": "“Mind” takes the gerund."
+        }
+       },
+       {
+        "text": "Do you mind to open the window?",
+        "kind": "wrong",
+        "note": {
+         "ru": "Инфинитив с «mind» — ошибка.",
+         "en": "The infinitive after “mind” is an error."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "«Мне нравится плавать» — это занятие в целом (герундий). «Я хочу поплавать сегодня» — конкретное намерение (инфинитив).",
+       "en": "“I enjoy swimming” describes the activity in general (gerund); “I want to swim today” states a particular intention (infinitive)."
+      }
+     }
+    ]
+   },
+   {
+    "id": "articles",
+    "rule": "articles",
+    "title": {
+     "ru": "Артикли и определители",
+     "en": "Articles and determiners"
+    },
+    "items": [
+     {
+      "id": "articles-basic",
+      "title": {
+       "ru": "a/an, the или ничего",
+       "en": "a/an, the or nothing"
+      },
+      "formulation": {
+       "ru": "a/an — первое упоминание исчисляемого предмета; the — уже известный предмет или единственный в своём роде; без артикля — неисчисляемые, множественное число в общем смысле, имена и большинство названий.",
+       "en": "a/an introduces a countable noun; the marks a known or unique object; no article is used with uncountable nouns, plural nouns in a general sense, names and most place names."
+      },
+      "conditions": {
+       "ru": "Выбор a/an — по ЗВУКУ: an hour, a university.",
+       "en": "The choice of a/an depends on the sound: an hour, a university."
+      },
+      "exceptions": {
+       "ru": "С устойчивыми выражениями артикль не по общему правилу: at school, on foot, play the piano, go to bed.",
+       "en": "Fixed expressions follow their own pattern: at school, on foot, play the piano, go to bed."
+      },
+      "examples": [
+       {
+        "text": "She plays the piano very well.",
+        "kind": "correct",
+        "note": {
+         "ru": "Инструмент с «the».",
+         "en": "An instrument takes “the”."
+        }
+       },
+       {
+        "text": "She plays piano very well.",
+        "kind": "wrong",
+        "note": {
+         "ru": "В этом выражении «the» обязателен.",
+         "en": "Here “the” is obligatory."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Разговор в кафе: «I need a fork» — любая вилка (a). «Give me the fork» — та самая, которую собеседник видит (the). Артикль — это подсказка «какой именно».",
+       "en": "In a café: “I need a fork” means any fork; “give me the fork” means the very one in sight. The article tells the listener which one is meant."
+      }
+     }
+    ]
+   },
+   {
+    "id": "prepositions",
+    "rule": "prepositions",
+    "title": {
+     "ru": "Предлоги и фразовые глаголы",
+     "en": "Prepositions and phrasal verbs"
+    },
+    "items": [
+     {
+      "id": "prepositions-collocation",
+      "title": {
+       "ru": "Предлог закреплён за словом",
+       "en": "Prepositions are fixed by collocation"
+      },
+      "formulation": {
+       "ru": "Предлог не переводится отдельно: он закреплён за словом или выражением (depend on, interested in, good at, responsible for, since 2019, for five years).",
+       "en": "A preposition is fixed by its collocation: depend on, interested in, good at, responsible for, since 2019, for five years."
+      },
+      "conditions": {
+       "ru": "Место: in — большой объект, at — точка, on — поверхность. Время: at — час, on — день, in — месяц/год.",
+       "en": "Place: in for a large area, at for a point, on for a surface. Time: at for a clock time, on for a day, in for a month or year."
+      },
+      "exceptions": {
+       "ru": "Многие глаголы меняют смысл с предлогом: look at / look for / look after.",
+       "en": "Many verbs change meaning with the preposition: look at / look for / look after."
+      },
+      "examples": [
+       {
+        "text": "The result depends on the weather.",
+        "kind": "correct",
+        "note": {
+         "ru": "«Depend on» — устойчивое сочетание.",
+         "en": "“Depend on” is fixed."
+        }
+       },
+       {
+        "text": "The result depends of the weather.",
+        "kind": "wrong",
+        "note": {
+         "ru": "«Of» здесь невозможно.",
+         "en": "“Of” cannot be used here."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Как «сахар — в чай, а не на чай»: предлог идёт вместе со словом, а не по смыслу русского перевода. Поэтому сочетания учат целиком.",
+       "en": "Prepositions travel with their word, like a fixed phrase, not with the meaning of the Russian translation — so collocations are learnt as a whole."
+      }
+     }
+    ]
+   },
+   {
+    "id": "pronouns_numerals",
+    "rule": "pronouns",
+    "title": {
+     "ru": "Местоимения, числительные, союзы",
+     "en": "Pronouns, numerals, conjunctions"
+    },
+    "items": [
+     {
+      "id": "quantifiers",
+      "title": {
+       "ru": "much/many, few/little, neither/both",
+       "en": "much/many, few/little, neither/both"
+      },
+      "formulation": {
+       "ru": "many/few — с исчисляемыми, much/little — с неисчисляемыми. neither — ни один из двух, none — ни один из многих, both — оба.",
+       "en": "many/few take countable nouns; much/little take uncountable ones. Neither means “not one of two”, none “not one of many”, both means “the two together”."
+      },
+      "conditions": {
+       "ru": "Порядковые числительные — twenty-first, the third; даты — on the fifth of May.",
+       "en": "Ordinals are twenty-first, the third; dates take “on the fifth of May”."
+      },
+      "exceptions": {
+       "ru": "few и a few различаются смыслом: «мало» против «немного, но есть».",
+       "en": "“Few” means “not enough”; “a few” means “some, but not many”."
+      },
+      "examples": [
+       {
+        "text": "There are fewer students than last year.",
+        "kind": "correct",
+        "note": {
+         "ru": "Исчисляемое — fewer.",
+         "en": "Countable nouns take “fewer”."
+        }
+       },
+       {
+        "text": "There are less students than last year.",
+        "kind": "wrong",
+        "note": {
+         "ru": "«Less» — для неисчисляемых.",
+         "en": "“Less” is used with uncountable nouns."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "В магазине: «much money» — деньги не считаем штуками, «many coins» — монеты считаем. Это и есть разница между неисчисляемым и исчисляемым.",
+       "en": "In a shop: “much money” treats money as a mass, while “many coins” counts them — that is the difference between uncountable and countable."
+      }
+     }
+    ]
+   },
+   {
+    "id": "noun_adj_adv",
+    "rule": "noun_adj_adv",
+    "title": {
+     "ru": "Существительное, прилагательное, наречие",
+     "en": "Nouns, adjectives, adverbs"
+    },
+    "items": [
+     {
+      "id": "adjective-adverb",
+      "title": {
+       "ru": "Прилагательное и наречие",
+       "en": "Adjective or adverb"
+      },
+      "formulation": {
+       "ru": "Прилагательное определяет существительное и стоит после «be, look, feel»; наречие определяет глагол, прилагательное или другое наречие.",
+       "en": "An adjective describes a noun and follows “be, look, feel”; an adverb modifies a verb, an adjective or another adverb."
+      },
+      "conditions": {
+       "ru": "Одни и те же слова различаются окончанием -ly: careful — carefully.",
+       "en": "Many pairs differ by “-ly”: careful — carefully."
+      },
+      "exceptions": {
+       "ru": "hard — «усердно», hardly — «едва»; late — «поздно», lately — «в последнее время».",
+       "en": "Hard means “with effort”, hardly means “almost not”; late and lately differ too."
+      },
+      "examples": [
+       {
+        "text": "She speaks English fluently.",
+        "kind": "correct",
+        "note": {
+         "ru": "Глагол + наречие.",
+         "en": "A verb takes the adverb."
+        }
+       },
+       {
+        "text": "She speaks English fluent.",
+        "kind": "wrong",
+        "note": {
+         "ru": "Нужно наречие, а не прилагательное.",
+         "en": "The adverb, not the adjective, is required."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "«Он внимательный водитель» (прилагательное о человеке) и «он водит внимательно» (наречие о действии) — по-английски это разные слова с -ly.",
+       "en": "“He is a careful driver” describes the person, “he drives carefully” describes the action — English marks the difference with “-ly”."
+      }
+     }
+    ]
+   },
+   {
+    "id": "word_formation",
+    "rule": "word_formation",
+    "title": {
+     "ru": "Словообразование",
+     "en": "Word formation"
+    },
+    "items": [
+     {
+      "id": "suffixes",
+      "title": {
+       "ru": "Приставки и суффиксы",
+       "en": "Prefixes and suffixes"
+      },
+      "formulation": {
+       "ru": "Часть речи задаётся местом в предложении и суффиксом: -ness, -ment, -ion, -er/-or — существительное; -ful, -ous, -able, -ive, -al — прилагательное; -ly — наречие; un-, im-, in-, dis- — отрицание.",
+       "en": "The position in the sentence and the suffix determine the part of speech: -ness, -ment, -ion, -er/-or form nouns; -ful, -ous, -able, -ive, -al form adjectives; -ly forms adverbs; un-, im-, in-, dis- negate."
+      },
+      "conditions": {
+       "ru": "Сначала определите, что требуется в пропуске (существительное, прилагательное, наречие), потом выбирайте суффикс.",
+       "en": "First decide what the gap needs, then choose the suffix."
+      },
+      "exceptions": {
+       "ru": "Написание меняется: happy → happiness, easy → easily, modern → modernize.",
+       "en": "Spelling changes: happy → happiness, easy → easily."
+      },
+      "examples": [
+       {
+        "text": "His achievement surprised everybody.",
+        "kind": "correct",
+        "note": {
+         "ru": "После «his» — существительное.",
+         "en": "“His” takes a noun."
+        }
+       },
+       {
+        "text": "His achieve surprised everybody.",
+        "kind": "wrong",
+        "note": {
+         "ru": "Глагол не может стоять на месте существительного.",
+         "en": "A verb cannot occupy the position of a noun here."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Как конструктор: одно и то же слово «собирается» по-разному в зависимости от места в предложении — «успех» (success), «успешный» (successful), «успешно» (successfully).",
+       "en": "Like building blocks: one word takes different forms by its position — success, successful, successfully."
+      }
+     }
+    ]
+   },
+   {
+    "id": "gap_fill",
+    "rule": "gap_fill",
+    "title": {
+     "ru": "Вставка пропущенного слова",
+     "en": "Gap fill"
+    },
+    "items": [
+     {
+      "id": "gap-strategy",
+      "title": {
+       "ru": "Что именно вписать в пропуск",
+       "en": "What exactly goes into the gap"
+      },
+      "formulation": {
+       "ru": "Пропуск может требовать предлог, вспомогательный глагол, артикль или союз. Сначала прочитайте предложение целиком и определите, какая часть речи отсутствует.",
+       "en": "A gap may need a preposition, an auxiliary verb, an article or a conjunction. Read the whole sentence first and decide which part of speech is missing."
+      },
+      "conditions": {
+       "ru": "Одно слово, без лишних элементов: если пропуск не нужен, поле остаётся пустым.",
+       "en": "One word only: when nothing is missing, the field stays empty."
+      },
+      "exceptions": {
+       "ru": "В устойчивых выражениях ответ не выводится из правила — их надо знать (be used to, there is no point in).",
+       "en": "Fixed patterns such as “be used to” and “there is no point in” must be learnt."
+      },
+      "examples": [
+       {
+        "text": "She is used to getting up early.",
+        "kind": "correct",
+        "note": {
+         "ru": "Предлог «to» — часть конструкции.",
+         "en": "The preposition “to” belongs to the pattern."
+        }
+       },
+       {
+        "text": "She is used getting up early.",
+        "kind": "wrong",
+        "note": {
+         "ru": "Без «to» конструкция распадается.",
+         "en": "Without “to” the pattern falls apart."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Как пазл со стыками: соседние слова подсказывают, какая деталь отсутствует. «Interested» всегда ждёт «in», а «depend» — «on».",
+       "en": "Like a puzzle: neighbouring words tell you which piece is missing — “interested” always asks for “in”, “depend” for “on”."
+      }
+     }
+    ]
+   },
+   {
+    "id": "extra_word",
+    "rule": "extra_word",
+    "title": {
+     "ru": "Поиск лишнего слова",
+     "en": "Extra word"
+    },
+    "items": [
+     {
+      "id": "extra-word-strategy",
+      "title": {
+       "ru": "Лишнее слово в строке",
+       "en": "The extra word in the line"
+      },
+      "formulation": {
+       "ru": "В строке ровно одно лишнее слово, чаще всего предлог, местоимение, вспомогательный глагол, артикль или второе подлежащее.",
+       "en": "Every line contains exactly one extra word — most often a preposition, a pronoun, an auxiliary verb, an article or a repeated subject."
+      },
+      "conditions": {
+       "ru": "Читайте предложение целиком: ошибка не всегда там, где «выглядит странно».",
+       "en": "Read the whole sentence: the extra word is not always where it looks suspicious."
+      },
+      "exceptions": {
+       "ru": "Иногда лишнее слово стоит в середине и без него предложение становится грамматически целым.",
+       "en": "Sometimes removing a word from the middle is what makes the sentence grammatical."
+      },
+      "examples": [
+       {
+        "text": "We discussed the plan in detail.",
+        "kind": "correct",
+        "note": {
+         "ru": "«Discuss» — без предлога.",
+         "en": "“Discuss” takes no preposition."
+        }
+       },
+       {
+        "text": "We discussed about the plan.",
+        "kind": "wrong",
+        "note": {
+         "ru": "«About» лишнее.",
+         "en": "“About” is extra."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "Как лишняя деталь в собранном пазле: всё сходится, но одна деталь не имеет места. Уберите её — и предложение станет правильным.",
+       "en": "Like a spare piece in a finished puzzle: everything fits except one piece. Remove it and the sentence becomes correct."
+      }
+     }
+    ]
+   },
+   {
+    "id": "communication",
+    "rule": "communication",
+    "title": {
+     "ru": "Чтение, реплики, социокультурный контекст",
+     "en": "Reading, replies, culture"
+    },
+    "items": [
+     {
+      "id": "replies",
+      "title": {
+       "ru": "Как реагируют в разговоре",
+       "en": "How people reply"
+      },
+      "formulation": {
+       "ru": "У устойчивых ситуаций есть готовые формулы: thank you → you are welcome; sorry → that is all right; would you like…? → yes, please / no, thank you.",
+       "en": "Fixed situations have fixed replies: thank you → you are welcome; sorry → that is all right; would you like…? → yes, please / no, thank you."
+      },
+      "conditions": {
+       "ru": "В объявлениях и инструкциях значение читается буквально: until 5 May — до 5 мая, last admission 17:30 — вход до 17:30.",
+       "en": "Notices are read literally: “until 5 May” ends the closure on that date, “last admission 17:30” means entering before 17:30."
+      },
+      "exceptions": {
+       "ru": "«How do you do?» — не вопрос о самочувствии, а приветствие при знакомстве.",
+       "en": "“How do you do?” greets a new acquaintance; it is not a question about health."
+      },
+      "examples": [
+       {
+        "text": "— Thank you very much. — You are welcome.",
+        "kind": "correct",
+        "note": {
+         "ru": "Стандартный ответ на благодарность.",
+         "en": "The standard reply to thanks."
+        }
+       },
+       {
+        "text": "— Thank you very much. — Never mind.",
+        "kind": "wrong",
+        "note": {
+         "ru": "«Never mind» отвечают на извинение, а не на благодарность.",
+         "en": "“Never mind” answers an apology, not thanks."
+        }
+       }
+      ],
+      "everyday": {
+       "ru": "В аэропорту объявление «Boarding closes 20 minutes before departure» — это не совет, а точное правило: опоздал на минуту — не пустят.",
+       "en": "At an airport, “boarding closes 20 minutes before departure” is a rule, not a piece of advice: being a minute late means not boarding."
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "checklist": [
+  {
+   "ru": "Проверьте, не изменился ли смысл: время, число, порядок слов.",
+   "en": "Check whether the meaning changed: tense, number, word order."
+  },
+  {
+   "ru": "Посмотрите на слово перед пропуском — оно подсказывает форму.",
+   "en": "Look at the word before the gap — it suggests the form."
+  },
+  {
+   "ru": "Перечитайте предложение целиком после ответа.",
+   "en": "Reread the whole sentence after answering."
+  },
+  {
+   "ru": "Отдельно проверьте предлог и артикль: их чаще всего теряют.",
+   "en": "Check the preposition and the article separately: they are the most frequent omissions."
+  },
+  {
+   "ru": "Если ответ не сходится, откройте правило из разбора ошибки.",
+   "en": "If the answer does not work out, open the rule from the mistake analysis."
+  }
+ ],
+ "periods": {
+  "released": [
+   2026
+  ],
+  "planned": [
+   2021,
+   2022,
+   2023,
+   2024,
+   2025
+  ]
+ },
+ "generators": {
+  "tenses": 8,
+  "modals": 0,
+  "passive": 0,
+  "conditionals": 0,
+  "nonfinite": 0,
+  "articles": 0,
+  "prepositions": 8,
+  "pronouns_numerals": 0,
+  "noun_adj_adv": 0,
+  "word_formation": 8,
+  "gap_fill": 0,
+  "extra_word": 0,
+  "communication": 0
+ }
+}

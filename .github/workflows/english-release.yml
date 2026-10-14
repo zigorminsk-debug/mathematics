@@ -1,0 +1,37 @@
+name: Release (English)
+
+# Recovery/manual and explicit-tag entry points use the SAME complete English CI
+# gates and the SAME artifacts as automatic branch publication; no unverified
+# rebuilds. Tags of other subjects (v* mathematics, physics-v*) never reach here.
+on:
+  push:
+    tags: ['english-v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Optional exact tag; leave empty for automatic increasing version'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+  actions: read
+
+# Тот же outer lock, что у доверенного branch CI английского. Ключ отличается от
+# математического и физического, поэтому предметные очереди не блокируют друг
+# друга. Reusable CI вызывается с release_request=true и берёт свой inner group.
+concurrency:
+  group: ctenglish-release-pipeline
+  queue: max
+  cancel-in-progress: false
+
+jobs:
+  build_verify_publish:
+    name: Build, verify and release (English)
+    if: ${{ github.repository == 'zigorminsk-debug/mathematics' && (github.ref_type == 'branch' || startsWith(github.ref, 'refs/tags/english-v')) }}
+    uses: ./.github/workflows/english-ci.yml
+    with:
+      publish: true
+      release_request: true
+      tag: ${{ github.ref_type == 'tag' && github.ref_name || inputs.tag }}

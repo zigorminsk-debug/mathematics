@@ -1,0 +1,74 @@
+{
+ "contentVersion": "2026.10.1",
+ "schema": 1,
+ "subject": "english",
+ "package": "by.ziv.ctenglish",
+ "app": "CTEnglishTutor",
+ "years": [
+  2026
+ ],
+ "counts": {
+  "bank": 105,
+  "practice": 65,
+  "analogous": 39,
+  "choice": 68,
+  "typed": 37,
+  "lessons": 13,
+  "rules": 13,
+  "figures": 5,
+  "topics": 13
+ },
+ "parts": {
+  "A": 18,
+  "B": 22
+ },
+ "minutes": 120,
+ "author": "Zakharevich Igor",
+ "repo": "https://github.com/zigorminsk-debug/mathematics",
+ "disclosure": "Авторские тренировочные наборы этого приложения не являются официальными материалами РИКЗ и не выдаются за них. Формат подготовки повторяет структуру теста по английскому языку (18 A + 22 B, 120 минут), но задания составлены автором приложения.",
+ "structureSource": "РИКЗ, «Перечень и коды учебных предметов …», форма № 3, Английский язык: 18 A + 22 B = 40 заданий, 120 минут — https://result.rikc.by/ru/documents/filesofregpunkts/rce_2025/form__3.pdf (проверено 2026-10-14)",
+ "updatePolicy": "subject-scoped releases API; no global /latest/download",
+ "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/download/english-v2026.10.1",
+ "periods": {
+  "released": [
+   2026
+  ],
+  "planned": [
+   2021,
+   2022,
+   2023,
+   2024,
+   2025
+  ]
+ },
+ "files": {
+  "analogous.json": {
+   "sha256": "2d5d981e9fcfd0ef82544412ae1ffb69f6209136a3e87b68eaa0c4f08b0c84b9",
+   "bytes": 37278
+  },
+  "answer_vectors.json": {
+   "sha256": "5f37c53be93d3ca82e3289c7f976c798b6f38a467397079d1d9c11dfa0fe7a6d",
+   "bytes": 508369
+  },
+  "bank.json": {
+   "sha256": "744846418d6c68b7138589faf3c98b4e4a98e06367e8913c32b272d5196a7629",
+   "bytes": 99586
+  },
+  "mistakes.json": {
+   "sha256": "43abb4c24aceae498876f579955ab710865072b13682a96dbdfd7d5feac08af4",
+   "bytes": 39596
+  },
+  "rules.json": {
+   "sha256": "abc9f11f0ff7a012c65a2cfb1b0dcda7c47901b96244b72cff3e80d8d2fcc7a3",
+   "bytes": 32018
+  },
+  "topics.json": {
+   "sha256": "f247a8575dbfa8c3225545ec55953cb9122cec5a0850fc58534d62c34be304af",
+   "bytes": 69393
+  },
+  "ui_strings.json": {
+   "sha256": "49f5c08d146df65a226a58aa321f817adf663607b19dd9ac6d91d4c1abd05590",
+   "bytes": 13319
+  }
+ }
+}

@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """tools/sync_assets.py — copy the shared web interface and the content banks
-into both applications.
+into both applications **of the active subject** (``tools/subject.py``).
 
-    webapp/*            → windows/web/                         (embedded with go:embed)
-    webapp/*            → android/app/src/main/assets/webapp/  (WebViewAssetLoader)
-    dist/content/*.json → <both>/content/                      (bank, formulas, ui, ...)
+    <subject>/webapp/*            → <subject>/windows/web/                (go:embed)
+    <subject>/webapp/*            → <subject>/android/…/assets/webapp/    (WebViewAssetLoader)
+    <subject>/dist/content/*.json → <both>/content/                       (bank, rules, ui, …)
 
-Run it locally after editing ``webapp/`` or the content sources::
+The exact targets come from the subject profile (``SYNC_TARGETS``,
+``SYNC_EXTRA``), so physics keeps its historical layout in the repository root
+while the English trainer syncs inside ``english/``. Run it locally after editing
+``webapp/`` or the content sources::
 
     python3 tools/build_content.py && python3 tools/sync_assets.py
 
@@ -23,24 +26,19 @@ import shutil
 import sys
 from pathlib import Path
 
+import subject  # noqa: E402  (профиль предмета: CT_SUBJECT, по умолчанию physics)
+
 ROOT = Path(__file__).resolve().parent.parent
-WEBAPP = ROOT / "webapp"
-CONTENT = ROOT / "dist" / "content"
+SUBJECT_ROOT = Path(subject.SUBJECT_ROOT)
+WEBAPP = SUBJECT_ROOT / "webapp"
+CONTENT = SUBJECT_ROOT / "dist" / "content"
 
-TARGETS = [
-    ("windows", ROOT / "windows" / "web"),
-    ("android", ROOT / "android" / "app" / "src" / "main" / "assets" / "webapp"),
-]
+TARGETS = [(label, Path(target)) for label, target in subject.SYNC_TARGETS]
 
-#: the shared answer-checker vectors, unit table and banks are asserted by the
-#: Android unit tests too (parity of Python, JavaScript and Kotlin)
-ANDROID_TEST_RESOURCES = ROOT / "android" / "app" / "src" / "test" / "resources"
-EXTRA_FILES = [
-    (CONTENT / "answer_vectors.json", ANDROID_TEST_RESOURCES / "answer_vectors.json"),
-    (CONTENT / "bank.json", ANDROID_TEST_RESOURCES / "bank.json"),
-    (CONTENT / "analogous.json", ANDROID_TEST_RESOURCES / "analogous.json"),
-    (ROOT / "tests" / "unit_vectors.json", ANDROID_TEST_RESOURCES / "unit_vectors.json"),
-]
+#: the shared answer-checker vectors and banks are asserted by the Android unit
+#: tests too (parity of Python, JavaScript and Kotlin); the pairs come from the
+#: subject profile so each subject ships exactly its own test fixtures
+EXTRA_FILES = [(Path(source), Path(target)) for source, target in subject.SYNC_EXTRA]
 
 SKIP_NAMES = {".DS_Store", "Thumbs.db"}
 
@@ -111,7 +109,7 @@ def main() -> int:
         print("dist/content is missing — run tools/build_content.py first", file=sys.stderr)
         return 1
 
-    print("Asset sync")
+    print(f"Asset sync ({subject.SUBJECT})")
     problems: list[str] = []
     for src, dst in EXTRA_FILES:
         if args.check:

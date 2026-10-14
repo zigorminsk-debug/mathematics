@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Репетитор ЦТ: Английский язык</title>
+<!-- Адаптивная вёрстка для телефона и для окна Windows; без сети и без CDN. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Английский тренажёр для подготовки к ЦТ (Беларусь): авторский вариант 18 A + 22 B на 120 минут, тренировка по темам, справочник правил с бытовыми объяснениями, разбор ошибок и статистика. Работает офлайн.">
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <button class="brand" id="brand" type="button" aria-label="На главную">
+    <span class="brand-mark">EN</span>
+    <span id="brand-name">Репетитор ЦТ: Английский язык</span>
+  </button>
+  <div class="topbar-actions">
+    <button class="icon-btn" id="btn-settings" type="button" title="Настройки" aria-label="Настройки">⚙️</button>
+    <button class="icon-btn lang" id="lang-toggle" type="button" title="Язык / Language" aria-label="Язык / Language">EN</button>
+  </div>
+</header>
+
+<nav id="mainnav" class="mainnav" aria-label="Разделы"></nav>
+
+<main id="view" class="view" tabindex="-1"></main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="muted small">Захаревич Игорь · Zakharevich Igor</span>
+    <a class="small" href="mailto:ziv@csl.by">ziv@csl.by</a>
+    <a class="small" href="tel:+3753371412">+375 33 714 12</a>
+    <a class="small" href="https://wa.me/3753371412">WhatsApp</a>
+    <span class="muted small" id="app-folder"></span>
+  </div>
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="sheet"></div>
+</div>
+
+<script src="core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

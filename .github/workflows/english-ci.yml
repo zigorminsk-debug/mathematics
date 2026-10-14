@@ -1,0 +1,374 @@
+name: CI (English)
+
+# Subject: ENGLISH (tools/subject.py → tools/subject_english.py). Every push
+# builds, verifies and publishes the CTEnglishTutor APK/EXEs plus the content
+# feed under english-v* tags with make_latest=false, so the repository-wide
+# latest keeps serving mathematics and the physics releases stay untouched.
+# PR/fork runs only test; the pipeline uses its own lock name, so the English
+# queue never cancels or blocks the math and physics queues.
+# queue:max preserves up to 100 pending runs; ordinary single-slot concurrency
+# would silently cancel intermediate pushes. A shared lock covers planning
+# through publication. Reusable Release calls use a DIFFERENT child lock.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish after all checks (false = test only)'
+        type: boolean
+        default: true
+      tag:
+        description: 'Optional exact tag; leave empty for automatic version'
+        type: string
+        default: ''
+  workflow_call:
+    inputs:
+      publish:
+        type: boolean
+        default: false
+      tag:
+        type: string
+        default: ''
+      release_request:
+        description: 'The Release caller already owns the publication lock'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+
+defaults:
+  run:
+    shell: bash  # explicit bash enables -e -o pipefail, including go vet | sed
+
+concurrency:
+  group: ${{ inputs.release_request && format('english-ci-release-child-{0}', github.run_id) || (github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && github.ref_type == 'branch') && 'ctenglish-release-pipeline' || format('english-ci-{0}-{1}', github.repository, github.ref) }}
+  queue: max
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Resolve effective English build version
+    runs-on: ubuntu-24.04
+    env:
+      CT_SUBJECT: english
+    outputs:
+      version: ${{ steps.plan.outputs.version }}
+      source_version: ${{ steps.plan.outputs.source_version }}
+      publish: ${{ steps.plan.outputs.publish }}
+      already_published: ${{ steps.plan.outputs.already_published }}
+      previous_tag: ${{ steps.plan.outputs.previous_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Allocate a unique increasing version; PR builds stay unpublished
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_TAG: ${{ inputs.tag }}
+          ALLOW_PUBLICATION: ${{ github.repository == 'zigorminsk-debug/mathematics' && github.event_name != 'pull_request' && (github.ref_type == 'branch' || (inputs.release_request && startsWith(github.ref, 'refs/tags/english-v'))) && (github.event_name == 'push' || inputs.publish == true) }}
+        run: |
+          if [ "$ALLOW_PUBLICATION" = "true" ]; then
+            python3 tools/release_plan.py --repo "$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
+              --tag "$REQUESTED_TAG" --output "$GITHUB_OUTPUT"
+          else
+            python3 tools/release_plan.py --local --output "$GITHUB_OUTPUT"
+          fi
+
+  content:
+    needs: prepare
+    env:
+      CT_SUBJECT: english
+      BUILD_VERSION: ${{ needs.prepare.outputs.version }}
+    name: English content & web (verify, parity, assets)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verify every authored task and the answer policy
+        run: python3 english/tools/build_content.py
+
+      # Сборка английского языка не имеет права трогать деревья математики и
+      # физики: шаг выше уже собирал английский контент, здесь проверяем, что
+      # снаружи english/ ничего не изменилось.
+      - name: The mathematics and physics trees stay untouched by the English build
+        run: |
+          if ! git diff --exit-code -- android webapp windows dist content_src tools tests VERSION docs; then
+            echo "::error::английская сборка изменила файлы математики или физики"
+            git --no-pager diff --stat -- android webapp windows dist content_src tools tests VERSION docs
+            exit 1
+          fi
+
+      # Общая машинерия (tools/) остаётся исправной: сборка физики по-прежнему
+      # воспроизводима и ничего не переписывает в своём дереве.
+      - name: The physics build stays reproducible with the shared tooling
+        env:
+          CT_SUBJECT: physics
+        run: |
+          python3 tools/build_content.py
+          python3 tools/sync_assets.py
+          if ! git diff --exit-code -- android dist content_src tools tests VERSION; then
+            echo "::error::сборка физики изменила собственное дерево — общий инструментарий сломан"
+            git --no-pager diff --stat -- android dist content_src tools tests VERSION
+            exit 1
+          fi
+          git checkout -- . 2>/dev/null || true
+
+      # Иконка рисуется кодом (tools/make_icon.py): растр, SVG и Android-векторы
+      # обязаны совпадать, иначе знак приложения разъедется по платформам.
+      - name: Application icon (speech bubble «EN») still matches its generator
+        run: python3 english/tools/make_icon.py --check
+
+      - name: Ensure the committed assets match the sources
+        run: |
+          if ! CT_SUBJECT=english python3 tools/sync_assets.py --check; then
+            echo "::error::копии интерфейса/банка устарели — запустите CT_SUBJECT=english python3 english/tools/build_content.py && CT_SUBJECT=english python3 tools/sync_assets.py"
+            exit 1
+          fi
+          if ! git diff --exit-code -- english/android/app/src/main/assets english/android/app/src/main/res english/windows/web; then
+            echo "::error::generated source-version assets are not committed; regenerate and sync before pushing"
+            exit 1
+          fi
+
+      - name: Apply the effective version to the verified content
+        run: |
+          CT_SUBJECT=english python3 tools/release_plan.py --apply-version "$BUILD_VERSION"
+          CT_SUBJECT=english python3 english/tools/build_content.py
+          CT_SUBJECT=english python3 tools/sync_assets.py
+
+      - name: Install test and syntax dependencies
+        run: python3 -m pip install --quiet -r requirements-dev.txt
+
+      - name: JavaScript syntax check
+        run: |
+          node --check english/webapp/core.js
+          node --check english/webapp/app.js
+
+      - name: Answer-checker parity (Python ↔ JS ↔ Kotlin vectors)
+        run: node english/tests/answer_parity.js
+
+      - name: Content schema, periods and interface strings
+        run: node english/tests/content_schema.js
+
+      - name: Repository tests (shared gates — subject profiles, publishing, icons)
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Syntax gate (Go, Kotlin, Kotlin DSL)
+        run: |
+          CT_SUBJECT=english python3 tools/check_syntax.py --require
+
+      - name: English icon test (bubble «EN», copies, launcher layers)
+        run: python3 english/tests/test_icon.py
+
+      - name: Interface journeys in jsdom (UI, Android bridge, Windows host)
+        run: |
+          npm install --no-save jsdom
+          node english/tests/ui_smoke.js
+
+      - name: Upload the English content bank
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-bank
+          path: english/dist/content/
+          if-no-files-found: error
+
+  windows:
+    needs: prepare
+    env:
+      CT_SUBJECT: english
+      BUILD_VERSION: ${{ needs.prepare.outputs.version }}
+    name: Windows app (Go)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: false  # stdlib-only app has no go.sum/module cache to restore
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Отметка времени сборки EXE = время коммита: сборки воспроизводимы.
+      - name: Apply the same effective version used by the content job
+        run: CT_SUBJECT=english python3 tools/release_plan.py --apply-version "$BUILD_VERSION"
+
+      - name: Reproducible build stamp (commit time)
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - name: Sync the shared interface into english/windows/web
+        run: |
+          CT_SUBJECT=english python3 english/tools/build_content.py
+          CT_SUBJECT=english python3 tools/sync_assets.py
+
+      - name: go vet
+        working-directory: english/windows
+        run: go vet ./... 2>&1 | sed 's/^/::error::/'
+
+      - name: go test
+        working-directory: english/windows
+        run: |
+          if ! go test ./... -v > /tmp/go-test.log 2>&1; then
+            grep -nE '(^| )--- FAIL|\.go:[0-9]+:|^(FAIL|panic)|expected|Error Trace' /tmp/go-test.log \
+              | head -40 | sed 's/^/::error::/'
+            tail -60 /tmp/go-test.log
+            exit 1
+          fi
+          tail -5 /tmp/go-test.log
+
+      - name: Build (windows/amd64)
+        working-directory: english/windows
+        run: |
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath \
+            -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u -d @${SOURCE_DATE_EPOCH} +%Y%m%d%H%M)" \
+            -o ../dist/CTEnglishTutor-amd64.exe .
+
+      - name: Build (windows/arm64)
+        working-directory: english/windows
+        run: |
+          CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -trimpath \
+            -ldflags "-s -w -H=windowsgui -X main.buildStamp=$(date -u -d @${SOURCE_DATE_EPOCH} +%Y%m%d%H%M)" \
+            -o ../dist/CTEnglishTutor-arm64.exe .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: english/dist/*.exe
+          if-no-files-found: error
+
+  android:
+    needs: prepare
+    env:
+      CT_SUBJECT: english
+      BUILD_VERSION: ${{ needs.prepare.outputs.version }}
+      PREVIOUS_TAG: ${{ needs.prepare.outputs.previous_tag }}
+    name: Android app (APK)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Apply the same effective version used by the content job
+        run: CT_SUBJECT=english python3 tools/release_plan.py --apply-version "$BUILD_VERSION"
+
+      - name: Reproducible build stamp (commit time)
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - name: Regenerate the interface and content
+        run: |
+          CT_SUBJECT=english python3 english/tools/build_content.py
+          CT_SUBJECT=english python3 tools/sync_assets.py
+
+      - name: The permanent English signing key still matches the committed fingerprint
+        run: CT_SUBJECT=english python3 tools/check_signature.py --require --keystore english/android/keystore/ctenglish-release.p12
+
+      - name: Unit tests (answer checker parity, Kotlin)
+        working-directory: english/android
+        run: |
+          if ! gradle --no-daemon testDebugUnitTest > /tmp/gradle-test.log 2>&1; then
+            grep -nE '^e: |FAILED|expected:|AssertionError|Caused by|error:' /tmp/gradle-test.log \
+              | head -40 | sed 's/^/::error::/'
+            tail -80 /tmp/gradle-test.log
+            exit 1
+          fi
+          tail -5 /tmp/gradle-test.log
+
+      - name: Assemble debug APK
+        working-directory: english/android
+        run: |
+          if ! gradle --no-daemon assembleDebug > /tmp/gradle-build.log 2>&1; then
+            grep -nE '^e: |FAILED|error:|Caused by' /tmp/gradle-build.log | head -40 | sed 's/^/::error::/'
+            tail -80 /tmp/gradle-build.log
+            exit 1
+          fi
+          tail -5 /tmp/gradle-build.log
+
+      - name: Assemble signed release APK (constant key, updates install over)
+        working-directory: english/android
+        run: |
+          if ! gradle --no-daemon assembleRelease > /tmp/gradle-release.log 2>&1; then
+            grep -nE '^e: |FAILED|error:|Caused by' /tmp/gradle-release.log | head -40 | sed 's/^/::error::/'
+            tail -80 /tmp/gradle-release.log
+            exit 1
+          fi
+          tail -5 /tmp/gradle-release.log
+
+      - name: Verify the release APK is signed with the permanent key
+        working-directory: english/android
+        run: |
+          CT_SUBJECT=english python3 ../../tools/check_signature.py --require \
+            --apk app/build/outputs/apk/release/app-release.apk \
+            --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
+
+      - name: Verify the release APK package and VERSION-derived versionCode
+        working-directory: english/android
+        run: |
+          CT_SUBJECT=english python3 ../../tools/check_apk_update.py \
+            --apk app/build/outputs/apk/release/app-release.apk \
+            --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2"
+
+      - name: Verify signature and increasing code against the previous published APK
+        if: ${{ needs.prepare.outputs.publish == 'true' && needs.prepare.outputs.already_published != 'true' && env.PREVIOUS_TAG != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "$PREVIOUS_TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern engtutor.apk --dir previous-release
+          CT_SUBJECT=english python3 tools/check_signature.py --require --apk previous-release/engtutor.apk \
+            --tool "$ANDROID_HOME/build-tools/34.0.0/apksigner"
+          CT_SUBJECT=english python3 tools/check_apk_update.py \
+            --apk english/android/app/build/outputs/apk/release/app-release.apk \
+            --previous previous-release/engtutor.apk --tool "$ANDROID_HOME/build-tools/34.0.0/aapt2"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-release-apk
+          path: english/android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-debug-apk
+          path: english/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+  publish:
+    name: Publish the verified English builds automatically
+    needs: [prepare, content, windows, android]
+    if: ${{ success() && github.repository == 'zigorminsk-debug/mathematics' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && needs.prepare.outputs.publish == 'true' && needs.prepare.outputs.already_published != 'true' }}
+    permissions:
+      contents: write
+      actions: read
+    uses: ./.github/workflows/publish.yml
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      source_version: ${{ needs.prepare.outputs.source_version }}
+      subject: english

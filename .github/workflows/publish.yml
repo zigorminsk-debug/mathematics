@@ -2,6 +2,9 @@ name: Publish verified artifacts
 
 # Callable only after all build/check jobs. Never triggered from PR artifacts,
 # never recompiles native binaries, never overwrites a published release.
+# The subject (tools/subject.py) decides the tag family, package, APK asset name
+# and signing identity; publications always use make_latest=false so the
+# repository-wide latest keeps serving mathematics.
 on:
   workflow_call:
     inputs:
@@ -11,6 +14,11 @@ on:
       source_version:
         required: true
         type: string
+      subject:
+        description: 'Which tutor this release belongs to (physics | english)'
+        required: false
+        type: string
+        default: 'physics'
 
 permissions:
   contents: write
@@ -22,9 +30,11 @@ defaults:
 
 jobs:
   publish:
-    name: Publish the verified physics release (make_latest=false)
+    name: Publish the verified ${{ inputs.subject }} release (make_latest=false)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    env:
+      CT_SUBJECT: ${{ inputs.subject }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,9 +57,10 @@ jobs:
         with:
           name: android-release-apk
           path: staging/android
-      - name: Name the published APK exactly as the user asked (phyzics.apk)
+      - name: Name the published APK exactly as this product asks
         run: |
-          mv staging/android/app-release.apk staging/android/phyzics.apk
+          asset=$(python3 -c "import sys; sys.path.insert(0, 'tools'); import subject; print(subject.APK_ASSET)")
+          mv staging/android/app-release.apk "staging/android/$asset"
           ls -l staging/android
       - name: Verify inventory, stage draft, publish without switching repository latest
         env:

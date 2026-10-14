@@ -1,0 +1,1570 @@
+{
+ "meta": {
+  "contentVersion": "2026.10.1",
+  "schema": 1,
+  "subject": "english",
+  "package": "by.ziv.ctenglish",
+  "app": "CTEnglishTutor",
+  "years": [
+   2026
+  ],
+  "counts": {
+   "bank": 105,
+   "practice": 65,
+   "analogous": 39,
+   "choice": 68,
+   "typed": 37,
+   "lessons": 13,
+   "rules": 13,
+   "figures": 5,
+   "topics": 13
+  },
+  "parts": {
+   "A": 18,
+   "B": 22
+  },
+  "minutes": 120,
+  "author": "Zakharevich Igor",
+  "repo": "https://github.com/zigorminsk-debug/mathematics",
+  "disclosure": "Авторские тренировочные наборы этого приложения не являются официальными материалами РИКЗ и не выдаются за них. Формат подготовки повторяет структуру теста по английскому языку (18 A + 22 B, 120 минут), но задания составлены автором приложения.",
+  "structureSource": "РИКЗ, «Перечень и коды учебных предметов …», форма № 3, Английский язык: 18 A + 22 B = 40 заданий, 120 минут — https://result.rikc.by/ru/documents/filesofregpunkts/rce_2025/form__3.pdf (проверено 2026-10-14)"
+ },
+ "tasks": [
+  {
+   "id": "pool-tenses-6",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Water ___ at 100 degrees Celsius.",
+   "answer": {
+    "value": "boils"
+   },
+   "accepted": [
+    "boils"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.present_simple"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "boils",
+    "is boiling",
+    "boiled",
+    "has boiled",
+    "will boil"
+   ],
+   "correction": {
+    "ru": "Постоянный закон природы — Present Simple.",
+    "en": "A permanent law of nature takes Present Simple."
+   }
+  },
+  {
+   "id": "pool-tenses-7",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He ___ the report for three hours already.",
+   "answer": {
+    "value": "has been writing"
+   },
+   "accepted": [
+    "has been writing"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.present_perfect_continuous"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "has been writing",
+    "writes",
+    "wrote",
+    "is writing",
+    "had written"
+   ],
+   "correction": {
+    "ru": "Длительность до момента речи с «already» — Present Perfect Continuous.",
+    "en": "A duration up to now with “already” takes Present Perfect Continuous."
+   }
+  },
+  {
+   "id": "pool-tenses-8",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "While my sister ___ TV, I was doing my homework.",
+   "answer": {
+    "value": "was watching"
+   },
+   "accepted": [
+    "was watching"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.past_continuous"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "was watching",
+    "watched",
+    "watches",
+    "has watched",
+    "is watching"
+   ],
+   "correction": {
+    "ru": "Фоновое действие в прошлом — Past Continuous.",
+    "en": "A background action in the past takes Past Continuous."
+   }
+  },
+  {
+   "id": "pool-modals-6",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "___ you help me with this box, please?",
+   "answer": {
+    "value": "Could"
+   },
+   "accepted": [
+    "Could"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.request"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "Could",
+    "Must",
+    "Need",
+    "Should",
+    "Shall"
+   ],
+   "correction": {
+    "ru": "Вежливая просьба — «Could you …?».",
+    "en": "A polite request takes “Could you …?”."
+   }
+  },
+  {
+   "id": "pool-modals-7",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "We ___ hurry: the train leaves in ten minutes.",
+   "answer": {
+    "value": "had better"
+   },
+   "accepted": [
+    "had better"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.advice"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "had better",
+    "would rather",
+    "used to",
+    "are able to",
+    "may"
+   ],
+   "correction": {
+    "ru": "Настоятельный совет с угрозой последствий — «had better».",
+    "en": "Urgent advice with a consequence takes “had better”."
+   }
+  },
+  {
+   "id": "pool-modals-8",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He ___ have forgotten about the meeting; he never misses them.",
+   "answer": {
+    "value": "cannot"
+   },
+   "accepted": [
+    "cannot"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.deduction"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "cannot",
+    "must",
+    "should",
+    "need not",
+    "may not"
+   ],
+   "correction": {
+    "ru": "Уверенное «не может быть» — «cannot have + V3».",
+    "en": "A confident “it is impossible” takes “cannot have + V3”."
+   }
+  },
+  {
+   "id": "pool-passive-6",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "English ___ all over the world.",
+   "answer": {
+    "value": "is spoken"
+   },
+   "accepted": [
+    "is spoken"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.present_simple"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "is spoken",
+    "speaks",
+    "is speaking",
+    "spoke",
+    "has spoken"
+   ],
+   "correction": {
+    "ru": "Язык «говорят», а не он говорит: «is spoken».",
+    "en": "A language is spoken by people: “is spoken”."
+   }
+  },
+  {
+   "id": "pool-passive-7",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "We ___ shown the documents before the meeting starts.",
+   "answer": {
+    "value": "will be"
+   },
+   "accepted": [
+    "will be"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.future_simple"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "will be",
+    "will",
+    "are",
+    "were",
+    "have been"
+   ],
+   "correction": {
+    "ru": "Действие до момента в будущем — «will be shown».",
+    "en": "An action before a future moment takes “will be shown”."
+   }
+  },
+  {
+   "id": "pool-passive-8",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The house ___ painted when we came.",
+   "answer": {
+    "value": "was being"
+   },
+   "accepted": [
+    "was being"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.past_continuous"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "was being",
+    "was",
+    "has been",
+    "is being",
+    "had been"
+   ],
+   "correction": {
+    "ru": "Процесс в прошлом в пассиве — «was being + V3».",
+    "en": "A past process in the passive takes “was being + V3”."
+   }
+  },
+  {
+   "id": "pool-conditionals-6",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "I wish I ___ more time yesterday.",
+   "answer": {
+    "value": "had had"
+   },
+   "accepted": [
+    "had had"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.wish"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "had had",
+    "have",
+    "had",
+    "would have",
+    "will have"
+   ],
+   "correction": {
+    "ru": "Сожаление о прошлом — «I wish I had + V3».",
+    "en": "Regret about the past takes “I wish I had + V3”."
+   }
+  },
+  {
+   "id": "pool-conditionals-7",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The teacher told us that water ___ at 100 °C.",
+   "answer": {
+    "value": "boils"
+   },
+   "accepted": [
+    "boils"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.reported_speech"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "boils",
+    "boiled",
+    "would boil",
+    "has boiled",
+    "was boiling"
+   ],
+   "correction": {
+    "ru": "Всеобщий закон в косвенной речи не сдвигается.",
+    "en": "A universal law does not shift in reported speech."
+   }
+  },
+  {
+   "id": "pool-conditionals-8",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Unless you leave now, you ___ the train.",
+   "answer": {
+    "value": "will miss"
+   },
+   "accepted": [
+    "will miss"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.first"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "will miss",
+    "miss",
+    "missed",
+    "would miss",
+    "have missed"
+   ],
+   "correction": {
+    "ru": "«Unless» = «if not»: главная часть в будущем.",
+    "en": "“Unless” means “if not”, so the main clause takes the future."
+   }
+  },
+  {
+   "id": "pool-nonfinite-6",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "It is important ___ the rules.",
+   "answer": {
+    "value": "to follow"
+   },
+   "accepted": [
+    "to follow"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.infinitive_after_verb"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "to follow",
+    "following",
+    "follow",
+    "followed",
+    "follows"
+   ],
+   "correction": {
+    "ru": "Конструкция «It is important + инфинитив».",
+    "en": "“It is important” takes the infinitive."
+   }
+  },
+  {
+   "id": "pool-nonfinite-7",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Do you mind ___ the window?",
+   "answer": {
+    "value": "opening"
+   },
+   "accepted": [
+    "opening"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.gerund_after_verb"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "opening",
+    "to open",
+    "open",
+    "opened",
+    "opens"
+   ],
+   "correction": {
+    "ru": "«Do you mind …?» — герундий.",
+    "en": "“Do you mind …?” takes the gerund."
+   }
+  },
+  {
+   "id": "pool-nonfinite-8",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "They left without ___ goodbye.",
+   "answer": {
+    "value": "saying"
+   },
+   "accepted": [
+    "saying"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.gerund_after_preposition"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "saying",
+    "to say",
+    "say",
+    "said",
+    "says"
+   ],
+   "correction": {
+    "ru": "После предлога «without» — герундий.",
+    "en": "The preposition “without” takes the gerund."
+   }
+  },
+  {
+   "id": "pool-articles-6",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "They live in ___ small village near Grodno.",
+   "answer": {
+    "value": "a"
+   },
+   "accepted": [
+    "a"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "articles.indefinite"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "a",
+    "the",
+    "an",
+    "—",
+    "some"
+   ],
+   "correction": {
+    "ru": "Первое упоминание исчисляемого в единственном числе — «a».",
+    "en": "A first mention of a countable singular noun takes “a”."
+   }
+  },
+  {
+   "id": "pool-articles-7",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "___ Netherlands is a country in Western Europe.",
+   "answer": {
+    "value": "The"
+   },
+   "accepted": [
+    "The"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "articles.geographical"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "The",
+    "A",
+    "An",
+    "—",
+    "Some"
+   ],
+   "correction": {
+    "ru": "Названия с «Netherlands» употребляются с «the».",
+    "en": "The name “Netherlands” is used with “the”."
+   }
+  },
+  {
+   "id": "pool-articles-8",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "We went to school ___ foot.",
+   "answer": {
+    "value": "on"
+   },
+   "accepted": [
+    "on"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "articles.zero",
+    "prepositions.collocation"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "on",
+    "by",
+    "in",
+    "with",
+    "at"
+   ],
+   "correction": {
+    "ru": "«On foot» — устойчивое выражение.",
+    "en": "“On foot” is a fixed expression."
+   }
+  },
+  {
+   "id": "pool-prepositions-6",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The book was written ___ Mark Twain.",
+   "answer": {
+    "value": "by"
+   },
+   "accepted": [
+    "by"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.agent"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "by",
+    "with",
+    "from",
+    "of",
+    "on"
+   ],
+   "correction": {
+    "ru": "Автор действия в пассиве — «by».",
+    "en": "The agent in the passive takes “by”."
+   }
+  },
+  {
+   "id": "pool-prepositions-7",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Please, fill ___ this form.",
+   "answer": {
+    "value": "in"
+   },
+   "accepted": [
+    "in"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.phrasal_verb"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "in",
+    "on",
+    "at",
+    "for",
+    "with"
+   ],
+   "correction": {
+    "ru": "Фразовый глагол «fill in» — заполнить бланк.",
+    "en": "The phrasal verb “fill in” means to complete a form."
+   }
+  },
+  {
+   "id": "pool-prepositions-8",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "They arrived ___ the airport at noon.",
+   "answer": {
+    "value": "at"
+   },
+   "accepted": [
+    "at"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.place"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "at",
+    "in",
+    "on",
+    "to",
+    "into"
+   ],
+   "correction": {
+    "ru": "Точка на карте (вокзал, аэропорт) — «at».",
+    "en": "A point on the map (airport, station) takes “at”."
+   }
+  },
+  {
+   "id": "pool-pronouns-6",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "___ of the two roads leads to the lake.",
+   "answer": {
+    "value": "Neither"
+   },
+   "accepted": [
+    "Neither"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.quantifiers"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "Neither",
+    "Both",
+    "All",
+    "Each of",
+    "None"
+   ],
+   "correction": {
+    "ru": "Выбор из двух — «neither» (ни один из двух).",
+    "en": "A choice out of two takes “neither”."
+   }
+  },
+  {
+   "id": "pool-pronouns-7",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "It was ___ who called you yesterday.",
+   "answer": {
+    "value": "me"
+   },
+   "accepted": [
+    "me"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.case"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "me",
+    "I",
+    "myself",
+    "mine",
+    "my"
+   ],
+   "correction": {
+    "ru": "В разговорной норме после «It was …» — «me».",
+    "en": "Informal standard after “It was …” is “me”."
+   }
+  },
+  {
+   "id": "pool-pronouns-8",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Both ___ the boys play the guitar.",
+   "answer": {
+    "value": "of"
+   },
+   "accepted": [
+    "of"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.quantifiers"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "of",
+    "from",
+    "with",
+    "in",
+    "at"
+   ],
+   "correction": {
+    "ru": "«Both of the …» — обязательный предлог.",
+    "en": "“Both of the …” requires the preposition."
+   }
+  },
+  {
+   "id": "pool-noun-6",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The weather today is ___ than yesterday.",
+   "answer": {
+    "value": "worse"
+   },
+   "accepted": [
+    "worse"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.comparison"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "worse",
+    "worst",
+    "bad",
+    "badly",
+    "more bad"
+   ],
+   "correction": {
+    "ru": "Сравнение: «worse than».",
+    "en": "A comparative form is “worse than”."
+   }
+  },
+  {
+   "id": "pool-noun-7",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Physics ___ a difficult subject.",
+   "answer": {
+    "value": "is"
+   },
+   "accepted": [
+    "is"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.subject_verb"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "is",
+    "are",
+    "were",
+    "be",
+    "have been"
+   ],
+   "correction": {
+    "ru": "Названия наук согласуются в единственном числе.",
+    "en": "Names of sciences take a singular verb."
+   }
+  },
+  {
+   "id": "pool-noun-8",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He works ___ than his colleague.",
+   "answer": {
+    "value": "harder"
+   },
+   "accepted": [
+    "harder"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.adverb"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "harder",
+    "hardly",
+    "hard",
+    "hardest",
+    "more hardly"
+   ],
+   "correction": {
+    "ru": "«Hardly» — «едва», а не «усердно».",
+    "en": "“Hardly” means “almost not”, not “hard”."
+   }
+  },
+  {
+   "id": "pool-formation-6",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "He is a very ___ (AMBITION) young man.",
+   "answer": {
+    "value": "ambitious"
+   },
+   "accepted": [
+    "ambitious"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_adjective"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "AMBITION",
+   "correction": {
+    "ru": "Перед существительным нужно прилагательное: ambition → ambitious.",
+    "en": "Before a noun an adjective is required: ambition → ambitious."
+   }
+  },
+  {
+   "id": "pool-formation-7",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "The results were ___ (DISAPPOINT).",
+   "answer": {
+    "value": "disappointing"
+   },
+   "accepted": [
+    "disappointing"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.participle_adjective"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "DISAPPOINT",
+   "correction": {
+    "ru": "Результаты «разочаровывают»: disappointing (не disappointed).",
+    "en": "Results are disappointing; people feel disappointed."
+   }
+  },
+  {
+   "id": "pool-formation-8",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "Their ___ (FRIEND) helped us a lot.",
+   "answer": {
+    "value": "friendliness"
+   },
+   "accepted": [
+    "friendliness"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_noun"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "FRIEND",
+   "correction": {
+    "ru": "Нужно абстрактное существительное: friend → friendliness.",
+    "en": "An abstract noun is required: friend → friendliness."
+   }
+  },
+  {
+   "id": "pool-gap-6",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "He was so tired that he ___ not continue.",
+   "answer": {
+    "value": "could"
+   },
+   "accepted": [
+    "could"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.modal"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "correction": {
+    "ru": "Неспособность в прошлом — «could not».",
+    "en": "Past inability takes “could not”."
+   }
+  },
+  {
+   "id": "pool-gap-7",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "There is no point ___ arguing with him.",
+   "answer": {
+    "value": "in"
+   },
+   "accepted": [
+    "in"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.preposition"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "correction": {
+    "ru": "«There is no point in doing something».",
+    "en": "The pattern is “there is no point in doing something”."
+   }
+  },
+  {
+   "id": "pool-gap-8",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "You had better ___ your room before dinner.",
+   "answer": {
+    "value": "tidy"
+   },
+   "accepted": [
+    "tidy"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.modal"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "correction": {
+    "ru": "После «had better» — инфинитив без «to».",
+    "en": "“Had better” is followed by the bare infinitive."
+   }
+  },
+  {
+   "id": "pool-extra-6",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "This is the most easiest task in the test.",
+   "answer": {
+    "value": "most"
+   },
+   "accepted": [
+    "most"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.comparison"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "correction": {
+    "ru": "«Easiest» уже превосходная степень: «most» лишнее.",
+    "en": "“Easiest” is already a superlative, so “most” is extra."
+   }
+  },
+  {
+   "id": "pool-extra-7",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "We discussed about the plan for the next month.",
+   "answer": {
+    "value": "about"
+   },
+   "accepted": [
+    "about"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.preposition"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "correction": {
+    "ru": "«Discuss» не требует предлога.",
+    "en": "The verb “discuss” takes a direct object without a preposition."
+   }
+  },
+  {
+   "id": "pool-extra-8",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "My parents they are both teachers.",
+   "answer": {
+    "value": "they"
+   },
+   "accepted": [
+    "they"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.subject"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "correction": {
+    "ru": "Подлежащее уже названо: «they» лишнее.",
+    "en": "The subject is already “my parents”, so “they” is extra."
+   }
+  },
+  {
+   "id": "pool-communication-6",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Match the situation: a colleague invites you to dinner, but you cannot come. What is the polite answer?",
+   "answer": {
+    "value": "Thank you, but I am afraid I cannot come."
+   },
+   "accepted": [
+    "Thank you, but I am afraid I cannot come."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.replies"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "Thank you, but I am afraid I cannot come.",
+    "No.",
+    "I do not want it.",
+    "You must be joking.",
+    "Never mind."
+   ],
+   "correction": {
+    "ru": "Отказ сопровождается благодарностью и смягчением.",
+    "en": "A refusal is softened with thanks and “I am afraid”."
+   }
+  },
+  {
+   "id": "pool-communication-7",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "— How do you do? — ___",
+   "answer": {
+    "value": "How do you do?"
+   },
+   "accepted": [
+    "How do you do?"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.greetings"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "How do you do?",
+    "I am fine, thanks.",
+    "Very well, and you?",
+    "So-so.",
+    "Not too bad."
+   ],
+   "correction": {
+    "ru": "«How do you do?» — приветствие при знакомстве, на него отвечают тем же.",
+    "en": "“How do you do?” greets a new acquaintance and is answered the same way."
+   }
+  },
+  {
+   "id": "pool-communication-8",
+   "topic": "communication",
+   "type": "translate",
+   "instruction": {
+    "ru": "Переведите фрагмент на английский язык.",
+    "en": "Translate the fragment into English."
+   },
+   "text": "Скажите, пожалуйста: «Я никогда не был в Лондоне».",
+   "answer": {
+    "value": "I have never been to London"
+   },
+   "accepted": [
+    "I have never been to London",
+    "I have never been to London.",
+    "I've never been to London",
+    "I have never been in London"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "ignored",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.translation"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "correction": {
+    "ru": "Опыт к моменту речи — Present Perfect: have never been to.",
+    "en": "Experience up to now takes the Present Perfect: have never been to."
+   }
+  }
+ ]
+}

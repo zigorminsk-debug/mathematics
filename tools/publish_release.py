@@ -25,8 +25,8 @@ import subprocess
 import sys
 
 import subject
-from release_plan import (ROOT, BUILD_JOBS, CONTENT_FILES, INSTALLERS, RELEASE_FILES,
-                          canonical, check_lineage, gh, gh_json, gh_pages,
+from release_plan import (ROOT, SUBJECT_ROOT, BUILD_JOBS, CONTENT_FILES, INSTALLERS,
+                          RELEASE_FILES, canonical, check_lineage, gh, gh_json, gh_pages,
                           git_commit, stable_releases, validate_repo, version_code)
 
 
@@ -168,7 +168,7 @@ def publish(args) -> dict:
     version = canonical(args.version)
     tag = subject.tag(version)
     sha = git_commit("HEAD")
-    source_version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+    source_version = (SUBJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
     if args.source_version != source_version or version_code(version) < version_code(source_version):
         raise ValueError("source floor/effective version mismatch")
     if sha != os.environ.get("GITHUB_SHA") or args.run_id != os.environ.get("GITHUB_RUN_ID"):
@@ -206,7 +206,7 @@ def publish(args) -> dict:
                 "url": run_url, "event": run["event"], "ref": os.environ["GITHUB_REF"]},
         "checks": verified, "previousStableTag": previous["tag_name"] if previous else None,
         "android": {"applicationId": subject.ANDROID_PACKAGE, "versionName": version, "versionCode": code,
-                    "certificateSha256": (ROOT / subject.EXPECTED_CERT).read_text().strip(),
+                    "certificateSha256": (SUBJECT_ROOT / subject.EXPECTED_CERT).read_text().strip(),
                     "signatureAndPreviousApkGate": "passed"},
         "content": {"version": manifest["contentVersion"], "files": sorted(CONTENT_FILES)},
         "assets": payloads,

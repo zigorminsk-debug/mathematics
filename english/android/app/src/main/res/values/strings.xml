@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- сгенерировано english/tools/build_content.py: правьте content_src/ui_strings.py -->
+<resources>
+    <string name="app_name">CT English Tutor</string>
+    <string name="app_tagline">Practice variants, rules and mistake analysis offline</string>
+    <string name="disclaimer">Authored practice material. Not official RIKZ tasks.</string>
+</resources>

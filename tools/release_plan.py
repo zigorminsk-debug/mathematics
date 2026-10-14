@@ -26,9 +26,12 @@ from zoneinfo import ZoneInfo
 from check_apk_update import version_code
 import subject
 
+#: Корень репозитория: здесь живёт история git, теги и общая машинерия релизов.
 ROOT = Path(__file__).resolve().parents[1]
-CONTENT_FILES = {"bank.json", "analogous.json", "topics.json", "formulas.json",
-                 "ui_strings.json", "mistakes.json", "answer_vectors.json"}
+#: Корень предметного дерева: у физики — сам репозиторий, у английского — english/.
+SUBJECT_ROOT = subject.SUBJECT_ROOT
+#: Публикуемый контент предмета (у английского справка это rules.json).
+CONTENT_FILES = set(subject.CONTENT_FILES)
 INSTALLERS = subject.installers()
 RELEASE_FILES = CONTENT_FILES | INSTALLERS | {"version.json", "release-info.json", "SHA256SUMS.txt"}
 BUILD_JOBS = ("Content & web (verify, parity, assets)", "Windows app (Go)", "Android app (APK)")
@@ -236,10 +239,10 @@ def main() -> int:
     args = parser.parse_args()
     try:
         if args.apply_version:
-            apply_version(ROOT / "VERSION", args.apply_version)
+            apply_version(SUBJECT_ROOT / "VERSION", args.apply_version)
             print("Effective build version:", args.apply_version)
             return 0
-        source = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+        source = (SUBJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
         canonical(source)
         commit = args.commit or git_commit("HEAD")
         if not re.fullmatch(r"[0-9a-f]{40}", commit) or commit != git_commit("HEAD"):

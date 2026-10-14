@@ -1,0 +1,4224 @@
+{
+ "meta": {
+  "contentVersion": "2026.10.1",
+  "schema": 1,
+  "subject": "english",
+  "package": "by.ziv.ctenglish",
+  "app": "CTEnglishTutor",
+  "years": [
+   2026
+  ],
+  "counts": {
+   "bank": 105,
+   "practice": 65,
+   "analogous": 39,
+   "choice": 68,
+   "typed": 37,
+   "lessons": 13,
+   "rules": 13,
+   "figures": 5,
+   "topics": 13
+  },
+  "parts": {
+   "A": 18,
+   "B": 22
+  },
+  "minutes": 120,
+  "author": "Zakharevich Igor",
+  "repo": "https://github.com/zigorminsk-debug/mathematics",
+  "disclosure": "Авторские тренировочные наборы этого приложения не являются официальными материалами РИКЗ и не выдаются за них. Формат подготовки повторяет структуру теста по английскому языку (18 A + 22 B, 120 минут), но задания составлены автором приложения.",
+  "structureSource": "РИКЗ, «Перечень и коды учебных предметов …», форма № 3, Английский язык: 18 A + 22 B = 40 заданий, 120 минут — https://result.rikc.by/ru/documents/filesofregpunkts/rce_2025/form__3.pdf (проверено 2026-10-14)"
+ },
+ "tasks": [
+  {
+   "id": "pool-tenses-1",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "She ___ in Minsk since 2019.",
+   "answer": {
+    "value": "has lived"
+   },
+   "accepted": [
+    "has lived"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.present_perfect"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "has lived",
+    "lived",
+    "lives",
+    "is living",
+    "was living"
+   ],
+   "correction": {
+    "ru": "«since 2019» — Present Perfect: действие началось в прошлом и продолжается.",
+    "en": "“since 2019” takes Present Perfect: it started in the past and still continues."
+   }
+  },
+  {
+   "id": "pool-tenses-2",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Look! The children ___ football in the yard.",
+   "answer": {
+    "value": "are playing"
+   },
+   "accepted": [
+    "are playing"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.present_continuous"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "are playing",
+    "play",
+    "played",
+    "have played",
+    "will play"
+   ],
+   "correction": {
+    "ru": "«Look!» — сигнал действия прямо сейчас: Present Continuous.",
+    "en": "“Look!” signals an action happening now: Present Continuous."
+   }
+  },
+  {
+   "id": "pool-tenses-3",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "By the time we arrived, the film ___.",
+   "answer": {
+    "value": "had started"
+   },
+   "accepted": [
+    "had started"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.past_perfect"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "had started",
+    "started",
+    "has started",
+    "was starting",
+    "starts"
+   ],
+   "correction": {
+    "ru": "Действие раньше другого прошедшего — Past Perfect.",
+    "en": "An action earlier than another past action takes Past Perfect."
+   }
+  },
+  {
+   "id": "pool-tenses-4",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "I ___ my keys, so I could not open the door.",
+   "answer": {
+    "value": "had lost"
+   },
+   "accepted": [
+    "had lost"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.past_perfect"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "had lost",
+    "lost",
+    "lose",
+    "have lost",
+    "was losing"
+   ],
+   "correction": {
+    "ru": "Потеря произошла до того, как стало невозможно открыть дверь.",
+    "en": "The loss happened before the door could not be opened."
+   }
+  },
+  {
+   "id": "pool-tenses-5",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "This time tomorrow we ___ to Warsaw.",
+   "answer": {
+    "value": "will be driving"
+   },
+   "accepted": [
+    "will be driving"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.future_continuous"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "will be driving",
+    "drive",
+    "are driving",
+    "will drive",
+    "drove"
+   ],
+   "correction": {
+    "ru": "«This time tomorrow» — процесс в будущем: Future Continuous.",
+    "en": "“This time tomorrow” describes an action in progress: Future Continuous."
+   }
+  },
+  {
+   "id": "pool-modals-1",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "You ___ take an umbrella: it looks like rain.",
+   "answer": {
+    "value": "should"
+   },
+   "accepted": [
+    "should"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.advice"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "should",
+    "can",
+    "must not",
+    "need not",
+    "could"
+   ],
+   "correction": {
+    "ru": "Совет — «should».",
+    "en": "A piece of advice takes “should”."
+   }
+  },
+  {
+   "id": "pool-modals-2",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Passengers ___ smoke on board: it is prohibited.",
+   "answer": {
+    "value": "must not"
+   },
+   "accepted": [
+    "must not"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.prohibition"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "must not",
+    "may not",
+    "need not",
+    "could not",
+    "should not"
+   ],
+   "correction": {
+    "ru": "Полный запрет — «must not».",
+    "en": "A strict prohibition takes “must not”."
+   }
+  },
+  {
+   "id": "pool-modals-3",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "She ___ swim when she was five.",
+   "answer": {
+    "value": "could"
+   },
+   "accepted": [
+    "could"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.ability"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "could",
+    "can",
+    "must",
+    "should",
+    "may"
+   ],
+   "correction": {
+    "ru": "Умение в прошлом — «could».",
+    "en": "Past ability takes “could”."
+   }
+  },
+  {
+   "id": "pool-modals-4",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "It is late; he ___ be at home already.",
+   "answer": {
+    "value": "must"
+   },
+   "accepted": [
+    "must"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.deduction"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "must",
+    "can",
+    "should",
+    "need",
+    "might not"
+   ],
+   "correction": {
+    "ru": "Уверенное предположение — «must».",
+    "en": "A confident deduction takes “must”."
+   }
+  },
+  {
+   "id": "pool-modals-5",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "You ___ not have shouted at her; she was right.",
+   "answer": {
+    "value": "should"
+   },
+   "accepted": [
+    "should"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.criticism"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "should",
+    "must",
+    "can",
+    "would",
+    "may"
+   ],
+   "correction": {
+    "ru": "Упрёк о прошлом — «should not have + V3».",
+    "en": "A reproach about the past takes “should not have + V3”."
+   }
+  },
+  {
+   "id": "pool-passive-1",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The bridge ___ built in 1897.",
+   "answer": {
+    "value": "was"
+   },
+   "accepted": [
+    "was"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.past_simple"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "was",
+    "is",
+    "has",
+    "were",
+    "had"
+   ],
+   "correction": {
+    "ru": "Дата в прошлом, единственное число — «was built».",
+    "en": "A single object and a past date take “was built”."
+   }
+  },
+  {
+   "id": "pool-passive-2",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The letters ___ sent tomorrow morning.",
+   "answer": {
+    "value": "will be"
+   },
+   "accepted": [
+    "will be"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.future_simple"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "will be",
+    "will",
+    "are",
+    "have been",
+    "were"
+   ],
+   "correction": {
+    "ru": "Будущее время в пассиве — «will be + V3».",
+    "en": "A future passive takes “will be + V3”."
+   }
+  },
+  {
+   "id": "pool-passive-3",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The room ___ cleaned already.",
+   "answer": {
+    "value": "has been"
+   },
+   "accepted": [
+    "has been"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.present_perfect"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "has been",
+    "is",
+    "was",
+    "had been",
+    "will be"
+   ],
+   "correction": {
+    "ru": "Результат к моменту речи — «has been + V3».",
+    "en": "A result up to now takes “has been + V3”."
+   }
+  },
+  {
+   "id": "pool-passive-4",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Such mistakes ___ often made by beginners.",
+   "answer": {
+    "value": "are"
+   },
+   "accepted": [
+    "are"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.present_simple"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "are",
+    "is",
+    "were",
+    "have",
+    "will"
+   ],
+   "correction": {
+    "ru": "Множественное число, обычная практика — «are made».",
+    "en": "A plural subject and a general fact take “are made”."
+   }
+  },
+  {
+   "id": "pool-passive-5",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The window ___ by the storm last night.",
+   "answer": {
+    "value": "was broken"
+   },
+   "accepted": [
+    "was broken"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.past_simple"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "was broken",
+    "broke",
+    "has broken",
+    "is broken",
+    "breaks"
+   ],
+   "correction": {
+    "ru": "Окно не действовало само: нужен пассив «was broken».",
+    "en": "The window did not act itself, so the passive “was broken” is required."
+   }
+  },
+  {
+   "id": "pool-conditionals-1",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "If it ___ tomorrow, we will stay at home.",
+   "answer": {
+    "value": "rains"
+   },
+   "accepted": [
+    "rains"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.first"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "rains",
+    "will rain",
+    "rained",
+    "is raining",
+    "has rained"
+   ],
+   "correction": {
+    "ru": "В условии I типа будущее не употребляется: «if it rains».",
+    "en": "A first conditional uses the present in the if-clause: “if it rains”."
+   }
+  },
+  {
+   "id": "pool-conditionals-2",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "If I were you, I ___ apologize.",
+   "answer": {
+    "value": "would"
+   },
+   "accepted": [
+    "would"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.second"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "would",
+    "will",
+    "am",
+    "had",
+    "did"
+   ],
+   "correction": {
+    "ru": "Нереальное условие II типа: «would + V».",
+    "en": "An unreal second conditional takes “would + V”."
+   }
+  },
+  {
+   "id": "pool-conditionals-3",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "She said that she ___ busy the next day.",
+   "answer": {
+    "value": "would be"
+   },
+   "accepted": [
+    "would be"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.reported_speech"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "would be",
+    "will be",
+    "is",
+    "was being",
+    "has been"
+   ],
+   "correction": {
+    "ru": "Косвенная речь: будущее сдвигается в «would be».",
+    "en": "Reported speech shifts the future to “would be”."
+   }
+  },
+  {
+   "id": "pool-conditionals-4",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He asked me where I ___ from.",
+   "answer": {
+    "value": "came"
+   },
+   "accepted": [
+    "came"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.reported_speech"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "came",
+    "come",
+    "will come",
+    "have come",
+    "am coming"
+   ],
+   "correction": {
+    "ru": "В косвенном вопросе время сдвигается назад.",
+    "en": "A reported question shifts the tense back."
+   }
+  },
+  {
+   "id": "pool-conditionals-5",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "If he had studied harder, he ___ the exam.",
+   "answer": {
+    "value": "would have passed"
+   },
+   "accepted": [
+    "would have passed"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.third"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "would have passed",
+    "would pass",
+    "passed",
+    "will pass",
+    "has passed"
+   ],
+   "correction": {
+    "ru": "Нереальное условие III типа — «would have + V3».",
+    "en": "A third conditional takes “would have + V3”."
+   }
+  },
+  {
+   "id": "pool-nonfinite-1",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "She is interested in ___ new languages.",
+   "answer": {
+    "value": "learning"
+   },
+   "accepted": [
+    "learning"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.gerund_after_preposition"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "learning",
+    "learn",
+    "to learn",
+    "learned",
+    "learns"
+   ],
+   "correction": {
+    "ru": "После предлога — герундий: «interested in learning».",
+    "en": "A preposition is followed by the gerund: “interested in learning”."
+   }
+  },
+  {
+   "id": "pool-nonfinite-2",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "I would like ___ this book.",
+   "answer": {
+    "value": "to read"
+   },
+   "accepted": [
+    "to read"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.infinitive_after_verb"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "to read",
+    "reading",
+    "read",
+    "reads",
+    "readed"
+   ],
+   "correction": {
+    "ru": "После «would like» — инфинитив.",
+    "en": "“Would like” takes the infinitive."
+   }
+  },
+  {
+   "id": "pool-nonfinite-3",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He avoided ___ about the accident.",
+   "answer": {
+    "value": "speaking"
+   },
+   "accepted": [
+    "speaking"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.gerund_after_verb"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "speaking",
+    "to speak",
+    "speak",
+    "spoke",
+    "speaks"
+   ],
+   "correction": {
+    "ru": "«Avoid» требует герундий.",
+    "en": "“Avoid” requires the gerund."
+   }
+  },
+  {
+   "id": "pool-nonfinite-4",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The letter ___ yesterday arrived too late.",
+   "answer": {
+    "value": "sent"
+   },
+   "accepted": [
+    "sent"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.participle"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "sent",
+    "sending",
+    "to send",
+    "send",
+    "sends"
+   ],
+   "correction": {
+    "ru": "Причастие прошедшего времени: письмо, которое отправили.",
+    "en": "A past participle describes the letter that was sent."
+   }
+  },
+  {
+   "id": "pool-nonfinite-5",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "___ the news, she called her mother.",
+   "answer": {
+    "value": "Having heard"
+   },
+   "accepted": [
+    "Having heard"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.participle"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "Having heard",
+    "Hear",
+    "To hear",
+    "Heard",
+    "Hearing of"
+   ],
+   "correction": {
+    "ru": "Действие раньше главного — перфектное причастие.",
+    "en": "An action earlier than the main one takes the perfect participle."
+   }
+  },
+  {
+   "id": "pool-articles-1",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "We usually have ___ breakfast at seven.",
+   "answer": {
+    "value": "—"
+   },
+   "accepted": [
+    "—"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "accept"
+   },
+   "tags": [
+    "articles.zero"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "—",
+    "a",
+    "an",
+    "the",
+    "some"
+   ],
+   "correction": {
+    "ru": "С приёмами пищи артикль не нужен.",
+    "en": "Meals take no article."
+   }
+  },
+  {
+   "id": "pool-articles-2",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He is ___ honest man.",
+   "answer": {
+    "value": "an"
+   },
+   "accepted": [
+    "an"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "articles.indefinite"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "an",
+    "a",
+    "the",
+    "—",
+    "some"
+   ],
+   "correction": {
+    "ru": "Перед гласным звуком «h-onest» — «an».",
+    "en": "“Honest” starts with a vowel sound, so it takes “an”."
+   }
+  },
+  {
+   "id": "pool-articles-3",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "___ sun rises in the east.",
+   "answer": {
+    "value": "The"
+   },
+   "accepted": [
+    "The"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "articles.definite"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "The",
+    "A",
+    "An",
+    "—",
+    "Some"
+   ],
+   "correction": {
+    "ru": "Единственное в своём роде — определённый артикль.",
+    "en": "A unique object takes the definite article."
+   }
+  },
+  {
+   "id": "pool-articles-4",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "She plays ___ piano very well.",
+   "answer": {
+    "value": "the"
+   },
+   "accepted": [
+    "the"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "articles.definite"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "the",
+    "a",
+    "an",
+    "—",
+    "some"
+   ],
+   "correction": {
+    "ru": "С музыкальными инструментами после «play» — «the».",
+    "en": "Musical instruments after “play” take “the”."
+   }
+  },
+  {
+   "id": "pool-articles-5",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "I need ___ advice.",
+   "answer": {
+    "value": "—"
+   },
+   "accepted": [
+    "—"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "accept"
+   },
+   "tags": [
+    "articles.uncountable"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "—",
+    "an",
+    "a",
+    "the",
+    "some of"
+   ],
+   "correction": {
+    "ru": "«Advice» неисчисляемое: без артикля.",
+    "en": "“Advice” is uncountable and takes no article."
+   }
+  },
+  {
+   "id": "pool-prepositions-1",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The result depends ___ the weather.",
+   "answer": {
+    "value": "on"
+   },
+   "accepted": [
+    "on"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.collocation"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "on",
+    "of",
+    "from",
+    "in",
+    "at"
+   ],
+   "correction": {
+    "ru": "«Depend on» — устойчивое сочетание.",
+    "en": "“Depend on” is a fixed collocation."
+   }
+  },
+  {
+   "id": "pool-prepositions-2",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "She is good ___ mathematics.",
+   "answer": {
+    "value": "at"
+   },
+   "accepted": [
+    "at"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.collocation"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "at",
+    "in",
+    "on",
+    "with",
+    "for"
+   ],
+   "correction": {
+    "ru": "«Good at» — устойчивое сочетание.",
+    "en": "“Good at” is a fixed collocation."
+   }
+  },
+  {
+   "id": "pool-prepositions-3",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "I am interested ___ history.",
+   "answer": {
+    "value": "in"
+   },
+   "accepted": [
+    "in"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.collocation"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "in",
+    "on",
+    "at",
+    "for",
+    "about"
+   ],
+   "correction": {
+    "ru": "«Interested in» — устойчивое сочетание.",
+    "en": "“Interested in” is a fixed collocation."
+   }
+  },
+  {
+   "id": "pool-prepositions-4",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The meeting was postponed ___ Friday.",
+   "answer": {
+    "value": "until"
+   },
+   "accepted": [
+    "until"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.time"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "until",
+    "since",
+    "for",
+    "during",
+    "by"
+   ],
+   "correction": {
+    "ru": "«Postpone until» — отложить до момента.",
+    "en": "“Postpone until” marks the new moment in time."
+   }
+  },
+  {
+   "id": "pool-prepositions-5",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He has been working here ___ 2015.",
+   "answer": {
+    "value": "since"
+   },
+   "accepted": [
+    "since"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.time"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "since",
+    "for",
+    "from",
+    "during",
+    "by"
+   ],
+   "correction": {
+    "ru": "«Since» + точка отсчёта, «for» + отрезок.",
+    "en": "“Since” takes a starting point; “for” takes a period."
+   }
+  },
+  {
+   "id": "pool-pronouns-1",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "This is my sister. ___ name is Olga.",
+   "answer": {
+    "value": "Her"
+   },
+   "accepted": [
+    "Her"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.possessive"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "Her",
+    "His",
+    "Its",
+    "Their",
+    "Hers"
+   ],
+   "correction": {
+    "ru": "Притяжательное местоимение женского рода — «Her».",
+    "en": "A feminine possessive determiner is “Her”."
+   }
+  },
+  {
+   "id": "pool-pronouns-2",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "There are ___ students in the group than last year.",
+   "answer": {
+    "value": "fewer"
+   },
+   "accepted": [
+    "fewer"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.quantifiers"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "fewer",
+    "less",
+    "little",
+    "few",
+    "lesser"
+   ],
+   "correction": {
+    "ru": "С исчисляемыми — «fewer».",
+    "en": "Countable nouns take “fewer”."
+   }
+  },
+  {
+   "id": "pool-pronouns-3",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He did the task ___ without any help.",
+   "answer": {
+    "value": "himself"
+   },
+   "accepted": [
+    "himself"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.reflexive"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "himself",
+    "hisself",
+    "him",
+    "he",
+    "itself"
+   ],
+   "correction": {
+    "ru": "Возвратное местоимение 3-го лица — «himself».",
+    "en": "The reflexive pronoun of the third person is “himself”."
+   }
+  },
+  {
+   "id": "pool-pronouns-4",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "My birthday is on the ___ of May.",
+   "answer": {
+    "value": "twenty-first"
+   },
+   "accepted": [
+    "twenty-first"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.numerals"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "twenty-first",
+    "twenty-one",
+    "twentieth-one",
+    "twenty first's",
+    "twenties-one"
+   ],
+   "correction": {
+    "ru": "Порядковое числительное — «twenty-first».",
+    "en": "An ordinal numeral is “twenty-first”."
+   }
+  },
+  {
+   "id": "pool-pronouns-5",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Neither the teacher ___ the students were late.",
+   "answer": {
+    "value": "nor"
+   },
+   "accepted": [
+    "nor"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.conjunctions"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "nor",
+    "or",
+    "and",
+    "but",
+    "either"
+   ],
+   "correction": {
+    "ru": "Парный союз «neither … nor».",
+    "en": "The paired conjunction is “neither … nor”."
+   }
+  },
+  {
+   "id": "pool-noun-1",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "This information is very ___.",
+   "answer": {
+    "value": "useful"
+   },
+   "accepted": [
+    "useful"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.adjective"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "useful",
+    "usefully",
+    "use",
+    "used",
+    "using"
+   ],
+   "correction": {
+    "ru": "После «is» нужно прилагательное.",
+    "en": "After “is” an adjective is required."
+   }
+  },
+  {
+   "id": "pool-noun-2",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "She speaks English ___.",
+   "answer": {
+    "value": "fluently"
+   },
+   "accepted": [
+    "fluently"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.adverb"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "fluently",
+    "fluent",
+    "fluency",
+    "fluentness",
+    "fluenting"
+   ],
+   "correction": {
+    "ru": "Глагол определяет наречие.",
+    "en": "A verb is modified by an adverb."
+   }
+  },
+  {
+   "id": "pool-noun-3",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "These ___ are my friends.",
+   "answer": {
+    "value": "people"
+   },
+   "accepted": [
+    "people"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.plural"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "people",
+    "peoples",
+    "person",
+    "persons",
+    "peoples'"
+   ],
+   "correction": {
+    "ru": "«People» — множественное от «person».",
+    "en": "“People” is the plural of “person”."
+   }
+  },
+  {
+   "id": "pool-noun-4",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He is the ___ student in our group.",
+   "answer": {
+    "value": "best"
+   },
+   "accepted": [
+    "best"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.comparison"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "best",
+    "better",
+    "good",
+    "well",
+    "most good"
+   ],
+   "correction": {
+    "ru": "Превосходная степень — «the best».",
+    "en": "The superlative degree is “the best”."
+   }
+  },
+  {
+   "id": "pool-noun-5",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "There is too ___ sugar in my tea.",
+   "answer": {
+    "value": "much"
+   },
+   "accepted": [
+    "much"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.quantifiers"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "much",
+    "many",
+    "few",
+    "number of",
+    "lots"
+   ],
+   "correction": {
+    "ru": "С неисчисляемым — «much».",
+    "en": "Uncountable nouns take “much”."
+   }
+  },
+  {
+   "id": "pool-formation-1",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "His ___ (ACHIEVE) surprised everybody.",
+   "answer": {
+    "value": "achievement"
+   },
+   "accepted": [
+    "achievement"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_noun"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "ACHIEVE",
+   "correction": {
+    "ru": "После «his» нужно существительное: achieve → achievement.",
+    "en": "After “his” a noun is required: achieve → achievement."
+   }
+  },
+  {
+   "id": "pool-formation-2",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "The task was ___ (DIFFICULTY) for the whole team.",
+   "answer": {
+    "value": "difficult"
+   },
+   "accepted": [
+    "difficult"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_adjective"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "DIFFICULTY",
+   "correction": {
+    "ru": "После «was» нужно прилагательное: difficulty → difficult.",
+    "en": "After “was” an adjective is required: difficulty → difficult."
+   }
+  },
+  {
+   "id": "pool-formation-3",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "She answered the question ___ (CONFIDENT).",
+   "answer": {
+    "value": "confidently"
+   },
+   "accepted": [
+    "confidently"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_adverb"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "CONFIDENT",
+   "correction": {
+    "ru": "Глагол «answered» определяет наречие: confident → confidently.",
+    "en": "The verb “answered” needs an adverb: confident → confidently."
+   }
+  },
+  {
+   "id": "pool-formation-4",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "It is ___ (POSSIBLE) to finish this work in one day.",
+   "answer": {
+    "value": "impossible"
+   },
+   "accepted": [
+    "impossible"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.prefix_negative"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "POSSIBLE",
+   "correction": {
+    "ru": "Отрицательное значение: possible → impossible.",
+    "en": "The negative meaning is formed with the prefix: impossible."
+   }
+  },
+  {
+   "id": "pool-formation-5",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "The ___ (INVENT) of the telephone changed the world.",
+   "answer": {
+    "value": "invention"
+   },
+   "accepted": [
+    "invention"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_noun"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "INVENT",
+   "correction": {
+    "ru": "Нужно существительное-действие: invent → invention.",
+    "en": "A noun of action is required: invent → invention."
+   }
+  },
+  {
+   "id": "pool-gap-1",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "My brother is keen ___ playing chess.",
+   "answer": {
+    "value": "on"
+   },
+   "accepted": [
+    "on"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.collocation"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "correction": {
+    "ru": "Устойчивое сочетание «keen on».",
+    "en": "The fixed collocation is “keen on”."
+   }
+  },
+  {
+   "id": "pool-gap-2",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "We had ___ wait for an hour because of the rain.",
+   "answer": {
+    "value": "to"
+   },
+   "accepted": [
+    "to"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.auxiliary"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "correction": {
+    "ru": "«Had to wait» — вынужденная необходимость.",
+    "en": "“Had to wait” expresses obligation in the past."
+   }
+  },
+  {
+   "id": "pool-gap-3",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "She has lived in Gomel ___ five years.",
+   "answer": {
+    "value": "for"
+   },
+   "accepted": [
+    "for"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.preposition"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "correction": {
+    "ru": "Период времени — «for».",
+    "en": "A period of time takes “for”."
+   }
+  },
+  {
+   "id": "pool-gap-4",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "It was the first time that I ___ seen such a performance.",
+   "answer": {
+    "value": "had"
+   },
+   "accepted": [
+    "had"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.tense_form"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "correction": {
+    "ru": "«It was the first time that I had seen».",
+    "en": "The pattern is “It was the first time that I had seen”."
+   }
+  },
+  {
+   "id": "pool-gap-5",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "The more you practise, the ___ you speak.",
+   "answer": {
+    "value": "better"
+   },
+   "accepted": [
+    "better"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.comparison"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "correction": {
+    "ru": "Конструкция «the more …, the better …».",
+    "en": "The pattern is “the more …, the better …”."
+   }
+  },
+  {
+   "id": "pool-extra-1",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "In a time bank, where everyone becomes both a giver and a receiver.",
+   "answer": {
+    "value": "where"
+   },
+   "accepted": [
+    "where"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.conjunction"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "correction": {
+    "ru": "Придаточное «where» разрывает предложение без главной части.",
+    "en": "The clause with “where” leaves the sentence without its main part."
+   }
+  },
+  {
+   "id": "pool-extra-2",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "Participants can spend their time credits on the skills they need it.",
+   "answer": {
+    "value": "it"
+   },
+   "accepted": [
+    "it"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.object"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "correction": {
+    "ru": "«They need» уже имеет дополнение «the skills»; «it» лишнее.",
+    "en": "“They need” already has the object “the skills”; “it” is extra."
+   }
+  },
+  {
+   "id": "pool-extra-3",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "He has been living in this city since many years.",
+   "answer": {
+    "value": "since"
+   },
+   "accepted": [
+    "since"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.preposition"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "correction": {
+    "ru": "С «many years» нужен «for», а «since» лишнее.",
+    "en": "“Many years” takes “for”, so “since” is extra."
+   }
+  },
+  {
+   "id": "pool-extra-4",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "The more carefully you drive, the less fewer accidents happen.",
+   "answer": {
+    "value": "fewer"
+   },
+   "accepted": [
+    "fewer"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.comparison"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "correction": {
+    "ru": "После «less» второе сравнительное слово лишнее.",
+    "en": "After “less” a second comparative word is extra."
+   }
+  },
+  {
+   "id": "pool-extra-5",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "She told me that she will would come later.",
+   "answer": {
+    "value": "will"
+   },
+   "accepted": [
+    "will"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.reported_speech"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "correction": {
+    "ru": "В косвенной речи «will» заменяется на «would».",
+    "en": "Reported speech replaces “will” with “would”."
+   }
+  },
+  {
+   "id": "pool-communication-1",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "— Thank you very much for your help. — ___",
+   "answer": {
+    "value": "You are welcome."
+   },
+   "accepted": [
+    "You are welcome."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.replies"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "You are welcome.",
+    "Never mind.",
+    "I am sorry.",
+    "Not at all bad.",
+    "That is right."
+   ],
+   "correction": {
+    "ru": "Ответ на благодарность — «You are welcome».",
+    "en": "The standard reply to thanks is “You are welcome”."
+   }
+  },
+  {
+   "id": "pool-communication-2",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "— I am sorry I am late. — ___",
+   "answer": {
+    "value": "That is all right."
+   },
+   "accepted": [
+    "That is all right."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.replies"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "That is all right.",
+    "You are welcome.",
+    "Here you are.",
+    "So do I.",
+    "It does not matter to me."
+   ],
+   "correction": {
+    "ru": "Извинение принимают словами «That is all right».",
+    "en": "An apology is accepted with “That is all right”."
+   }
+  },
+  {
+   "id": "pool-communication-3",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Read the notice: “The library is closed for repairs until 5 May.” Where can you borrow books?",
+   "answer": {
+    "value": "The library is not open until 5 May."
+   },
+   "accepted": [
+    "The library is not open until 5 May."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.notice"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "The library is not open until 5 May.",
+    "Books are sold in the library.",
+    "The library moved to another city.",
+    "Repairs start on 5 May.",
+    "The library closes only on Sundays."
+   ],
+   "correction": {
+    "ru": "«Until 5 May» — до этой даты библиотека закрыта.",
+    "en": "“Until 5 May” means the library stays closed before that date."
+   }
+  },
+  {
+   "id": "pool-communication-4",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The sign says “Queue here for tickets”. What should you do?",
+   "answer": {
+    "value": "Stand in the line to buy a ticket."
+   },
+   "accepted": [
+    "Stand in the line to buy a ticket."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.notice"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "Stand in the line to buy a ticket.",
+    "Leave the building at once.",
+    "Ask the driver for a ticket.",
+    "Buy the ticket online only.",
+    "Go to another city."
+   ],
+   "correction": {
+    "ru": "Объявление указывает, где встать за билетом.",
+    "en": "The notice tells you where to stand to buy a ticket."
+   }
+  },
+  {
+   "id": "pool-communication-5",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "— Would you like some tea? — ___",
+   "answer": {
+    "value": "Yes, please."
+   },
+   "accepted": [
+    "Yes, please."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.replies"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "Yes, please.",
+    "Here you are.",
+    "Not at all.",
+    "You are welcome.",
+    "That is all right."
+   ],
+   "correction": {
+    "ru": "Вежливое согласие на предложение — «Yes, please».",
+    "en": "A polite acceptance of an offer is “Yes, please”."
+   }
+  },
+  {
+   "id": "en-2026-A1",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "By the end of next year he ___ here for a decade.",
+   "answer": {
+    "value": "will have worked"
+   },
+   "accepted": [
+    "will have worked"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.future_perfect"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "will have worked",
+    "will work",
+    "works",
+    "has worked",
+    "would work"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 1,
+   "correction": {
+    "ru": "«By the end of …» + длительность — Future Perfect.",
+    "en": "“By the end of …” with a duration takes the Future Perfect."
+   },
+   "distractors": {
+    "will work": {
+     "ru": "Future Simple не выражает «к концу срока»",
+     "en": "Future Simple does not mark completion by a deadline"
+    }
+   }
+  },
+  {
+   "id": "en-2026-A2",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "I ___ the letter when the telephone rang.",
+   "answer": {
+    "value": "was writing"
+   },
+   "accepted": [
+    "was writing"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.past_continuous"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "was writing",
+    "wrote",
+    "have written",
+    "write",
+    "had written"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 2,
+   "correction": {
+    "ru": "Действие в процессе, которое прервал звонок — Past Continuous.",
+    "en": "The interrupted action in progress takes the Past Continuous."
+   }
+  },
+  {
+   "id": "en-2026-A3",
+   "topic": "modals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "You ___ have told her the truth; now she is upset.",
+   "answer": {
+    "value": "should"
+   },
+   "accepted": [
+    "should"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "modals.criticism"
+   ],
+   "rule": "modals",
+   "source": "authored",
+   "options": [
+    "should",
+    "must",
+    "can",
+    "may",
+    "will"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 3,
+   "correction": {
+    "ru": "Упрёк о невыполненном действии — «should have + V3».",
+    "en": "A reproach about the past takes “should have + V3”."
+   }
+  },
+  {
+   "id": "en-2026-A4",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The new stadium ___ opened next month.",
+   "answer": {
+    "value": "will be"
+   },
+   "accepted": [
+    "will be"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.future_simple"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "will be",
+    "is",
+    "has been",
+    "was",
+    "would be"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 4,
+   "correction": {
+    "ru": "Стадион не открывает сам себя: будущее в пассиве.",
+    "en": "The stadium does not open itself: the future passive is required."
+   }
+  },
+  {
+   "id": "en-2026-A5",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "If she ___ earlier, she would have caught the train.",
+   "answer": {
+    "value": "had left"
+   },
+   "accepted": [
+    "had left"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.third"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "had left",
+    "left",
+    "has left",
+    "would leave",
+    "leaves"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 5,
+   "correction": {
+    "ru": "Третье (нереальное) условие: had + V3 в условии.",
+    "en": "The third conditional takes “had + V3” in the if-clause."
+   }
+  },
+  {
+   "id": "en-2026-A6",
+   "topic": "nonfinite",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "They suggested ___ the meeting until Monday.",
+   "answer": {
+    "value": "postponing"
+   },
+   "accepted": [
+    "postponing"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "nonfinite.gerund_after_verb"
+   ],
+   "rule": "nonfinite",
+   "source": "authored",
+   "options": [
+    "postponing",
+    "to postpone",
+    "postpone",
+    "postponed",
+    "postpones"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 6,
+   "correction": {
+    "ru": "«Suggest» требует герундий.",
+    "en": "“Suggest” takes the gerund."
+   }
+  },
+  {
+   "id": "en-2026-A7",
+   "topic": "articles",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "She has been playing ___ violin since childhood.",
+   "answer": {
+    "value": "the"
+   },
+   "accepted": [
+    "the"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "articles.definite"
+   ],
+   "rule": "articles",
+   "source": "authored",
+   "options": [
+    "the",
+    "a",
+    "an",
+    "—",
+    "some"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 7,
+   "correction": {
+    "ru": "С инструментами — «play the violin».",
+    "en": "Instruments take “play the violin”."
+   }
+  },
+  {
+   "id": "en-2026-A8",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "Our success depends ___ careful planning.",
+   "answer": {
+    "value": "on"
+   },
+   "accepted": [
+    "on"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.collocation"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "on",
+    "of",
+    "from",
+    "at",
+    "in"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 8,
+   "correction": {
+    "ru": "«Depend on» — устойчивое сочетание.",
+    "en": "“Depend on” is a fixed collocation."
+   }
+  },
+  {
+   "id": "en-2026-A9",
+   "topic": "prepositions",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He is responsible ___ the whole project.",
+   "answer": {
+    "value": "for"
+   },
+   "accepted": [
+    "for"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "prepositions.collocation"
+   ],
+   "rule": "prepositions",
+   "source": "authored",
+   "options": [
+    "for",
+    "of",
+    "on",
+    "with",
+    "about"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 9,
+   "correction": {
+    "ru": "«Responsible for» — устойчивое сочетание.",
+    "en": "“Responsible for” is a fixed collocation."
+   }
+  },
+  {
+   "id": "en-2026-A10",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The company presented ___ new programme yesterday.",
+   "answer": {
+    "value": "its"
+   },
+   "accepted": [
+    "its"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.possessive"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "its",
+    "it's",
+    "their",
+    "his",
+    "hers"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 10,
+   "correction": {
+    "ru": "«Its» — притяжательное, «it's» — «it is».",
+    "en": "“Its” is possessive; “it's” means “it is”."
+   }
+  },
+  {
+   "id": "en-2026-A11",
+   "topic": "pronouns_numerals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "___ of the two candidates was suitable for the post.",
+   "answer": {
+    "value": "Neither"
+   },
+   "accepted": [
+    "Neither"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "pronouns.quantifiers"
+   ],
+   "rule": "pronouns",
+   "source": "authored",
+   "options": [
+    "Neither",
+    "Both",
+    "All",
+    "None",
+    "Every"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 11,
+   "correction": {
+    "ru": "Из двух — «neither» с глаголом в единственном числе.",
+    "en": "Out of two, “neither” takes a singular verb."
+   }
+  },
+  {
+   "id": "en-2026-A12",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The instructions were so ___ that nobody understood them.",
+   "answer": {
+    "value": "confusing"
+   },
+   "accepted": [
+    "confusing"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.participle_adjective"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "confusing",
+    "confused",
+    "confuse",
+    "confusion",
+    "confusedly"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 12,
+   "correction": {
+    "ru": "Инструкции «сбивают с толку»: confusing.",
+    "en": "Instructions are confusing; people feel confused."
+   }
+  },
+  {
+   "id": "en-2026-A13",
+   "topic": "noun_adj_adv",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "This year the harvest is ___ than last year.",
+   "answer": {
+    "value": "better"
+   },
+   "accepted": [
+    "better"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "noun_adj_adv.comparison"
+   ],
+   "rule": "noun_adj_adv",
+   "source": "authored",
+   "options": [
+    "better",
+    "best",
+    "good",
+    "well",
+    "gooder"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 13,
+   "correction": {
+    "ru": "Сравнительная степень от «good» — «better».",
+    "en": "The comparative form of “good” is “better”."
+   }
+  },
+  {
+   "id": "en-2026-A14",
+   "topic": "tenses",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The train ___ at 6:40 every morning.",
+   "answer": {
+    "value": "leaves"
+   },
+   "accepted": [
+    "leaves"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "tenses.present_simple"
+   ],
+   "rule": "tenses",
+   "source": "authored",
+   "options": [
+    "leaves",
+    "is leaving",
+    "left",
+    "has left",
+    "will leave"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 14,
+   "correction": {
+    "ru": "Расписание — Present Simple.",
+    "en": "A timetable takes the Present Simple."
+   }
+  },
+  {
+   "id": "en-2026-A15",
+   "topic": "passive",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The documents ___ signed before the meeting started.",
+   "answer": {
+    "value": "had been"
+   },
+   "accepted": [
+    "had been"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "passive.past_perfect"
+   ],
+   "rule": "passive",
+   "source": "authored",
+   "options": [
+    "had been",
+    "have been",
+    "were",
+    "are",
+    "will be"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 15,
+   "correction": {
+    "ru": "Раньше другого прошедшего действия — Past Perfect Passive.",
+    "en": "Earlier than another past action: the Past Perfect Passive."
+   }
+  },
+  {
+   "id": "en-2026-A16",
+   "topic": "conditionals",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "He asked whether I ___ ever been abroad.",
+   "answer": {
+    "value": "had"
+   },
+   "accepted": [
+    "had"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "conditionals.reported_speech"
+   ],
+   "rule": "conditionals",
+   "source": "authored",
+   "options": [
+    "had",
+    "have",
+    "has",
+    "will",
+    "was"
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 16,
+   "correction": {
+    "ru": "Косвенный вопрос сдвигает время назад: «had ever been».",
+    "en": "A reported question shifts the tense back: “had ever been”."
+   }
+  },
+  {
+   "id": "en-2026-A17",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "— I am terribly sorry for the delay. — ___",
+   "answer": {
+    "value": "That is quite all right."
+   },
+   "accepted": [
+    "That is quite all right."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.replies"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "That is quite all right.",
+    "You are welcome.",
+    "Here you are.",
+    "Never mind me.",
+    "It is my pleasure."
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 17,
+   "correction": {
+    "ru": "Извинение принимают: «That is quite all right».",
+    "en": "An apology is accepted with “That is quite all right”."
+   }
+  },
+  {
+   "id": "en-2026-A18",
+   "topic": "communication",
+   "type": "choice",
+   "instruction": {
+    "ru": "Выберите правильный вариант.",
+    "en": "Choose the correct option."
+   },
+   "text": "The notice says: “Last admission is at 17:30; the museum closes at 18:00.” When must you enter?",
+   "answer": {
+    "value": "Before 17:30."
+   },
+   "accepted": [
+    "Before 17:30."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.notice"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "options": [
+    "Before 17:30.",
+    "Exactly at 18:00.",
+    "After 18:00.",
+    "At any time at night.",
+    "Before 18:30."
+   ],
+   "year": 2026,
+   "part": "A",
+   "n": 18,
+   "correction": {
+    "ru": "«Last admission 17:30» — входить нужно до этого времени.",
+    "en": "“Last admission 17:30” means you must enter before that time."
+   }
+  },
+  {
+   "id": "en-2026-B1",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "Regular exercise improves your ___ (PERFORM).",
+   "answer": {
+    "value": "performance"
+   },
+   "accepted": [
+    "performance"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_noun"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "PERFORM",
+   "year": 2026,
+   "part": "B",
+   "n": 1,
+   "correction": {
+    "ru": "После «your» нужно существительное: perform → performance.",
+    "en": "“Your” needs a noun: perform → performance."
+   }
+  },
+  {
+   "id": "en-2026-B2",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "The results were rather ___ (SURPRISE).",
+   "answer": {
+    "value": "surprising"
+   },
+   "accepted": [
+    "surprising"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.participle_adjective"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "SURPRISE",
+   "year": 2026,
+   "part": "B",
+   "n": 2,
+   "correction": {
+    "ru": "Результаты удивляют: surprising (не surprised).",
+    "en": "Results are surprising; people feel surprised."
+   }
+  },
+  {
+   "id": "en-2026-B3",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "He works as a ___ (TRANSLATE) at an international company.",
+   "answer": {
+    "value": "translator"
+   },
+   "accepted": [
+    "translator"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_person"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "TRANSLATE",
+   "year": 2026,
+   "part": "B",
+   "n": 3,
+   "correction": {
+    "ru": "Название профессии: translate → translator.",
+    "en": "A profession is formed with “-or”: translator."
+   }
+  },
+  {
+   "id": "en-2026-B4",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "The weather was completely ___ (PREDICT) last week.",
+   "answer": {
+    "value": "unpredictable"
+   },
+   "accepted": [
+    "unpredictable"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.prefix_negative"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "PREDICT",
+   "year": 2026,
+   "part": "B",
+   "n": 4,
+   "correction": {
+    "ru": "Отрицательное значение: unpredictable (un- + predict + -able).",
+    "en": "The negative adjective is “unpredictable”."
+   }
+  },
+  {
+   "id": "en-2026-B5",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "Their ___ (KIND) impressed everybody.",
+   "answer": {
+    "value": "kindness"
+   },
+   "accepted": [
+    "kindness"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_noun"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "KIND",
+   "year": 2026,
+   "part": "B",
+   "n": 5,
+   "correction": {
+    "ru": "Абстрактное существительное: kind → kindness.",
+    "en": "An abstract noun is formed with “-ness”: kindness."
+   }
+  },
+  {
+   "id": "en-2026-B6",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "She spoke ___ (ANGRY) about the broken promise.",
+   "answer": {
+    "value": "angrily"
+   },
+   "accepted": [
+    "angrily"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_adverb"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "ANGRY",
+   "year": 2026,
+   "part": "B",
+   "n": 6,
+   "correction": {
+    "ru": "Глагол «spoke» определяет наречие: angrily.",
+    "en": "The verb “spoke” needs the adverb “angrily”."
+   }
+  },
+  {
+   "id": "en-2026-B7",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "The city is famous for its ___ (HISTORY) centre.",
+   "answer": {
+    "value": "historic"
+   },
+   "accepted": [
+    "historic",
+    "historical"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.suffix_adjective"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "HISTORY",
+   "year": 2026,
+   "part": "B",
+   "n": 7,
+   "correction": {
+    "ru": "Перед существительным — прилагательное: historic centre.",
+    "en": "Before a noun an adjective is required: historic centre."
+   }
+  },
+  {
+   "id": "en-2026-B8",
+   "topic": "word_formation",
+   "type": "form",
+   "instruction": {
+    "ru": "Образуйте от данного слова подходящую по смыслу и форме форму.",
+    "en": "Form the correct word from the one given."
+   },
+   "text": "It is ___ (POSSIBLE) to learn a language without practice.",
+   "answer": {
+    "value": "impossible"
+   },
+   "accepted": [
+    "impossible"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "word_formation.prefix_negative"
+   ],
+   "rule": "word_formation",
+   "source": "authored",
+   "given": "POSSIBLE",
+   "year": 2026,
+   "part": "B",
+   "n": 8,
+   "correction": {
+    "ru": "Отрицание через приставку: impossible.",
+    "en": "The negative form is “impossible”."
+   }
+  },
+  {
+   "id": "en-2026-B9",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "My cousins are fond ___ reading adventure stories.",
+   "answer": {
+    "value": "of"
+   },
+   "accepted": [
+    "of"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.collocation"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 9,
+   "correction": {
+    "ru": "«Fond of» — устойчивое сочетание.",
+    "en": "The fixed collocation is “fond of”."
+   }
+  },
+  {
+   "id": "en-2026-B10",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "The lesson starts ___ nine o'clock sharp.",
+   "answer": {
+    "value": "at"
+   },
+   "accepted": [
+    "at"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.preposition"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 10,
+   "correction": {
+    "ru": "Точное время — «at».",
+    "en": "A clock time takes “at”."
+   }
+  },
+  {
+   "id": "en-2026-B11",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "You needn't ___ taken the umbrella: the rain has stopped.",
+   "answer": {
+    "value": "have"
+   },
+   "accepted": [
+    "have"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.modal"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 11,
+   "correction": {
+    "ru": "«Needn't have + V3» — действие было напрасным.",
+    "en": "“Needn't have + V3” marks an unnecessary past action."
+   }
+  },
+  {
+   "id": "en-2026-B12",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "She is used ___ getting up early.",
+   "answer": {
+    "value": "to"
+   },
+   "accepted": [
+    "to"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.collocation"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 12,
+   "correction": {
+    "ru": "«Be used to doing» — привычка.",
+    "en": "“Be used to doing” expresses a habit."
+   }
+  },
+  {
+   "id": "en-2026-B13",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "He is not used ___ being told what to do.",
+   "answer": {
+    "value": "to"
+   },
+   "accepted": [
+    "to"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.collocation"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 13,
+   "correction": {
+    "ru": "«Be used to doing something» требует предлог «to».",
+    "en": "“Be used to doing something” requires the preposition “to”."
+   }
+  },
+  {
+   "id": "en-2026-B14",
+   "topic": "gap_fill",
+   "type": "gap",
+   "instruction": {
+    "ru": "Заполните пропуск одним словом.",
+    "en": "Fill the gap with one word."
+   },
+   "text": "We have known each other ___ childhood.",
+   "answer": {
+    "value": "since"
+   },
+   "accepted": [
+    "since"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "gap_fill.preposition"
+   ],
+   "rule": "gap_fill",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 14,
+   "correction": {
+    "ru": "«Since» + точка отсчёта времени.",
+    "en": "“Since” takes a starting point in time."
+   }
+  },
+  {
+   "id": "en-2026-B15",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "The teacher explained us the rule twice.",
+   "answer": {
+    "value": "us"
+   },
+   "accepted": [
+    "us"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.object"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 15,
+   "correction": {
+    "ru": "«Explain» требует «to»: explain the rule to us («us» без предлога лишнее).",
+    "en": "“Explain” takes “to”: explain the rule to us, so bare “us” is extra."
+   }
+  },
+  {
+   "id": "en-2026-B16",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "This is the most fastest car in the city.",
+   "answer": {
+    "value": "most"
+   },
+   "accepted": [
+    "most"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.comparison"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 16,
+   "correction": {
+    "ru": "«Fastest» уже превосходная степень.",
+    "en": "“Fastest” is already a superlative, so “most” is extra."
+   }
+  },
+  {
+   "id": "en-2026-B17",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "He entered into the room without knocking.",
+   "answer": {
+    "value": "into"
+   },
+   "accepted": [
+    "into"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.preposition"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 17,
+   "correction": {
+    "ru": "«Enter» — переходный глагол: enter the room.",
+    "en": "“Enter” is transitive: enter the room."
+   }
+  },
+  {
+   "id": "en-2026-B18",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "My friend he lives in Brest now.",
+   "answer": {
+    "value": "he"
+   },
+   "accepted": [
+    "he"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.subject"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 18,
+   "correction": {
+    "ru": "Подлежащее «My friend» уже названо: «he» лишнее.",
+    "en": "The subject “my friend” is already given, so “he” is extra."
+   }
+  },
+  {
+   "id": "en-2026-B19",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "We discussed about the plan in detail.",
+   "answer": {
+    "value": "about"
+   },
+   "accepted": [
+    "about"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.preposition"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 19,
+   "correction": {
+    "ru": "«Discuss» не требует предлога.",
+    "en": "“Discuss” takes a direct object without a preposition."
+   }
+  },
+  {
+   "id": "en-2026-B20",
+   "topic": "extra_word",
+   "type": "extra",
+   "instruction": {
+    "ru": "Найдите лишнее слово в строке и впишите его.",
+    "en": "Find the extra word in the line and type it."
+   },
+   "text": "She has been working here since three years.",
+   "answer": {
+    "value": "since"
+   },
+   "accepted": [
+    "since"
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "extra_word.preposition"
+   ],
+   "rule": "extra_word",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 20,
+   "correction": {
+    "ru": "Период «three years» требует «for».",
+    "en": "The period “three years” takes “for”."
+   }
+  },
+  {
+   "id": "en-2026-B21",
+   "topic": "communication",
+   "type": "translate",
+   "instruction": {
+    "ru": "Переведите фрагмент на английский язык.",
+    "en": "Translate the fragment into English."
+   },
+   "text": "Переведите на английский: «Он сказал, что придёт позже».",
+   "answer": {
+    "value": "He said that he would come later"
+   },
+   "accepted": [
+    "He said that he would come later",
+    "He said he would come later",
+    "He said that he would come later."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.translation"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 21,
+   "correction": {
+    "ru": "Косвенная речь: will → would.",
+    "en": "Reported speech shifts “will” to “would”."
+   }
+  },
+  {
+   "id": "en-2026-B22",
+   "topic": "communication",
+   "type": "translate",
+   "instruction": {
+    "ru": "Переведите фрагмент на английский язык.",
+    "en": "Translate the fragment into English."
+   },
+   "text": "Переведите на английский: «Если бы я знал ответ, я бы помог тебе».",
+   "answer": {
+    "value": "If I knew the answer, I would help you"
+   },
+   "accepted": [
+    "If I knew the answer, I would help you",
+    "If I knew the answer I would help you",
+    "If I knew the answer, I would help you."
+   ],
+   "policy": {
+    "case": "insensitive",
+    "article": "checked",
+    "apostrophe": "ignore",
+    "hyphen": "significant",
+    "space": "significant",
+    "stress": "significant",
+    "empty": "reject"
+   },
+   "tags": [
+    "communication.translation"
+   ],
+   "rule": "communication",
+   "source": "authored",
+   "year": 2026,
+   "part": "B",
+   "n": 22,
+   "correction": {
+    "ru": "Нереальное условие II типа: if + Past Simple, would + V.",
+    "en": "The second conditional: if + Past Simple, would + V."
+   }
+  }
+ ]
+}

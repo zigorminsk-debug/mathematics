@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Адаптивная иконка: бирюзовый фон-вектор + облако с «EN» растром в
+     безопасной зоне (mipmap-*/ic_launcher_foreground.png, рисует
+     english/tools/make_icon.py). Монохромный слой — та же картинка. -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@drawable/ic_launcher_background"/>
+    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+    <monochrome android:drawable="@mipmap/ic_launcher_foreground"/>
+</adaptive-icon>

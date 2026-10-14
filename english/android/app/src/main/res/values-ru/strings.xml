@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- сгенерировано english/tools/build_content.py: правьте content_src/ui_strings.py -->
+<resources>
+    <string name="app_name">Репетитор ЦТ: Английский язык</string>
+    <string name="app_tagline">Авторские варианты, правила и разбор ошибок офлайн</string>
+    <string name="disclaimer">Авторские тренировочные материалы. Это не официальные задания РИКЗ.</string>
+</resources>

@@ -1,0 +1,180 @@
+#!/usr/bin/env node
+/* english/tests/ui_smoke.js — дымовые проверки английского интерфейса в jsdom.
+ *
+ * Повторяют то, что делает ученик, и падают, если экран перестал работать:
+ * главная, вариант 2026 (40 заданий: 18 A + 22 B, таймер 120 минут), ответ на
+ * задание части A, сохранение статистики, тренировка с разбором ошибки
+ * (диагноз → правило → однотипные задания), справочник со схемой, статистика,
+ * настройки и «О программе».
+ *
+ * Отдельно проверяется требование к языку: переключатель интерфейса RU/EN не
+ * переводит сам проверяемый английский текст.
+ *
+ * Usage:  npm install --no-save jsdom && node english/tests/ui_smoke.js
+ */
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const { JSDOM } = require('jsdom');
+
+const englishRoot = path.join(__dirname, '..');
+const contentDir = path.join(englishRoot, 'dist', 'content');
+const html = fs.readFileSync(path.join(englishRoot, 'webapp', 'index.html'), 'utf8');
+
+const dom = new JSDOM(html, { url: 'http://localhost/index.html', runScripts: 'outside-only', pretendToBeVisual: true });
+const { window } = dom;
+
+// Платформа-заглушка Windows: content/<name>.json отдаём из собранного банка.
+window.fetch = (url) => {
+  const target = String(url);
+  const json = (value) => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(value),
+    text: () => Promise.resolve(JSON.stringify(value)) });
+  if (target.indexOf('content/') === 0) {
+    const file = path.join(contentDir, target.replace('content/', '').replace('.json', '') + '.json');
+    if (!fs.existsSync(file)) return Promise.resolve({ ok: false, status: 404 });
+    return json(JSON.parse(fs.readFileSync(file, 'utf8')));
+  }
+  if (target === 'api/state') {
+    return json({ app: { platform: 'windows', dataDir: 'C:/tmp', version: '2026.10.1' },
+      content: { version: '2026.10.1' } });
+  }
+  if (target.indexOf('api/blob') === 0) return json(null);
+  if (target === 'api/update') return json({ status: 'ok', version: '2026.10.1' });
+  return json({ ok: true });
+};
+
+window.eval(fs.readFileSync(path.join(englishRoot, 'webapp', 'core.js'), 'utf8'));
+window.eval(fs.readFileSync(path.join(englishRoot, 'webapp', 'app.js'), 'utf8'));
+
+const $ = (selector) => window.document.querySelector(selector);
+const $$ = (selector) => Array.prototype.slice.call(window.document.querySelectorAll(selector));
+const click = (node) => node.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+const wait = () => new Promise((resolve) => setTimeout(resolve, 30));
+
+let failures = 0;
+const check = (condition, label, extra) => {
+  if (!condition) { failures++; console.error('✗ ' + label + (extra ? ' — ' + extra : '')); }
+  else console.log('· ' + label);
+};
+const show = (hash) => { window.location.hash = hash; window.CT.render(); };
+
+(async () => {
+  await window.CT.boot();
+  await wait();
+  check(!!$('.hero'), 'главная отрисована');
+  check(document_title_ok(), 'заголовок называет предмет', window.document.title);
+  function document_title_ok() { return /Английский/.test(window.document.title); }
+
+  /* ---------------------------------------------------- вариант целиком */
+  const variant = window.CT.content.variants()[0];
+  check(variant && variant.tasks.length === 40, 'вариант 2026 содержит 40 заданий',
+    variant ? String(variant.tasks.length) : 'нет');
+  check(variant.partA === 18 && variant.partB === 22, 'структура варианта 18 A + 22 B',
+    variant.partA + ' A + ' + variant.partB + ' B');
+  check(window.CT.content.meta.minutes === 120, 'на вариант отведено 120 минут',
+    String(window.CT.content.meta.minutes));
+  check(window.CT.content.plannedYears().length > 0, 'будущие годы помечены как «готовятся»');
+
+  show('#/tests');
+  check($$('#view .card').length >= 1, 'экран вариантов открылся');
+  click($$('#view .btn.primary')[0]);
+  await wait();
+  check(window.location.hash === '#/run', 'вариант запущен', window.location.hash);
+  check(!!$('#run-clock'), 'таймер варианта виден');
+  check(/осталось/i.test($('#run-clock').textContent), 'таймер показывает остаток времени');
+
+  const task = window.CT.run.task();
+  check(!!task && task.part === 'A', 'первое задание — из части A', task && task.id);
+  if (task.type === 'choice') {
+    const right = $$('.choice').filter((node) => node.textContent.indexOf(task.answer.value) >= 0)[0];
+    check(!!right, 'вариант с верным ответом есть на экране');
+    click(right);
+  } else {
+    $('.answer-input').value = task.answer.value;
+    click($('.btn.primary'));
+  }
+  await wait();
+  // В варианте целиком правильность не раскрывается до завершения.
+  check(!!$('.banner.info'), 'ответ на задание варианта записан');
+  check(!$('.policy-note') && !$('.diagnosis'), 'в варианте разбор не подсказывает ответ');
+  check(window.CT.store.progress.tasksDone >= 1, 'статистика учла задание',
+    String(window.CT.store.progress.tasksDone));
+  check(!!window.CT.store.progress.byTopic[task.topic], 'тема учтена в статистике');
+  const result = window.CT.store.session.results[0];
+  check(result && result.correct === true && result.part === 'A', 'ответ записан в прогон вместе с частью');
+
+  /* ------------------------------------------------ тренировка и разбор */
+  show('#/practice');
+  check($$('#view .card').length >= 10, 'в тренировке перечислены темы',
+    String($$('#view .card').length));
+  click($$('#view .btn.primary')[0]);
+  await wait();
+  const practice = window.CT.run.task();
+  if (practice.type === 'choice') {
+    click($$('.choice').filter((node) => node.textContent.indexOf(practice.answer.value) < 0)[0]);
+  } else {
+    $('.answer-input').value = 'zzz';
+    click($('.btn.primary'));
+  }
+  await wait();
+  check(!!$('.banner.bad'), 'неверный ответ отмечен');
+  check(!!$('.policy-note'), 'показано, что именно проверяется в задании');
+  check(!!$('.diagnosis'), 'показан диагноз типичной ошибки');
+  check(!!$('.rule-card'), 'открылась карточка правила');
+  check(!!$('.analogous-box'), 'предложены однотипные задания');
+  check(/Ожидалось/.test($('#view').textContent), 'показан ожидаемый ответ');
+
+  /* --------------------------------------- перевод ответа не переводится */
+  const before = window.CT.content.bank.slice(0, 5).map((item) => item.text);
+  window.CT.i18n.setLang('en');
+  window.CT.render();
+  const after = window.CT.content.bank.slice(0, 5).map((item) => item.text);
+  check(before.join('|') === after.join('|'), 'английский текст заданий не переводится');
+  check(/Topics|Practice|Rules/i.test(window.document.body.textContent), 'интерфейс переключился на английский');
+  window.CT.i18n.setLang('ru');
+  window.CT.render();
+
+  /* --------------------------------------------------- справочник и схема */
+  show('#/study');
+  check($$('.rule-card').length >= 13, 'в справочнике есть карточки правил',
+    String($$('.rule-card').length));
+  const lesson = Object.keys(window.CT.content.lessons)[0];
+  show('#/study/' + lesson);
+  check(!!$('.diagram-svg'), 'нарисована схема урока');
+  check($$('.diagram-svg .diagram-node').length >= 2, 'у схемы есть узлы');
+  check($$('.diagram-svg .diagram-edge').length >= 1, 'у схемы есть связи');
+  show('#/study');
+  const search = $('.search');
+  if (search) {
+    search.value = 'артикл';
+    search.dispatchEvent(new window.Event('input', { bubbles: true }));
+    check($$('.rule-card').length >= 1, 'поиск по справочнику находит правило');
+  }
+
+  /* ---------------------------------------------------- статистика, экраны */
+  for (const hash of ['#/home', '#/stats', '#/mistakes', '#/settings', '#/about']) {
+    show(hash);
+    const view = $('#view');
+    check(view.children.length > 0 && view.textContent.indexOf('undefined') < 0, 'экран ' + hash);
+  }
+  show('#/about');
+  check(/Английский/.test($('#view').textContent), 'в «О программе» назван предмет');
+  check(/не являются официальными|не официальные/i.test($('#view').textContent),
+    'есть оговорка, что задания не РИКЗ');
+
+  /* ---------------------------------------------------------- завершение */
+  show('#/run');
+  click($$('#view .btn.ghost').pop());
+  await wait();
+  const confirmYes = $$('.confirm .btn.primary')[0];
+  if (confirmYes) { click(confirmYes); await wait(); }
+  check(window.location.hash === '#/result' || window.location.hash === '#/run',
+    'вариант можно завершить', window.location.hash);
+  if (window.location.hash === '#/result') {
+    check(/Верных ответов/.test($('#view').textContent), 'результат показывает счёт');
+  }
+
+  if (failures) { console.error('\n✗ ошибок: ' + failures); process.exit(1); }
+  console.log('\n✓ интерфейс английского тренажёра проходит дымовой тест');
+})().catch((error) => { console.error(error); process.exit(1); });

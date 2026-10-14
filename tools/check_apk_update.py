@@ -19,6 +19,7 @@ import sys
 import subject
 
 ROOT = Path(__file__).resolve().parent.parent
+SUBJECT_ROOT = Path(subject.SUBJECT_ROOT)
 PACKAGE = subject.ANDROID_PACKAGE
 
 
@@ -70,7 +71,7 @@ def main() -> int:
     parser.add_argument("--print-version-code", action="store_true")
     args = parser.parse_args()
     try:
-        version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+        version = (SUBJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
         if args.print_version_code:
             print(version_code(version))
             return 0

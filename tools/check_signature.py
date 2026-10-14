@@ -23,9 +23,15 @@ import shutil
 import subprocess
 import sys
 
+import sys
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DEFAULT_APK = ROOT / "android" / "app" / "build" / "outputs" / "apk" / "release" / "app-release.apk"
-EXPECTED = ROOT / "android" / "keystore" / "expected-cert-sha256.txt"
+sys.path.insert(0, str(ROOT / "tools"))
+import subject  # noqa: E402  (профиль предмета: CT_SUBJECT, по умолчанию physics)
+
+SUBJECT_ROOT = pathlib.Path(subject.SUBJECT_ROOT)
+DEFAULT_APK = SUBJECT_ROOT / subject.GRADLE_APK
+EXPECTED = SUBJECT_ROOT / subject.EXPECTED_CERT
 
 DIGEST = re.compile(r"certificate SHA-256 digest:\s*([0-9a-fA-F:]+)")
 
