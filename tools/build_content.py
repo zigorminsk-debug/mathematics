@@ -32,6 +32,7 @@ import os
 import re
 import shutil
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -182,7 +183,12 @@ def main() -> int:
     meta = {
         "contentVersion": CONTENT_VERSION_FILE.read_text(encoding="utf-8").strip()
         if CONTENT_VERSION_FILE.exists() else "1.0.0",
-        "built": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        # Момент сборки.  SOURCE_DATE_EPOCH делает сборку воспроизводимой —
+        # именно так поступает CI (берёт время коммита), иначе отметка времени
+        # каждый раз делала бы скопированный манифест «устаревшим».
+        "built": datetime.fromtimestamp(
+            int(os.environ.get("SOURCE_DATE_EPOCH", time.time())), timezone.utc
+        ).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "schema": 1,
         "years": sorted({t["year"] for t in bank if t["year"]}),
         "counts": {

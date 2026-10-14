@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import filecmp
+import json
 import shutil
 import sys
 from pathlib import Path
@@ -55,6 +56,24 @@ def copy_tree_into(src: Path, dst: Path) -> int:
     return count
 
 
+def compare_manifest(src: Path, dst: Path) -> bool:
+    """version.json сравниваем по смыслу: отметка ``built`` зависит от времени сборки.
+
+    Всё остальное (версия, периоды, SHA-256 остальных файлов) должно совпадать
+    байт в байт — иначе копия действительно устарела.
+    """
+    if not dst.exists():
+        return False
+    try:
+        left = json.loads(src.read_text(encoding="utf-8"))
+        right = json.loads(dst.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    left.pop("built", None)
+    right.pop("built", None)
+    return left == right
+
+
 def compare_tree(src: Path, dst: Path) -> list[str]:
     """Return a list of human-readable differences (empty = identical)."""
     problems: list[str] = []
@@ -68,6 +87,8 @@ def compare_tree(src: Path, dst: Path) -> list[str]:
             problems.extend(compare_tree(item, target))
         elif not target.exists():
             problems.append(f"missing {target.relative_to(ROOT)}")
+        elif item.name == "version.json" and compare_manifest(item, target):
+            continue
         elif not filecmp.cmp(item, target, shallow=False):
             problems.append(f"outdated {target.relative_to(ROOT)}")
     return problems
