@@ -1,6 +1,110 @@
 {
  "cases": [
   {
+   "user": "  − 7 ",
+   "accept": [
+    "-7"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "X = 12",
+   "accept": [
+    "12"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "х = 12",
+   "accept": [
+    "12"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "ответ: 12",
+   "accept": [
+    "12"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "(12)",
+   "accept": [
+    "12"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "1 000",
+   "accept": [
+    "1000"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "-1/3",
+   "accept": [
+    "−1/3"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "6√2",
+   "accept": [
+    "6√2"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "6√2",
+   "accept": [
+    "6√3"
+   ],
+   "answerType": "short",
+   "expect": false
+  },
+  {
+   "user": "",
+   "accept": [
+    "4"
+   ],
+   "answerType": "short",
+   "expect": false
+  },
+  {
+   "user": "4",
+   "accept": [
+    "4"
+   ],
+   "answerType": "choice",
+   "expect": true
+  },
+  {
+   "user": "3",
+   "accept": [
+    "4"
+   ],
+   "answerType": "choice",
+   "expect": false
+  },
+  {
+   "user": "8/2",
+   "accept": [
+    "4"
+   ],
+   "answerType": "choice",
+   "expect": false
+  },
+  {
    "user": "0,8",
    "accept": [
     "4/5"
@@ -25,6 +129,38 @@
    "expect": true
   },
   {
+   "user": "12,0",
+   "accept": [
+    "12"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "12.",
+   "accept": [
+    "12"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "2,5",
+   "accept": [
+    "5/2"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "2,51",
+   "accept": [
+    "5/2"
+   ],
+   "answerType": "short",
+   "expect": false
+  },
+  {
    "user": "0,833",
    "accept": [
     "5/6"
@@ -41,81 +177,65 @@
    "expect": false
   },
   {
-   "user": " − 7 ",
+   "user": "0,333",
    "accept": [
-    "-7"
+    "1/3"
    ],
    "answerType": "short",
    "expect": true
   },
   {
-   "user": "X = 12",
+   "user": "0,33",
    "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "ответ: 12",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "12,0",
-   "accept": [
-    "12"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "3",
-   "accept": [
-    "4"
-   ],
-   "answerType": "choice",
-   "expect": false
-  },
-  {
-   "user": "4",
-   "accept": [
-    "4"
-   ],
-   "answerType": "choice",
-   "expect": true
-  },
-  {
-   "user": "",
-   "accept": [
-    "4"
+    "1/3"
    ],
    "answerType": "short",
    "expect": false
   },
   {
-   "user": "6√2",
+   "user": "1000,5",
+   "accept": [
+    "1000"
+   ],
+   "answerType": "short",
+   "expect": false
+  },
+  {
+   "user": "0,707",
+   "accept": [
+    "√2/2"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "0,7",
+   "accept": [
+    "√2/2"
+   ],
+   "answerType": "short",
+   "expect": false
+  },
+  {
+   "user": "√2/2",
+   "accept": [
+    "0,707"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "6,28",
+   "accept": [
+    "2π"
+   ],
+   "answerType": "short",
+   "expect": true
+  },
+  {
+   "user": "8,49",
    "accept": [
     "6√2"
-   ],
-   "answerType": "short",
-   "expect": true
-  },
-  {
-   "user": "6√2",
-   "accept": [
-    "6√3"
-   ],
-   "answerType": "short",
-   "expect": false
-  },
-  {
-   "user": "-1/3",
-   "accept": [
-    "−1/3"
    ],
    "answerType": "short",
    "expect": true

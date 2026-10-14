@@ -378,9 +378,10 @@ TYPICAL_ERRORS: dict[str, dict[str, str]] = {
     # ---- вероятность и комбинаторика --------------------------------------- #
     "вероятность": {
         "ru": "Вероятность = число благоприятных исходов, делённое на ОБЩЕЕ число исходов; "
-              "проверьте, что оба числа посчитаны по одному и тому же множеству.",
+              "проверьте, что оба числа посчитаны по одному и тому же множеству — ошибки чаще "
+              "всего возникают именно при подсчёте общего числа исходов.",
         "en": "Probability = favourable outcomes over ALL outcomes; make sure both counts refer "
-              "to the same set."},
+              "to the same set — mistakes usually come from counting the total incorrectly."},
     "противоположные события": {
         "ru": "P(Ā) = 1 − P(A). Событие «не сработает» — это дополнение к «сработает».",
         "en": "P(Ā) = 1 − P(A). 'Fails' is the complement of 'works'."},
@@ -449,10 +450,6 @@ TYPICAL_ERRORS: dict[str, dict[str, str]] = {
     "линейная функция": {
         "ru": "y = kx + b: точка (0; b) — пересечение с осью Oy, коэффициент k — угловой.",
         "en": "y = kx + b: the point (0; b) is the Oy-intersection, k is the slope."},
-    "вероятность": {
-        "ru": "Сравните число благоприятных исходов и общее число исходов — ошибки чаще всего "
-              "в подсчёте общего числа.",
-        "en": "Compare favourable and total outcomes — most mistakes are in the total count."},
     "логика": {
         "ru": "Проверьте закономерность на нескольких членах, прежде чем применять формулу.",
         "en": "Test the pattern on several terms before applying a formula."},

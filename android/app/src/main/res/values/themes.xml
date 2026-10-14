@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- The interface itself is themed inside the web app (light/dark/auto), so the
-         activity only needs a chromeless, edge-friendly shell. -->
+    <!-- Тема «день/ночь»: WebView получает тот же фон, что и интерфейс. -->
     <style name="Theme.CTMaths" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:statusBarColor">#2D7FF9</item>
-        <item name="android:navigationBarColor">#2D7FF9</item>
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="27">shortEdges</item>
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryDark">@color/brand_primary_dark</item>
+        <item name="colorAccent">@color/brand_accent</item>
+        <item name="android:windowBackground">@color/brand_background</item>
+        <item name="android:statusBarColor">@color/brand_primary_dark</item>
+        <item name="android:navigationBarColor">@color/brand_surface</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 </resources>

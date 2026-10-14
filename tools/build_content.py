@@ -7,7 +7,8 @@
 
 Steps
 -----
-1. import every authoring module (``year2021``…``year2025``, ``templates``, …);
+1. import every authoring module (``task_bank_2021``…``task_bank_2025``,
+   ``templates``, ``templates_extra``, …);
 2. run the exact-arithmetic ``check()`` of **every** item — the build fails if a
    single answer is wrong, a task has no solution, or part A is malformed;
 3. serialise language-neutral banks (ru + en side by side);
@@ -40,8 +41,10 @@ DIST = ROOT / "dist" / "content"
 
 sys.path.insert(0, str(SRC))
 
-YEAR_MODULES = ["year2021", "year2022", "year2023", "year2024", "year2025"]
-EXTRA_MODULES = ["templates", "formulas", "ui_strings", "mistakes"]
+import periods  # noqa: E402  (лежит рядом, подключается после sys.path)
+
+YEAR_MODULES = periods.modules()
+EXTRA_MODULES = ["templates", "templates_extra", "formulas", "ui_strings", "mistakes"]
 
 CONTENT_VERSION_FILE = ROOT / "VERSION"
 
@@ -78,7 +81,19 @@ def collect_tasks() -> tuple[list, list]:
 
     tmod = load("templates")
     if tmod is not None:
-        items = tmod.generate()
+        items = list(tmod.generate())
+        emod = load("templates_extra")
+        if emod is not None:
+            items += list(emod.generate_extra())
+        seen_text = set()
+        unique = []
+        for t in items:
+            key = (t.topic, t.ru.strip(), t.en.strip())
+            if key in seen_text:
+                continue
+            seen_text.add(key)
+            unique.append(t)
+        items = unique
         for t in items:
             t.verify()
             total_checks += 1
@@ -89,6 +104,11 @@ def collect_tasks() -> tuple[list, list]:
         print(f"  · templates: {len(items)} analogous items verified")
 
     print(f"  ✓ {total_checks} exact-arithmetic checks passed")
+    missing = [year for year in periods.years() if not (SRC / f"task_bank_{year}.py").exists()]
+    if missing:
+        # periods.py — единственный источник правды: год без модуля означает, что в
+        # манифест попал вариант, которого нет в банке
+        raise SystemExit("нет модулей для периодов: " + ", ".join(str(year) for year in missing))
     return bank, analogous
 
 
@@ -192,8 +212,15 @@ def main() -> int:
     mmod = load("mistakes")
     mistake_help = mmod.payload() if mmod else {"errors": {}, "checklist": []}
 
-    from kit import ANSWER_VECTORS
+    from kit import ANSWER_VECTORS, check_answer
     vectors = ANSWER_VECTORS or default_vectors()
+    for index, vector in enumerate(vectors):
+        graded = check_answer(vector["user"], {"accept": vector["accept"],
+                                               "answerType": vector.get("answerType", "short")})
+        if graded != bool(vector["expect"]):
+            raise SystemExit(f"answer vector #{index} ({vector['user']!r} vs {vector['accept']}) "
+                             f"graded {graded}, expected {vector['expect']}")
+    print(f"  ✓ {len(vectors)} answer vectors graded by the Python implementation")
 
     if args.check:
         print("check-only mode: no files written")
@@ -210,6 +237,7 @@ def main() -> int:
 
     version = {
         **meta,
+        **periods.payload(),
         "files": {p.name: {"sha256": sha256(p), "bytes": p.stat().st_size}
                   for p in sorted(DIST.glob("*.json")) if p.name != "version.json"},
         "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/latest/download",
@@ -244,29 +272,56 @@ def main() -> int:
 
 
 def default_vectors() -> list[dict]:
-    """Sanity vectors for the *portable* answer checker (see kit.check_answer).
+    """The shared contract of the portable answer checker.
 
-    Regenerate whenever the algorithm changes — Kotlin and JS unit tests read
-    this file and fail the build on any divergence.
+    Every row is graded by **all three implementations** — Python
+    (:func:`kit.check_answer`), JavaScript (``webapp/core.js`` → ``CT.answer``,
+    checked by ``tests/answer_parity.js``) and Kotlin (``AnswerChecker.kt``,
+    checked by ``AnswerCheckerTest.kt``) — and the builds fail when any of them
+    disagrees.  Four tiers are covered: canonical string match, choice tasks
+    (never graded numerically), exact numbers with a rounding band for
+    fractions, and expressions with roots or π that at least one side wrote as an
+    expression.
     """
-    v = [
+    return [
+        # 1. каноническая строка / canonical string forms
+        {"user": "  − 7 ", "accept": ["-7"], "answerType": "short", "expect": True},
+        {"user": "X = 12", "accept": ["12"], "answerType": "short", "expect": True},
+        {"user": "х = 12", "accept": ["12"], "answerType": "short", "expect": True},
+        {"user": "ответ: 12", "accept": ["12"], "answerType": "short", "expect": True},
+        {"user": "(12)", "accept": ["12"], "answerType": "short", "expect": True},
+        {"user": "1 000", "accept": ["1000"], "answerType": "short", "expect": True},
+        {"user": "-1/3", "accept": ["−1/3"], "answerType": "short", "expect": True},
+        {"user": "6√2", "accept": ["6√2"], "answerType": "short", "expect": True},
+        {"user": "6√2", "accept": ["6√3"], "answerType": "short", "expect": False},
+        {"user": "", "accept": ["4"], "answerType": "short", "expect": False},
+
+        # 2. выбор варианта: «повезло с числом» — не ответ
+        {"user": "4", "accept": ["4"], "answerType": "choice", "expect": True},
+        {"user": "3", "accept": ["4"], "answerType": "choice", "expect": False},
+        {"user": "8/2", "accept": ["4"], "answerType": "choice", "expect": False},
+
+        # 3. точные числа и округления, написанные рукой
         {"user": "0,8", "accept": ["4/5"], "answerType": "short", "expect": True},
         {"user": "0.80", "accept": ["4/5"], "answerType": "short", "expect": True},
         {"user": "8/10", "accept": ["0,8"], "answerType": "short", "expect": True},
+        {"user": "12,0", "accept": ["12"], "answerType": "short", "expect": True},
+        {"user": "12.", "accept": ["12"], "answerType": "short", "expect": True},
+        {"user": "2,5", "accept": ["5/2"], "answerType": "short", "expect": True},
+        {"user": "2,51", "accept": ["5/2"], "answerType": "short", "expect": False},
         {"user": "0,833", "accept": ["5/6"], "answerType": "short", "expect": True},
         {"user": "0,8", "accept": ["5/6"], "answerType": "short", "expect": False},
-        {"user": " − 7 ", "accept": ["-7"], "answerType": "short", "expect": True},
-        {"user": "X = 12", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "ответ: 12", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "12,0", "accept": ["12"], "answerType": "short", "expect": True},
-        {"user": "3", "accept": ["4"], "answerType": "choice", "expect": False},
-        {"user": "4", "accept": ["4"], "answerType": "choice", "expect": True},
-        {"user": "", "accept": ["4"], "answerType": "short", "expect": False},
-        {"user": "6√2", "accept": ["6√2"], "answerType": "short", "expect": True},
-        {"user": "6√2", "accept": ["6√3"], "answerType": "short", "expect": False},
-        {"user": "-1/3", "accept": ["−1/3"], "answerType": "short", "expect": True},
+        {"user": "0,333", "accept": ["1/3"], "answerType": "short", "expect": True},
+        {"user": "0,33", "accept": ["1/3"], "answerType": "short", "expect": False},
+        {"user": "1000,5", "accept": ["1000"], "answerType": "short", "expect": False},
+
+        # 4. ответы, записанные выражением (корни, π)
+        {"user": "0,707", "accept": ["√2/2"], "answerType": "short", "expect": True},
+        {"user": "0,7", "accept": ["√2/2"], "answerType": "short", "expect": False},
+        {"user": "√2/2", "accept": ["0,707"], "answerType": "short", "expect": True},
+        {"user": "6,28", "accept": ["2π"], "answerType": "short", "expect": True},
+        {"user": "8,49", "accept": ["6√2"], "answerType": "short", "expect": True},
     ]
-    return v
 
 
 if __name__ == "__main__":

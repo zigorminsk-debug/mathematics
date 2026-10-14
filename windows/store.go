@@ -1,5 +1,19 @@
 package main
 
+// store.go — постоянное хранилище приложения Windows.
+//
+// Раскладка данных (каталог задаётся --data, иначе %APPDATA%\CTMathsTutor,
+// при --portable — рядом с исполняемым файлом):
+//
+//	data/progress.json   успеваемость ученика (попытки, статистика по темам)
+//	data/settings.json   язык, тема оформления, длительность экзамена, цель дня
+//	data/session.json    незавершённый тест (можно продолжить)
+//	data/content/*.json  банк заданий, скачанный «поверх» встроенного (обновление)
+//	reports/*.html        выгруженные отчёты о прогрессе
+//
+// On-disk layout of the Windows app: JSON blobs, a content overlay that shadows
+// the embedded bank, and exported HTML reports.
+
 import (
 	"crypto/sha256"
 	"encoding/hex"
@@ -11,235 +25,273 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"sync"
+	"strings"
 	"time"
 )
 
-// Store keeps every mutable artefact of the desktop app on disk:
-// student progress, settings, a resumable session, generated reports and the
-// downloaded content overlay (new task banks installed on top of the embedded
-// ones, exactly like the Android updater).
+// blobName matches the keys used by the shared UI (progress, settings, …) and by
+// the content overlay (bank, analogous, …). Anything else is rejected so a
+// malformed request can never escape the data directory.
+var blobName = regexp.MustCompile(`^[a-z0-9][a-z0-9_-]{0,40}$`)
+
+// maxBlobBytes caps a single JSON blob (progress with years of history is far
+// smaller than this limit).
+const maxBlobBytes = 32 << 20
+
+// Store owns the data directory of the application.
 type Store struct {
-	dir string
-	mu  sync.Mutex
+	root string
+	http *http.Client
 }
 
-var keyRe = regexp.MustCompile(`^[a-z0-9_\-]{1,32}$`)
-
-// sha256Hex is used to verify every downloaded content pack.
-func sha256Hex(b []byte) string {
-	sum := sha256.Sum256(b)
-	return hex.EncodeToString(sum[:])
-}
-
+// NewStore prepares (and creates if needed) the data directory under base.
 func NewStore(base string) (*Store, error) {
-	dir := filepath.Join(base, "data")
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return nil, err
+	if base == "" {
+		return nil, errors.New("store: empty data directory")
 	}
-	if err := os.MkdirAll(filepath.Join(dir, "content"), 0o755); err != nil {
-		return nil, err
+	root := filepath.Join(base, "data")
+	if err := os.MkdirAll(root, 0o755); err != nil {
+		return nil, fmt.Errorf("store: create %s: %w", root, err)
 	}
-	if err := os.MkdirAll(filepath.Join(dir, "reports"), 0o755); err != nil {
-		return nil, err
+	if err := os.MkdirAll(filepath.Join(base, "reports"), 0o755); err != nil {
+		return nil, fmt.Errorf("store: create reports: %w", err)
 	}
-	return &Store{dir: dir}, nil
+	return &Store{root: root, http: &http.Client{Timeout: 45 * time.Second}}, nil
 }
 
-func (s *Store) Dir() string       { return s.dir }
-func (s *Store) ContentDir() string { return filepath.Join(s.dir, "content") }
-func (s *Store) ReportsDir() string { return filepath.Join(s.dir, "reports") }
+// Root returns the data directory ("data").
+func (s *Store) Root() string { return s.root }
 
-// ---- blobs (progress, settings, history, session) ------------------------- //
+// Base returns the parent directory holding "data" and "reports".
+func (s *Store) Base() string { return filepath.Dir(s.root) }
 
-func (s *Store) path(key string) (string, error) {
-	if !keyRe.MatchString(key) {
-		return "", fmt.Errorf("invalid storage key %q", key)
+// Reports returns the folder with exported HTML reports.
+func (s *Store) Reports() string { return filepath.Join(s.Base(), "reports") }
+
+// ContentDir returns the folder with the downloaded content overlay.
+func (s *Store) ContentDir() string { return filepath.Join(s.root, "content") }
+
+func (s *Store) blobPath(key string) (string, error) {
+	if !blobName.MatchString(key) {
+		return "", fmt.Errorf("store: bad key %q", key)
 	}
-	return filepath.Join(s.dir, key+".json"), nil
+	return filepath.Join(s.root, key+".json"), nil
 }
 
-func (s *Store) Load(key string) ([]byte, bool) {
-	p, err := s.path(key)
+// ReadBlob returns the stored JSON or nil when the blob does not exist yet.
+func (s *Store) ReadBlob(key string) ([]byte, error) {
+	path, err := s.blobPath(key)
 	if err != nil {
-		return nil, false
+		return nil, err
 	}
-	b, err := os.ReadFile(p)
+	data, err := os.ReadFile(path)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil, nil
+	}
 	if err != nil {
-		return nil, false
+		return nil, err
 	}
-	return b, true
+	return data, nil
 }
 
-func (s *Store) Save(key string, data []byte) error {
-	p, err := s.path(key)
+// WriteBlob stores raw JSON atomically (write to a temp file, then rename), so a
+// crash in the middle never leaves a truncated progress file behind.
+func (s *Store) WriteBlob(key string, data []byte) error {
+	path, err := s.blobPath(key)
 	if err != nil {
 		return err
 	}
-	if !json.Valid(data) {
-		return errors.New("payload is not valid JSON")
+	if len(data) > maxBlobBytes {
+		return fmt.Errorf("store: blob %s too large (%d bytes)", key, len(data))
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	tmp := p + ".tmp"
+	if len(data) > 0 && !json.Valid(data) {
+		return fmt.Errorf("store: blob %s is not valid JSON", key)
+	}
+	tmp := path + ".tmp"
 	if err := os.WriteFile(tmp, data, 0o644); err != nil {
 		return err
 	}
-	return os.Rename(tmp, p)
+	return os.Rename(tmp, path)
 }
 
-// ---- content overlay ------------------------------------------------------ //
-
-// ReadContent returns the newest version of a bank: the downloaded overlay wins
-// over the bank embedded into the executable.
-func (s *Store) ReadContent(name string, embedded []byte) []byte {
-	if !keyRe.MatchString(name) {
-		return embedded
+// ReadContent returns an overlay content file (downloaded update) when present.
+func (s *Store) ReadContent(name string) ([]byte, bool) {
+	if !blobName.MatchString(name) {
+		return nil, false
 	}
-	b, err := os.ReadFile(filepath.Join(s.ContentDir(), name+".json"))
-	if err == nil && json.Valid(b) {
-		return b
+	data, err := os.ReadFile(filepath.Join(s.ContentDir(), name+".json"))
+	if err != nil {
+		return nil, false
 	}
-	return embedded
+	return data, true
 }
 
+// WriteContent stores one content file of a downloaded update.
 func (s *Store) WriteContent(name string, data []byte) error {
-	if !keyRe.MatchString(name) {
-		return fmt.Errorf("invalid content name %q", name)
+	if !blobName.MatchString(name) {
+		return fmt.Errorf("store: bad content name %q", name)
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	return os.WriteFile(filepath.Join(s.ContentDir(), name+".json"), data, 0o644)
+	if err := os.MkdirAll(s.ContentDir(), 0o755); err != nil {
+		return err
+	}
+	tmp := filepath.Join(s.ContentDir(), name+".json.tmp")
+	if err := os.WriteFile(tmp, data, 0o644); err != nil {
+		return err
+	}
+	return os.Rename(tmp, filepath.Join(s.ContentDir(), name+".json"))
 }
 
-func (s *Store) ContentVersion() string {
-	b, err := os.ReadFile(filepath.Join(s.ContentDir(), "version.json"))
-	if err != nil {
-		return ""
+// WriteReport saves an exported HTML report and returns its path.
+func (s *Store) WriteReport(kind string, html []byte) (string, error) {
+	if kind == "" {
+		kind = "progress"
 	}
-	var v struct {
-		ContentVersion string `json:"contentVersion"`
+	kind = regexp.MustCompile(`[^a-z0-9_-]`).ReplaceAllString(strings.ToLower(kind), "")
+	if kind == "" {
+		kind = "progress"
 	}
-	if json.Unmarshal(b, &v) != nil {
-		return ""
+	name := fmt.Sprintf("%s-%s.html", kind, time.Now().Format("20060102-150405"))
+	path := filepath.Join(s.Reports(), name)
+	if err := os.WriteFile(path, html, 0o644); err != nil {
+		return "", err
 	}
-	return v.ContentVersion
+	return path, nil
 }
 
-// ---- in-place content update ---------------------------------------------- //
+// ---------------------------------------------------------------- updates ---
 
+// contentManifest mirrors dist/content/version.json published with a release.
+type contentManifest struct {
+	ContentVersion string `json:"contentVersion"`
+	Built          string `json:"built"`
+	BaseURL        string `json:"baseUrl"`
+	Files          map[string]struct {
+		SHA256 string `json:"sha256"`
+		Bytes  int64  `json:"bytes"`
+	} `json:"files"`
+	Counts struct {
+		Bank      int `json:"bank"`
+		Analogous int `json:"analogous"`
+	} `json:"counts"`
+}
+
+// UpdateResult is returned to the interface (and shown as a toast).
 type UpdateResult struct {
-	Status   string `json:"status"` // ok | uptodate | offline | error
-	Version  string `json:"version"`
-	NewTasks int    `json:"newTasks"`
-	Message  string `json:"message"`
+	Status     string `json:"status"` // uptodate | updated | offline | error
+	Version    string `json:"version"`
+	Files      int    `json:"files"`
+	NewTasks   int    `json:"newTasks"`
+	Message    string `json:"message,omitempty"`
+	Previous   string `json:"previous,omitempty"`
+	Downloaded int64  `json:"downloaded,omitempty"`
 }
 
-var errOffline = errors.New("network unavailable")
+const defaultFeed = "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"
 
-// UpdateContent downloads a newer content pack from the release feed and installs
-// it over the existing bank without touching progress.
-func (s *Store) UpdateContent(base, currentVersion string) UpdateResult {
-	if base == "" {
-		return UpdateResult{Status: "error", Message: "no update source configured"}
+// CheckUpdates downloads the manifest, verifies every file (SHA-256) and installs
+// the ones that differ into the content overlay. The installed version keeps
+// working when the network is unavailable.
+func (s *Store) CheckUpdates(feed, current string) UpdateResult {
+	if feed == "" {
+		feed = defaultFeed
 	}
-	client := &http.Client{Timeout: 30 * time.Second}
+	feed = strings.TrimRight(feed, "/")
 
-	manifest, err := fetch(client, base+"/version.json")
+	manifestData, err := s.fetch(feed + "/version.json")
 	if err != nil {
-		return UpdateResult{Status: "offline", Version: currentVersion,
-			Message: "could not reach the update server: " + err.Error()}
+		return UpdateResult{Status: "offline", Message: err.Error(), Version: current}
 	}
-	var man struct {
-		ContentVersion string `json:"contentVersion"`
-		Files          map[string]struct {
-			SHA256 string `json:"sha256"`
-		} `json:"files"`
+	var manifest contentManifest
+	if err := json.Unmarshal(manifestData, &manifest); err != nil {
+		return UpdateResult{Status: "error", Message: "manifest: " + err.Error(), Version: current}
 	}
-	if err := json.Unmarshal(manifest, &man); err != nil {
-		return UpdateResult{Status: "error", Version: currentVersion,
-			Message: "malformed manifest: " + err.Error()}
+	if manifest.ContentVersion == "" || len(manifest.Files) == 0 {
+		return UpdateResult{Status: "error", Message: "manifest is empty", Version: current}
 	}
-	if man.ContentVersion == "" {
-		return UpdateResult{Status: "error", Version: currentVersion, Message: "manifest has no version"}
-	}
-	if currentVersion != "" && man.ContentVersion == currentVersion {
-		return UpdateResult{Status: "uptodate", Version: currentVersion, Message: "content is up to date"}
+	if manifest.ContentVersion == current && !s.overlayOutdated() {
+		return UpdateResult{Status: "uptodate", Version: current, Message: "already up to date"}
 	}
 
+	var total int64
 	installed := 0
-	for name, meta := range man.Files {
-		stem := name
-		if ext := filepath.Ext(stem); ext == ".json" {
-			stem = stem[:len(stem)-len(ext)]
-		}
-		body, err := fetch(client, base+"/"+name)
+	for name, meta := range manifest.Files {
+		base := strings.TrimSuffix(name, ".json")
+		data, err := s.fetch(feed + "/" + name)
 		if err != nil {
-			return UpdateResult{Status: "offline", Version: currentVersion,
-				Message: fmt.Sprintf("failed to download %s: %v", name, err)}
+			return UpdateResult{Status: "error", Version: current, Message: name + ": " + err.Error()}
 		}
-		if meta.SHA256 != "" {
-			sum := sha256.Sum256(body)
-			if hex.EncodeToString(sum[:]) != meta.SHA256 {
-				return UpdateResult{Status: "error", Version: currentVersion,
-					Message: "checksum mismatch for " + name}
-			}
+		sum := sha256.Sum256(data)
+		if meta.SHA256 != "" && !strings.EqualFold(hex.EncodeToString(sum[:]), meta.SHA256) {
+			return UpdateResult{Status: "error", Version: current, Message: name + ": checksum mismatch"}
 		}
-		if err := s.WriteContent(stem, body); err != nil {
-			return UpdateResult{Status: "error", Version: currentVersion, Message: err.Error()}
+		if err := s.WriteContent(base, data); err != nil {
+			return UpdateResult{Status: "error", Version: current, Message: name + ": " + err.Error()}
 		}
+		total += int64(len(data))
 		installed++
 	}
-
-	result := UpdateResult{Status: "ok", Version: man.ContentVersion, NewTasks: s.countTasks()}
-	if installed == 0 {
-		result.Status = "uptodate"
+	return UpdateResult{
+		Status: "updated", Version: manifest.ContentVersion, Previous: current,
+		Files: installed, NewTasks: manifest.Counts.Bank + manifest.Counts.Analogous,
+		Downloaded: total, Message: "installed " + manifest.ContentVersion,
 	}
-	result.Message = fmt.Sprintf("installed %d content files, content version %s", installed, man.ContentVersion)
-	return result
 }
 
-func (s *Store) countTasks() int {
-	b, err := os.ReadFile(filepath.Join(s.ContentDir(), "bank.json"))
+// overlayOutdated reports whether a half-installed overlay exists (used when the
+// feed still carries the same version but local files were removed).
+func (s *Store) overlayOutdated() bool {
+	entries, err := os.ReadDir(s.ContentDir())
 	if err != nil {
-		return 0
+		return true
 	}
-	var bank struct {
-		Tasks []json.RawMessage `json:"tasks"`
+	for _, entry := range entries {
+		if strings.HasSuffix(entry.Name(), ".json") {
+			return false
+		}
 	}
-	if json.Unmarshal(b, &bank) != nil {
-		return 0
-	}
-	return len(bank.Tasks)
+	return true
 }
 
-func fetch(client *http.Client, url string) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+// secureURL accepts https anywhere and plain http only on this machine (used by
+// the tests and by a locally served update feed).
+func secureURL(raw string) bool {
+	if strings.HasPrefix(raw, "https://") {
+		return true
+	}
+	if !strings.HasPrefix(raw, "http://") {
+		return false
+	}
+	host := strings.TrimPrefix(raw, "http://")
+	if cut := strings.IndexAny(host, "/?"); cut >= 0 {
+		host = host[:cut]
+	}
+	if colon := strings.LastIndex(host, ":"); colon >= 0 {
+		host = host[:colon]
+	}
+	return host == "localhost" || host == "127.0.0.1" || host == "[::1]" || host == "::1"
+}
+
+// fetch downloads a small file with a hard size limit (a content file is a few
+// hundred kilobytes; the limit protects against a hostile feed).
+func (s *Store) fetch(url string) ([]byte, error) {
+	if !secureURL(url) {
+		return nil, fmt.Errorf("refusing non-https url %q", url)
+	}
+	response, err := s.http.Get(url)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "CTMathsTutor/"+AppVersion)
-	resp, err := client.Do(req)
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("GET %s: %s", url, response.Status)
+	}
+	limit := int64(maxBlobBytes)
+	data, err := io.ReadAll(io.LimitReader(response.Body, limit+1))
 	if err != nil {
-		return nil, errOffline
+		return nil, err
 	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("http %d", resp.StatusCode)
+	if int64(len(data)) > limit {
+		return nil, fmt.Errorf("GET %s: response too large", url)
 	}
-	return io.ReadAll(io.LimitReader(resp.Body, 32<<20))
-}
-
-// ---- report --------------------------------------------------------------- //
-
-func (s *Store) SaveReport(name string, html []byte) (string, error) {
-	if name == "" {
-		name = "progress"
-	}
-	clean := regexp.MustCompile(`[^a-zA-Z0-9_\-]+`).ReplaceAllString(name, "_")
-	if len(clean) > 60 {
-		clean = clean[:60]
-	}
-	path := filepath.Join(s.ReportsDir(), fmt.Sprintf("%s_%s.html", clean, time.Now().Format("20060102-150405")))
-	return path, os.WriteFile(path, html, 0o644)
+	return data, nil
 }

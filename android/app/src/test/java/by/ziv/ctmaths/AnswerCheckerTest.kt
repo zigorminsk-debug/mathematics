@@ -69,4 +69,43 @@ class AnswerCheckerTest {
         assertTrue(AnswerChecker.check(" 6√2 ", task))
         assertFalse(AnswerChecker.check("6√3", task))
     }
+
+    @Test
+    fun `whole numbers are never rounded`() {
+        val task = JSONObject().put("accept", JSONArray(listOf("1000"))).put("answerType", "short")
+        assertTrue(AnswerChecker.check("1000", task))
+        assertTrue(AnswerChecker.check("1 000", task))
+        assertTrue(AnswerChecker.check("12.", JSONObject().put("accept", JSONArray(listOf("12")))))
+        assertFalse(AnswerChecker.check("1000,5", task))
+        assertFalse(AnswerChecker.check("999,6", task))
+    }
+
+    @Test
+    fun `hand-written decimals pass for fractions`() {
+        val task = JSONObject().put("accept", JSONArray(listOf("5/6"))).put("answerType", "short")
+        assertTrue(AnswerChecker.check("0,833", task))
+        assertFalse(AnswerChecker.check("0,8", task))
+    }
+
+    @Test
+    fun `expressions with roots and pi are evaluated`() {
+        val root = JSONObject().put("accept", JSONArray(listOf("√2/2"))).put("answerType", "short")
+        assertTrue(AnswerChecker.check("0,707", root))
+        assertFalse(AnswerChecker.check("0,7", root))
+        val pi = JSONObject().put("accept", JSONArray(listOf("2π"))).put("answerType", "short")
+        assertTrue(AnswerChecker.check("6,28", pi))
+        assertTrue(AnswerChecker.check("2π", pi))
+        assertFalse(AnswerChecker.check("6,2", pi))
+    }
+
+    @Test
+    fun `expression evaluator follows the shared grammar`() {
+        assertEquals(14.0, AnswerChecker.value("2(3+4)")!!, 1e-9)
+        assertEquals(10.0, AnswerChecker.value("sqrt(6^2+8^2)")!!, 1e-9)
+        assertEquals(512.0, AnswerChecker.value("2^3^2")!!, 1e-9)
+        assertEquals(8.485281374238571, AnswerChecker.value("6sqrt2")!!, 1e-9)
+        assertEquals(0.5, AnswerChecker.value(".5")!!, 1e-9)
+        assertEquals(null, AnswerChecker.value("2 +"))
+        assertEquals(null, AnswerChecker.value("sqrt"))
+    }
 }

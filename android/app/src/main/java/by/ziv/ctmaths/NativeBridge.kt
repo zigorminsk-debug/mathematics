@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.VibratorManager
 import android.util.Log
 import android.view.WindowManager
 import android.webkit.JavascriptInterface
@@ -30,7 +31,7 @@ import java.util.Locale
  * ```
  * filesDir/data/<key>.json          progress, settings, session blobs
  * filesDir/content/<name>.json      content packs downloaded on top of the assets
- * getExternalFilesDir/reports/*.html  exported progress reports
+ * getExternalFilesDir/reports/       exported progress reports (HTML)
  * ```
  *
  * The same method names are implemented by the Windows backend through HTTP
@@ -55,6 +56,11 @@ class NativeBridge(private val activity: Activity) {
             put("platform", "android")
             put("shell", "webview")
             put("dataDir", dataDir.absolutePath)
+            put("contentDir", contentDir.absolutePath)
+            put("reportsDir", File(activity.getExternalFilesDir(null), "reports").absolutePath)
+            put("repo", "https://github.com/zigorminsk-debug/mathematics")
+            put("email", "ziv@csl.by")
+            put("phone", "+3753371412")
             put("developer", JSONObject().apply {
                 put("name", "Zakharevich Igor (Захаревич Игорь)")
                 put("email", "ziv@csl.by")
@@ -223,6 +229,52 @@ class NativeBridge(private val activity: Activity) {
             JSONObject().put("path", file.absolutePath).toString()
         } catch (error: IOException) {
             JSONObject().put("path", "").put("error", error.message ?: "").toString()
+        }
+    }
+
+    /** Открыть папку средствами системы; если некому — показать путь (ничего не теряется). */
+    @JavascriptInterface
+    fun openFolder(which: String): String {
+        val target = when (which) {
+            "content" -> contentDir
+            "reports" -> File(activity.getExternalFilesDir(null), "reports").apply { mkdirs() }
+            else -> dataDir
+        }
+        mainHandler.post {
+            val shown = try {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(Uri.parse("file://" + target.absolutePath), "resource/folder")
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                activity.startActivity(intent)
+                true
+            } catch (error: Exception) {
+                false
+            }
+            if (!shown) {
+                // На телефоне проводника для приватной папки обычно нет — показываем путь.
+                Toast.makeText(activity, target.absolutePath, Toast.LENGTH_LONG).show()
+            }
+        }
+        return JSONObject().put("ok", true).put("path", target.absolutePath).toString()
+    }
+
+    /** Короткая вибрация как отклик на верный/неверный ответ (если включена в настройках). */
+    @JavascriptInterface
+    fun vibrate(milliseconds: Int) {
+        mainHandler.post {
+            try {
+                val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    (activity.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+                } else {
+                    @Suppress("DEPRECATION")
+                    activity.getSystemService(Context.VIBRATOR_SERVICE) as android.os.Vibrator
+                }
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(milliseconds.coerceIn(5, 200).toLong())
+            } catch (error: Exception) {
+                Log.w(TAG, "vibrate failed: ${error.message}")
+            }
         }
     }
 

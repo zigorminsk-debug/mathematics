@@ -41,6 +41,20 @@ jobs:
       - name: Answer-checker parity (Python ↔ JS ↔ Kotlin vectors)
         run: node tests/answer_parity.js
 
+      - name: Content schema, periods and interface strings
+        run: node tests/content_schema.js
+
+      - name: Syntax gate (Go, Kotlin, Kotlin DSL)
+        run: |
+          python3 -m pip install --quiet tree-sitter tree-sitter-go tree-sitter-kotlin
+          python3 tools/check_syntax.py --require
+
+      - name: Interface journeys in jsdom (UI + Android bridge)
+        run: |
+          npm install --no-save jsdom
+          node tests/ui_smoke.js
+          node tests/native_smoke.js
+
       - name: Upload the content bank
         uses: actions/upload-artifact@v4
         with:

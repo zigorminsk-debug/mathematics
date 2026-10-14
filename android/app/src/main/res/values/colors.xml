@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Цвета оболочки Android: те же, что и в общем интерфейсе (webapp/styles.css). -->
 <resources>
-    <color name="ic_launcher_background">#2D7FF9</color>
-    <color name="brand">#2D7FF9</color>
+    <color name="brand_primary">#2F5FD0</color>
+    <color name="brand_primary_dark">#213F9C</color>
+    <color name="brand_background">#F4F6FB</color>
+    <color name="brand_surface">#FFFFFF</color>
+    <color name="brand_text">#1C2330</color>
+    <color name="brand_accent">#FFD166</color>
+    <color name="brand_background_dark">#131722</color>
+    <color name="brand_surface_dark">#1B2130</color>
+    <color name="brand_text_dark">#E9EDF6</color>
 </resources>

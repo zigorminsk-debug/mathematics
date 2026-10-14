@@ -1,6 +1,6 @@
 {
  "contentVersion": "2026.10.1",
- "built": "2026-10-14T00:57:30Z",
+ "built": "2026-10-14T03:38:03Z",
  "schema": 1,
  "years": [
   2021,
@@ -11,7 +11,7 @@
  ],
  "counts": {
   "bank": 150,
-  "analogous": 200,
+  "analogous": 552,
   "choice": 90,
   "short": 60
  },
@@ -19,34 +19,106 @@
  "email": "ziv@csl.by",
  "phone": "+3753371412",
  "repo": "https://github.com/zigorminsk-debug/mathematics",
+ "periods": [
+  {
+   "year": 2021,
+   "label": {
+    "ru": "Вариант 2021",
+    "en": "Variant 2021"
+   },
+   "parts": {
+    "A": 18,
+    "B": 12
+   },
+   "minutes": 180,
+   "tasks": 30
+  },
+  {
+   "year": 2022,
+   "label": {
+    "ru": "Вариант 2022",
+    "en": "Variant 2022"
+   },
+   "parts": {
+    "A": 18,
+    "B": 12
+   },
+   "minutes": 180,
+   "tasks": 30
+  },
+  {
+   "year": 2023,
+   "label": {
+    "ru": "Вариант 2023",
+    "en": "Variant 2023"
+   },
+   "parts": {
+    "A": 18,
+    "B": 12
+   },
+   "minutes": 180,
+   "tasks": 30
+  },
+  {
+   "year": 2024,
+   "label": {
+    "ru": "Вариант 2024",
+    "en": "Variant 2024"
+   },
+   "parts": {
+    "A": 18,
+    "B": 12
+   },
+   "minutes": 180,
+   "tasks": 30
+  },
+  {
+   "year": 2025,
+   "label": {
+    "ru": "Вариант 2025",
+    "en": "Variant 2025"
+   },
+   "parts": {
+    "A": 18,
+    "B": 12
+   },
+   "minutes": 180,
+   "tasks": 30
+  }
+ ],
+ "disclaimer": {
+  "ru": "Задания составлены по мотивам ЦТ соответствующего года и не являются официальными материалами РИКЗ.",
+  "en": "The tasks follow the format of the corresponding CT year and are not official RIKZ materials."
+ },
+ "examMinutes": 180,
  "files": {
   "analogous.json": {
-   "sha256": "e44d138bf7b23269a4c5790675ec85d077184d08aa4f0bffc070494c9576420b",
-   "bytes": 199573
+   "sha256": "51c793b5494c569d0b9c779c537d34eef93b6c973db7af956fc0ff96e9c4e932",
+   "bytes": 558440
   },
   "answer_vectors.json": {
-   "sha256": "7c19183c47f22386a9af6b24f5d18eeb8de3bc6f2ba35097b3e3701ae0960287",
-   "bytes": 1571
+   "sha256": "1979abdff6f9d97554ef7b59836fb283221a233584ceeee8e6a4e01368082bd6",
+   "bytes": 3136
   },
   "bank.json": {
-   "sha256": "e7ccb026b3341c8e02ff5d6fbfda74f42fc434f17fe262f522cf7e50c8ab98db",
-   "bytes": 203502
+   "sha256": "65657cb737ca4106ee766586fb1fc64e92105ceda9b2bbd8b400c44e56095cf7",
+   "bytes": 203230
   },
   "formulas.json": {
-   "sha256": "074f18a432735acb8f91a000085398997317c237c5b0a6b8effb1cb21a9e9890",
-   "bytes": 13590
+   "sha256": "6566a435363f4596e482fbe1c5738ebb4fd53883ec82b6e90da26e9dd49f6d34",
+   "bytes": 18903
   },
   "mistakes.json": {
-   "sha256": "8057188f656c445ce67a96536a6f8cd32a29f0eaaeb0c4d40afb81f85b640f6a",
-   "bytes": 35946
+   "sha256": "99ed1109b535441ac7606b201e931e260d804dd1ffea55436fc749c9b27ed98e",
+   "bytes": 36224
   },
   "topics.json": {
-   "sha256": "5b955a7faeed005e540972387733a93700ffe4a69f55191fa3c38d27cee55236",
-   "bytes": 2967
+   "sha256": "847af28f3eaf9c50772036f17d4c99d962ea958c318fe7bb7bb8017e1c2905ab",
+   "bytes": 2972
   },
   "ui_strings.json": {
-   "sha256": "607fd2468c64fac4e5787b1aa4e47f1112b2f0b97cca172c48b5166745830e4c",
-   "bytes": 23491
+   "sha256": "972c3e5281d599635194fcbfde9334623943837ea6bb7c7f0f5e959361441e18",
+   "bytes": 18294
   }
  },
  "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/latest/download"

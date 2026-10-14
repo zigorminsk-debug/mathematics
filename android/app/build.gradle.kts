@@ -103,4 +103,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
     testImplementation("junit:junit:4.13.2")
+    // unitTests.isReturnDefaultValues = true stubs every org.json method, so a real
+    // implementation is required on the test classpath for the parity vectors
+    testImplementation("org.json:json:20240303")
 }

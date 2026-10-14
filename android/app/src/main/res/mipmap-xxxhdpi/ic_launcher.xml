@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Запасная иконка для устройств без adaptive-icon (Android < 8): рисуется тем же вектором. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_launcher_background"/>
+    <item android:drawable="@drawable/ic_launcher_foreground" android:inset="12%"/>
+</layer-list>

@@ -23,13 +23,52 @@ from __future__ import annotations
 
 import math
 import re
-from fractions import Fraction as F  # noqa: N817  (F(3,4) reads well)
+from fractions import Fraction as _Fraction
 
 __all__ = [
     "F", "R", "E", "num", "dec", "pc", "sgn", "nth_root", "simplify_radical",
     "quad", "Task", "TOPICS", "TOPIC_ORDER", "TOOLS", "ANSWER_VECTORS",
-    "normalize_answer", "answer_variants", "check_answer",
+    "normalize_answer", "answer_variants", "check_answer", "is_expression_answer",
+    "expression_value",
 ]
+
+# --------------------------------------------------------------------------- #
+#  Точные числа / exact numbers
+# --------------------------------------------------------------------------- #
+
+_DECIMAL_LITERAL = re.compile(r"-?\d+\.\d+")
+
+
+class F(_Fraction):  # noqa: N801 - F(3,4) reads well inside formulas
+    """Дробь, которая помнит, как её записали в исходном тексте задания.
+
+    * ``F(1.9)``  → ровно ``19/10`` (десятичная запись из исходника, а не двоичное
+      приближение float) и выводится как «1,9»;
+    * ``F(11, 2)`` → «11/2» (как записано), а в принимаемых ответах добавляется и
+      десятичный вариант «5,5» (см. :func:`answer_variants`).
+
+    A fraction that remembers the literal used in the source, so options and
+    answers are printed the way the author wrote them.
+    """
+
+    __slots__ = ("literal",)
+
+    def __new__(cls, numerator=0, denominator=None):
+        if denominator is None and isinstance(numerator, float):
+            exact = _Fraction(str(numerator))
+            obj = super().__new__(cls, exact.numerator, exact.denominator)
+            obj.literal = str(numerator)
+            return obj
+        obj = super().__new__(cls, numerator, denominator)
+        obj.literal = None
+        return obj
+
+    @property
+    def written(self) -> str | None:
+        """Исходная десятичная запись (``'1.9'``) или ``None``."""
+        literal = getattr(self, "literal", None)
+        return literal if literal and _DECIMAL_LITERAL.fullmatch(literal) else None
+
 
 # --------------------------------------------------------------------------- #
 #  Number formatting (localised: Russian uses a decimal comma)
@@ -76,7 +115,10 @@ def num(x, lang: str = "ru", *, decimal: bool = False) -> str:
         raise TypeError("bool is not a number here")
     if isinstance(x, int):
         s = str(x)
-    elif isinstance(x, F):
+    elif isinstance(x, _Fraction):
+        written = x.written if isinstance(x, F) else None
+        if written:
+            return written.replace(".", ",") if lang == "ru" else written
         if x.denominator == 1:
             s = str(x.numerator)
         elif decimal:
@@ -218,32 +260,39 @@ _SPACES = " \u00a0\u2009\u202f\t"
 
 
 def normalize_answer(s) -> str:
-    """Canonical form used by every platform.
+    """Canonical form used by **every** platform (Python, JavaScript, Kotlin).
 
-    * drops spaces / non-breaking spaces
-    * unifies all Unicode minus signs and dashes to ``-``
-    * unifies decimal comma to a dot
-    * drops a leading ``x=``, ``y=``, ``n=``, ``a=``, ``ответ:`` / ``answer:``
-    * unifies ``*`` to ``·``, ``√`` variants keep as is
-    * lower-cases and strips the trailing dot
+    The same rules are implemented in ``webapp/core.js`` (``CT.answer.normalize``)
+    and in ``android/.../AnswerChecker.kt``; the shared vectors in
+    ``dist/content/answer_vectors.json`` are what keeps the three copies honest.
+
+    * lower-cases and strips the input;
+    * removes spaces (ordinary, non-breaking, thin, figure) — «1 000» == «1000»;
+    * unifies every Unicode minus/dash to ``-`` and ``× · ∙`` to ``*``;
+    * unifies the Cyrillic letters «х»/«у» used instead of Latin x/y;
+    * writes ``π`` as ``pi`` and ``√`` as ``sqrt``;
+    * drops a leading ``ответ:``/``answer:`` or a single letter with ``=``/``:``
+      («x = 12»);
+    * unwraps one level of parentheses and turns the decimal comma into a dot.
     """
     if s is None:
         return ""
-    s = str(s)
+    s = str(s).strip().lower()
+    s = s.replace("\u00a0", " ")
     for m in _MINUSES:
         s = s.replace(m, "-")
-    s = s.replace("\u2212", "-")
+    for ch in ("×", "·", "∙"):
+        s = s.replace(ch, "*")
+    s = s.replace("х", "x").replace("у", "y")
+    s = s.replace("π", "pi").replace("√", "sqrt")
+    s = re.sub(r"^(ответ|answer)\s*[:=]?\s*", "", s)
+    s = re.sub(r"^[a-zа-я]{1,2}\s*[:=]\s*", "", s)
     for sp in _SPACES:
         s = s.replace(sp, "")
-    s = s.strip().lower()
-    s = re.sub(r"^(ответ|answer)\s*[:=]\s*", "", s)
-    s = re.sub(r"^[a-zа-я]\s*=\s*", "", s)
+    s = re.sub(r"^\((.*)\)$", r"\1", s)
+    s = s.replace(",", ".")
     if s.endswith("."):
         s = s[:-1]
-    s = s.replace("*", "·")
-    s = s.replace(":", ":").replace(";", ";")
-    s = s.replace("√", "√").replace("⌄", "√")
-    s = s.replace("pi", "π").replace("пі", "π")
     return s
 
 
@@ -264,32 +313,229 @@ def _as_fraction(s: str):
         return None
 
 
+# --------------------------------------------------------------------------- #
+#  Оценка простых выражений (та же грамматика, что в JS и Kotlin)
+#  Evaluation of simple expressions: numbers, + - * / % ^, parentheses,
+#  sqrt/abs/sin/cos/tan/ln/lg, constants pi and e, implicit multiplication
+#  («6√2», «2π» читаются как 6·√2 и 2·π).
+# --------------------------------------------------------------------------- #
+
+_EVAL_NUMBER = re.compile(r"(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?")
+
+
+def _tokenize_expr(src: str):
+    tokens, i = [], 0
+    while i < len(src):
+        ch = src[i]
+        if ch.isspace():
+            i += 1
+            continue
+        match = _EVAL_NUMBER.match(src, i)
+        if match and any(character.isdigit() for character in match.group(0)):
+            tokens.append(("num", float(match.group(0))))
+            i = match.end()
+            continue
+        if ch.isalpha() or ch == "_":
+            match = re.compile(r"[a-zA-Zа-яА-Я_]+").match(src, i)
+            tokens.append(("name", match.group(0).lower()))
+            i = match.end()
+            continue
+        if ch in "+-*/^%()":
+            tokens.append(("op", ch))
+            i += 1
+            continue
+        raise ValueError(f"bad symbol {ch!r}")
+    return tokens
+
+
+_EXPR_FUNCS = {
+    "sqrt": math.sqrt, "abs": abs, "sin": math.sin, "cos": math.cos, "tan": math.tan,
+    "tg": math.tan, "ln": math.log, "lg": lambda x: math.log10(x), "exp": math.exp,
+    "floor": math.floor, "ceil": math.ceil,
+}
+_EXPR_CONSTS = {"pi": math.pi, "e": math.e, "tau": 2 * math.pi}
+
+
+def _eval_tokens(tokens):
+    """Recursive-descent parser; returns a value or raises ValueError."""
+    pos = 0
+
+    def peek():
+        return tokens[pos] if pos < len(tokens) else None
+
+    def take():
+        nonlocal pos
+        token = peek()
+        pos += 1
+        return token
+
+    def starts_atom(token):
+        if token is None:
+            return False
+        if token[0] == "num":
+            return True
+        if token[0] == "name":
+            return True
+        return token == ("op", "(")
+
+    def expression():
+        node = term()
+        while peek() in (("op", "+"), ("op", "-")):
+            op = take()[1]
+            node = node + term() if op == "+" else node - term()
+        return node
+
+    def term():
+        node = unary()
+        while True:
+            token = peek()
+            if token in (("op", "*"), ("op", "/"), ("op", "%")):
+                op = take()[1]
+                right = unary()
+                if op == "*":
+                    node *= right
+                elif op == "/":
+                    node /= right
+                else:
+                    node %= right
+                continue
+            # неявное умножение: «6√2», «2π», «3(4+1)»
+            if starts_atom(token):
+                node *= unary()
+                continue
+            return node
+
+    def unary():
+        if peek() in (("op", "-"), ("op", "+")):
+            op = take()[1]
+            value = unary()
+            return -value if op == "-" else value
+        return power()
+
+    def power():
+        base = atom()
+        if peek() == ("op", "^"):
+            take()
+            return base ** unary()
+        return base
+
+    def atom():
+        token = take()
+        if token is None:
+            raise ValueError("unexpected end of expression")
+        if token[0] == "num":
+            return token[1]
+        if token[0] == "name":
+            name = token[1]
+            if name in _EXPR_FUNCS and peek() == ("op", "("):
+                take()
+                argument = expression()
+                if take() != ("op", ")"):
+                    raise ValueError("missing )")
+                return _EXPR_FUNCS[name](argument)
+            if name in _EXPR_FUNCS:
+                return _EXPR_FUNCS[name](power())      # «sqrt2», «sin pi/6»
+            if name in _EXPR_CONSTS:
+                return _EXPR_CONSTS[name]
+            raise ValueError(f"unknown name {name!r}")
+        if token == ("op", "("):
+            value = expression()
+            if take() != ("op", ")"):
+                raise ValueError("missing )")
+            return value
+        raise ValueError("unexpected token")
+
+    value = expression()
+    if pos != len(tokens):
+        raise ValueError("trailing input")
+    return value
+
+
+def expression_value(text):
+    """Numeric value of a simple expression, ``None`` when unparsable.
+
+    Mirrors ``CT.math.value`` in the interface and ``AnswerChecker.value`` in the
+    Android build, so all three platforms compare answers the same way.
+    """
+    if text is None:
+        return None
+    source = str(text)
+    for old, new in (("−", "-"), ("×", "*"), ("·", "*"), ("∙", "*"), ("√", "sqrt"),
+                     ("π", "pi"), ("**", "^")):
+        source = source.replace(old, new)
+    source = source.replace("[", "(").replace("]", ")").replace("{", "(").replace("}", ")")
+    source = source.replace("²", "^2").replace("³", "^3")
+    try:
+        value = _eval_tokens(_tokenize_expr(source))
+    except (ValueError, ZeroDivisionError, OverflowError, TypeError):
+        return None
+    if value is None:
+        return None
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return None
+    return value if math.isfinite(value) else None
+
+
+def is_expression_answer(text) -> bool:
+    """Ответ записан выражением (корень, π, дробная степень), а не просто числом."""
+    normalized = normalize_answer(text)
+    if not normalized:
+        return False
+    if _as_fraction(normalized) is not None:
+        return False
+    return any(marker in normalized for marker in ("sqrt", "pi", "^", "(", ")"))
+
+
 def check_answer(user: str, task: dict) -> bool:
     """Decide whether ``user`` is a correct answer for ``task``.
 
-    Three tiers: exact string match against the accepted variants, exact numeric
-    equality (so ``8/10`` == ``0,8`` == ``0.80``), and a numeric-equality fallback
-    for simple decimal approximations the student typed by hand.
+    Four tiers, identical on every platform:
+
+    1. canonical string match against the accepted spellings;
+    2. choice tasks stop here (a lucky number is not an answer);
+    3. exact numeric equality (``8/10`` == ``0,8`` == ``0.80``);
+    A whole-number answer must be exact; the rounding band is reserved for
+    non-integer candidates (``5/6`` vs ``0,833``) and for expressions with roots
+    or π (``√2/2`` vs ``0,707``, ``2π`` vs ``6,28``).
     """
     nu = normalize_answer(user)
     if not nu:
         return False
-    accepted = [normalize_answer(v) for v in task.get("accept", [])]
+    accepted = [normalize_answer(v) for v in task.get("accept", []) if v not in (None, "")]
     if nu in accepted:
         return True
     if task.get("answerType") == "choice":
         return False
     fu = _as_fraction(nu)
-    if fu is None:
+    if fu is not None:
+        for v in accepted:
+            fv = _as_fraction(v)
+            if fv is None:
+                continue
+            if fv == fu:
+                return True
+            # снисходительность — только к «нецелым» ответам (1/3, 5/6, 3/7):
+            # округление до трёх знаков не должно превращать 1000,5 в 1000
+            if fv.denominator == 1:
+                continue
+            if abs(float(fu) - float(fv)) <= 5e-4 * max(1.0, abs(float(fv))):
+                return True
+    user_value = expression_value(nu)
+    if user_value is None:
         return False
+    user_is_expression = is_expression_answer(nu)
     for v in accepted:
-        fv = _as_fraction(v)
-        if fv is not None and fv == fu:
-            return True
-    # decimal approximation written by the student: |u - v| <= 5e-4
-    for v in accepted:
-        fv = _as_fraction(v)
-        if fv is not None and abs(float(fu) - float(fv)) < 5e-4:
+        # третий рубеж включается только когда хотя бы одна сторона записана
+        # выражением («√2/2», «2π»): обычные числа уже сравнены точно, и
+        # снисходительность здесь была бы неуместна («1000,5» против «1000»)
+        if not user_is_expression and not is_expression_answer(v):
+            continue
+        candidate = expression_value(v)
+        if candidate is None:
+            continue
+        if abs(user_value - candidate) <= 1e-3 * max(1.0, abs(candidate)):
             return True
     return False
 

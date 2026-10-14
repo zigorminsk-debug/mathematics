@@ -879,9 +879,26 @@ _GENERATORS = [
 ]
 
 
-def generate() -> list[Task]:
-    """Build the whole analogous-task bank (deterministic)."""
+def _unique(tasks: list[Task]) -> list[Task]:
+    """Drop items whose statement repeats an earlier one (same text, any language)."""
+    seen, out = set(), []
+    for task in tasks:
+        key = (task.topic, task.ru.strip(), task.en.strip())
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(task)
+    return out
+
+
+def generate(per_family=24) -> list[Task]:
+    """Build the whole analogous-task bank (deterministic).
+
+    Each family is asked for more items than needed and de-duplicated, so the
+    pool always holds *distinct* statements even though the parameter draws are
+    random.
+    """
     tasks: list[Task] = []
     for gen in _GENERATORS:
-        tasks.extend(gen(10))
+        tasks.extend(_unique(gen(per_family * 2))[:per_family])
     return tasks

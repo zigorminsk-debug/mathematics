@@ -1,7 +1,12 @@
 package main
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
+	"io"
+	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -12,195 +17,290 @@ import (
 
 func newTestStore(t *testing.T) *Store {
 	t.Helper()
-	dir := t.TempDir()
-	st, err := NewStore(dir)
+	store, err := NewStore(t.TempDir())
 	if err != nil {
 		t.Fatalf("NewStore: %v", err)
 	}
-	return st
+	return store
 }
 
-func TestStoreSaveLoadRoundTrip(t *testing.T) {
-	st := newTestStore(t)
-	payload := []byte(`{"attempts":[{"id":"a","correct":18,"total":30}]}`)
-	if err := st.Save("progress", payload); err != nil {
-		t.Fatalf("Save: %v", err)
-	}
-	got, ok := st.Load("progress")
-	if !ok {
-		t.Fatal("Load reported a missing file")
-	}
-	if strings.TrimSpace(string(got)) != string(payload) {
-		t.Fatalf("round trip mismatch: %s", got)
-	}
-}
+func TestBlobRoundTrip(t *testing.T) {
+	store := newTestStore(t)
+	payload := []byte(`{"attempts":[],"tasksDone":0}`)
 
-func TestStoreRejectsBadInput(t *testing.T) {
-	st := newTestStore(t)
-	if err := st.Save("progress", []byte("not json")); err == nil {
-		t.Fatal("expected an error for invalid JSON")
+	if err := store.WriteBlob("progress", payload); err != nil {
+		t.Fatalf("WriteBlob: %v", err)
 	}
-	if err := st.Save("../escape", []byte(`{}`)); err == nil {
-		t.Fatal("expected an error for a path-traversal key")
+	got, err := store.ReadBlob("progress")
+	if err != nil {
+		t.Fatalf("ReadBlob: %v", err)
 	}
-	if _, ok := st.Load("../escape"); ok {
-		t.Fatal("path traversal key must not resolve")
+	if !bytes.Equal(got, payload) {
+		t.Fatalf("ReadBlob = %s, want %s", got, payload)
+	}
+
+	missing, err := store.ReadBlob("settings")
+	if err != nil {
+		t.Fatalf("ReadBlob(missing): %v", err)
+	}
+	if missing != nil {
+		t.Fatalf("ReadBlob(missing) = %s, want nil", missing)
 	}
 }
 
-func TestContentOverlayWins(t *testing.T) {
-	st := newTestStore(t)
-	embedded := []byte(`{"tasks":[]}`)
-	if got := st.ReadContent("bank", embedded); string(got) != string(embedded) {
-		t.Fatalf("expected the embedded bank, got %s", got)
+func TestBlobRejectsBadInput(t *testing.T) {
+	store := newTestStore(t)
+
+	if err := store.WriteBlob("../escape", []byte(`{}`)); err == nil {
+		t.Fatal("WriteBlob accepted a path traversal key")
 	}
-	updated := []byte(`{"tasks":[{"id":"new"}]}`)
-	if err := st.WriteContent("bank", updated); err != nil {
+	if err := store.WriteBlob("progress", []byte(`{oops`)); err == nil {
+		t.Fatal("WriteBlob accepted invalid JSON")
+	}
+	if _, err := store.ReadBlob("Progress"); err == nil {
+		t.Fatal("ReadBlob accepted an invalid key")
+	}
+	good := []byte(`{"ok":true}`)
+	if err := store.WriteBlob("progress", good); err != nil {
+		t.Fatalf("WriteBlob: %v", err)
+	}
+	_ = store.WriteBlob("progress", []byte("broken"))
+	after, err := store.ReadBlob("progress")
+	if err != nil || !bytes.Equal(after, good) {
+		t.Fatalf("blob damaged after a failed write: %s (%v)", after, err)
+	}
+}
+
+func TestContentOverlayTakesPrecedence(t *testing.T) {
+	store := newTestStore(t)
+	if _, ok := store.ReadContent("bank"); ok {
+		t.Fatal("overlay should be empty on a fresh install")
+	}
+	overlay := []byte(`{"tasks":[{"id":"new-task"}]}`)
+	if err := store.WriteContent("bank", overlay); err != nil {
 		t.Fatalf("WriteContent: %v", err)
 	}
-	if got := st.ReadContent("bank", embedded); string(got) != string(updated) {
-		t.Fatalf("overlay must win over the embedded bank, got %s", got)
+	got, ok := store.ReadContent("bank")
+	if !ok || !bytes.Equal(got, overlay) {
+		t.Fatalf("ReadContent = %s, %v", got, ok)
+	}
+	if err := store.WriteContent("../../etc/passwd", overlay); err == nil {
+		t.Fatal("WriteContent accepted a path traversal name")
 	}
 }
 
-func TestContentVersionAndCount(t *testing.T) {
-	st := newTestStore(t)
-	if v := st.ContentVersion(); v != "" {
-		t.Fatalf("expected an empty version before an update, got %q", v)
+func TestWriteReport(t *testing.T) {
+	store := newTestStore(t)
+	path, err := store.WriteReport("progress", []byte("<html>отчёт</html>"))
+	if err != nil {
+		t.Fatalf("WriteReport: %v", err)
 	}
-	man := []byte(`{"contentVersion":"2027.01.1"}`)
-	if err := st.WriteContent("version", man); err != nil {
-		t.Fatalf("WriteContent: %v", err)
+	if filepath.Dir(path) != store.Reports() {
+		t.Fatalf("report saved to %s, want %s", path, store.Reports())
 	}
-	if v := st.ContentVersion(); v != "2027.01.1" {
-		t.Fatalf("unexpected version %q", v)
-	}
-	bank := []byte(`{"tasks":[{"id":"a"},{"id":"b"}]}`)
-	if err := st.WriteContent("bank", bank); err != nil {
-		t.Fatalf("WriteContent: %v", err)
-	}
-	if n := st.countTasks(); n != 2 {
-		t.Fatalf("expected 2 tasks, got %d", n)
+	data, err := os.ReadFile(path)
+	if err != nil || !strings.Contains(string(data), "отчёт") {
+		t.Fatalf("report content: %s (%v)", data, err)
 	}
 }
 
-func TestUpdateContentOffline(t *testing.T) {
-	st := newTestStore(t)
-	res := st.UpdateContent("http://127.0.0.1:1", "2026.10.1")
-	if res.Status != "offline" {
-		t.Fatalf("expected status offline, got %q (%s)", res.Status, res.Message)
-	}
-}
-
-func TestUpdateContentInstallsPack(t *testing.T) {
-	bank := []byte(`{"tasks":[{"id":"x"},{"id":"y"},{"id":"z"}]}`)
-	sum := sha256Hex(bank)
+// feedServer publishes a content manifest plus one file, like a GitHub release.
+func feedServer(t *testing.T, version string, bank []byte) *httptest.Server {
+	t.Helper()
+	sum := sha256.Sum256(bank)
 	mux := http.NewServeMux()
 	mux.HandleFunc("/version.json", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`{"contentVersion":"2027.02.1","files":{"bank.json":{"sha256":"` +
-			sum + `"}}}`))
-	})
-	mux.HandleFunc("/bank.json", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write(bank) })
-	srv := httptest.NewServer(mux)
-	defer srv.Close()
-
-	st := newTestStore(t)
-	res := st.UpdateContent(srv.URL, "2026.10.1")
-	if res.Status != "ok" {
-		t.Fatalf("expected ok, got %q (%s)", res.Status, res.Message)
-	}
-	if res.Version != "2027.02.1" || res.NewTasks != 3 {
-		t.Fatalf("unexpected result %+v", res)
-	}
-	if got := string(st.ReadContent("bank", nil)); got != string(bank) {
-		t.Fatalf("installed bank mismatch: %s", got)
-	}
-	// second run must report that everything is up to date
-	if again := st.UpdateContent(srv.URL, "2027.02.1"); again.Status != "uptodate" {
-		t.Fatalf("expected uptodate, got %q", again.Status)
-	}
-}
-
-func TestUpdateContentRejectsTamperedPack(t *testing.T) {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/version.json", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`{"contentVersion":"9.9.9","files":{"bank.json":{"sha256":"deadbeef"}}}`))
+		manifest := map[string]any{
+			"contentVersion": version,
+			"counts":         map[string]int{"bank": 150, "analogous": 552},
+			"files": map[string]any{
+				"bank.json": map[string]any{"sha256": hex.EncodeToString(sum[:]), "bytes": len(bank)},
+			},
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(manifest)
 	})
 	mux.HandleFunc("/bank.json", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`{"tasks":[]}`))
+		_, _ = w.Write(bank)
 	})
-	srv := httptest.NewServer(mux)
-	defer srv.Close()
+	return httptest.NewServer(mux)
+}
 
-	st := newTestStore(t)
-	if res := st.UpdateContent(srv.URL, "1.0.0"); res.Status != "error" {
-		t.Fatalf("tampered pack must be rejected, got %q", res.Status)
+func TestCheckUpdatesInstallsNewVersion(t *testing.T) {
+	store := newTestStore(t)
+	bank := []byte(`{"meta":{"contentVersion":"2026.10.9"},"tasks":[]}`)
+	feed := feedServer(t, "2026.10.9", bank)
+	defer feed.Close()
+
+	result := store.CheckUpdates(feed.URL, "2026.10.1")
+	if result.Status != "updated" {
+		t.Fatalf("status = %q (%s)", result.Status, result.Message)
 	}
+	if result.Version != "2026.10.9" || result.Files != 1 {
+		t.Fatalf("result = %+v", result)
+	}
+	installed, ok := store.ReadContent("bank")
+	if !ok || !bytes.Equal(installed, bank) {
+		t.Fatalf("installed bank = %s", installed)
+	}
+
+	again := store.CheckUpdates(feed.URL, "2026.10.9")
+	if again.Status != "uptodate" {
+		t.Fatalf("second check = %+v", again)
+	}
+}
+
+func TestCheckUpdatesRejectsTamperedFile(t *testing.T) {
+	store := newTestStore(t)
+	feed := feedServer(t, "2026.11.1", []byte(`{"tasks":[{"id":"honest"}]}`))
+	defer feed.Close()
+
+	// подменяем содержимое банка, оставив прежнюю контрольную сумму в манифесте
+	tampered := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, "bank.json") {
+			_, _ = w.Write([]byte(`{"tasks":[{"id":"evil"}]}`))
+			return
+		}
+		response, err := http.Get(feed.URL + r.URL.Path)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		defer response.Body.Close()
+		w.Header().Set("Content-Type", "application/json")
+		body, _ := io.ReadAll(response.Body)
+		_, _ = w.Write(body)
+	}))
+	defer tampered.Close()
+
+	result := store.CheckUpdates(tampered.URL, "2026.10.1")
+	if result.Status != "error" || !strings.Contains(result.Message, "checksum") {
+		t.Fatalf("tampered update accepted: %+v", result)
+	}
+	if _, ok := store.ReadContent("bank"); ok {
+		t.Fatal("tampered content was installed")
+	}
+}
+
+func TestCheckUpdatesOffline(t *testing.T) {
+	store := newTestStore(t)
+	result := store.CheckUpdates("", "2026.10.1")
+	if result.Status != "offline" {
+		t.Fatalf("status = %q, want offline", result.Status)
+	}
+}
+
+/* ------------------------------------------------------------- HTTP API --- */
+
+func newTestServer(t *testing.T) (*server, *Store) {
+	t.Helper()
+	store := newTestStore(t)
+	return &server{
+		store:   store,
+		version: appVersion,
+		build:   "test",
+		dataDir: store.Base(),
+		quit:    make(chan struct{}),
+	}, store
 }
 
 func TestAPIStateAndBlob(t *testing.T) {
-	st = newTestStore(t)
-	defer func() { store = nil }()
-
+	srv, _ := newTestServer(t)
 	mux := http.NewServeMux()
-	registerRoutes(mux)
+	mux.HandleFunc("/api/state", srv.handleState)
+	mux.HandleFunc("/api/blob", srv.handleBlob)
 
-	rec := httptest.NewRecorder()
-	mux.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/api/state", nil))
-	if rec.Code != http.StatusOK {
-		t.Fatalf("GET /api/state -> %d", rec.Code)
+	recorder := httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/api/state", nil))
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("state code = %d", recorder.Code)
 	}
-	var st1 appState
-	if err := json.Unmarshal(rec.Body.Bytes(), &st1); err != nil {
-		t.Fatalf("state is not valid JSON: %v", err)
+	var state map[string]any
+	if err := json.Unmarshal(recorder.Body.Bytes(), &state); err != nil {
+		t.Fatalf("state json: %v", err)
 	}
-	if st1.App.Version != AppVersion || st1.App.Developer.Email != "ziv@csl.by" {
-		t.Fatalf("unexpected state payload: %+v", st1.App)
-	}
-
-	body := strings.NewReader(`{"attempts":1}`)
-	rec = httptest.NewRecorder()
-	mux.ServeHTTP(rec, httptest.NewRequest(http.MethodPost, "/api/blob?k=progress", body))
-	if rec.Code != http.StatusOK {
-		t.Fatalf("POST /api/blob -> %d", rec.Code)
-	}
-	if _, ok := st.Load("progress"); !ok {
-		t.Fatal("progress blob was not persisted")
+	app := state["app"].(map[string]any)
+	if app["platform"] != "windows" || app["developer"] == "" {
+		t.Fatalf("state.app = %+v", app)
 	}
 
-	rec = httptest.NewRecorder()
-	mux.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/api/blob?k=progress", nil))
-	if rec.Code != http.StatusOK || !strings.Contains(rec.Body.String(), "attempts") {
-		t.Fatalf("GET /api/blob -> %d %s", rec.Code, rec.Body.String())
+	body := strings.NewReader(`{"attempts":[{"id":"a1"}],"tasksDone":1}`)
+	recorder = httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodPost, "/api/blob?key=progress", body))
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("save code = %d: %s", recorder.Code, recorder.Body)
+	}
+	recorder = httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/api/blob?key=progress", nil))
+	if !strings.Contains(recorder.Body.String(), `"a1"`) {
+		t.Fatalf("loaded blob = %s", recorder.Body)
+	}
+
+	recorder = httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/api/blob?key=../secret", nil))
+	if recorder.Code != http.StatusBadRequest {
+		t.Fatalf("bad key code = %d", recorder.Code)
 	}
 }
 
-func TestIndexIsServed(t *testing.T) {
-	st = newTestStore(t)
-	defer func() { store = nil }()
-	mux := http.NewServeMux()
-	registerRoutes(mux)
-
-	rec := httptest.NewRecorder()
-	mux.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/", nil))
-	if rec.Code != http.StatusOK {
-		t.Fatalf("GET / -> %d", rec.Code)
-	}
-	if !strings.Contains(rec.Body.String(), "<html") {
-		t.Fatalf("interface is not HTML: %.80s", rec.Body.String())
-	}
-}
-
-func TestReportSaved(t *testing.T) {
-	st := newTestStore(t)
-	path, err := st.SaveReport("progress report", []byte("<html></html>"))
+func TestStaticServingAndContentOverlay(t *testing.T) {
+	srv, store := newTestServer(t)
+	webRoot, err := fs.Sub(embedded, "web")
 	if err != nil {
-		t.Fatalf("SaveReport: %v", err)
+		t.Fatalf("embedded web root: %v", err)
 	}
-	if filepath.Ext(path) != ".html" {
-		t.Fatalf("unexpected report path %q", path)
+	mux := http.NewServeMux()
+	mux.Handle("/content/", srv.contentHandler(webRoot))
+	mux.Handle("/", srv.staticHandler(webRoot))
+
+	recorder := httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/", nil))
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("index code = %d", recorder.Code)
 	}
-	if _, err := os.Stat(path); err != nil {
-		t.Fatalf("report file missing: %v", err)
+	if !strings.Contains(recorder.Body.String(), "<!DOCTYPE html>") {
+		t.Fatal("index.html not served from the embedded filesystem")
+	}
+
+	recorder = httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/content/bank.json", nil))
+	if recorder.Code != http.StatusOK || !strings.Contains(recorder.Body.String(), "\"tasks\"") {
+		t.Fatalf("embedded bank not served (code %d)", recorder.Code)
+	}
+
+	overlay := []byte(`{"meta":{"contentVersion":"2099.1"},"tasks":[]}`)
+	if err := store.WriteContent("bank", overlay); err != nil {
+		t.Fatalf("WriteContent: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/content/bank.json", nil))
+	if !strings.Contains(recorder.Body.String(), "2099.1") {
+		t.Fatalf("overlay not served: %s", recorder.Body)
+	}
+	if srv.contentVersion() != "2099.1" {
+		t.Fatalf("contentVersion = %q", srv.contentVersion())
+	}
+}
+
+func TestReportEndpoint(t *testing.T) {
+	srv, store := newTestServer(t)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/report", srv.handleReport)
+	payload, _ := json.Marshal(map[string]string{"kind": "progress", "html": "<html>ok</html>"})
+	recorder := httptest.NewRecorder()
+	mux.ServeHTTP(recorder, httptest.NewRequest(http.MethodPost, "/api/report", bytes.NewReader(payload)))
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("report code = %d: %s", recorder.Code, recorder.Body)
+	}
+	entries, err := os.ReadDir(store.Reports())
+	if err != nil || len(entries) != 1 {
+		t.Fatalf("reports dir = %v (%v)", entries, err)
+	}
+}
+
+func TestContentVersionFallsBackToEmbedded(t *testing.T) {
+	srv, _ := newTestServer(t)
+	if version := srv.contentVersion(); version == "" {
+		t.Fatal("embedded content version is empty — did tools/sync_assets.py run?")
 	}
 }

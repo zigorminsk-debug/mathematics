@@ -345,8 +345,8 @@
    "en": "V = abc, while d² = a² + b² + c² (not (a + b + c)²)."
   },
   "вероятность": {
-   "ru": "Сравните число благоприятных исходов и общее число исходов — ошибки чаще всего в подсчёте общего числа.",
-   "en": "Compare favourable and total outcomes — most mistakes are in the total count."
+   "ru": "Вероятность = число благоприятных исходов, делённое на ОБЩЕЕ число исходов; проверьте, что оба числа посчитаны по одному и тому же множеству — ошибки чаще всего возникают именно при подсчёте общего числа исходов.",
+   "en": "Probability = favourable outcomes over ALL outcomes; make sure both counts refer to the same set — mistakes usually come from counting the total incorrectly."
   },
   "противоположные события": {
    "ru": "P(Ā) = 1 − P(A). Событие «не сработает» — это дополнение к «сработает».",

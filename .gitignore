@@ -31,6 +31,16 @@ android/app/release/
 .DS_Store
 Thumbs.db
 
+# ---- Generated build output ----
+# dist/content — то, что собирает tools/build_content.py; в репозиторий попадают
+# копии для приложений (windows/web/content, android .../assets/webapp/content).
+dist/
+
+# ---- Node (необязательные инструменты разработки, jsdom для тестов интерфейса) ----
+node_modules
+node_modules/
+package-lock.json
+
 # ---- Local scratch (never committed) ----
 /tmp/
 scratch/
