@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- The interface itself is themed inside the web app (light/dark/auto), so the
+         activity only needs a chromeless, edge-friendly shell. -->
+    <style name="Theme.CTMaths" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:statusBarColor">#2D7FF9</item>
+        <item name="android:navigationBarColor">#2D7FF9</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="27">shortEdges</item>
+    </style>
+</resources>

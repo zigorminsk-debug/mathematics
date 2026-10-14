@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- stylised sigma (Σ), the logo of the trainer -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,32 h34 v8 h-22 l17,14 -17,14 h22 v8 h-34 v-8 l17,-14 -17,-14 z" />
+</vector>

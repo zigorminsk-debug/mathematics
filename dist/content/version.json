@@ -1,6 +1,6 @@
 {
  "contentVersion": "2026.10.1",
- "built": "2026-10-14T00:50:44Z",
+ "built": "2026-10-14T00:57:07Z",
  "schema": 1,
  "years": [
   2021,
@@ -21,7 +21,7 @@
  "repo": "https://github.com/zigorminsk-debug/mathematics",
  "files": {
   "analogous.json": {
-   "sha256": "aa57119eacb26fffe3013dbf7064e31cedc1b3cc56128e4f4137ee869328561f",
+   "sha256": "ae863ce591ac2a491b47bc03aca0fabcdc6e7804532e1f8cae16872cdf428df2",
    "bytes": 199573
   },
   "answer_vectors.json": {
@@ -29,19 +29,23 @@
    "bytes": 1571
   },
   "bank.json": {
-   "sha256": "7217fb5cb8d93aaa05bb7e1231428105299fbff525aad6263fa88b44eaf828b9",
+   "sha256": "4995c2ba5f328e9ca1af7f6b11792eada1efb985c4b02541f630528a3e13d451",
    "bytes": 203502
   },
   "formulas.json": {
    "sha256": "074f18a432735acb8f91a000085398997317c237c5b0a6b8effb1cb21a9e9890",
    "bytes": 13590
   },
+  "mistakes.json": {
+   "sha256": "8057188f656c445ce67a96536a6f8cd32a29f0eaaeb0c4d40afb81f85b640f6a",
+   "bytes": 35946
+  },
   "topics.json": {
    "sha256": "5b955a7faeed005e540972387733a93700ffe4a69f55191fa3c38d27cee55236",
    "bytes": 2967
   },
   "ui_strings.json": {
-   "sha256": "0f6eb54d28ce75ec4d45f6e349aa77e1c084a648918ae0c7bbc1add11b942b93",
+   "sha256": "53f40314cd744a2ce442d49e3f5c75cd21550b8dd4fd27bff81e3d319e5cbaa5",
    "bytes": 22715
   }
  },

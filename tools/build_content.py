@@ -40,7 +40,7 @@ DIST = ROOT / "dist" / "content"
 sys.path.insert(0, str(SRC))
 
 YEAR_MODULES = ["year2021", "year2022", "year2023", "year2024", "year2025"]
-EXTRA_MODULES = ["templates", "formulas", "ui_strings"]
+EXTRA_MODULES = ["templates", "formulas", "ui_strings", "mistakes"]
 
 CONTENT_VERSION_FILE = ROOT / "VERSION"
 
@@ -181,6 +181,8 @@ def main() -> int:
     formulas = fmod.groups() if fmod else {"groups": []}
     umod = load("ui_strings")
     ui = umod.STRINGS if umod else {}
+    mmod = load("mistakes")
+    mistake_help = mmod.payload() if mmod else {"errors": {}, "checklist": []}
 
     from kit import ANSWER_VECTORS
     vectors = ANSWER_VECTORS or default_vectors()
@@ -196,6 +198,7 @@ def main() -> int:
     write_json(DIST / "formulas.json", formulas)
     write_json(DIST / "ui_strings.json", {"strings": ui, "meta": meta})
     write_json(DIST / "answer_vectors.json", {"cases": vectors})
+    write_json(DIST / "mistakes.json", mistake_help)
 
     version = {
         **meta,

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- progress and settings are plain JSON files: back them up, nothing else -->
+<full-backup-content>
+    <include domain="file" path="data/" />
+    <exclude domain="file" path="content/" />
+</full-backup-content>

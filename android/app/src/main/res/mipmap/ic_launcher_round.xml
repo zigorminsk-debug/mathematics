@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fallback icon for API 24/25 (no adaptive icons there) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp" android:height="48dp"
+    android:viewportWidth="48" android:viewportHeight="48">
+    <path android:fillColor="#2D7FF9" android:pathData="M4,4 h40 v40 h-40 z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M14,13 h20 v4 h-13 l10,7 -10,7 h13 v4 h-20 v-4 l10,-7 -10,-7 z" />
+</vector>

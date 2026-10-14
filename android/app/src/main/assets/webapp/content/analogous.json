@@ -1,0 +1,9281 @@
+{
+ "meta": {
+  "contentVersion": "2026.10.1",
+  "built": "2026-10-14T00:57:07Z",
+  "schema": 1,
+  "years": [
+   2021,
+   2022,
+   2023,
+   2024,
+   2025
+  ],
+  "counts": {
+   "bank": 150,
+   "analogous": 200,
+   "choice": 90,
+   "short": 60
+  },
+  "author": "Zakharevich Igor",
+  "email": "ziv@csl.by",
+  "phone": "+3753371412",
+  "repo": "https://github.com/zigorminsk-debug/mathematics"
+ },
+ "tasks": [
+  {
+   "id": "gen-lin-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 6(x − 6) = 5x − 31. В ответе укажите корень.",
+    "en": "Solve 6(x − 6) = 5x − 31. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 6x − 36 = 5x − 31.",
+     "Перенесём слагаемые с x влево, числа вправо: 1x = 5.",
+     "x = 5."
+    ],
+    "en": [
+     "Expand: 6x − 36 = 5x − 31.",
+     "Move x-terms left and numbers right: 1x = 5.",
+     "x = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 2(x + 2) = x + 9. В ответе укажите корень.",
+    "en": "Solve 2(x + 2) = x + 9. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 2x + 4 = x + 9.",
+     "Перенесём слагаемые с x влево, числа вправо: 1x = 5.",
+     "x = 5."
+    ],
+    "en": [
+     "Expand: 2x + 4 = x + 9.",
+     "Move x-terms left and numbers right: 1x = 5.",
+     "x = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 6(x − 5) = 5x − 37. В ответе укажите корень.",
+    "en": "Solve 6(x − 5) = 5x − 37. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-7",
+    "en": "-7"
+   },
+   "accept": [
+    "-7",
+    "−7"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 6x − 30 = 5x − 37.",
+     "Перенесём слагаемые с x влево, числа вправо: 1x = -7.",
+     "x = -7."
+    ],
+    "en": [
+     "Expand: 6x − 30 = 5x − 37.",
+     "Move x-terms left and numbers right: 1x = -7.",
+     "x = -7."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 6(x − 6) = 4x − 18. В ответе укажите корень.",
+    "en": "Solve 6(x − 6) = 4x − 18. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "9",
+    "en": "9"
+   },
+   "accept": [
+    "9"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 6x − 36 = 4x − 18.",
+     "Перенесём слагаемые с x влево, числа вправо: 2x = 18.",
+     "x = 9."
+    ],
+    "en": [
+     "Expand: 6x − 36 = 4x − 18.",
+     "Move x-terms left and numbers right: 2x = 18.",
+     "x = 9."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 3(x − 1) = 2x + 6. В ответе укажите корень.",
+    "en": "Solve 3(x − 1) = 2x + 6. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "9",
+    "en": "9"
+   },
+   "accept": [
+    "9"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 3x − 3 = 2x + 6.",
+     "Перенесём слагаемые с x влево, числа вправо: 1x = 9.",
+     "x = 9."
+    ],
+    "en": [
+     "Expand: 3x − 3 = 2x + 6.",
+     "Move x-terms left and numbers right: 1x = 9.",
+     "x = 9."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 2(x − 6) = −x + 0. В ответе укажите корень.",
+    "en": "Solve 2(x − 6) = −x + 0. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 2x − 12 = −x + 0.",
+     "Перенесём слагаемые с x влево, числа вправо: 3x = 12.",
+     "x = 4."
+    ],
+    "en": [
+     "Expand: 2x − 12 = −x + 0.",
+     "Move x-terms left and numbers right: 3x = 12.",
+     "x = 4."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 6(x − 5) = 5x − 26. В ответе укажите корень.",
+    "en": "Solve 6(x − 5) = 5x − 26. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 6x − 30 = 5x − 26.",
+     "Перенесём слагаемые с x влево, числа вправо: 1x = 4.",
+     "x = 4."
+    ],
+    "en": [
+     "Expand: 6x − 30 = 5x − 26.",
+     "Move x-terms left and numbers right: 1x = 4.",
+     "x = 4."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 6(x + 1) = 4x + 16. В ответе укажите корень.",
+    "en": "Solve 6(x + 1) = 4x + 16. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 6x + 6 = 4x + 16.",
+     "Перенесём слагаемые с x влево, числа вправо: 2x = 10.",
+     "x = 5."
+    ],
+    "en": [
+     "Expand: 6x + 6 = 4x + 16.",
+     "Move x-terms left and numbers right: 2x = 10.",
+     "x = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 4(x − 4) = 3x − 11. В ответе укажите корень.",
+    "en": "Solve 4(x − 4) = 3x − 11. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 4x − 16 = 3x − 11.",
+     "Перенесём слагаемые с x влево, числа вправо: 1x = 5.",
+     "x = 5."
+    ],
+    "en": [
+     "Expand: 4x − 16 = 3x − 11.",
+     "Move x-terms left and numbers right: 1x = 5.",
+     "x = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-lin-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 4(x − 1) = 2x + 2. В ответе укажите корень.",
+    "en": "Solve 4(x − 1) = 2x + 2. Give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: 4x − 4 = 2x + 2.",
+     "Перенесём слагаемые с x влево, числа вправо: 2x = 6.",
+     "x = 3."
+    ],
+    "en": [
+     "Expand: 4x − 4 = 2x + 2.",
+     "Move x-terms left and numbers right: 2x = 6.",
+     "x = 3."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "gen-sys-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 2x − 1y = 7, 2x − 3y = 5.",
+    "en": "Find x + y where (x; y) solves the system { 2x − 1y = 7, 2x − 3y = 5."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = 4, y = 1.",
+     "Тогда x + y = 5."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = 4, y = 1.",
+     "Hence x + y = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 2x + 1y = -3, 2x − 3y = 1.",
+    "en": "Find x + y where (x; y) solves the system { 2x + 1y = -3, 2x − 3y = 1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-2",
+    "en": "-2"
+   },
+   "accept": [
+    "-2",
+    "−2"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = -1, y = -1.",
+     "Тогда x + y = -2."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = -1, y = -1.",
+     "Hence x + y = -2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 4x − 1y = -18, 1x − 1y = 0.",
+    "en": "Find x + y where (x; y) solves the system { 4x − 1y = -18, 1x − 1y = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-12",
+    "en": "-12"
+   },
+   "accept": [
+    "-12",
+    "−12"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = -6, y = -6.",
+     "Тогда x + y = -12."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = -6, y = -6.",
+     "Hence x + y = -12."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 4x − 2y = 26, 4x − 1y = 25.",
+    "en": "Find x + y where (x; y) solves the system { 4x − 2y = 26, 4x − 1y = 25."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = 6, y = -1.",
+     "Тогда x + y = 5."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = 6, y = -1.",
+     "Hence x + y = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 2x + 1y = 10, 3x − 2y = -6.",
+    "en": "Find x + y where (x; y) solves the system { 2x + 1y = 10, 3x − 2y = -6."
+   },
+   "options": null,
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = 2, y = 6.",
+     "Тогда x + y = 8."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = 2, y = 6.",
+     "Hence x + y = 8."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 4x + 3y = -39, 3x − 2y = -8.",
+    "en": "Find x + y where (x; y) solves the system { 4x + 3y = -39, 3x − 2y = -8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-11",
+    "en": "-11"
+   },
+   "accept": [
+    "-11",
+    "−11"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = -6, y = -5.",
+     "Тогда x + y = -11."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = -6, y = -5.",
+     "Hence x + y = -11."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 1x + 3y = 11, 1x − 2y = 1.",
+    "en": "Find x + y where (x; y) solves the system { 1x + 3y = 11, 1x − 2y = 1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "7",
+    "en": "7"
+   },
+   "accept": [
+    "7"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = 5, y = 2.",
+     "Тогда x + y = 7."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = 5, y = 2.",
+     "Hence x + y = 7."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 1x − 3y = 20, 3x − 2y = 25.",
+    "en": "Find x + y where (x; y) solves the system { 1x − 3y = 20, 3x − 2y = 25."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0",
+    "en": "0"
+   },
+   "accept": [
+    "0"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = 5, y = -5.",
+     "Тогда x + y = 0."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = 5, y = -5.",
+     "Hence x + y = 0."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 4x − 1y = -5, 2x − 1y = -1.",
+    "en": "Find x + y where (x; y) solves the system { 4x − 1y = -5, 2x − 1y = -1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-5",
+    "en": "-5"
+   },
+   "accept": [
+    "-5",
+    "−5"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = -2, y = -3.",
+     "Тогда x + y = -5."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = -2, y = -3.",
+     "Hence x + y = -5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-sys-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение x + y, где (x; y) — решение системы { 1x + 3y = -9, 3x − 2y = -16.",
+    "en": "Find x + y where (x; y) solves the system { 1x + 3y = -9, 3x − 2y = -16."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-7",
+    "en": "-7"
+   },
+   "accept": [
+    "-7",
+    "−7"
+   ],
+   "solution": {
+    "ru": [
+     "Выразим одну переменную через другую из более простого уравнения.",
+     "Подстановка даёт x = -6, y = -1.",
+     "Тогда x + y = -7."
+    ],
+    "en": [
+     "Express one variable through the other from the simpler equation.",
+     "Substitution gives x = -6, y = -1.",
+     "Hence x + y = -7."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "gen-vie-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму корней уравнения x² − 2x − 48 = 0.",
+    "en": "Find the sum of the roots of x² − 2x − 48 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = 2, x₁·x₂ = q = -48.",
+     "Корни уравнения: -6 и 8; искомая величина равна 2."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = 2, x₁·x₂ = q = -48.",
+     "The roots are -6 and 8; the required value is 2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите произведение корней уравнения x² − 2x − 15 = 0.",
+    "en": "Find the product of the roots of x² − 2x − 15 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-15",
+    "en": "-15"
+   },
+   "accept": [
+    "-15",
+    "−15"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = 2, x₁·x₂ = q = -15.",
+     "Корни уравнения: 5 и -3; искомая величина равна -15."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = 2, x₁·x₂ = q = -15.",
+     "The roots are 5 and -3; the required value is -15."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму корней уравнения x² + 10x + 24 = 0.",
+    "en": "Find the sum of the roots of x² + 10x + 24 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-10",
+    "en": "-10"
+   },
+   "accept": [
+    "-10",
+    "−10"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = -10, x₁·x₂ = q = 24.",
+     "Корни уравнения: -4 и -6; искомая величина равна -10."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = -10, x₁·x₂ = q = 24.",
+     "The roots are -4 and -6; the required value is -10."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите произведение корней уравнения x² − 15x + 56 = 0.",
+    "en": "Find the product of the roots of x² − 15x + 56 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "56",
+    "en": "56"
+   },
+   "accept": [
+    "56"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = 15, x₁·x₂ = q = 56.",
+     "Корни уравнения: 7 и 8; искомая величина равна 56."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = 15, x₁·x₂ = q = 56.",
+     "The roots are 7 and 8; the required value is 56."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму корней уравнения x² + 1x − 12 = 0.",
+    "en": "Find the sum of the roots of x² + 1x − 12 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-1",
+    "en": "-1"
+   },
+   "accept": [
+    "-1",
+    "−1"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = -1, x₁·x₂ = q = -12.",
+     "Корни уравнения: 3 и -4; искомая величина равна -1."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = -1, x₁·x₂ = q = -12.",
+     "The roots are 3 and -4; the required value is -1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите произведение корней уравнения x² − 5x + 4 = 0.",
+    "en": "Find the product of the roots of x² − 5x + 4 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = 5, x₁·x₂ = q = 4.",
+     "Корни уравнения: 1 и 4; искомая величина равна 4."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = 5, x₁·x₂ = q = 4.",
+     "The roots are 1 and 4; the required value is 4."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму корней уравнения x² + 1x − 2 = 0.",
+    "en": "Find the sum of the roots of x² + 1x − 2 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-1",
+    "en": "-1"
+   },
+   "accept": [
+    "-1",
+    "−1"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = -1, x₁·x₂ = q = -2.",
+     "Корни уравнения: -2 и 1; искомая величина равна -1."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = -1, x₁·x₂ = q = -2.",
+     "The roots are -2 and 1; the required value is -1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите произведение корней уравнения x² − 1 = 0.",
+    "en": "Find the product of the roots of x² − 1 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-1",
+    "en": "-1"
+   },
+   "accept": [
+    "-1",
+    "−1"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = 0, x₁·x₂ = q = -1.",
+     "Корни уравнения: 1 и -1; искомая величина равна -1."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = 0, x₁·x₂ = q = -1.",
+     "The roots are 1 and -1; the required value is -1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму корней уравнения x² − 5x + 4 = 0.",
+    "en": "Find the sum of the roots of x² − 5x + 4 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = 5, x₁·x₂ = q = 4.",
+     "Корни уравнения: 4 и 1; искомая величина равна 5."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = 5, x₁·x₂ = q = 4.",
+     "The roots are 4 and 1; the required value is 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-vie-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите произведение корней уравнения x² + 3x − 18 = 0.",
+    "en": "Find the product of the roots of x² + 3x − 18 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-18",
+    "en": "-18"
+   },
+   "accept": [
+    "-18",
+    "−18"
+   ],
+   "solution": {
+    "ru": [
+     "Приведённое квадратное уравнение x² + px + q = 0.",
+     "По теореме Виета x₁ + x₂ = −p = -3, x₁·x₂ = q = -18.",
+     "Корни уравнения: -6 и 3; искомая величина равна -18."
+    ],
+    "en": [
+     "The quadratic is monic: x² + px + q = 0.",
+     "By Vieta x₁ + x₂ = −p = -3, x₁·x₂ = q = -18.",
+     "The roots are -6 and 3; the required value is -18."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "gen-rad-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x + 18) = 7.",
+    "en": "Solve √(x + 18) = 7."
+   },
+   "options": null,
+   "answer": {
+    "ru": "31",
+    "en": "31"
+   },
+   "accept": [
+    "31"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x + 18 = 49.",
+     "x = 49 − 18 = 31.",
+     "Проверка: √49 = 7 — верно."
+    ],
+    "en": [
+     "Square both sides: x + 18 = 49.",
+     "x = 31.",
+     "Check: √49 = 7, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x + 15) = 9.",
+    "en": "Solve √(x + 15) = 9."
+   },
+   "options": null,
+   "answer": {
+    "ru": "66",
+    "en": "66"
+   },
+   "accept": [
+    "66"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x + 15 = 81.",
+     "x = 81 − 15 = 66.",
+     "Проверка: √81 = 9 — верно."
+    ],
+    "en": [
+     "Square both sides: x + 15 = 81.",
+     "x = 66.",
+     "Check: √81 = 9, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x + 1) = 6.",
+    "en": "Solve √(x + 1) = 6."
+   },
+   "options": null,
+   "answer": {
+    "ru": "35",
+    "en": "35"
+   },
+   "accept": [
+    "35"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x + 1 = 36.",
+     "x = 36 − 1 = 35.",
+     "Проверка: √36 = 6 — верно."
+    ],
+    "en": [
+     "Square both sides: x + 1 = 36.",
+     "x = 35.",
+     "Check: √36 = 6, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x + 5) = 8.",
+    "en": "Solve √(x + 5) = 8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "59",
+    "en": "59"
+   },
+   "accept": [
+    "59"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x + 5 = 64.",
+     "x = 64 − 5 = 59.",
+     "Проверка: √64 = 8 — верно."
+    ],
+    "en": [
+     "Square both sides: x + 5 = 64.",
+     "x = 59.",
+     "Check: √64 = 8, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x − 9) = 2.",
+    "en": "Solve √(x − 9) = 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "13",
+    "en": "13"
+   },
+   "accept": [
+    "13"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x − 9 = 4.",
+     "x = 4 + 9 = 13.",
+     "Проверка: √4 = 2 — верно."
+    ],
+    "en": [
+     "Square both sides: x − 9 = 4.",
+     "x = 13.",
+     "Check: √4 = 2, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x − 8) = 6.",
+    "en": "Solve √(x − 8) = 6."
+   },
+   "options": null,
+   "answer": {
+    "ru": "44",
+    "en": "44"
+   },
+   "accept": [
+    "44"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x − 8 = 36.",
+     "x = 36 + 8 = 44.",
+     "Проверка: √36 = 6 — верно."
+    ],
+    "en": [
+     "Square both sides: x − 8 = 36.",
+     "x = 44.",
+     "Check: √36 = 6, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x − 2) = 4.",
+    "en": "Solve √(x − 2) = 4."
+   },
+   "options": null,
+   "answer": {
+    "ru": "18",
+    "en": "18"
+   },
+   "accept": [
+    "18"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x − 2 = 16.",
+     "x = 16 + 2 = 18.",
+     "Проверка: √16 = 4 — верно."
+    ],
+    "en": [
+     "Square both sides: x − 2 = 16.",
+     "x = 18.",
+     "Check: √16 = 4, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x + 17) = 6.",
+    "en": "Solve √(x + 17) = 6."
+   },
+   "options": null,
+   "answer": {
+    "ru": "19",
+    "en": "19"
+   },
+   "accept": [
+    "19"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x + 17 = 36.",
+     "x = 36 − 17 = 19.",
+     "Проверка: √36 = 6 — верно."
+    ],
+    "en": [
+     "Square both sides: x + 17 = 36.",
+     "x = 19.",
+     "Check: √36 = 6, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x + 0) = 2.",
+    "en": "Solve √(x + 0) = 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x + 0 = 4.",
+     "x = 4 + 0 = 4.",
+     "Проверка: √4 = 2 — верно."
+    ],
+    "en": [
+     "Square both sides: x + 0 = 4.",
+     "x = 4.",
+     "Check: √4 = 2, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-rad-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x + 1) = 3.",
+    "en": "Solve √(x + 1) = 3."
+   },
+   "options": null,
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: x + 1 = 9.",
+     "x = 9 − 1 = 8.",
+     "Проверка: √9 = 3 — верно."
+    ],
+    "en": [
+     "Square both sides: x + 1 = 9.",
+     "x = 8.",
+     "Check: √9 = 3, correct."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "gen-pct-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 2000 руб., сначала увеличили на 50%, а затем снизили на 20%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 2000 was first increased by 50% and then decreased by 20%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "2400",
+    "en": "2400"
+   },
+   "accept": [
+    "2400"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 2000 · 1.5 = 3000.",
+     "После снижения: 3000 · 0.8 = 2400.",
+     "Ответ: 2400 руб."
+    ],
+    "en": [
+     "After the increase: 3000.",
+     "After the decrease: 2400.",
+     "Answer: 2400."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 400 руб., сначала увеличили на 10%, а затем снизили на 20%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 400 was first increased by 10% and then decreased by 20%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "352",
+    "en": "352"
+   },
+   "accept": [
+    "352"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 400 · 1.1 = 440.",
+     "После снижения: 440 · 0.8 = 352.",
+     "Ответ: 352 руб."
+    ],
+    "en": [
+     "After the increase: 440.",
+     "After the decrease: 352.",
+     "Answer: 352."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 400 руб., сначала увеличили на 25%, а затем снизили на 25%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 400 was first increased by 25% and then decreased by 25%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "375",
+    "en": "375"
+   },
+   "accept": [
+    "375"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 400 · 1.25 = 500.",
+     "После снижения: 500 · 0.75 = 375.",
+     "Ответ: 375 руб."
+    ],
+    "en": [
+     "After the increase: 500.",
+     "After the decrease: 375.",
+     "Answer: 375."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 600 руб., сначала увеличили на 50%, а затем снизили на 25%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 600 was first increased by 50% and then decreased by 25%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "675",
+    "en": "675"
+   },
+   "accept": [
+    "675"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 600 · 1.5 = 900.",
+     "После снижения: 900 · 0.75 = 675.",
+     "Ответ: 675 руб."
+    ],
+    "en": [
+     "After the increase: 900.",
+     "After the decrease: 675.",
+     "Answer: 675."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 1500 руб., сначала увеличили на 20%, а затем снизили на 20%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 1500 was first increased by 20% and then decreased by 20%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1440",
+    "en": "1440"
+   },
+   "accept": [
+    "1440"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 1500 · 1.2 = 1800.",
+     "После снижения: 1800 · 0.8 = 1440.",
+     "Ответ: 1440 руб."
+    ],
+    "en": [
+     "After the increase: 1800.",
+     "After the decrease: 1440.",
+     "Answer: 1440."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 400 руб., сначала увеличили на 50%, а затем снизили на 20%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 400 was first increased by 50% and then decreased by 20%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "480",
+    "en": "480"
+   },
+   "accept": [
+    "480"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 400 · 1.5 = 600.",
+     "После снижения: 600 · 0.8 = 480.",
+     "Ответ: 480 руб."
+    ],
+    "en": [
+     "After the increase: 600.",
+     "After the decrease: 480.",
+     "Answer: 480."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 1000 руб., сначала увеличили на 20%, а затем снизили на 50%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 1000 was first increased by 20% and then decreased by 50%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "600",
+    "en": "600"
+   },
+   "accept": [
+    "600"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 1000 · 1.2 = 1200.",
+     "После снижения: 1200 · 0.5 = 600.",
+     "Ответ: 600 руб."
+    ],
+    "en": [
+     "After the increase: 1200.",
+     "After the decrease: 600.",
+     "Answer: 600."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 1200 руб., сначала увеличили на 20%, а затем снизили на 20%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 1200 was first increased by 20% and then decreased by 20%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1152",
+    "en": "1152"
+   },
+   "accept": [
+    "1152"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 1200 · 1.2 = 1440.",
+     "После снижения: 1440 · 0.8 = 1152.",
+     "Ответ: 1152 руб."
+    ],
+    "en": [
+     "After the increase: 1440.",
+     "After the decrease: 1152.",
+     "Answer: 1152."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 1200 руб., сначала увеличили на 50%, а затем снизили на 20%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 1200 was first increased by 50% and then decreased by 20%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1440",
+    "en": "1440"
+   },
+   "accept": [
+    "1440"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 1200 · 1.5 = 1800.",
+     "После снижения: 1800 · 0.8 = 1440.",
+     "Ответ: 1440 руб."
+    ],
+    "en": [
+     "After the increase: 1800.",
+     "After the decrease: 1440.",
+     "Answer: 1440."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-pct-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Цену товара, стоившего 1500 руб., сначала увеличили на 20%, а затем снизили на 50%. Сколько рублей стал стоить товар?",
+    "en": "A good costing 1500 was first increased by 20% and then decreased by 50%. What is its final price?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "900",
+    "en": "900"
+   },
+   "accept": [
+    "900"
+   ],
+   "solution": {
+    "ru": [
+     "После повышения: 1500 · 1.2 = 1800.",
+     "После снижения: 1800 · 0.5 = 900.",
+     "Ответ: 900 руб."
+    ],
+    "en": [
+     "After the increase: 1800.",
+     "After the decrease: 900.",
+     "Answer: 900."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "gen-aps-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 7, d = -4. Найдите 18-й член арифметической прогрессии.",
+    "en": "a₁ = 7, d = -4. Find the 18th term of the arithmetic progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-61",
+    "en": "-61"
+   },
+   "accept": [
+    "-61",
+    "−61"
+   ],
+   "solution": {
+    "ru": [
+     "Формула n-го члена: aₙ = a₁ + (n − 1)d.",
+     "a18 = 7 + 17 · (-4).",
+     "a18 = -61."
+    ],
+    "en": [
+     "n-th term: aₙ = a₁ + (n − 1)d.",
+     "a18 = 7 + 17 · (-4).",
+     "a18 = -61."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-aps-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = -1, d = 3. Найдите сумму первых 10 членов арифметической прогрессии.",
+    "en": "a₁ = -1, d = 3. Find the sum of the first 10 terms."
+   },
+   "options": null,
+   "answer": {
+    "ru": "125",
+    "en": "125"
+   },
+   "accept": [
+    "125"
+   ],
+   "solution": {
+    "ru": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S10 = (2·-1 + 9·(3))·10/2 = 125.",
+     "Ответ: 125."
+    ],
+    "en": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S10 = 125.",
+     "Answer: 125."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия",
+    "сумма"
+   ]
+  },
+  {
+   "id": "gen-aps-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 11, d = 3. Найдите 20-й член арифметической прогрессии.",
+    "en": "a₁ = 11, d = 3. Find the 20th term of the arithmetic progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "68",
+    "en": "68"
+   },
+   "accept": [
+    "68"
+   ],
+   "solution": {
+    "ru": [
+     "Формула n-го члена: aₙ = a₁ + (n − 1)d.",
+     "a20 = 11 + 19 · (3).",
+     "a20 = 68."
+    ],
+    "en": [
+     "n-th term: aₙ = a₁ + (n − 1)d.",
+     "a20 = 11 + 19 · (3).",
+     "a20 = 68."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-aps-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 8, d = 3. Найдите сумму первых 8 членов арифметической прогрессии.",
+    "en": "a₁ = 8, d = 3. Find the sum of the first 8 terms."
+   },
+   "options": null,
+   "answer": {
+    "ru": "148",
+    "en": "148"
+   },
+   "accept": [
+    "148"
+   ],
+   "solution": {
+    "ru": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S8 = (2·8 + 7·(3))·8/2 = 148.",
+     "Ответ: 148."
+    ],
+    "en": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S8 = 148.",
+     "Answer: 148."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия",
+    "сумма"
+   ]
+  },
+  {
+   "id": "gen-aps-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = -3, d = 5. Найдите 9-й член арифметической прогрессии.",
+    "en": "a₁ = -3, d = 5. Find the 9th term of the arithmetic progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "37",
+    "en": "37"
+   },
+   "accept": [
+    "37"
+   ],
+   "solution": {
+    "ru": [
+     "Формула n-го члена: aₙ = a₁ + (n − 1)d.",
+     "a9 = -3 + 8 · (5).",
+     "a9 = 37."
+    ],
+    "en": [
+     "n-th term: aₙ = a₁ + (n − 1)d.",
+     "a9 = -3 + 8 · (5).",
+     "a9 = 37."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-aps-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 3, d = 4. Найдите сумму первых 10 членов арифметической прогрессии.",
+    "en": "a₁ = 3, d = 4. Find the sum of the first 10 terms."
+   },
+   "options": null,
+   "answer": {
+    "ru": "210",
+    "en": "210"
+   },
+   "accept": [
+    "210"
+   ],
+   "solution": {
+    "ru": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S10 = (2·3 + 9·(4))·10/2 = 210.",
+     "Ответ: 210."
+    ],
+    "en": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S10 = 210.",
+     "Answer: 210."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия",
+    "сумма"
+   ]
+  },
+  {
+   "id": "gen-aps-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 9, d = -1. Найдите 10-й член арифметической прогрессии.",
+    "en": "a₁ = 9, d = -1. Find the 10th term of the arithmetic progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0",
+    "en": "0"
+   },
+   "accept": [
+    "0"
+   ],
+   "solution": {
+    "ru": [
+     "Формула n-го члена: aₙ = a₁ + (n − 1)d.",
+     "a10 = 9 + 9 · (-1).",
+     "a10 = 0."
+    ],
+    "en": [
+     "n-th term: aₙ = a₁ + (n − 1)d.",
+     "a10 = 9 + 9 · (-1).",
+     "a10 = 0."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-aps-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = -6, d = 4. Найдите сумму первых 9 членов арифметической прогрессии.",
+    "en": "a₁ = -6, d = 4. Find the sum of the first 9 terms."
+   },
+   "options": null,
+   "answer": {
+    "ru": "90",
+    "en": "90"
+   },
+   "accept": [
+    "90"
+   ],
+   "solution": {
+    "ru": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S9 = (2·-6 + 8·(4))·9/2 = 90.",
+     "Ответ: 90."
+    ],
+    "en": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S9 = 90.",
+     "Answer: 90."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия",
+    "сумма"
+   ]
+  },
+  {
+   "id": "gen-aps-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = -1, d = 4. Найдите 18-й член арифметической прогрессии.",
+    "en": "a₁ = -1, d = 4. Find the 18th term of the arithmetic progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "67",
+    "en": "67"
+   },
+   "accept": [
+    "67"
+   ],
+   "solution": {
+    "ru": [
+     "Формула n-го члена: aₙ = a₁ + (n − 1)d.",
+     "a18 = -1 + 17 · (4).",
+     "a18 = 67."
+    ],
+    "en": [
+     "n-th term: aₙ = a₁ + (n − 1)d.",
+     "a18 = -1 + 17 · (4).",
+     "a18 = 67."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-aps-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 9, d = 1. Найдите сумму первых 10 членов арифметической прогрессии.",
+    "en": "a₁ = 9, d = 1. Find the sum of the first 10 terms."
+   },
+   "options": null,
+   "answer": {
+    "ru": "135",
+    "en": "135"
+   },
+   "accept": [
+    "135"
+   ],
+   "solution": {
+    "ru": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S10 = (2·9 + 9·(1))·10/2 = 135.",
+     "Ответ: 135."
+    ],
+    "en": [
+     "Sₙ = (2a₁ + (n − 1)d)·n / 2.",
+     "S10 = 135.",
+     "Answer: 135."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "арифметическая прогрессия",
+    "сумма"
+   ]
+  },
+  {
+   "id": "gen-geo-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 5, q = 2. Найдите 6-й член геометрической прогрессии.",
+    "en": "b₁ = 5, q = 2. Find the 6th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "160",
+    "en": "160"
+   },
+   "accept": [
+    "160"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b6 = 5 · (2)^5 = 160.",
+     "Ответ: 160."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b6 = 160.",
+     "Answer: 160."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 1, q = -2. Найдите 7-й член геометрической прогрессии.",
+    "en": "b₁ = 1, q = -2. Find the 7th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "64",
+    "en": "64"
+   },
+   "accept": [
+    "64"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b7 = 1 · (-2)^6 = 64.",
+     "Ответ: 64."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b7 = 64.",
+     "Answer: 64."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 3, q = 1/3. Найдите 5-й член геометрической прогрессии.",
+    "en": "b₁ = 3, q = 1/3. Find the 5th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/27",
+    "en": "1/27"
+   },
+   "accept": [
+    "1/27"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b5 = 3 · (1/3)^4 = 1/27.",
+     "Ответ: 1/27."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b5 = 1/27.",
+     "Answer: 1/27."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 1, q = -2. Найдите 5-й член геометрической прогрессии.",
+    "en": "b₁ = 1, q = -2. Find the 5th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "16",
+    "en": "16"
+   },
+   "accept": [
+    "16"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b5 = 1 · (-2)^4 = 16.",
+     "Ответ: 16."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b5 = 16.",
+     "Answer: 16."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 5, q = -3. Найдите 6-й член геометрической прогрессии.",
+    "en": "b₁ = 5, q = -3. Find the 6th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-1215",
+    "en": "-1215"
+   },
+   "accept": [
+    "-1215",
+    "−1215"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b6 = 5 · (-3)^5 = -1215.",
+     "Ответ: -1215."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b6 = -1215.",
+     "Answer: -1215."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 4, q = 1/2. Найдите 7-й член геометрической прогрессии.",
+    "en": "b₁ = 4, q = 1/2. Find the 7th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/16",
+    "en": "1/16"
+   },
+   "accept": [
+    "1/16",
+    "0.0625",
+    "0,0625",
+    "0.062"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b7 = 4 · (1/2)^6 = 1/16.",
+     "Ответ: 1/16."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b7 = 1/16.",
+     "Answer: 1/16."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 5, q = -2. Найдите 5-й член геометрической прогрессии.",
+    "en": "b₁ = 5, q = -2. Find the 5th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "80",
+    "en": "80"
+   },
+   "accept": [
+    "80"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b5 = 5 · (-2)^4 = 80.",
+     "Ответ: 80."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b5 = 80.",
+     "Answer: 80."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 3, q = -3. Найдите 6-й член геометрической прогрессии.",
+    "en": "b₁ = 3, q = -3. Find the 6th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-729",
+    "en": "-729"
+   },
+   "accept": [
+    "-729",
+    "−729"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b6 = 3 · (-3)^5 = -729.",
+     "Ответ: -729."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b6 = -729.",
+     "Answer: -729."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = -3, q = 1/3. Найдите 5-й член геометрической прогрессии.",
+    "en": "b₁ = -3, q = 1/3. Find the 5th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-1/27",
+    "en": "-1/27"
+   },
+   "accept": [
+    "-1/27",
+    "−1/27"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b5 = -3 · (1/3)^4 = -1/27.",
+     "Ответ: -1/27."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b5 = -1/27.",
+     "Answer: -1/27."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-geo-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "b₁ = 4, q = -2. Найдите 4-й член геометрической прогрессии.",
+    "en": "b₁ = 4, q = -2. Find the 4th term of the geometric progression."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-32",
+    "en": "-32"
+   },
+   "accept": [
+    "-32",
+    "−32"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b4 = 4 · (-2)^3 = -32.",
+     "Ответ: -32."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b4 = -32.",
+     "Answer: -32."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "gen-rgt-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 3 и 4. Найдите гипотенузу.",
+    "en": "The legs of a right triangle are 3 and 4. Find the hypotenuse."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Теорема Пифагора: c² = a² + b².",
+     "c² = 9 + 16 = 25.",
+     "c = 5."
+    ],
+    "en": [
+     "Pythagoras: c² = a² + b².",
+     "c² = 9 + 16 = 25.",
+     "c = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 6 и 8. Найдите площадь.",
+    "en": "The legs of a right triangle are 6 and 8. Find the area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "24",
+    "en": "24"
+   },
+   "accept": [
+    "24"
+   ],
+   "solution": {
+    "ru": [
+     "Катеты взаимно перпендикулярны, поэтому один из них — основание, другой — высота.",
+     "S = ½ · 6 · 8.",
+     "S = 24."
+    ],
+    "en": [
+     "The legs are perpendicular, so one is the base and the other the height.",
+     "S = ½ · 6 · 8.",
+     "S = 24."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 5 и 12. Найдите радиус вписанной окружности.",
+    "en": "The legs of a right triangle are 5 and 12. Find the inradius."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Гипотенуза: c = √(25 + 144) = 13.",
+     "Для прямоугольного треугольника r = (a + b − c)/2 = (5 + 12 − 13)/2.",
+     "r = 2."
+    ],
+    "en": [
+     "Hypotenuse: c = 13.",
+     "r = (a + b − c)/2 = (5 + 12 − 13)/2.",
+     "r = 2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 9 и 12. Найдите гипотенузу.",
+    "en": "The legs of a right triangle are 9 and 12. Find the hypotenuse."
+   },
+   "options": null,
+   "answer": {
+    "ru": "15",
+    "en": "15"
+   },
+   "accept": [
+    "15"
+   ],
+   "solution": {
+    "ru": [
+     "Теорема Пифагора: c² = a² + b².",
+     "c² = 81 + 144 = 225.",
+     "c = 15."
+    ],
+    "en": [
+     "Pythagoras: c² = a² + b².",
+     "c² = 81 + 144 = 225.",
+     "c = 15."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 8 и 15. Найдите площадь.",
+    "en": "The legs of a right triangle are 8 and 15. Find the area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "60",
+    "en": "60"
+   },
+   "accept": [
+    "60"
+   ],
+   "solution": {
+    "ru": [
+     "Катеты взаимно перпендикулярны, поэтому один из них — основание, другой — высота.",
+     "S = ½ · 8 · 15.",
+     "S = 60."
+    ],
+    "en": [
+     "The legs are perpendicular, so one is the base and the other the height.",
+     "S = ½ · 8 · 15.",
+     "S = 60."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 7 и 24. Найдите радиус вписанной окружности.",
+    "en": "The legs of a right triangle are 7 and 24. Find the inradius."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Гипотенуза: c = √(49 + 576) = 25.",
+     "Для прямоугольного треугольника r = (a + b − c)/2 = (7 + 24 − 25)/2.",
+     "r = 3."
+    ],
+    "en": [
+     "Hypotenuse: c = 25.",
+     "r = (a + b − c)/2 = (7 + 24 − 25)/2.",
+     "r = 3."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 20 и 21. Найдите гипотенузу.",
+    "en": "The legs of a right triangle are 20 and 21. Find the hypotenuse."
+   },
+   "options": null,
+   "answer": {
+    "ru": "29",
+    "en": "29"
+   },
+   "accept": [
+    "29"
+   ],
+   "solution": {
+    "ru": [
+     "Теорема Пифагора: c² = a² + b².",
+     "c² = 400 + 441 = 841.",
+     "c = 29."
+    ],
+    "en": [
+     "Pythagoras: c² = a² + b².",
+     "c² = 400 + 441 = 841.",
+     "c = 29."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 12 и 16. Найдите площадь.",
+    "en": "The legs of a right triangle are 12 and 16. Find the area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "96",
+    "en": "96"
+   },
+   "accept": [
+    "96"
+   ],
+   "solution": {
+    "ru": [
+     "Катеты взаимно перпендикулярны, поэтому один из них — основание, другой — высота.",
+     "S = ½ · 12 · 16.",
+     "S = 96."
+    ],
+    "en": [
+     "The legs are perpendicular, so one is the base and the other the height.",
+     "S = ½ · 12 · 16.",
+     "S = 96."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 10 и 24. Найдите радиус вписанной окружности.",
+    "en": "The legs of a right triangle are 10 and 24. Find the inradius."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Гипотенуза: c = √(100 + 576) = 26.",
+     "Для прямоугольного треугольника r = (a + b − c)/2 = (10 + 24 − 26)/2.",
+     "r = 4."
+    ],
+    "en": [
+     "Hypotenuse: c = 26.",
+     "r = (a + b − c)/2 = (10 + 24 − 26)/2.",
+     "r = 4."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-rgt-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 15 и 20. Найдите гипотенузу.",
+    "en": "The legs of a right triangle are 15 and 20. Find the hypotenuse."
+   },
+   "options": null,
+   "answer": {
+    "ru": "25",
+    "en": "25"
+   },
+   "accept": [
+    "25"
+   ],
+   "solution": {
+    "ru": [
+     "Теорема Пифагора: c² = a² + b².",
+     "c² = 225 + 400 = 625.",
+     "c = 25."
+    ],
+    "en": [
+     "Pythagoras: c² = a² + b².",
+     "c² = 225 + 400 = 625.",
+     "c = 25."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "gen-quad-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Основания трапеции равны 10 и 14, высота — 5. Найдите площадь трапеции.",
+    "en": "A trapezoid has bases 10 and 14 and height 5. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "60",
+    "en": "60"
+   },
+   "accept": [
+    "60"
+   ],
+   "solution": {
+    "ru": [
+     "S = (a + b)/2 · h.",
+     "S = (10 + 14)/2 · 5 = 12 · 5.",
+     "S = 60."
+    ],
+    "en": [
+     "S = (a + b)/2 · h.",
+     "S = 60.",
+     "Answer: 60."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "трапеция"
+   ]
+  },
+  {
+   "id": "gen-quad-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Диагонали ромба равны 8 и 5. Найдите площадь ромба.",
+    "en": "A rhombus has diagonals 8 and 5. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "20",
+    "en": "20"
+   },
+   "accept": [
+    "20"
+   ],
+   "solution": {
+    "ru": [
+     "S = ½ d₁d₂.",
+     "S = ½ · 8 · 5.",
+     "S = 20."
+    ],
+    "en": [
+     "S = ½ d₁d₂.",
+     "S = 20.",
+     "Answer: 20."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "ромб"
+   ]
+  },
+  {
+   "id": "gen-quad-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Основания трапеции равны 6 и 14, высота — 7. Найдите площадь трапеции.",
+    "en": "A trapezoid has bases 6 and 14 and height 7. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "70",
+    "en": "70"
+   },
+   "accept": [
+    "70"
+   ],
+   "solution": {
+    "ru": [
+     "S = (a + b)/2 · h.",
+     "S = (6 + 14)/2 · 7 = 10 · 7.",
+     "S = 70."
+    ],
+    "en": [
+     "S = (a + b)/2 · h.",
+     "S = 70.",
+     "Answer: 70."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "трапеция"
+   ]
+  },
+  {
+   "id": "gen-quad-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Диагонали ромба равны 6 и 5. Найдите площадь ромба.",
+    "en": "A rhombus has diagonals 6 and 5. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "15",
+    "en": "15"
+   },
+   "accept": [
+    "15"
+   ],
+   "solution": {
+    "ru": [
+     "S = ½ d₁d₂.",
+     "S = ½ · 6 · 5.",
+     "S = 15."
+    ],
+    "en": [
+     "S = ½ d₁d₂.",
+     "S = 15.",
+     "Answer: 15."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "ромб"
+   ]
+  },
+  {
+   "id": "gen-quad-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Основания трапеции равны 6 и 16, высота — 3. Найдите площадь трапеции.",
+    "en": "A trapezoid has bases 6 and 16 and height 3. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "33",
+    "en": "33"
+   },
+   "accept": [
+    "33"
+   ],
+   "solution": {
+    "ru": [
+     "S = (a + b)/2 · h.",
+     "S = (6 + 16)/2 · 3 = 11 · 3.",
+     "S = 33."
+    ],
+    "en": [
+     "S = (a + b)/2 · h.",
+     "S = 33.",
+     "Answer: 33."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "трапеция"
+   ]
+  },
+  {
+   "id": "gen-quad-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Диагонали ромба равны 4 и 12. Найдите площадь ромба.",
+    "en": "A rhombus has diagonals 4 and 12. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "24",
+    "en": "24"
+   },
+   "accept": [
+    "24"
+   ],
+   "solution": {
+    "ru": [
+     "S = ½ d₁d₂.",
+     "S = ½ · 4 · 12.",
+     "S = 24."
+    ],
+    "en": [
+     "S = ½ d₁d₂.",
+     "S = 24.",
+     "Answer: 24."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "ромб"
+   ]
+  },
+  {
+   "id": "gen-quad-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Основания трапеции равны 10 и 14, высота — 7. Найдите площадь трапеции.",
+    "en": "A trapezoid has bases 10 and 14 and height 7. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "84",
+    "en": "84"
+   },
+   "accept": [
+    "84"
+   ],
+   "solution": {
+    "ru": [
+     "S = (a + b)/2 · h.",
+     "S = (10 + 14)/2 · 7 = 12 · 7.",
+     "S = 84."
+    ],
+    "en": [
+     "S = (a + b)/2 · h.",
+     "S = 84.",
+     "Answer: 84."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "трапеция"
+   ]
+  },
+  {
+   "id": "gen-quad-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Диагонали ромба равны 10 и 14. Найдите площадь ромба.",
+    "en": "A rhombus has diagonals 10 and 14. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "70",
+    "en": "70"
+   },
+   "accept": [
+    "70"
+   ],
+   "solution": {
+    "ru": [
+     "S = ½ d₁d₂.",
+     "S = ½ · 10 · 14.",
+     "S = 70."
+    ],
+    "en": [
+     "S = ½ d₁d₂.",
+     "S = 70.",
+     "Answer: 70."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "ромб"
+   ]
+  },
+  {
+   "id": "gen-quad-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Основания трапеции равны 6 и 16, высота — 6. Найдите площадь трапеции.",
+    "en": "A trapezoid has bases 6 and 16 and height 6. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "66",
+    "en": "66"
+   },
+   "accept": [
+    "66"
+   ],
+   "solution": {
+    "ru": [
+     "S = (a + b)/2 · h.",
+     "S = (6 + 16)/2 · 6 = 11 · 6.",
+     "S = 66."
+    ],
+    "en": [
+     "S = (a + b)/2 · h.",
+     "S = 66.",
+     "Answer: 66."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "трапеция"
+   ]
+  },
+  {
+   "id": "gen-quad-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Диагонали ромба равны 6 и 12. Найдите площадь ромба.",
+    "en": "A rhombus has diagonals 6 and 12. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "36",
+    "en": "36"
+   },
+   "accept": [
+    "36"
+   ],
+   "solution": {
+    "ru": [
+     "S = ½ d₁d₂.",
+     "S = ½ · 6 · 12.",
+     "S = 36."
+    ],
+    "en": [
+     "S = ½ d₁d₂.",
+     "S = 36.",
+     "Answer: 36."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "ромб"
+   ]
+  },
+  {
+   "id": "gen-der-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 1x³ − 3x² − 4x. Найдите значение производной в точке x₀ = 2.",
+    "en": "f(x) = 1x³ − 3x² − 4x. Find the value of the derivative at x₀ = 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-4",
+    "en": "-4"
+   },
+   "accept": [
+    "-4",
+    "−4"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 3x² − 6x − 4.",
+     "f′(2) = 3·4 − 12 − 4.",
+     "f′(2) = -4."
+    ],
+    "en": [
+     "f′(x) = 3x² − 6x − 4.",
+     "f′(2) = -4.",
+     "Answer: -4."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 2x³ + 4x² + 2x. Найдите значение производной в точке x₀ = -3.",
+    "en": "f(x) = 2x³ + 4x² + 2x. Find the value of the derivative at x₀ = -3."
+   },
+   "options": null,
+   "answer": {
+    "ru": "32",
+    "en": "32"
+   },
+   "accept": [
+    "32"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 6x² + 8x + 2.",
+     "f′(-3) = 6·9 − 24 + 2.",
+     "f′(-3) = 32."
+    ],
+    "en": [
+     "f′(x) = 6x² + 8x + 2.",
+     "f′(-3) = 32.",
+     "Answer: 32."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 3x³ + 2x² + 8x. Найдите значение производной в точке x₀ = 1.",
+    "en": "f(x) = 3x³ + 2x² + 8x. Find the value of the derivative at x₀ = 1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "21",
+    "en": "21"
+   },
+   "accept": [
+    "21"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 9x² + 4x + 8.",
+     "f′(1) = 9·1 + 4 + 8.",
+     "f′(1) = 21."
+    ],
+    "en": [
+     "f′(x) = 9x² + 4x + 8.",
+     "f′(1) = 21.",
+     "Answer: 21."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 5x³ − 6x² + 2x. Найдите значение производной в точке x₀ = 2.",
+    "en": "f(x) = 5x³ − 6x² + 2x. Find the value of the derivative at x₀ = 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "38",
+    "en": "38"
+   },
+   "accept": [
+    "38"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 15x² − 12x + 2.",
+     "f′(2) = 15·4 − 24 + 2.",
+     "f′(2) = 38."
+    ],
+    "en": [
+     "f′(x) = 15x² − 12x + 2.",
+     "f′(2) = 38.",
+     "Answer: 38."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 5x³ + 4x² + 5x. Найдите значение производной в точке x₀ = 3.",
+    "en": "f(x) = 5x³ + 4x² + 5x. Find the value of the derivative at x₀ = 3."
+   },
+   "options": null,
+   "answer": {
+    "ru": "164",
+    "en": "164"
+   },
+   "accept": [
+    "164"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 15x² + 8x + 5.",
+     "f′(3) = 15·9 + 24 + 5.",
+     "f′(3) = 164."
+    ],
+    "en": [
+     "f′(x) = 15x² + 8x + 5.",
+     "f′(3) = 164.",
+     "Answer: 164."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 2x³ + 2x² − 2x. Найдите значение производной в точке x₀ = -1.",
+    "en": "f(x) = 2x³ + 2x² − 2x. Find the value of the derivative at x₀ = -1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0",
+    "en": "0"
+   },
+   "accept": [
+    "0"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 6x² + 4x − 2.",
+     "f′(-1) = 6·1 − 4 − 2.",
+     "f′(-1) = 0."
+    ],
+    "en": [
+     "f′(x) = 6x² + 4x − 2.",
+     "f′(-1) = 0.",
+     "Answer: 0."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 1x³ + 0x² − 4x. Найдите значение производной в точке x₀ = 1.",
+    "en": "f(x) = 1x³ + 0x² − 4x. Find the value of the derivative at x₀ = 1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-1",
+    "en": "-1"
+   },
+   "accept": [
+    "-1",
+    "−1"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 3x² + 0x − 4.",
+     "f′(1) = 3·1 + 0 − 4.",
+     "f′(1) = -1."
+    ],
+    "en": [
+     "f′(x) = 3x² + 0x − 4.",
+     "f′(1) = -1.",
+     "Answer: -1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 1x³ + 6x² + 3x. Найдите значение производной в точке x₀ = 2.",
+    "en": "f(x) = 1x³ + 6x² + 3x. Find the value of the derivative at x₀ = 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "39",
+    "en": "39"
+   },
+   "accept": [
+    "39"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 3x² + 12x + 3.",
+     "f′(2) = 3·4 + 24 + 3.",
+     "f′(2) = 39."
+    ],
+    "en": [
+     "f′(x) = 3x² + 12x + 3.",
+     "f′(2) = 39.",
+     "Answer: 39."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 4x³ + 5x² + 1x. Найдите значение производной в точке x₀ = -3.",
+    "en": "f(x) = 4x³ + 5x² + 1x. Find the value of the derivative at x₀ = -3."
+   },
+   "options": null,
+   "answer": {
+    "ru": "79",
+    "en": "79"
+   },
+   "accept": [
+    "79"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 12x² + 10x + 1.",
+     "f′(-3) = 12·9 − 30 + 1.",
+     "f′(-3) = 79."
+    ],
+    "en": [
+     "f′(x) = 12x² + 10x + 1.",
+     "f′(-3) = 79.",
+     "Answer: 79."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-der-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "f(x) = 3x³ + 3x² − 3x. Найдите значение производной в точке x₀ = -1.",
+    "en": "f(x) = 3x³ + 3x² − 3x. Find the value of the derivative at x₀ = -1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0",
+    "en": "0"
+   },
+   "accept": [
+    "0"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 9x² + 6x − 3.",
+     "f′(-1) = 9·1 − 6 − 3.",
+     "f′(-1) = 0."
+    ],
+    "en": [
+     "f′(x) = 9x² + 6x − 3.",
+     "f′(-1) = 0.",
+     "Answer: 0."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "gen-par-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = -8 − (x + 4)².",
+    "en": "Find the maximum value of y = -8 − (x + 4)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-8",
+    "en": "-8"
+   },
+   "accept": [
+    "-8",
+    "−8"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x + 4)² ≥ 0, поэтому y ≤ -8.",
+     "Равенство достигается при x = -4.",
+     "Наибольшее значение равно -8."
+    ],
+    "en": [
+     "(x + 4)² ≥ 0, hence y ≤ -8.",
+     "Equality holds for x = -4.",
+     "The maximum value is -8."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = 5 − (x + 1)².",
+    "en": "Find the maximum value of y = 5 − (x + 1)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x + 1)² ≥ 0, поэтому y ≤ 5.",
+     "Равенство достигается при x = -1.",
+     "Наибольшее значение равно 5."
+    ],
+    "en": [
+     "(x + 1)² ≥ 0, hence y ≤ 5.",
+     "Equality holds for x = -1.",
+     "The maximum value is 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = -3 − (x + 3)².",
+    "en": "Find the maximum value of y = -3 − (x + 3)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-3",
+    "en": "-3"
+   },
+   "accept": [
+    "-3",
+    "−3"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x + 3)² ≥ 0, поэтому y ≤ -3.",
+     "Равенство достигается при x = -3.",
+     "Наибольшее значение равно -3."
+    ],
+    "en": [
+     "(x + 3)² ≥ 0, hence y ≤ -3.",
+     "Equality holds for x = -3.",
+     "The maximum value is -3."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = 7 − (x + 2)².",
+    "en": "Find the maximum value of y = 7 − (x + 2)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "7",
+    "en": "7"
+   },
+   "accept": [
+    "7"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x + 2)² ≥ 0, поэтому y ≤ 7.",
+     "Равенство достигается при x = -2.",
+     "Наибольшее значение равно 7."
+    ],
+    "en": [
+     "(x + 2)² ≥ 0, hence y ≤ 7.",
+     "Equality holds for x = -2.",
+     "The maximum value is 7."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = 5 − (x − 2)².",
+    "en": "Find the maximum value of y = 5 − (x − 2)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x − 2)² ≥ 0, поэтому y ≤ 5.",
+     "Равенство достигается при x = 2.",
+     "Наибольшее значение равно 5."
+    ],
+    "en": [
+     "(x − 2)² ≥ 0, hence y ≤ 5.",
+     "Equality holds for x = 2.",
+     "The maximum value is 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = 6 − (x + 0)².",
+    "en": "Find the maximum value of y = 6 − (x + 0)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "6",
+    "en": "6"
+   },
+   "accept": [
+    "6"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x + 0)² ≥ 0, поэтому y ≤ 6.",
+     "Равенство достигается при x = 0.",
+     "Наибольшее значение равно 6."
+    ],
+    "en": [
+     "(x + 0)² ≥ 0, hence y ≤ 6.",
+     "Equality holds for x = 0.",
+     "The maximum value is 6."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = 3 − (x − 4)².",
+    "en": "Find the maximum value of y = 3 − (x − 4)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x − 4)² ≥ 0, поэтому y ≤ 3.",
+     "Равенство достигается при x = 4.",
+     "Наибольшее значение равно 3."
+    ],
+    "en": [
+     "(x − 4)² ≥ 0, hence y ≤ 3.",
+     "Equality holds for x = 4.",
+     "The maximum value is 3."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = 1 − (x + 2)².",
+    "en": "Find the maximum value of y = 1 − (x + 2)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x + 2)² ≥ 0, поэтому y ≤ 1.",
+     "Равенство достигается при x = -2.",
+     "Наибольшее значение равно 1."
+    ],
+    "en": [
+     "(x + 2)² ≥ 0, hence y ≤ 1.",
+     "Equality holds for x = -2.",
+     "The maximum value is 1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = -2 − (x − 2)².",
+    "en": "Find the maximum value of y = -2 − (x − 2)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-2",
+    "en": "-2"
+   },
+   "accept": [
+    "-2",
+    "−2"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x − 2)² ≥ 0, поэтому y ≤ -2.",
+     "Равенство достигается при x = 2.",
+     "Наибольшее значение равно -2."
+    ],
+    "en": [
+     "(x − 2)² ≥ 0, hence y ≤ -2.",
+     "Equality holds for x = 2.",
+     "The maximum value is -2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-par-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = -5 − (x + 3)².",
+    "en": "Find the maximum value of y = -5 − (x + 3)²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-5",
+    "en": "-5"
+   },
+   "accept": [
+    "-5",
+    "−5"
+   ],
+   "solution": {
+    "ru": [
+     "Выражение (x + 3)² ≥ 0, поэтому y ≤ -5.",
+     "Равенство достигается при x = -3.",
+     "Наибольшее значение равно -5."
+    ],
+    "en": [
+     "(x + 3)² ≥ 0, hence y ≤ -5.",
+     "Equality holds for x = -3.",
+     "The maximum value is -5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратичная функция",
+    "наибольшее значение"
+   ]
+  },
+  {
+   "id": "gen-log-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите 2^(log_2 2) * 2².",
+    "en": "Evaluate 2^(log_2 2) · 2²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "2^(log_2 2) = 2.",
+     "2 · 4.",
+     "Ответ: 8."
+    ],
+    "en": [
+     "2^(log_2 2) = 2.",
+     "2 · 4 = 8.",
+     "Answer: 8."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите log_16 64.",
+    "en": "Evaluate log_16 64."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3/2",
+    "en": "3/2"
+   },
+   "accept": [
+    "3/2",
+    "1.5",
+    "1,5"
+   ],
+   "solution": {
+    "ru": [
+     "16 = 4², значит log_16 64 = log_4 64 / 2.",
+     "log_4 64 = 3.",
+     "Ответ: 3/2."
+    ],
+    "en": [
+     "16 = 4², so the logarithm equals 3/2.",
+     "3/2 = 3/2.",
+     "Answer: 3/2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите log_4 32 − log_4 2.",
+    "en": "Evaluate log_4 32 − log_4 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Разность логарифмов: log_a (m/k).",
+     "32/2 = 16 = 4^2.",
+     "Ответ: 2."
+    ],
+    "en": [
+     "Difference of logarithms.",
+     "32/2 = 16 = 4^2.",
+     "Answer: 2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите 3^(log_3 5) * 3².",
+    "en": "Evaluate 3^(log_3 5) · 3²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "45",
+    "en": "45"
+   },
+   "accept": [
+    "45"
+   ],
+   "solution": {
+    "ru": [
+     "3^(log_3 5) = 5.",
+     "5 · 9.",
+     "Ответ: 45."
+    ],
+    "en": [
+     "3^(log_3 5) = 5.",
+     "5 · 9 = 45.",
+     "Answer: 45."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите log_9 9.",
+    "en": "Evaluate log_9 9."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "9 = 3², значит log_9 9 = log_3 9 / 2.",
+     "log_3 9 = 2.",
+     "Ответ: 1."
+    ],
+    "en": [
+     "9 = 3², so the logarithm equals 2/2.",
+     "2/2 = 1.",
+     "Answer: 1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите log_4 2048 − log_4 2.",
+    "en": "Evaluate log_4 2048 − log_4 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Разность логарифмов: log_a (m/k).",
+     "2048/2 = 1024 = 4^5.",
+     "Ответ: 5."
+    ],
+    "en": [
+     "Difference of logarithms.",
+     "2048/2 = 1024 = 4^5.",
+     "Answer: 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите 5^(log_5 4) * 5².",
+    "en": "Evaluate 5^(log_5 4) · 5²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "100",
+    "en": "100"
+   },
+   "accept": [
+    "100"
+   ],
+   "solution": {
+    "ru": [
+     "5^(log_5 4) = 4.",
+     "4 · 25.",
+     "Ответ: 100."
+    ],
+    "en": [
+     "5^(log_5 4) = 4.",
+     "4 · 25 = 100.",
+     "Answer: 100."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите log_25 625.",
+    "en": "Evaluate log_25 625."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "25 = 5², значит log_25 625 = log_5 625 / 2.",
+     "log_5 625 = 4.",
+     "Ответ: 2."
+    ],
+    "en": [
+     "25 = 5², so the logarithm equals 4/2.",
+     "4/2 = 2.",
+     "Answer: 2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите log_2 40 − log_2 5.",
+    "en": "Evaluate log_2 40 − log_2 5."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Разность логарифмов: log_a (m/k).",
+     "40/5 = 8 = 2^3.",
+     "Ответ: 3."
+    ],
+    "en": [
+     "Difference of logarithms.",
+     "40/5 = 8 = 2^3.",
+     "Answer: 3."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-log-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите 3^(log_3 4) * 3².",
+    "en": "Evaluate 3^(log_3 4) · 3²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "36",
+    "en": "36"
+   },
+   "accept": [
+    "36"
+   ],
+   "solution": {
+    "ru": [
+     "3^(log_3 4) = 4.",
+     "4 · 9.",
+     "Ответ: 36."
+    ],
+    "en": [
+     "3^(log_3 4) = 4.",
+     "4 · 9 = 36.",
+     "Answer: 36."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "gen-exp-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 2^(5x + 2) = 4.",
+    "en": "Solve 2^(5x + 2) = 4."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0",
+    "en": "0"
+   },
+   "accept": [
+    "0"
+   ],
+   "solution": {
+    "ru": [
+     "4 = 2^2, основания равны.",
+     "5x + 2 = 2.",
+     "x = 0."
+    ],
+    "en": [
+     "4 = 2^2, bases are equal.",
+     "5x + 2 = 2.",
+     "x = 0."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 4^(2x − 8) = 16.",
+    "en": "Solve 4^(2x − 8) = 16."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "16 = 4^2, основания равны.",
+     "2x − 8 = 2.",
+     "x = 5."
+    ],
+    "en": [
+     "16 = 4^2, bases are equal.",
+     "2x − 8 = 2.",
+     "x = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 2^(5x + 25) = 32.",
+    "en": "Solve 2^(5x + 25) = 32."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-4",
+    "en": "-4"
+   },
+   "accept": [
+    "-4",
+    "−4"
+   ],
+   "solution": {
+    "ru": [
+     "32 = 2^5, основания равны.",
+     "5x + 25 = 5.",
+     "x = -4."
+    ],
+    "en": [
+     "32 = 2^5, bases are equal.",
+     "5x + 25 = 5.",
+     "x = -4."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 4^(5x − 26) = 256.",
+    "en": "Solve 4^(5x − 26) = 256."
+   },
+   "options": null,
+   "answer": {
+    "ru": "6",
+    "en": "6"
+   },
+   "accept": [
+    "6"
+   ],
+   "solution": {
+    "ru": [
+     "256 = 4^4, основания равны.",
+     "5x − 26 = 4.",
+     "x = 6."
+    ],
+    "en": [
+     "256 = 4^4, bases are equal.",
+     "5x − 26 = 4.",
+     "x = 6."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 3^(2x + 7) = 27.",
+    "en": "Solve 3^(2x + 7) = 27."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-2",
+    "en": "-2"
+   },
+   "accept": [
+    "-2",
+    "−2"
+   ],
+   "solution": {
+    "ru": [
+     "27 = 3^3, основания равны.",
+     "2x + 7 = 3.",
+     "x = -2."
+    ],
+    "en": [
+     "27 = 3^3, bases are equal.",
+     "2x + 7 = 3.",
+     "x = -2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 2^(3x + 5) = 32.",
+    "en": "Solve 2^(3x + 5) = 32."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0",
+    "en": "0"
+   },
+   "accept": [
+    "0"
+   ],
+   "solution": {
+    "ru": [
+     "32 = 2^5, основания равны.",
+     "3x + 5 = 5.",
+     "x = 0."
+    ],
+    "en": [
+     "32 = 2^5, bases are equal.",
+     "3x + 5 = 5.",
+     "x = 0."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 4^(3x − 6) = 64.",
+    "en": "Solve 4^(3x − 6) = 64."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "64 = 4^3, основания равны.",
+     "3x − 6 = 3.",
+     "x = 3."
+    ],
+    "en": [
+     "64 = 4^3, bases are equal.",
+     "3x − 6 = 3.",
+     "x = 3."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 4^(3x − 7) = 16.",
+    "en": "Solve 4^(3x − 7) = 16."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "16 = 4^2, основания равны.",
+     "3x − 7 = 2.",
+     "x = 3."
+    ],
+    "en": [
+     "16 = 4^2, bases are equal.",
+     "3x − 7 = 2.",
+     "x = 3."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 3^(2x + 1) = 243.",
+    "en": "Solve 3^(2x + 1) = 243."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "243 = 3^5, основания равны.",
+     "2x + 1 = 5.",
+     "x = 2."
+    ],
+    "en": [
+     "243 = 3^5, bases are equal.",
+     "2x + 1 = 5.",
+     "x = 2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-exp-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 5^(5x − 21) = 625.",
+    "en": "Solve 5^(5x − 21) = 625."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "625 = 5^4, основания равны.",
+     "5x − 21 = 4.",
+     "x = 5."
+    ],
+    "en": [
+     "625 = 5^4, bases are equal.",
+     "5x − 21 = 4.",
+     "x = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "gen-prb-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Какова вероятность того, что случайно выбранное двузначное число делится на 11?",
+    "en": "What is the probability that a random two-digit number is divisible by 11?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/10",
+    "en": "1/10"
+   },
+   "accept": [
+    "1/10",
+    "0.1",
+    "0,1"
+   ],
+   "solution": {
+    "ru": [
+     "Всего двузначных чисел 90.",
+     "Кратных 11 среди них 9.",
+     "P = 9/90 = 1/10."
+    ],
+    "en": [
+     "There are 90 two-digit numbers in total.",
+     "9 of them are divisible by 11.",
+     "P = 9/90 = 1/10."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "В урне 6 белых и 6 чёрных шаров. Найдите вероятность вынуть белый шар.",
+    "en": "An urn has 6 white and 6 black balls. Find the probability of a white ball."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/2",
+    "en": "1/2"
+   },
+   "accept": [
+    "1/2",
+    "0.5",
+    "0,5"
+   ],
+   "solution": {
+    "ru": [
+     "Всего шаров 12.",
+     "Благоприятных исходов 6.",
+     "P = 6/12 = 1/2."
+    ],
+    "en": [
+     "Total balls: 12.",
+     "Favourable: 6.",
+     "P = 1/2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Какова вероятность того, что случайно выбранное двузначное число делится на 11?",
+    "en": "What is the probability that a random two-digit number is divisible by 11?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/10",
+    "en": "1/10"
+   },
+   "accept": [
+    "1/10",
+    "0.1",
+    "0,1"
+   ],
+   "solution": {
+    "ru": [
+     "Всего двузначных чисел 90.",
+     "Кратных 11 среди них 9.",
+     "P = 9/90 = 1/10."
+    ],
+    "en": [
+     "There are 90 two-digit numbers in total.",
+     "9 of them are divisible by 11.",
+     "P = 9/90 = 1/10."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Монету подбрасывают дважды. Найдите вероятность того, что ровно один раз выпадет орёл.",
+    "en": "A coin is tossed twice. Find the probability of exactly one head."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/2",
+    "en": "1/2"
+   },
+   "accept": [
+    "1/2",
+    "0.5",
+    "0,5"
+   ],
+   "solution": {
+    "ru": [
+     "Всего равновозможных исходов 4: ОО, ОР, РО, РР.",
+     "Благоприятных ровно два: ОР и РО.",
+     "P = 2/4 = 1/2."
+    ],
+    "en": [
+     "Four equally likely outcomes: HH, HT, TH, TT.",
+     "Exactly two are favourable: HT and TH.",
+     "P = 2/4 = 1/2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Какова вероятность того, что случайно выбранное двузначное число делится на 9?",
+    "en": "What is the probability that a random two-digit number is divisible by 9?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/9",
+    "en": "1/9"
+   },
+   "accept": [
+    "1/9"
+   ],
+   "solution": {
+    "ru": [
+     "Всего двузначных чисел 90.",
+     "Кратных 9 среди них 10.",
+     "P = 10/90 = 1/9."
+    ],
+    "en": [
+     "There are 90 two-digit numbers in total.",
+     "10 of them are divisible by 9.",
+     "P = 10/90 = 1/9."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "В урне 6 белых и 5 чёрных шаров. Найдите вероятность вынуть белый шар.",
+    "en": "An urn has 6 white and 5 black balls. Find the probability of a white ball."
+   },
+   "options": null,
+   "answer": {
+    "ru": "6/11",
+    "en": "6/11"
+   },
+   "accept": [
+    "6/11"
+   ],
+   "solution": {
+    "ru": [
+     "Всего шаров 11.",
+     "Благоприятных исходов 6.",
+     "P = 6/11 = 6/11."
+    ],
+    "en": [
+     "Total balls: 11.",
+     "Favourable: 6.",
+     "P = 6/11."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Какова вероятность того, что случайно выбранное двузначное число делится на 11?",
+    "en": "What is the probability that a random two-digit number is divisible by 11?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/10",
+    "en": "1/10"
+   },
+   "accept": [
+    "1/10",
+    "0.1",
+    "0,1"
+   ],
+   "solution": {
+    "ru": [
+     "Всего двузначных чисел 90.",
+     "Кратных 11 среди них 9.",
+     "P = 9/90 = 1/10."
+    ],
+    "en": [
+     "There are 90 two-digit numbers in total.",
+     "9 of them are divisible by 11.",
+     "P = 9/90 = 1/10."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Монету подбрасывают дважды. Найдите вероятность того, что ровно один раз выпадет орёл.",
+    "en": "A coin is tossed twice. Find the probability of exactly one head."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/2",
+    "en": "1/2"
+   },
+   "accept": [
+    "1/2",
+    "0.5",
+    "0,5"
+   ],
+   "solution": {
+    "ru": [
+     "Всего равновозможных исходов 4: ОО, ОР, РО, РР.",
+     "Благоприятных ровно два: ОР и РО.",
+     "P = 2/4 = 1/2."
+    ],
+    "en": [
+     "Four equally likely outcomes: HH, HT, TH, TT.",
+     "Exactly two are favourable: HT and TH.",
+     "P = 2/4 = 1/2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Какова вероятность того, что случайно выбранное двузначное число делится на 9?",
+    "en": "What is the probability that a random two-digit number is divisible by 9?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/9",
+    "en": "1/9"
+   },
+   "accept": [
+    "1/9"
+   ],
+   "solution": {
+    "ru": [
+     "Всего двузначных чисел 90.",
+     "Кратных 9 среди них 10.",
+     "P = 10/90 = 1/9."
+    ],
+    "en": [
+     "There are 90 two-digit numbers in total.",
+     "10 of them are divisible by 9.",
+     "P = 10/90 = 1/9."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-prb-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "В урне 2 белых и 6 чёрных шаров. Найдите вероятность вынуть белый шар.",
+    "en": "An urn has 2 white and 6 black balls. Find the probability of a white ball."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/4",
+    "en": "1/4"
+   },
+   "accept": [
+    "1/4",
+    "0.25",
+    "0,25"
+   ],
+   "solution": {
+    "ru": [
+     "Всего шаров 8.",
+     "Благоприятных исходов 2.",
+     "P = 2/8 = 1/4."
+    ],
+    "en": [
+     "Total balls: 8.",
+     "Favourable: 2.",
+     "P = 1/4."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "gen-cmb-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно выбрать 3 предмета из 11?",
+    "en": "In how many ways can 3 items be chosen out of 11?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "165",
+    "en": "165"
+   },
+   "accept": [
+    "165"
+   ],
+   "solution": {
+    "ru": [
+     "Порядок не важен — это сочетания.",
+     "C(11,3) = 11! / (3!·(11 − 3)!).",
+     "C(11,3) = 165."
+    ],
+    "en": [
+     "Order does not matter: combinations.",
+     "C(11,3) = 165.",
+     "Answer: 165."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно расставить 5 различных предметов в ряд?",
+    "en": "In how many ways can 5 distinct items be arranged in a row?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "120",
+    "en": "120"
+   },
+   "accept": [
+    "120"
+   ],
+   "solution": {
+    "ru": [
+     "Это перестановки из n элементов.",
+     "P5 = 5! = 5 · 4 · 3 · 2 · 1.",
+     "P5 = 120."
+    ],
+    "en": [
+     "These are permutations.",
+     "P5 = 5! = 120.",
+     "Answer: 120."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно выбрать 2 предмета из 10?",
+    "en": "In how many ways can 2 items be chosen out of 10?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "45",
+    "en": "45"
+   },
+   "accept": [
+    "45"
+   ],
+   "solution": {
+    "ru": [
+     "Порядок не важен — это сочетания.",
+     "C(10,2) = 10! / (2!·(10 − 2)!).",
+     "C(10,2) = 45."
+    ],
+    "en": [
+     "Order does not matter: combinations.",
+     "C(10,2) = 45.",
+     "Answer: 45."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно расставить 5 различных предметов в ряд?",
+    "en": "In how many ways can 5 distinct items be arranged in a row?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "120",
+    "en": "120"
+   },
+   "accept": [
+    "120"
+   ],
+   "solution": {
+    "ru": [
+     "Это перестановки из n элементов.",
+     "P5 = 5! = 5 · 4 · 3 · 2 · 1.",
+     "P5 = 120."
+    ],
+    "en": [
+     "These are permutations.",
+     "P5 = 5! = 120.",
+     "Answer: 120."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно выбрать 3 предмета из 7?",
+    "en": "In how many ways can 3 items be chosen out of 7?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "35",
+    "en": "35"
+   },
+   "accept": [
+    "35"
+   ],
+   "solution": {
+    "ru": [
+     "Порядок не важен — это сочетания.",
+     "C(7,3) = 7! / (3!·(7 − 3)!).",
+     "C(7,3) = 35."
+    ],
+    "en": [
+     "Order does not matter: combinations.",
+     "C(7,3) = 35.",
+     "Answer: 35."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно расставить 6 различных предметов в ряд?",
+    "en": "In how many ways can 6 distinct items be arranged in a row?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "720",
+    "en": "720"
+   },
+   "accept": [
+    "720"
+   ],
+   "solution": {
+    "ru": [
+     "Это перестановки из n элементов.",
+     "P6 = 6! = 6 · 5 · 4 · 3 · 2 · 1.",
+     "P6 = 720."
+    ],
+    "en": [
+     "These are permutations.",
+     "P6 = 6! = 720.",
+     "Answer: 720."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно выбрать 3 предмета из 8?",
+    "en": "In how many ways can 3 items be chosen out of 8?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "56",
+    "en": "56"
+   },
+   "accept": [
+    "56"
+   ],
+   "solution": {
+    "ru": [
+     "Порядок не важен — это сочетания.",
+     "C(8,3) = 8! / (3!·(8 − 3)!).",
+     "C(8,3) = 56."
+    ],
+    "en": [
+     "Order does not matter: combinations.",
+     "C(8,3) = 56.",
+     "Answer: 56."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно расставить 4 различных предметов в ряд?",
+    "en": "In how many ways can 4 distinct items be arranged in a row?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "24",
+    "en": "24"
+   },
+   "accept": [
+    "24"
+   ],
+   "solution": {
+    "ru": [
+     "Это перестановки из n элементов.",
+     "P4 = 4! = 4 · 3 · 2 · 1.",
+     "P4 = 24."
+    ],
+    "en": [
+     "These are permutations.",
+     "P4 = 4! = 24.",
+     "Answer: 24."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно выбрать 3 предмета из 10?",
+    "en": "In how many ways can 3 items be chosen out of 10?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "120",
+    "en": "120"
+   },
+   "accept": [
+    "120"
+   ],
+   "solution": {
+    "ru": [
+     "Порядок не важен — это сочетания.",
+     "C(10,3) = 10! / (3!·(10 − 3)!).",
+     "C(10,3) = 120."
+    ],
+    "en": [
+     "Order does not matter: combinations.",
+     "C(10,3) = 120.",
+     "Answer: 120."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-cmb-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами можно расставить 6 различных предметов в ряд?",
+    "en": "In how many ways can 6 distinct items be arranged in a row?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "720",
+    "en": "720"
+   },
+   "accept": [
+    "720"
+   ],
+   "solution": {
+    "ru": [
+     "Это перестановки из n элементов.",
+     "P6 = 6! = 6 · 5 · 4 · 3 · 2 · 1.",
+     "P6 = 720."
+    ],
+    "en": [
+     "These are permutations.",
+     "P6 = 6! = 720.",
+     "Answer: 720."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "комбинаторика"
+   ]
+  },
+  {
+   "id": "gen-trg-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Известно, что sin α = 3/5, где α — острый угол. Найдите cos α.",
+    "en": "Given sin α = 3/5 for an acute angle α, find cos α."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4/5",
+    "en": "4/5"
+   },
+   "accept": [
+    "4/5",
+    "0.8",
+    "0,8"
+   ],
+   "solution": {
+    "ru": [
+     "cos²α = 1 − sin²α = 1 − 9/25 = 16/25.",
+     "α — острый угол, поэтому cos α > 0.",
+     "cos α = 4/5."
+    ],
+    "en": [
+     "cos²α = 1 − sin²α = 16/25.",
+     "α is acute, hence cos α > 0.",
+     "cos α = 4/5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите sin 30° + cos 60°.",
+    "en": "Evaluate sin 30° + cos 60°."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "sin 30° = ½, cos 60° = ½.",
+     "½ + ½ = 1."
+    ],
+    "en": [
+     "sin 30° = ½, cos 60° = ½.",
+     "Sum = 1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Известно, что sin α = 8/17, где α — острый угол. Найдите cos α.",
+    "en": "Given sin α = 8/17 for an acute angle α, find cos α."
+   },
+   "options": null,
+   "answer": {
+    "ru": "15/17",
+    "en": "15/17"
+   },
+   "accept": [
+    "15/17"
+   ],
+   "solution": {
+    "ru": [
+     "cos²α = 1 − sin²α = 1 − 64/289 = 225/289.",
+     "α — острый угол, поэтому cos α > 0.",
+     "cos α = 15/17."
+    ],
+    "en": [
+     "cos²α = 1 − sin²α = 225/289.",
+     "α is acute, hence cos α > 0.",
+     "cos α = 15/17."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите sin²45° + cos²45°.",
+    "en": "Evaluate sin²45° + cos²45°."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "Основное тождество sin²α + cos²α = 1.",
+     "Выражение равно 1 при любом α, в том числе при 45°."
+    ],
+    "en": [
+     "Pythagorean identity sin²α + cos²α = 1.",
+     "It equals 1 for every α, including 45°."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Известно, что sin α = 7/25, где α — острый угол. Найдите cos α.",
+    "en": "Given sin α = 7/25 for an acute angle α, find cos α."
+   },
+   "options": null,
+   "answer": {
+    "ru": "24/25",
+    "en": "24/25"
+   },
+   "accept": [
+    "24/25",
+    "0.96",
+    "0,96"
+   ],
+   "solution": {
+    "ru": [
+     "cos²α = 1 − sin²α = 1 − 49/625 = 576/625.",
+     "α — острый угол, поэтому cos α > 0.",
+     "cos α = 24/25."
+    ],
+    "en": [
+     "cos²α = 1 − sin²α = 576/625.",
+     "α is acute, hence cos α > 0.",
+     "cos α = 24/25."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите tg 45° · sin 90°.",
+    "en": "Evaluate tg 45° · sin 90°."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "tg 45° = 1, sin 90° = 1.",
+     "1 · 1 = 1."
+    ],
+    "en": [
+     "tg 45° = 1, sin 90° = 1.",
+     "1 · 1 = 1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Известно, что sin α = 5/13, где α — острый угол. Найдите cos α.",
+    "en": "Given sin α = 5/13 for an acute angle α, find cos α."
+   },
+   "options": null,
+   "answer": {
+    "ru": "12/13",
+    "en": "12/13"
+   },
+   "accept": [
+    "12/13"
+   ],
+   "solution": {
+    "ru": [
+     "cos²α = 1 − sin²α = 1 − 25/169 = 144/169.",
+     "α — острый угол, поэтому cos α > 0.",
+     "cos α = 12/13."
+    ],
+    "en": [
+     "cos²α = 1 − sin²α = 144/169.",
+     "α is acute, hence cos α > 0.",
+     "cos α = 12/13."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите cos 60° + sin 30°.",
+    "en": "Evaluate cos 60° + sin 30°."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "cos 60° = ½, sin 30° = ½.",
+     "½ + ½ = 1."
+    ],
+    "en": [
+     "cos 60° = ½, sin 30° = ½.",
+     "Sum = 1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Известно, что sin α = 20/29, где α — острый угол. Найдите cos α.",
+    "en": "Given sin α = 20/29 for an acute angle α, find cos α."
+   },
+   "options": null,
+   "answer": {
+    "ru": "21/29",
+    "en": "21/29"
+   },
+   "accept": [
+    "21/29"
+   ],
+   "solution": {
+    "ru": [
+     "cos²α = 1 − sin²α = 1 − 400/841 = 441/841.",
+     "α — острый угол, поэтому cos α > 0.",
+     "cos α = 21/29."
+    ],
+    "en": [
+     "cos²α = 1 − sin²α = 441/841.",
+     "α is acute, hence cos α > 0.",
+     "cos α = 21/29."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-trg-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите sin30°·cos60° + cos30°·sin60°.",
+    "en": "Evaluate sin30°·cos60° + cos30°·sin60°."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "Это формула синуса суммы: sin(30° + 60°).",
+     "sin 90° = 1."
+    ],
+    "en": [
+     "Sine of a sum: sin(30° + 60°).",
+     "sin 90° = 1."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "тригонометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите площадь полной поверхности куба с ребром 4.",
+    "en": "Find the total surface area of a cube with edge 4."
+   },
+   "options": null,
+   "answer": {
+    "ru": "96",
+    "en": "96"
+   },
+   "accept": [
+    "96"
+   ],
+   "solution": {
+    "ru": [
+     "У куба 6 граней площадью 4² = 16.",
+     "S = 6 · 16.",
+     "S = 96."
+    ],
+    "en": [
+     "A cube has 6 faces of area 16.",
+     "S = 6 · 16.",
+     "S = 96."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите объём куба с ребром 2.",
+    "en": "Find the volume of a cube with edge 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "V = a³.",
+     "V = 2³.",
+     "V = 8."
+    ],
+    "en": [
+     "V = a³.",
+     "V = 8.",
+     "V = 8."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите объём цилиндра с радиусом основания 3 и высотой 2 (коэффициент при π).",
+    "en": "Find the volume of a cylinder with radius 3 and height 2 (coefficient at π)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "18",
+    "en": "18"
+   },
+   "accept": [
+    "18"
+   ],
+   "solution": {
+    "ru": [
+     "V = πR²H.",
+     "V = π · 9 · 2.",
+     "V = 18π."
+    ],
+    "en": [
+     "V = πR²H.",
+     "V = 18π.",
+     "Answer: 18π."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите объём конуса с радиусом 5 и высотой 3 (коэффициент при π).",
+    "en": "Find the volume of a cone with radius 5 and height 3 (coefficient at π)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "25",
+    "en": "25"
+   },
+   "accept": [
+    "25"
+   ],
+   "solution": {
+    "ru": [
+     "V = ⅓πR²H.",
+     "V = ⅓ · π · 25 · 3.",
+     "V = 25π."
+    ],
+    "en": [
+     "V = ⅓πR²H.",
+     "V = ⅓ · π · 25 · 3.",
+     "V = 25π."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите площадь поверхности шара радиуса 1 (коэффициент при π).",
+    "en": "Find the surface area of a sphere of radius 1 (coefficient at π)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "S = 4πR².",
+     "S = 4π · 1.",
+     "S = 4π."
+    ],
+    "en": [
+     "S = 4πR².",
+     "S = 4π.",
+     "Answer: 4π."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите площадь полной поверхности куба с ребром 7.",
+    "en": "Find the total surface area of a cube with edge 7."
+   },
+   "options": null,
+   "answer": {
+    "ru": "294",
+    "en": "294"
+   },
+   "accept": [
+    "294"
+   ],
+   "solution": {
+    "ru": [
+     "У куба 6 граней площадью 7² = 49.",
+     "S = 6 · 49.",
+     "S = 294."
+    ],
+    "en": [
+     "A cube has 6 faces of area 49.",
+     "S = 6 · 49.",
+     "S = 294."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите объём куба с ребром 9.",
+    "en": "Find the volume of a cube with edge 9."
+   },
+   "options": null,
+   "answer": {
+    "ru": "729",
+    "en": "729"
+   },
+   "accept": [
+    "729"
+   ],
+   "solution": {
+    "ru": [
+     "V = a³.",
+     "V = 9³.",
+     "V = 729."
+    ],
+    "en": [
+     "V = a³.",
+     "V = 729.",
+     "V = 729."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите объём цилиндра с радиусом основания 3 и высотой 3 (коэффициент при π).",
+    "en": "Find the volume of a cylinder with radius 3 and height 3 (coefficient at π)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "27",
+    "en": "27"
+   },
+   "accept": [
+    "27"
+   ],
+   "solution": {
+    "ru": [
+     "V = πR²H.",
+     "V = π · 9 · 3.",
+     "V = 27π."
+    ],
+    "en": [
+     "V = πR²H.",
+     "V = 27π.",
+     "Answer: 27π."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите объём конуса с радиусом 6 и высотой 12 (коэффициент при π).",
+    "en": "Find the volume of a cone with radius 6 and height 12 (coefficient at π)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "144",
+    "en": "144"
+   },
+   "accept": [
+    "144"
+   ],
+   "solution": {
+    "ru": [
+     "V = ⅓πR²H.",
+     "V = ⅓ · π · 36 · 12.",
+     "V = 144π."
+    ],
+    "en": [
+     "V = ⅓πR²H.",
+     "V = ⅓ · π · 36 · 12.",
+     "V = 144π."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-sol-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите площадь поверхности шара радиуса 3 (коэффициент при π).",
+    "en": "Find the surface area of a sphere of radius 3 (coefficient at π)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "36",
+    "en": "36"
+   },
+   "accept": [
+    "36"
+   ],
+   "solution": {
+    "ru": [
+     "S = 4πR².",
+     "S = 4π · 9.",
+     "S = 36π."
+    ],
+    "en": [
+     "S = 4πR².",
+     "S = 36π.",
+     "Answer: 36π."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "стереометрия"
+   ]
+  },
+  {
+   "id": "gen-ine-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество целых решений неравенства x² − 7x + 6 ≤ 0.",
+    "en": "Find the number of integer solutions of x² − 7x + 6 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "6",
+    "en": "6"
+   },
+   "accept": [
+    "6"
+   ],
+   "solution": {
+    "ru": [
+     "Нули трёхчлена: 1 и 6, ветви вверх.",
+     "Решение: 1 ≤ x ≤ 6.",
+     "Целых решений: 6."
+    ],
+    "en": [
+     "Zeros: 1 and 6, branches up.",
+     "Solution: 1 ≤ x ≤ 6.",
+     "There are 6 integer solutions."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму целых решений неравенства x² + 1x − 12 ≤ 0.",
+    "en": "Find the sum of the integer solutions of x² + 1x − 12 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-4",
+    "en": "-4"
+   },
+   "accept": [
+    "-4",
+    "−4"
+   ],
+   "solution": {
+    "ru": [
+     "Решение неравенства: -4 ≤ x ≤ 3.",
+     "Сумма целых чисел от -4 до 3.",
+     "Она равна -4."
+    ],
+    "en": [
+     "The solution is -4 ≤ x ≤ 3.",
+     "The arithmetic sum of consecutive integers.",
+     "It equals -4."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество целых решений неравенства x² − 11x + 18 ≤ 0.",
+    "en": "Find the number of integer solutions of x² − 11x + 18 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "Нули трёхчлена: 2 и 9, ветви вверх.",
+     "Решение: 2 ≤ x ≤ 9.",
+     "Целых решений: 8."
+    ],
+    "en": [
+     "Zeros: 2 and 9, branches up.",
+     "Solution: 2 ≤ x ≤ 9.",
+     "There are 8 integer solutions."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму целых решений неравенства x² + 9x + 14 ≤ 0.",
+    "en": "Find the sum of the integer solutions of x² + 9x + 14 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-27",
+    "en": "-27"
+   },
+   "accept": [
+    "-27",
+    "−27"
+   ],
+   "solution": {
+    "ru": [
+     "Решение неравенства: -7 ≤ x ≤ -2.",
+     "Сумма целых чисел от -7 до -2.",
+     "Она равна -27."
+    ],
+    "en": [
+     "The solution is -7 ≤ x ≤ -2.",
+     "The arithmetic sum of consecutive integers.",
+     "It equals -27."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество целых решений неравенства x² − 2x − 3 ≤ 0.",
+    "en": "Find the number of integer solutions of x² − 2x − 3 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Нули трёхчлена: -1 и 3, ветви вверх.",
+     "Решение: -1 ≤ x ≤ 3.",
+     "Целых решений: 5."
+    ],
+    "en": [
+     "Zeros: -1 and 3, branches up.",
+     "Solution: -1 ≤ x ≤ 3.",
+     "There are 5 integer solutions."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму целых решений неравенства x² − 7x + 6 ≤ 0.",
+    "en": "Find the sum of the integer solutions of x² − 7x + 6 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "21",
+    "en": "21"
+   },
+   "accept": [
+    "21"
+   ],
+   "solution": {
+    "ru": [
+     "Решение неравенства: 1 ≤ x ≤ 6.",
+     "Сумма целых чисел от 1 до 6.",
+     "Она равна 21."
+    ],
+    "en": [
+     "The solution is 1 ≤ x ≤ 6.",
+     "The arithmetic sum of consecutive integers.",
+     "It equals 21."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество целых решений неравенства x² − 15x + 44 ≤ 0.",
+    "en": "Find the number of integer solutions of x² − 15x + 44 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "Нули трёхчлена: 4 и 11, ветви вверх.",
+     "Решение: 4 ≤ x ≤ 11.",
+     "Целых решений: 8."
+    ],
+    "en": [
+     "Zeros: 4 and 11, branches up.",
+     "Solution: 4 ≤ x ≤ 11.",
+     "There are 8 integer solutions."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму целых решений неравенства x² − 7x + 6 ≤ 0.",
+    "en": "Find the sum of the integer solutions of x² − 7x + 6 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "21",
+    "en": "21"
+   },
+   "accept": [
+    "21"
+   ],
+   "solution": {
+    "ru": [
+     "Решение неравенства: 1 ≤ x ≤ 6.",
+     "Сумма целых чисел от 1 до 6.",
+     "Она равна 21."
+    ],
+    "en": [
+     "The solution is 1 ≤ x ≤ 6.",
+     "The arithmetic sum of consecutive integers.",
+     "It equals 21."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество целых решений неравенства x² + 10x + 21 ≤ 0.",
+    "en": "Find the number of integer solutions of x² + 10x + 21 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Нули трёхчлена: -7 и -3, ветви вверх.",
+     "Решение: -7 ≤ x ≤ -3.",
+     "Целых решений: 5."
+    ],
+    "en": [
+     "Zeros: -7 and -3, branches up.",
+     "Solution: -7 ≤ x ≤ -3.",
+     "There are 5 integer solutions."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-ine-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму целых решений неравенства x² − 7x + 6 ≤ 0.",
+    "en": "Find the sum of the integer solutions of x² − 7x + 6 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "21",
+    "en": "21"
+   },
+   "accept": [
+    "21"
+   ],
+   "solution": {
+    "ru": [
+     "Решение неравенства: 1 ≤ x ≤ 6.",
+     "Сумма целых чисел от 1 до 6.",
+     "Она равна 21."
+    ],
+    "en": [
+     "The solution is 1 ≤ x ≤ 6.",
+     "The arithmetic sum of consecutive integers.",
+     "It equals 21."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "gen-wrd-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Первый рабочий выполняет работу за 6 ч, второй — за 3 ч. За сколько часов они выполнят работу вместе?",
+    "en": "Worker A needs 6 h for a job, worker B needs 3 h. How many hours together?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Производительности: 1/6 и 1/3.",
+     "Вместе: 1/6 + 1/3 = 1/2 работы в час.",
+     "Время: 2 ч."
+    ],
+    "en": [
+     "Rates: 1/6 and 1/3.",
+     "Together: 1/2 per hour.",
+     "Time: 2 h."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Два объекта одновременно вышли навстречу друг другу из пунктов, расстояние между которыми 80 км, и встретились через 4 ч. Найдите скорость первого (км/ч), если второй на 4 км/ч быстрее.",
+    "en": "Two objects start simultaneously towards each other from points 80 km apart and meet after 4 h. Find the first speed if the second is 4 km/h faster."
+   },
+   "options": null,
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "Суммарная скорость: 80 : 4 = 20 км/ч.",
+     "v + (v + 4) = 20.",
+     "v = 8 км/ч (второй — 12 км/ч)."
+    ],
+    "en": [
+     "Combined speed: 80 : 4 = 20.",
+     "v + (v + 4) = 20.",
+     "v = 8."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Смешали 3 кг 20%-го и 2 кг 50%-го растворов. Найдите концентрацию смеси (в процентах).",
+    "en": "3 kg of a 20% solution and 2 kg of a 50% solution are mixed. Find the concentration (in %)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "32",
+    "en": "32"
+   },
+   "accept": [
+    "32"
+   ],
+   "solution": {
+    "ru": [
+     "Вещества: 3·20/100 + 2·50/100 = 8/5 кг.",
+     "Общая масса: 5 кг.",
+     "Концентрация: 32%."
+    ],
+    "en": [
+     "Substance: 8/5 kg.",
+     "Total mass: 5 kg.",
+     "Concentration: 32%."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Число 600 увеличили на 10%, а затем уменьшили на 25%. Какое число получилось?",
+    "en": "The number 600 was increased by 10% and then decreased by 25%. What is the result?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "495",
+    "en": "495"
+   },
+   "accept": [
+    "495"
+   ],
+   "solution": {
+    "ru": [
+     "После увеличения: 660.",
+     "После уменьшения: 495.",
+     "Ответ: 495."
+    ],
+    "en": [
+     "After the increase: 660.",
+     "After the decrease: 495.",
+     "Answer: 495."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Первый рабочий выполняет работу за 8 ч, второй — за 24 ч. За сколько часов они выполнят работу вместе?",
+    "en": "Worker A needs 8 h for a job, worker B needs 24 h. How many hours together?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "6",
+    "en": "6"
+   },
+   "accept": [
+    "6"
+   ],
+   "solution": {
+    "ru": [
+     "Производительности: 1/8 и 1/24.",
+     "Вместе: 1/8 + 1/24 = 1/6 работы в час.",
+     "Время: 6 ч."
+    ],
+    "en": [
+     "Rates: 1/8 and 1/24.",
+     "Together: 1/6 per hour.",
+     "Time: 6 h."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Два объекта одновременно вышли навстречу друг другу из пунктов, расстояние между которыми 32 км, и встретились через 4 ч. Найдите скорость первого (км/ч), если второй на 4 км/ч быстрее.",
+    "en": "Two objects start simultaneously towards each other from points 32 km apart and meet after 4 h. Find the first speed if the second is 4 km/h faster."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Суммарная скорость: 32 : 4 = 8 км/ч.",
+     "v + (v + 4) = 8.",
+     "v = 2 км/ч (второй — 6 км/ч)."
+    ],
+    "en": [
+     "Combined speed: 32 : 4 = 8.",
+     "v + (v + 4) = 8.",
+     "v = 2."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Смешали 5 кг 30%-го и 5 кг 60%-го растворов. Найдите концентрацию смеси (в процентах).",
+    "en": "5 kg of a 30% solution and 5 kg of a 60% solution are mixed. Find the concentration (in %)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "45",
+    "en": "45"
+   },
+   "accept": [
+    "45"
+   ],
+   "solution": {
+    "ru": [
+     "Вещества: 5·30/100 + 5·60/100 = 9/2 кг.",
+     "Общая масса: 10 кг.",
+     "Концентрация: 45%."
+    ],
+    "en": [
+     "Substance: 9/2 kg.",
+     "Total mass: 10 kg.",
+     "Concentration: 45%."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Число 120 увеличили на 25%, а затем уменьшили на 10%. Какое число получилось?",
+    "en": "The number 120 was increased by 25% and then decreased by 10%. What is the result?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "135",
+    "en": "135"
+   },
+   "accept": [
+    "135"
+   ],
+   "solution": {
+    "ru": [
+     "После увеличения: 150.",
+     "После уменьшения: 135.",
+     "Ответ: 135."
+    ],
+    "en": [
+     "After the increase: 150.",
+     "After the decrease: 135.",
+     "Answer: 135."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Первый рабочий выполняет работу за 6 ч, второй — за 12 ч. За сколько часов они выполнят работу вместе?",
+    "en": "Worker A needs 6 h for a job, worker B needs 12 h. How many hours together?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Производительности: 1/6 и 1/12.",
+     "Вместе: 1/6 + 1/12 = 1/4 работы в час.",
+     "Время: 4 ч."
+    ],
+    "en": [
+     "Rates: 1/6 and 1/12.",
+     "Together: 1/4 per hour.",
+     "Time: 4 h."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-wrd-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Два объекта одновременно вышли навстречу друг другу из пунктов, расстояние между которыми 32 км, и встретились через 2 ч. Найдите скорость первого (км/ч), если второй на 6 км/ч быстрее.",
+    "en": "Two objects start simultaneously towards each other from points 32 km apart and meet after 2 h. Find the first speed if the second is 6 km/h faster."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Суммарная скорость: 32 : 2 = 16 км/ч.",
+     "v + (v + 6) = 16.",
+     "v = 5 км/ч (второй — 11 км/ч)."
+    ],
+    "en": [
+     "Combined speed: 32 : 2 = 16.",
+     "v + (v + 6) = 16.",
+     "v = 5."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "текстовые задачи"
+   ]
+  },
+  {
+   "id": "gen-seq-001",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Последовательность задана формулой aₙ = 4n² + 10. Найдите a8.",
+    "en": "A sequence is defined by aₙ = 4n² + 10. Find a8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "266",
+    "en": "266"
+   },
+   "accept": [
+    "266"
+   ],
+   "solution": {
+    "ru": [
+     "Подставим n = 8.",
+     "a8 = 4·64 + 10 = 256 + 10.",
+     "a8 = 266."
+    ],
+    "en": [
+     "Substitute n = 8.",
+     "a8 = 266.",
+     "Answer: 266."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-002",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 3, aₙ₊₁ = 3aₙ + 1. Найдите a₅.",
+    "en": "a₁ = 3, aₙ₊₁ = 3aₙ + 1. Find a₅."
+   },
+   "options": null,
+   "answer": {
+    "ru": "283",
+    "en": "283"
+   },
+   "accept": [
+    "283"
+   ],
+   "solution": {
+    "ru": [
+     "a₂ = 3·3 + 1 = 10.",
+     "a₃ = 31, a₄ = 94.",
+     "a₅ = 283."
+    ],
+    "en": [
+     "a₂ = 10.",
+     "a₃ = 31, a₄ = 94.",
+     "a₅ = 283."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-003",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Последовательность задана формулой aₙ = 2n² + 7. Найдите a9.",
+    "en": "A sequence is defined by aₙ = 2n² + 7. Find a9."
+   },
+   "options": null,
+   "answer": {
+    "ru": "169",
+    "en": "169"
+   },
+   "accept": [
+    "169"
+   ],
+   "solution": {
+    "ru": [
+     "Подставим n = 9.",
+     "a9 = 2·81 + 7 = 162 + 7.",
+     "a9 = 169."
+    ],
+    "en": [
+     "Substitute n = 9.",
+     "a9 = 169.",
+     "Answer: 169."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-004",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 3, aₙ₊₁ = 3aₙ + 1. Найдите a₅.",
+    "en": "a₁ = 3, aₙ₊₁ = 3aₙ + 1. Find a₅."
+   },
+   "options": null,
+   "answer": {
+    "ru": "283",
+    "en": "283"
+   },
+   "accept": [
+    "283"
+   ],
+   "solution": {
+    "ru": [
+     "a₂ = 3·3 + 1 = 10.",
+     "a₃ = 31, a₄ = 94.",
+     "a₅ = 283."
+    ],
+    "en": [
+     "a₂ = 10.",
+     "a₃ = 31, a₄ = 94.",
+     "a₅ = 283."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-005",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Последовательность задана формулой aₙ = 3n² − 1. Найдите a8.",
+    "en": "A sequence is defined by aₙ = 3n² − 1. Find a8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "191",
+    "en": "191"
+   },
+   "accept": [
+    "191"
+   ],
+   "solution": {
+    "ru": [
+     "Подставим n = 8.",
+     "a8 = 3·64 − 1 = 192 − 1.",
+     "a8 = 191."
+    ],
+    "en": [
+     "Substitute n = 8.",
+     "a8 = 191.",
+     "Answer: 191."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-006",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 2, aₙ₊₁ = 2aₙ + 1. Найдите a₅.",
+    "en": "a₁ = 2, aₙ₊₁ = 2aₙ + 1. Find a₅."
+   },
+   "options": null,
+   "answer": {
+    "ru": "47",
+    "en": "47"
+   },
+   "accept": [
+    "47"
+   ],
+   "solution": {
+    "ru": [
+     "a₂ = 2·2 + 1 = 5.",
+     "a₃ = 11, a₄ = 23.",
+     "a₅ = 47."
+    ],
+    "en": [
+     "a₂ = 5.",
+     "a₃ = 11, a₄ = 23.",
+     "a₅ = 47."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-007",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Последовательность задана формулой aₙ = 4n² + 4. Найдите a9.",
+    "en": "A sequence is defined by aₙ = 4n² + 4. Find a9."
+   },
+   "options": null,
+   "answer": {
+    "ru": "328",
+    "en": "328"
+   },
+   "accept": [
+    "328"
+   ],
+   "solution": {
+    "ru": [
+     "Подставим n = 9.",
+     "a9 = 4·81 + 4 = 324 + 4.",
+     "a9 = 328."
+    ],
+    "en": [
+     "Substitute n = 9.",
+     "a9 = 328.",
+     "Answer: 328."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-008",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 3, aₙ₊₁ = 2aₙ + 1. Найдите a₅.",
+    "en": "a₁ = 3, aₙ₊₁ = 2aₙ + 1. Find a₅."
+   },
+   "options": null,
+   "answer": {
+    "ru": "63",
+    "en": "63"
+   },
+   "accept": [
+    "63"
+   ],
+   "solution": {
+    "ru": [
+     "a₂ = 2·3 + 1 = 7.",
+     "a₃ = 15, a₄ = 31.",
+     "a₅ = 63."
+    ],
+    "en": [
+     "a₂ = 7.",
+     "a₃ = 15, a₄ = 31.",
+     "a₅ = 63."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-009",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Последовательность задана формулой aₙ = 2n² − 7. Найдите a8.",
+    "en": "A sequence is defined by aₙ = 2n² − 7. Find a8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "121",
+    "en": "121"
+   },
+   "accept": [
+    "121"
+   ],
+   "solution": {
+    "ru": [
+     "Подставим n = 8.",
+     "a8 = 2·64 − 7 = 128 − 7.",
+     "a8 = 121."
+    ],
+    "en": [
+     "Substitute n = 8.",
+     "a8 = 121.",
+     "Answer: 121."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  },
+  {
+   "id": "gen-seq-010",
+   "year": 0,
+   "part": "B",
+   "n": 1,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "a₁ = 4, aₙ₊₁ = 3aₙ + 1. Найдите a₅.",
+    "en": "a₁ = 4, aₙ₊₁ = 3aₙ + 1. Find a₅."
+   },
+   "options": null,
+   "answer": {
+    "ru": "364",
+    "en": "364"
+   },
+   "accept": [
+    "364"
+   ],
+   "solution": {
+    "ru": [
+     "a₂ = 3·4 + 1 = 13.",
+     "a₃ = 40, a₄ = 121.",
+     "a₅ = 364."
+    ],
+    "en": [
+     "a₂ = 13.",
+     "a₃ = 40, a₄ = 121.",
+     "a₅ = 364."
+    ]
+   },
+   "hints": {
+    "ru": [],
+    "en": []
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "авторское задание (аналог) / author's analogous task",
+   "tags": [
+    "последовательности"
+   ]
+  }
+ ]
+}

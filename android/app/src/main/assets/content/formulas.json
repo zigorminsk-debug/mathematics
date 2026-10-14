@@ -1,0 +1,562 @@
+{
+ "groups": [
+  {
+   "id": "powers",
+   "title": {
+    "ru": "Степени и корни",
+    "en": "Powers and roots"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Свойства степеней",
+      "en": "Power rules"
+     },
+     "formula": "aᵐ · aⁿ = aᵐ⁺ⁿ;  aᵐ : aⁿ = aᵐ⁻ⁿ;  (aᵐ)ⁿ = aᵐⁿ"
+    },
+    {
+     "name": {
+      "ru": "Отрицательный и нулевой показатель",
+      "en": "Negative and zero exponent"
+     },
+     "formula": "a⁻ⁿ = 1/aⁿ;  a⁰ = 1  (a ≠ 0)"
+    },
+    {
+     "name": {
+      "ru": "Дробный показатель",
+      "en": "Fractional exponent"
+     },
+     "formula": "a^(m/n) = ⁿ√(aᵐ)  (a ≥ 0)"
+    },
+    {
+     "name": {
+      "ru": "Корни",
+      "en": "Roots"
+     },
+     "formula": "√(ab) = √a·√b;  √(a/b) = √a/√b;  (√a)² = a  (a ≥ 0)"
+    },
+    {
+     "name": {
+      "ru": "Вынесение множителя",
+      "en": "Simplifying radicals"
+     },
+     "formula": "√(a²b) = a√b  (a ≥ 0)"
+    },
+    {
+     "name": {
+      "ru": "Модуль",
+      "en": "Absolute value"
+     },
+     "formula": "|a| = a при a ≥ 0;  |a| = −a при a < 0"
+    }
+   ]
+  },
+  {
+   "id": "algebra",
+   "title": {
+    "ru": "Формулы сокращённого умножения",
+    "en": "Algebraic identities"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Квадрат суммы и разности",
+      "en": "Square of a sum / difference"
+     },
+     "formula": "(a ± b)² = a² ± 2ab + b²"
+    },
+    {
+     "name": {
+      "ru": "Разность квадратов",
+      "en": "Difference of squares"
+     },
+     "formula": "a² − b² = (a − b)(a + b)"
+    },
+    {
+     "name": {
+      "ru": "Куб суммы и разности",
+      "en": "Cube of a sum / difference"
+     },
+     "formula": "(a ± b)³ = a³ ± 3a²b + 3ab² ± b³"
+    },
+    {
+     "name": {
+      "ru": "Сумма и разность кубов",
+      "en": "Sum / difference of cubes"
+     },
+     "formula": "a³ ± b³ = (a ± b)(a² ∓ ab + b²)"
+    }
+   ]
+  },
+  {
+   "id": "quadratic",
+   "title": {
+    "ru": "Квадратное уравнение",
+    "en": "Quadratic equation"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Дискриминант",
+      "en": "Discriminant"
+     },
+     "formula": "D = b² − 4ac"
+    },
+    {
+     "name": {
+      "ru": "Корни",
+      "en": "Roots"
+     },
+     "formula": "x = (−b ± √D)/(2a);  при D > 0 два корня, D = 0 один, D < 0 нет"
+    },
+    {
+     "name": {
+      "ru": "Теорема Виета",
+      "en": "Vieta's theorem"
+     },
+     "formula": "x₁ + x₂ = −b/a;  x₁·x₂ = c/a"
+    },
+    {
+     "name": {
+      "ru": "Разложение трёхчлена",
+      "en": "Factoring"
+     },
+     "formula": "ax² + bx + c = a(x − x₁)(x − x₂)"
+    },
+    {
+     "name": {
+      "ru": "Вершина параболы",
+      "en": "Parabola vertex"
+     },
+     "formula": "x₀ = −b/(2a);  y₀ = y(x₀)"
+    }
+   ]
+  },
+  {
+   "id": "progressions",
+   "title": {
+    "ru": "Прогрессии",
+    "en": "Progressions"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Арифметическая: n-й член",
+      "en": "Arithmetic: n-th term"
+     },
+     "formula": "aₙ = a₁ + (n − 1)d"
+    },
+    {
+     "name": {
+      "ru": "Арифметическая: сумма",
+      "en": "Arithmetic: sum"
+     },
+     "formula": "Sₙ = (a₁ + aₙ)·n/2 = (2a₁ + (n − 1)d)·n/2"
+    },
+    {
+     "name": {
+      "ru": "Геометрическая: n-й член",
+      "en": "Geometric: n-th term"
+     },
+     "formula": "bₙ = b₁ · qⁿ⁻¹"
+    },
+    {
+     "name": {
+      "ru": "Геометрическая: сумма",
+      "en": "Geometric: sum"
+     },
+     "formula": "Sₙ = b₁(qⁿ − 1)/(q − 1),  q ≠ 1"
+    },
+    {
+     "name": {
+      "ru": "Бесконечная сумма",
+      "en": "Infinite sum"
+     },
+     "formula": "S = b₁/(1 − q),  |q| < 1"
+    }
+   ]
+  },
+  {
+   "id": "trig",
+   "title": {
+    "ru": "Тригонометрия",
+    "en": "Trigonometry"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Основное тождество",
+      "en": "Pythagorean identity"
+     },
+     "formula": "sin²α + cos²α = 1"
+    },
+    {
+     "name": {
+      "ru": "Тангенс и котангенс",
+      "en": "Tangent and cotangent"
+     },
+     "formula": "tg α = sin α / cos α;  ctg α = cos α / sin α"
+    },
+    {
+     "name": {
+      "ru": "Двойной угол",
+      "en": "Double angle"
+     },
+     "formula": "sin 2α = 2 sin α cos α;  cos 2α = cos²α − sin²α = 1 − 2sin²α;  tg 2α = 2tg α/(1 − tg²α)"
+    },
+    {
+     "name": {
+      "ru": "Сумма и разность углов",
+      "en": "Sum and difference"
+     },
+     "formula": "sin(α ± β) = sin α cos β ± cos α sin β;  cos(α ± β) = cos α cos β ∓ sin α sin β"
+    },
+    {
+     "name": {
+      "ru": "Преобразование суммы в произведение",
+      "en": "Sum to product"
+     },
+     "formula": "sin α + sin β = 2 sin((α+β)/2)·cos((α−β)/2)"
+    },
+    {
+     "name": {
+      "ru": "Табличные значения",
+      "en": "Table values"
+     },
+     "formula": "30°: ½, √3/2, √3/3;  45°: √2/2, √2/2, 1;  60°: √3/2, ½, √3"
+    },
+    {
+     "name": {
+      "ru": "Формулы понижения степени",
+      "en": "Power reduction"
+     },
+     "formula": "sin²α = (1 − cos 2α)/2;  cos²α = (1 + cos 2α)/2"
+    }
+   ]
+  },
+  {
+   "id": "logs",
+   "title": {
+    "ru": "Логарифмы",
+    "en": "Logarithms"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Определение",
+      "en": "Definition"
+     },
+     "formula": "log_a b = c ⟺ a^c = b  (a > 0, a ≠ 1, b > 0)"
+    },
+    {
+     "name": {
+      "ru": "Свойства",
+      "en": "Properties"
+     },
+     "formula": "log_a(xy) = log_a x + log_a y;  log_a(x/y) = log_a x − log_a y"
+    },
+    {
+     "name": {
+      "ru": "Степень под логарифмом",
+      "en": "Power rule"
+     },
+     "formula": "log_a xⁿ = n·log_a x"
+    },
+    {
+     "name": {
+      "ru": "Переход к новому основанию",
+      "en": "Change of base"
+     },
+     "formula": "log_a b = log_c b / log_c a"
+    },
+    {
+     "name": {
+      "ru": "Основное логарифмическое тождество",
+      "en": "Logarithmic identity"
+     },
+     "formula": "a^(log_a b) = b"
+    }
+   ]
+  },
+  {
+   "id": "derivative",
+   "title": {
+    "ru": "Производные",
+    "en": "Derivatives"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Основные правила",
+      "en": "Basic rules"
+     },
+     "formula": "(C)′ = 0;  (xⁿ)′ = n·xⁿ⁻¹;  (u ± v)′ = u′ ± v′"
+    },
+    {
+     "name": {
+      "ru": "Произведение и частное",
+      "en": "Product and quotient"
+     },
+     "formula": "(uv)′ = u′v + uv′;  (u/v)′ = (u′v − uv′)/v²"
+    },
+    {
+     "name": {
+      "ru": "Сложная функция",
+      "en": "Chain rule"
+     },
+     "formula": "(f(u))′ = f′(u) · u′"
+    },
+    {
+     "name": {
+      "ru": "Тригонометрические функции",
+      "en": "Trigonometric functions"
+     },
+     "formula": "(sin x)′ = cos x;  (cos x)′ = −sin x;  (tg x)′ = 1/cos²x"
+    },
+    {
+     "name": {
+      "ru": "Показательная и логарифмическая",
+      "en": "Exponential and logarithmic"
+     },
+     "formula": "(eˣ)′ = eˣ;  (aˣ)′ = aˣ ln a;  (ln x)′ = 1/x"
+    },
+    {
+     "name": {
+      "ru": "Геометрический смысл",
+      "en": "Geometric meaning"
+     },
+     "formula": "k = f′(x₀) — угловой коэффициент касательной"
+    },
+    {
+     "name": {
+      "ru": "Физический смысл",
+      "en": "Physical meaning"
+     },
+     "formula": "v(t) = s′(t) — скорость;  a(t) = v′(t) — ускорение"
+    }
+   ]
+  },
+  {
+   "id": "planimetry",
+   "title": {
+    "ru": "Планиметрия",
+    "en": "Plane geometry"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Треугольник: площадь",
+      "en": "Triangle area"
+     },
+     "formula": "S = ½ab·sin γ;  S = abc/(4R);  S = pr"
+    },
+    {
+     "name": {
+      "ru": "Теорема косинусов",
+      "en": "Law of cosines"
+     },
+     "formula": "c² = a² + b² − 2ab·cos γ"
+    },
+    {
+     "name": {
+      "ru": "Теорема синусов",
+      "en": "Law of sines"
+     },
+     "formula": "a/sin α = b/sin β = c/sin γ = 2R"
+    },
+    {
+     "name": {
+      "ru": "Правильный треугольник",
+      "en": "Equilateral triangle"
+     },
+     "formula": "S = a²√3/4;  r = a√3/6;  R = a√3/3"
+    },
+    {
+     "name": {
+      "ru": "Трапеция",
+      "en": "Trapezoid"
+     },
+     "formula": "S = (a + b)/2 · h;  средняя линия m = (a + b)/2"
+    },
+    {
+     "name": {
+      "ru": "Окружность",
+      "en": "Circle"
+     },
+     "formula": "C = 2πR;  S = πR²;  длина дуги l = πRα/180°"
+    },
+    {
+     "name": {
+      "ru": "Вписанный угол",
+      "en": "Inscribed angle"
+     },
+     "formula": "Вписанный угол равен половине центрального на ту же дугу"
+    },
+    {
+     "name": {
+      "ru": "Ромб",
+      "en": "Rhombus"
+     },
+     "formula": "S = ½d₁d₂;  S = a²·sin α"
+    }
+   ]
+  },
+  {
+   "id": "stereometry",
+   "title": {
+    "ru": "Стереометрия",
+    "en": "Solid geometry"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Параллелепипед",
+      "en": "Box"
+     },
+     "formula": "V = abc;  S = 2(ab + bc + ac);  d² = a² + b² + c²"
+    },
+    {
+     "name": {
+      "ru": "Призма",
+      "en": "Prism"
+     },
+     "formula": "V = S_осн · H"
+    },
+    {
+     "name": {
+      "ru": "Пирамида",
+      "en": "Pyramid"
+     },
+     "formula": "V = ⅓·S_осн·H"
+    },
+    {
+     "name": {
+      "ru": "Цилиндр",
+      "en": "Cylinder"
+     },
+     "formula": "V = πR²H;  S_бок = 2πRH"
+    },
+    {
+     "name": {
+      "ru": "Конус",
+      "en": "Cone"
+     },
+     "formula": "V = ⅓πR²H;  S_бок = πRl"
+    },
+    {
+     "name": {
+      "ru": "Шар и сфера",
+      "en": "Sphere"
+     },
+     "formula": "V = 4/3πR³;  S = 4πR²"
+    },
+    {
+     "name": {
+      "ru": "Куб",
+      "en": "Cube"
+     },
+     "formula": "V = a³;  S = 6a²;  d = a√3"
+    }
+   ]
+  },
+  {
+   "id": "probability",
+   "title": {
+    "ru": "Вероятность и комбинаторика",
+    "en": "Probability and combinatorics"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Классическое определение",
+      "en": "Classical definition"
+     },
+     "formula": "P(A) = m/n"
+    },
+    {
+     "name": {
+      "ru": "Сложение и умножение",
+      "en": "Addition and multiplication"
+     },
+     "formula": "P(A + B) = P(A) + P(B) − P(AB);  P(AB) = P(A)·P(B|A)"
+    },
+    {
+     "name": {
+      "ru": "Противоположное событие",
+      "en": "Complement"
+     },
+     "formula": "P(Ā) = 1 − P(A)"
+    },
+    {
+     "name": {
+      "ru": "Бернулли",
+      "en": "Bernoulli"
+     },
+     "formula": "Pₙ(k) = C(n,k)·pᵏ·(1 − p)ⁿ⁻ᵏ"
+    },
+    {
+     "name": {
+      "ru": "Математическое ожидание",
+      "en": "Expectation"
+     },
+     "formula": "E = np для числа успехов в n испытаниях"
+    },
+    {
+     "name": {
+      "ru": "Перестановки и сочетания",
+      "en": "Permutations and combinations"
+     },
+     "formula": "Pₙ = n!;  C(n,k) = n!/(k!(n − k)!)"
+    }
+   ]
+  },
+  {
+   "id": "exam",
+   "title": {
+    "ru": "Полезно на ЦТ",
+    "en": "Exam tips"
+   },
+   "items": [
+    {
+     "name": {
+      "ru": "Порядок действий",
+      "en": "Order of operations"
+     },
+     "formula": "Степени → умножение/деление → сложение/вычитание"
+    },
+    {
+     "name": {
+      "ru": "Оценка результата",
+      "en": "Sanity check"
+     },
+     "formula": "Прикиньте ответ: он должен быть разумного порядка и знака"
+    },
+    {
+     "name": {
+      "ru": "Проверка корня",
+      "en": "Root check"
+     },
+     "formula": "Подставьте найденное значение в исходное уравнение"
+    },
+    {
+     "name": {
+      "ru": "Знаки",
+      "en": "Signs"
+     },
+     "formula": "Умножение или деление неравенства на отрицательное число меняет знак"
+    },
+    {
+     "name": {
+      "ru": "Перевод единиц",
+      "en": "Unit conversion"
+     },
+     "formula": "1 км/ч = 1000/3600 м/с ≈ 0,278 м/с"
+    }
+   ]
+  }
+ ],
+ "note": {
+  "ru": "Справочник доступен в любом режиме, включая экзаменационный.",
+  "en": "The sheet is available in every mode, including the exam mode."
+ }
+}

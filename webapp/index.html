@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#2d7ff9">
+  <title>Репетитор ЦТ: Математика</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="system" data-font="normal">
+  <div id="app">
+    <header id="topbar">
+      <div class="brand" id="brand" role="button" tabindex="0" aria-label="Home">
+        <span class="brand-logo">∑</span>
+        <span id="brand-name">Репетитор ЦТ: Математика</span>
+      </div>
+      <nav id="mainnav" aria-label="Main"></nav>
+      <div class="topbar-right">
+        <button id="lang-toggle" class="icon-btn" title="Language">EN</button>
+        <button id="btn-settings" class="icon-btn" title="Settings">⚙</button>
+      </div>
+    </header>
+
+    <main id="view" role="main"></main>
+
+    <footer id="footer"></footer>
+  </div>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box" id="modal-box"></div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- plain scripts: no bundler, no CDN, works fully offline -->
+  <script src="core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
