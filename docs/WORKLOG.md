@@ -207,3 +207,69 @@ npm install --no-save kotlin-compiler@2.4.21     # компилятор Kotlin
 Ограничения стенда: `MainActivity.kt` и `NativeBridge.kt` используют Android
 API и локально не компилируются (в CI их собирает Gradle); APK локально не
 пересобирается, поэтому факт сборки APK подтверждается только раном CI.
+
+---
+
+## 2026-10-14 (продолжение 2): ЗЕЛЁНЫЙ прогон и первый выпуск физики
+
+Run **[38562589780](https://github.com/zigorminsk-debug/mathematics/actions/runs/38562589780)**
+(commit `3fa04f8e`, ветка `arena/f7b88593-mathematics`, событие `push`) —
+**success**, все пять jobs:
+
+| Job | Результат |
+|---|---|
+| Resolve effective build version | success (`physics-v2026.10.1`) |
+| Content & web (verify, parity, assets) | success |
+| Windows app (Go) | success |
+| Android app (APK) | success (юнит-тесты, debug, подписанный release, проверка подписи и versionCode) |
+| Publish verified builds automatically | success |
+
+### Выпуск
+
+* **`physics-v2026.10.1`** опубликован 2026-10-14T12:19:00Z с **13 ассетами**
+  (7 JSON контента + `version.json` + `release-info.json` + `SHA256SUMS.txt` +
+  `phyzics.apk` + `CTPhysicsTutor-amd64.exe` + `CTPhysicsTutor-arm64.exe`),
+  `draft=false`, `prerelease=false`, **`make_latest=false`**;
+* APK: пакет `by.ziv.ctphysics`, versionCode **261001**, отпечаток сертификата
+  `A3:55:CB:…:35:83` (постоянный ключ физики), гейт «подпись и возрастающий
+  versionCode относительно предыдущего опубликованного APK» — пройден;
+  ассет `phyzics.apk`, 5 172 973 байт,
+  `sha256:2e76888230c2cb7f2ad43e9f15c9990c1f750230e12e81266a00844e3de935eb`;
+* EXE: `CTPhysicsTutor-amd64.exe` 7 299 072 байт,
+  `sha256:190ff6a6f2aa37b366c43a6ab3af2190645c735d99bf0ef3ecba2c8cd4c2f427`;
+  `CTPhysicsTutor-arm64.exe` 6 918 144 байт,
+  `sha256:f30fc93bb75b35bd69d54243363f03737b53ce6120ed2e243564d5b6686e860f`;
+* `release-info.json` (в метаданных релиза он продублирован в `<details>`, чтобы
+  читался через API): subject `physics`, package `by.ziv.ctphysics`,
+  sourceCommit `3fa04f8e…`, run 38562589780, три проверки со статусом success,
+  `publication.repositoryLatestBefore = v2026.10.8`.
+
+### Изоляция математики проверена после публикации
+
+* repository latest остаётся **`v2026.10.8`** (published 2026-10-14T09:09:31Z,
+  13 ассетов) — выпуск физики его не переключил;
+* ключевые ассеты математики на момент проверки (для сверки в будущем):
+  `app-release.apk` sha256 `8b56d02c…1dc9` (5 255 485 Б),
+  `CTMathsTutor-amd64.exe` `d1e68182…fbd7`, `CTMathsTutor-arm64.exe`
+  `71f9da51…c916`, `SHA256SUMS.txt` `c56b4df2…09f5` — не изменялись;
+* у физики собственный тег-семейство, свой пакет, свой ключ, свой банк и своя
+  статистика; в интерфейсе не осталось математических терминов (проверено
+  поиском по поставляемым `webapp/*.js|html`).
+
+### Что дальше автоматически
+
+Любой следующий доверенный push в рабочую ветку снова пройдёт все ворота и
+выпустит **следующую** версию (`physics-v2026.10.2`, …) — так устроена
+автопубликация. Ручных шагов для выпуска нет; тег `physics-v*` можно также
+поставить вручную (`workflow_dispatch` в `release.yml`).
+
+### Остаётся непроверенным (честный список)
+
+* установка APK на реальный телефон и его запуск (в песочнице нет устройства);
+* запуск `CTPhysicsTutor-*.exe` на Windows (в песочнице нет Windows; бинарники
+  собраны и залиты, go vet/test зелёные);
+* локальная пересборка APK: Gradle и Android SDK отсутствуют, поэтому подпись и
+  метаданные подтверждаются **раном CI**, а не локально;
+* `MainActivity.kt`/`NativeBridge.kt` локально не компилируются (Android API) —
+  их собирает Gradle в CI; юнит-тесты Kotlin прогнаны на локальном стенде
+  (21 тест: `AnswerChecker`, `ContentVersions`, `ReleaseFeed`).
