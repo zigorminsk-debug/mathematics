@@ -97,6 +97,11 @@ jobs:
       - name: Verify every task with exact arithmetic
         run: python3 tools/build_content.py
 
+      # Иконка рисуется кодом (tools/make_icon.py): растр, SVG и Android-векторы
+      # обязаны совпадать, иначе знак приложения разъедется по платформам.
+      - name: Application icon still matches its generator
+        run: python3 tools/make_icon.py --check
+
       - name: Ensure the committed assets match the sources
         run: |
           if ! python3 tools/sync_assets.py --check; then

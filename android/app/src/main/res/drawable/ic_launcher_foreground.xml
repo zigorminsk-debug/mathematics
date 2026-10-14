@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Символ Σ: логотип приложения (векторный, любой размер). -->
+<!-- Атом: три орбиты и ядро — знак приложения по физике.
+
+     Геометрия та же, что в webapp/icon.svg и webapp/icon.png (масштаб
+     108/192): полуоси 31,5 и 11,8, толщина линии 3,66, радиус ядра 6,5.
+     Орбиты повёрнуты на 0°, 60° и −60° вокруг центра — так рисунок читается
+     и в круглой, и в квадратной маске лаунчера. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="#FFFFFF"
-        android:pathData="M34,32 L74,32 L74,40 L47,40 L66,54 L47,68 L74,68 L74,76 L34,76 L34,68 L52,54 L34,40 Z"/>
+    <group android:pivotX="54" android:pivotY="54" android:rotation="0">
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="3.66" android:fillColor="#00000000"
+            android:pathData="M22.5,54 a31.5,11.8 0 1 0 63,0 a31.5,11.8 0 1 0 -63,0"/>
+    </group>
+    <group android:pivotX="54" android:pivotY="54" android:rotation="60">
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="3.66" android:fillColor="#00000000"
+            android:pathData="M22.5,54 a31.5,11.8 0 1 0 63,0 a31.5,11.8 0 1 0 -63,0"/>
+    </group>
+    <group android:pivotX="54" android:pivotY="54" android:rotation="-60">
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="3.66" android:fillColor="#00000000"
+            android:pathData="M22.5,54 a31.5,11.8 0 1 0 63,0 a31.5,11.8 0 1 0 -63,0"/>
+    </group>
+    <path android:fillColor="#FFD166"
+        android:pathData="M54,54 m-6.5,0 a6.5,6.5 0 1 0 13,0 a6.5,6.5 0 1 0 -13,0"/>
 </vector>
