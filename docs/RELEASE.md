@@ -46,11 +46,23 @@ Windows-сборка не требует подписи для установк�
    git tag v2026.10.2 && git push origin v2026.10.2
    ```
 
-4. Workflow соберёт и опубликует:
+4. Перед публикацией workflow проверяет подпись APK
+   (`python3 tools/check_signature.py` — сверка с `android/keystore/expected-cert-sha256.txt`).
+   Если подпись отличается, релиз не выпускается: такое обновление не установилось бы
+   поверх предыдущей версии.
+
+5. Workflow соберёт и опубликует:
    * `CTMathsTutor-amd64.exe`, `CTMathsTutor-arm64.exe` — Windows-приложения;
    * `app-release.apk` (подписан постоянным ключом) и `app-debug.apk`;
    * `bank.json`, `analogous.json`, `formulas.json`, `mistakes.json`, `ui_strings.json`,
      `topics.json`, `version.json` — банк заданий и манифест с SHA-256.
+
+Эталонный отпечаток ключа можно посмотреть и проверить локально:
+
+```bash
+python3 tools/check_signature.py          # сверить собранный APK с эталоном
+cat android/keystore/expected-cert-sha256.txt
+```
 
 ## Как приложения получают новую базу
 
