@@ -156,6 +156,9 @@ jobs:
           python3 tools/build_content.py
           python3 tools/sync_assets.py
 
+      - name: The permanent signing key still matches the committed fingerprint
+        run: python3 tools/check_signature.py --keystore android/keystore/ctmaths-release.p12
+
       - name: Unit tests (answer checker parity, Kotlin)
         working-directory: android
         run: |

@@ -68,6 +68,9 @@ jobs:
           echo "code=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
           echo "Releasing $TAG (content $CONTENT_VERSION, versionCode ${{ github.run_number }})"
 
+      - name: The permanent signing key still matches the committed fingerprint
+        run: python3 tools/check_signature.py --keystore android/keystore/ctmaths-release.p12
+
       - name: Android — unit tests, debug and signed release APK
         working-directory: android
         env:
