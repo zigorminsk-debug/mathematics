@@ -1,0 +1,301 @@
+"""ui_strings.py — единый каталог строк интерфейса (RU/EN) для всех платформ.
+
+Single source of truth for all user-visible text: the build script turns it into
+Android ``strings.xml`` (values/ = English, values-ru/ = Russian) and a JSON file
+consumed by the Windows Go/HTML front-end.  Keys ending with ``_fmt`` contain a
+``%s`` placeholder (rendered as a formatted Android string and as a template on
+the web side).
+"""
+
+from __future__ import annotations
+
+STRINGS: dict[str, dict[str, str]] = {
+
+    # ---------------------------------------------------------------- basics --
+    "app_name": {"ru": "Репетитор ЦТ: Математика", "en": "CT Maths Tutor"},
+    "app_tagline": {"ru": "Математический тренажёр для подготовки к ЦТ (РБ)",
+                    "en": "Maths trainer for the CT exam (Belarus)"},
+    "nav_tests": {"ru": "Тесты", "en": "Tests"},
+    "nav_train": {"ru": "Тренировка", "en": "Practice"},
+    "nav_stats": {"ru": "Статистика", "en": "Statistics"},
+    "nav_mistakes": {"ru": "Ошибки", "en": "Mistakes"},
+    "nav_formulas": {"ru": "Формулы", "en": "Formulas"},
+    "nav_settings": {"ru": "Настройки", "en": "Settings"},
+    "nav_about": {"ru": "О программе", "en": "About"},
+    "nav_exam": {"ru": "Экзамен", "en": "Exam"},
+
+    # ----------------------------------------------------------- developer --
+    "developer": {"ru": "Разработчик", "en": "Developer"},
+    "author_name": {"ru": "Захаревич Игорь (Zakharevich Igor)", "en": "Zakharevich Igor"},
+    "contact_email": {"ru": "ziv@csl.by", "en": "ziv@csl.by"},
+    "contact_email_label": {"ru": "Электронная почта", "en": "E-mail"},
+    "contact_phone": {"ru": "+3753371412", "en": "+3753371412"},
+    "contact_phone_label": {"ru": "Телефон", "en": "Phone"},
+    "contact_whatsapp_label": {"ru": "WhatsApp / Telegram", "en": "WhatsApp / Telegram"},
+    "send_feedback": {"ru": "Написать разработчику", "en": "Contact the developer"},
+    "feedback_subject": {"ru": "Репетитор ЦТ: Математика — обратная связь",
+                         "en": "CT Maths Tutor — feedback"},
+    "feedback_body": {"ru": "Здравствуйте, Игорь!\n\nВерсия: %s\n\n",
+                      "en": "Hello Igor,\n\nVersion: %s\n\n"},
+    "source_code": {"ru": "Исходный код проекта", "en": "Project source code"},
+
+    # ---------------------------------------------------------------- common --
+    "ok": {"ru": "ОК", "en": "OK"},
+    "cancel": {"ru": "Отмена", "en": "Cancel"},
+    "close": {"ru": "Закрыть", "en": "Close"},
+    "back": {"ru": "Назад", "en": "Back"},
+    "next": {"ru": "Далее", "en": "Next"},
+    "previous": {"ru": "Назад", "en": "Previous"},
+    "finish": {"ru": "Завершить", "en": "Finish"},
+    "start": {"ru": "Начать", "en": "Start"},
+    "continue_label": {"ru": "Продолжить", "en": "Continue"},
+    "retry": {"ru": "Пройти заново", "en": "Try again"},
+    "loading": {"ru": "Загрузка…", "en": "Loading…"},
+    "error_generic": {"ru": "Что-то пошло не так", "en": "Something went wrong"},
+    "yes": {"ru": "Да", "en": "Yes"},
+    "no": {"ru": "Нет", "en": "No"},
+    "search": {"ru": "Поиск", "en": "Search"},
+    "clear": {"ru": "Очистить", "en": "Clear"},
+    "all": {"ru": "Все", "en": "All"},
+    "empty_state": {"ru": "Пока нет данных", "en": "No data yet"},
+
+    # -------------------------------------------------------------- language --
+    "language": {"ru": "Язык интерфейса", "en": "Interface language"},
+    "lang_ru": {"ru": "Русский", "en": "Russian"},
+    "lang_en": {"ru": "Английский", "en": "English"},
+    "english_mode_hint": {
+        "ru": "Английский режим включает билингвальные формулировки заданий и решений — "
+              "это тренирует технический английский, который пригодится в вузе.",
+        "en": "English mode shows statements and step-by-step solutions in English — "
+              "good training for the technical English you need at university."},
+    "bilingual_solutions": {"ru": "Показывать решение на английском", "en": "Show English solution"},
+
+    # ---------------------------------------------------------------- tests --
+    "tests_title": {"ru": "Варианты ЦТ", "en": "CT variants"},
+    "tests_subtitle": {"ru": "30 заданий: 18 с выбором ответа (А) и 12 с кратким ответом (В)",
+                       "en": "30 tasks: 18 multiple-choice (A) and 12 short-answer (B)"},
+    "test_year_fmt": {"ru": "Вариант %s", "en": "Variant %s"},
+    "parts_mix": {"ru": "Смешанный вариант", "en": "Mixed variant"},
+    "part_a": {"ru": "Часть А", "en": "Part A"},
+    "part_b": {"ru": "Часть B", "en": "Part B"},
+    "choice_hint": {"ru": "Выберите один из пяти вариантов", "en": "Choose one of five options"},
+    "short_hint": {"ru": "Введите ответ", "en": "Type your answer"},
+    "answer_placeholder": {"ru": "Ответ", "en": "Answer"},
+    "task_counter_fmt": {"ru": "Задание %s из %s", "en": "Task %s of %s"},
+    "answered_fmt": {"ru": "Отвечено: %s из %s", "en": "Answered: %s of %s"},
+    "skip": {"ru": "Пропустить", "en": "Skip"},
+    "mark_review": {"ru": "Отметить и вернуться", "en": "Mark for review"},
+    "submit_test": {"ru": "Завершить тест", "en": "Finish the test"},
+    "submit_confirm": {"ru": "Завершить тест и проверить ответы?",
+                       "en": "Finish the test and check the answers?"},
+    "unanswered_warning_fmt": {"ru": "Без ответа осталось заданий: %s",
+                               "en": "Tasks left unanswered: %s"},
+    "time_left_fmt": {"ru": "Осталось: %s", "en": "Time left: %s"},
+    "timer": {"ru": "Таймер", "en": "Timer"},
+    "pause": {"ru": "Пауза", "en": "Pause"},
+    "resume": {"ru": "Продолжить", "en": "Resume"},
+    "exit_test_confirm": {"ru": "Выйти из теста? Результат не сохранится.",
+                          "en": "Leave the test? Progress will not be saved."},
+
+    # -------------------------------------------------------------- results --
+    "results_title": {"ru": "Результат", "en": "Result"},
+    "score_fmt": {"ru": "Правильных ответов: %s из %s", "en": "Correct answers: %s of %s"},
+    "percent_fmt": {"ru": "Процент выполнения: %s%%", "en": "Score: %s%%"},
+    "points_fmt": {"ru": "Баллы (черновая шкала): %s", "en": "Points (rough scale): %s"},
+    "grade_fmt": {"ru": "Оценка: %s", "en": "Grade: %s"},
+    "grade_high": {"ru": "Отлично", "en": "Excellent"},
+    "grade_good": {"ru": "Хорошо", "en": "Good"},
+    "grade_mid": {"ru": "Удовлетворительно", "en": "Satisfactory"},
+    "grade_low": {"ru": "Нужно повторить материал", "en": "Needs revision"},
+    "time_spent_fmt": {"ru": "Затрачено времени: %s", "en": "Time spent: %s"},
+    "avg_time_fmt": {"ru": "В среднем на задание: %s", "en": "Average per task: %s"},
+    "review_mistakes": {"ru": "Разобрать ошибки", "en": "Review mistakes"},
+    "back_to_tests": {"ru": "К списку тестов", "en": "Back to the tests"},
+    "correct": {"ru": "Верно", "en": "Correct"},
+    "incorrect": {"ru": "Неверно", "en": "Incorrect"},
+    "your_answer_fmt": {"ru": "Ваш ответ: %s", "en": "Your answer: %s"},
+    "no_answer": {"ru": "Ответ не дан", "en": "Not answered"},
+    "correct_answer_fmt": {"ru": "Правильный ответ: %s", "en": "Correct answer: %s"},
+
+    # -------------------------------------------------------- error analysis --
+    "mistakes_title": {"ru": "Разбор ошибок", "en": "Error analysis"},
+    "mistakes_intro": {
+        "ru": "Для каждого неверного ответа показан полный разбор: где именно ошибка, "
+              "как правильно и почему, а затем аналогичный пример для закрепления.",
+        "en": "Every wrong answer comes with a full analysis: where the mistake is, what the "
+              "correct approach is and why, followed by a similar task to consolidate it."},
+    "error_analysis": {"ru": "Разбор", "en": "Analysis"},
+    "why_wrong": {"ru": "Типичная причина ошибки", "en": "Typical cause of the mistake"},
+    "correct_solution": {"ru": "Правильное решение", "en": "Correct solution"},
+    "solution": {"ru": "Решение", "en": "Solution"},
+    "step_fmt": {"ru": "Шаг %s", "en": "Step %s"},
+    "hint": {"ru": "Подсказка", "en": "Hint"},
+    "hint_fmt": {"ru": "Подсказка %s", "en": "Hint %s"},
+    "show_hint": {"ru": "Показать подсказку", "en": "Show a hint"},
+    "show_solution": {"ru": "Показать решение", "en": "Show the solution"},
+    "analogous_title": {"ru": "Аналогичные примеры", "en": "Similar tasks"},
+    "analogous_intro": {
+        "ru": "Решите похожие задания — так закрепляется верный способ действий.",
+        "en": "Solve the similar tasks to consolidate the correct method."},
+    "analogous_task_fmt": {"ru": "Аналог %s", "en": "Similar task %s"},
+    "check_answer": {"ru": "Проверить", "en": "Check"},
+    "answer_correct": {"ru": "Верно! Отличная работа.", "en": "Correct! Well done."},
+    "answer_incorrect": {"ru": "Пока неверно. Посмотрите разбор и попробуйте ещё раз.",
+                         "en": "Not yet. Study the solution and try again."},
+    "mistakes_left_fmt": {"ru": "Осталось разобрать ошибок: %s", "en": "Mistakes left to review: %s"},
+    "all_mistakes_done": {"ru": "Все ошибки разобраны. Отличная работа!",
+                          "en": "All mistakes reviewed. Great job!"},
+    "repeat_topic_fmt": {"ru": "Повторить тему «%s»", "en": "Revise “%s”"},
+    "recommended_topics": {"ru": "Рекомендуемые темы", "en": "Recommended topics"},
+    "mastered": {"ru": "Освоено", "en": "Mastered"},
+
+    # ----------------------------------------------------------- statistics --
+    "stats_title": {"ru": "Статистика и прогресс", "en": "Statistics and progress"},
+    "progress": {"ru": "Прогресс", "en": "Progress"},
+    "tests_taken": {"ru": "Пройдено тестов", "en": "Tests taken"},
+    "tasks_solved": {"ru": "Решено заданий", "en": "Tasks solved"},
+    "accuracy": {"ru": "Точность", "en": "Accuracy"},
+    "streak_days_fmt": {"ru": "Дней подряд: %s", "en": "Day streak: %s"},
+    "best_streak_fmt": {"ru": "Лучшая серия: %s", "en": "Best streak: %s"},
+    "daily_goal": {"ru": "Цель на день", "en": "Daily goal"},
+    "daily_goal_fmt": {"ru": "Цель на день: %s заданий", "en": "Daily goal: %s tasks"},
+    "goal_done": {"ru": "Цель дня выполнена!", "en": "Daily goal completed!"},
+    "by_topic": {"ru": "По темам", "en": "By topic"},
+    "by_year": {"ru": "По годам", "en": "By year"},
+    "topic_progress_fmt": {"ru": "%s: %s%% (%s из %s)", "en": "%s: %s%% (%s of %s)"},
+    "weak_topics": {"ru": "Слабые темы", "en": "Weak topics"},
+    "strong_topics": {"ru": "Сильные темы", "en": "Strong topics"},
+    "last_tests": {"ru": "Последние тесты", "en": "Recent tests"},
+    "in_progress": {"ru": "Незавершённый тест", "en": "Unfinished test"},
+    "continue_test": {"ru": "Продолжить тест", "en": "Continue the test"},
+    "reset_stats": {"ru": "Сбросить статистику", "en": "Reset statistics"},
+    "reset_confirm": {"ru": "Удалить всю статистику и историю? Действие необратимо.",
+                      "en": "Delete all statistics and history? This cannot be undone."},
+    "export_stats": {"ru": "Экспортировать прогресс", "en": "Export progress"},
+    "no_data_yet": {"ru": "Пройдите первый тест, чтобы увидеть статистику",
+                    "en": "Take your first test to see statistics"},
+    "chart_placeholder": {"ru": "График прогресса появится после двух тестов",
+                          "en": "The progress chart appears after two tests"},
+
+    # --------------------------------------------------------------- tools --
+    "tools_title": {"ru": "Инструменты", "en": "Tools"},
+    "tool_calculator": {"ru": "Калькулятор", "en": "Calculator"},
+    "tool_formula_sheet": {"ru": "Сборник формул", "en": "Formula sheet"},
+    "tool_scratchpad": {"ru": "Черновик", "en": "Scratchpad"},
+    "tool_graph": {"ru": "График функции", "en": "Function plotter"},
+    "tool_hint": {"ru": "Подсказка", "en": "Hint"},
+    "calc_expression": {"ru": "Выражение", "en": "Expression"},
+    "calc_history": {"ru": "История", "en": "History"},
+    "scratch_placeholder": {"ru": "Здесь можно решать «в столбик» — записи сохраняются.",
+                            "en": "Work here step by step — notes are kept."},
+    "graph_function": {"ru": "Функция y =", "en": "Function y ="},
+    "graph_plot": {"ru": "Построить", "en": "Plot"},
+    "graph_error": {"ru": "Не удалось построить график", "en": "Could not plot the function"},
+    "graph_examples": {"ru": "Примеры: x^2 − 3x + 2, sin(x), 1/x, √x, |x|, e^x, ln(x)",
+                       "en": "Examples: x^2 − 3x + 2, sin(x), 1/x, √x, |x|, e^x, ln(x)"},
+    "open_formula_sheet": {"ru": "Открыть сборник формул", "en": "Open the formula sheet"},
+    "use_calculator": {"ru": "Калькулятор", "en": "Calculator"},
+    "tools_available": {"ru": "Доступные инструменты", "en": "Available tools"},
+
+    # -------------------------------------------------------------- update --
+    "update_title": {"ru": "Обновление заданий", "en": "Content update"},
+    "update_checking": {"ru": "Проверяем обновления…", "en": "Checking for updates…"},
+    "update_none": {"ru": "Установлена последняя версия заданий", "en": "The content is up to date"},
+    "update_available_fmt": {"ru": "Доступна новая версия заданий: %s (%s новых заданий)",
+                             "en": "A new content version is available: %s (%s new tasks)"},
+    "update_now": {"ru": "Обновить сейчас", "en": "Update now"},
+    "updating": {"ru": "Загрузка заданий…", "en": "Downloading tasks…"},
+    "update_installed_fmt": {"ru": "Задания обновлены: версия %s", "en": "Content updated: version %s"},
+    "update_failed": {"ru": "Не удалось обновить задания. Проверьте подключение к интернету.",
+                      "en": "Could not update the content. Check your internet connection."},
+    "update_offline_ok": {"ru": "Приложение работает офлайн: все задания уже в памяти устройства.",
+                          "en": "The app works offline: every task is stored on the device."},
+    "content_version_fmt": {"ru": "Версия заданий: %s", "en": "Content version: %s"},
+    "auto_update": {"ru": "Автоматически обновлять задания", "en": "Update content automatically"},
+    "last_update_fmt": {"ru": "Последнее обновление: %s", "en": "Last update: %s"},
+    "update_source_note": {
+        "ru": "Новые варианты и однотипные задания загружаются поверх установленных "
+              "и не удаляют ваш прогресс.",
+        "en": "New variants and analogous tasks are installed on top of the existing content "
+              "and never reset your progress."},
+    "check_updates": {"ru": "Проверить обновления", "en": "Check for updates"},
+
+    # ------------------------------------------------------------ settings --
+    "settings_title": {"ru": "Настройки", "en": "Settings"},
+    "theme": {"ru": "Оформление", "en": "Theme"},
+    "theme_system": {"ru": "Как в системе", "en": "System default"},
+    "theme_light": {"ru": "Светлая", "en": "Light"},
+    "theme_dark": {"ru": "Тёмная", "en": "Dark"},
+    "font_size": {"ru": "Размер шрифта заданий", "en": "Task font size"},
+    "font_small": {"ru": "Мелкий", "en": "Small"},
+    "font_normal": {"ru": "Обычный", "en": "Normal"},
+    "font_large": {"ru": "Крупный", "en": "Large"},
+    "sound": {"ru": "Звук", "en": "Sound"},
+    "vibration": {"ru": "Вибрация", "en": "Vibration"},
+    "auto_advance": {"ru": "Переходить к следующему заданию автоматически",
+                     "en": "Advance to the next task automatically"},
+    "exam_timer_set": {"ru": "Ограничение времени на тест (минут)",
+                       "en": "Time limit for a test (minutes)"},
+    "keep_screen_on": {"ru": "Не гасить экран во время теста", "en": "Keep the screen on during a test"},
+
+    # --------------------------------------------------------------- about --
+    "about_title": {"ru": "О программе", "en": "About"},
+    "about_text": {
+        "ru": "Математический тренажёр для подготовки к централизованному тестированию "
+              "по математике (Республика Беларусь). База содержит пять вариантов "
+              "экзаменационного формата (2021–2025) и генератор однотипных заданий.",
+        "en": "A maths trainer for the Belarusian centralised testing (CT) exam. The bank "
+              "contains five exam-format variants (2021–2025) plus a generator of analogous "
+              "tasks for consolidation."},
+    "disclaimer": {
+        "ru": "Задания составлены автором по мотивам открытых материалов ЦТ и не являются "
+              "официальными материалами РИКЗ.",
+        "en": "The tasks are authored in the spirit of publicly available CT materials and are "
+              "not official RIKZ papers."},
+    "how_it_works": {"ru": "Как это работает", "en": "How it works"},
+    "how_it_works_text": {
+        "ru": "1. Проходите вариант в формате ЦТ.\n"
+              "2. Приложение проверяет ответы и показывает разбор каждой ошибки.\n"
+              "3. К каждой ошибке предлагается аналогичный пример с полным решением.\n"
+              "4. Статистика показывает прогресс по темам и годам.\n"
+              "5. База заданий обновляется поверх установленной без потери прогресса.",
+        "en": "1. Take a variant in the CT format.\n"
+              "2. The app checks your answers and analyses every mistake.\n"
+              "3. Each mistake is followed by a similar task with a full solution.\n"
+              "4. Statistics show your progress by topic and by year.\n"
+              "5. The task bank is updated in place without losing your progress."},
+    "keyboard_help": {"ru": "Полезные знаки для ответа: √, π, /, −, ²",
+                      "en": "Useful symbols for answers: √, π, /, −, ²"},
+    "license": {"ru": "Лицензия MIT", "en": "MIT licence"},
+    "version_label": {"ru": "Версия приложения", "en": "App version"},
+    "build_label": {"ru": "Сборка", "en": "Build"},
+
+    # --------------------------------------------------------- exam mode --
+    "exam_mode": {"ru": "Экзаменационный режим", "en": "Exam mode"},
+    "exam_instructions": {
+        "ru": "Режим без подсказок и промежуточной проверки: как на реальном ЦТ. "
+              "Разбор ошибок доступен после завершения.",
+        "en": "No hints and no intermediate checking, just like the real exam. "
+              "Error analysis unlocks after you finish."},
+    "exam_rules": {
+        "ru": "На выполнение 30 заданий отводится 180 минут. Ответы к части А — выбор из пяти, "
+              "к части В — число или выражение, которое можно ввести с клавиатуры.",
+        "en": "You have 180 minutes for 30 tasks. Part A is a five-option choice, part B needs "
+              "a number or an expression typed from the keyboard."},
+    "exam_start": {"ru": "Начать экзамен", "en": "Start the exam"},
+    "exam_rules_title": {"ru": "Правила", "en": "Rules"},
+    "train_mode": {"ru": "Режим тренировки", "en": "Practice mode"},
+    "train_subtitle": {"ru": "Подсказки, решения и инструменты доступны сразу",
+                       "en": "Hints, solutions and tools are available at once"},
+
+    # ------------------------------------------------------------ windows --
+    "win_title": {"ru": "Репетитор ЦТ: Математика — Windows", "en": "CT Maths Tutor — Windows"},
+    "win_minimize": {"ru": "Свернуть", "en": "Minimise"},
+    "win_maximize": {"ru": "Развернуть", "en": "Maximise"},
+    "win_close": {"ru": "Закрыть", "en": "Close"},
+    "win_export_report": {"ru": "Сохранить отчёт", "en": "Save the report"},
+    "win_report_saved_fmt": {"ru": "Отчёт сохранён: %s", "en": "Report saved: %s"},
+    "win_open_data_folder": {"ru": "Открыть папку данных", "en": "Open the data folder"},
+    "win_about_engine": {"ru": "Windows-версия работает на Go с HTML-интерфейсом.",
+                         "en": "The Windows build runs on Go with an HTML interface."},
+}

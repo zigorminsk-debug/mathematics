@@ -1,0 +1,36 @@
+# ---- Python tooling ----
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ---- Go ----
+windows/build/
+windows/dist/
+*.exe
+*.test
+
+# ---- Android / Gradle ----
+.gradle/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+android/app/release/
+
+# ---- Editors / OS ----
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# ---- Local scratch (never committed) ----
+/tmp/
+scratch/

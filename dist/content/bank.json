@@ -1,0 +1,9198 @@
+{
+ "meta": {
+  "contentVersion": "2026.10.1",
+  "built": "2026-10-14T00:50:44Z",
+  "schema": 1,
+  "years": [
+   2021,
+   2022,
+   2023,
+   2024,
+   2025
+  ],
+  "counts": {
+   "bank": 150,
+   "analogous": 200,
+   "choice": 90,
+   "short": 60
+  },
+  "author": "Zakharevich Igor",
+  "email": "ziv@csl.by",
+  "phone": "+3753371412",
+  "repo": "https://github.com/zigorminsk-debug/mathematics"
+ },
+ "tasks": [
+  {
+   "id": "ct-2021-a1",
+   "year": 2021,
+   "part": "A",
+   "n": 1,
+   "topic": "numbers",
+   "difficulty": 1,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения (0,3 − 5/4) : 0,05.",
+    "en": "Evaluate (0.3 − 5/4) : 0.05."
+   },
+   "options": {
+    "ru": [
+     "-19",
+     "19",
+     "-4278419646001971/2251799813685248",
+     "6699104445713613/562949953421312",
+     "3422735716801577/18014398509481984"
+    ],
+    "en": [
+     "-19",
+     "19",
+     "-4278419646001971/2251799813685248",
+     "6699104445713613/562949953421312",
+     "3422735716801577/18014398509481984"
+    ]
+   },
+   "answer": {
+    "ru": "-19",
+    "en": "-19"
+   },
+   "accept": [
+    "-19"
+   ],
+   "solution": {
+    "ru": [
+     "Переведём десятичные дроби в обыкновенные: 0,3 = 3/10, 0,05 = 1/20.",
+     "3/10 − 5/4 = 6/20 − 25/20 = −19/20.",
+     "Деление на 1/20 равносильно умножению на 20: −19/20 · 20 = −19."
+    ],
+    "en": [
+     "Convert to fractions: 0.3 = 3/10, 0.05 = 1/20.",
+     "3/10 − 5/4 = 6/20 − 25/20 = −19/20.",
+     "Dividing by 1/20 is multiplying by 20: −19/20 · 20 = −19."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "0,05 — это 1/20, делить на 1/20 удобно.",
+     "Сначала выполните действие в скобках, потом деление."
+    ],
+    "en": [
+     "0.05 equals 1/20, dividing by it is convenient.",
+     "Do the brackets first, then divide."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "десятичные дроби",
+    "порядок действий"
+   ]
+  },
+  {
+   "id": "ct-2021-a2",
+   "year": 2021,
+   "part": "A",
+   "n": 2,
+   "topic": "expressions",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения (√12 − √27 + √48) · √3.",
+    "en": "Evaluate (√12 − √27 + √48) · √3."
+   },
+   "options": {
+    "ru": [
+     "9",
+     "3",
+     "21",
+     "7",
+     "2"
+    ],
+    "en": [
+     "9",
+     "3",
+     "21",
+     "7",
+     "2"
+    ]
+   },
+   "answer": {
+    "ru": "9",
+    "en": "9"
+   },
+   "accept": [
+    "9"
+   ],
+   "solution": {
+    "ru": [
+     "Вынесем множители из-под знаков корня: √12 = 2√3, √27 = 3√3, √48 = 4√3.",
+     "2√3 − 3√3 + 4√3 = 3√3.",
+     "3√3 · √3 = 3 · 3 = 9."
+    ],
+    "en": [
+     "Simplify the radicals: √12 = 2√3, √27 = 3√3, √48 = 4√3.",
+     "2√3 − 3√3 + 4√3 = 3√3.",
+     "3√3 · √3 = 3 · 3 = 9."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Вынесите полный квадрат из-под корня: 12 = 4·3, 27 = 9·3, 48 = 16·3.",
+     "√3 · √3 = 3."
+    ],
+    "en": [
+     "Take the perfect square out of each root: 12 = 4·3, 27 = 9·3, 48 = 16·3.",
+     "√3 · √3 = 3."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "иррациональные выражения"
+   ]
+  },
+  {
+   "id": "ct-2021-a3",
+   "year": 2021,
+   "part": "A",
+   "n": 3,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите корень уравнения √(2x + 5) = 4.",
+    "en": "Solve the equation √(2x + 5) = 4."
+   },
+   "options": {
+    "ru": [
+     "11/2",
+     "11",
+     "5",
+     "3/2",
+     "8"
+    ],
+    "en": [
+     "11/2",
+     "11",
+     "5",
+     "3/2",
+     "8"
+    ]
+   },
+   "answer": {
+    "ru": "11/2",
+    "en": "11/2"
+   },
+   "accept": [
+    "11/2"
+   ],
+   "solution": {
+    "ru": [
+     "Возведём обе части в квадрат: 2x + 5 = 16.",
+     "2x = 11, откуда x = 11/2 = 5,5.",
+     "Проверка: √(2·5,5 + 5) = √16 = 4 — верно."
+    ],
+    "en": [
+     "Square both sides: 2x + 5 = 16.",
+     "2x = 11, so x = 11/2 = 5.5.",
+     "Check: √(2·5.5 + 5) = √16 = 4, correct."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Избавьтесь от корня возведением в квадрат.",
+     "Не забудьте проверить, что подкоренное выражение неотрицательно."
+    ],
+    "en": [
+     "Square both sides to remove the root.",
+     "Check afterwards that the radicand is non-negative."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "иррациональные уравнения"
+   ]
+  },
+  {
+   "id": "ct-2021-a4",
+   "year": 2021,
+   "part": "A",
+   "n": 4,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите произведение x·y, где (x; y) — решение системы уравнений { 2x + 3y = 12, x − y = 1.",
+    "en": "Find the product x·y, where (x; y) is the solution of the system { 2x + 3y = 12, x − y = 1."
+   },
+   "options": {
+    "ru": [
+     "6",
+     "5",
+     "12",
+     "-6",
+     "8"
+    ],
+    "en": [
+     "6",
+     "5",
+     "12",
+     "-6",
+     "8"
+    ]
+   },
+   "answer": {
+    "ru": "6",
+    "en": "6"
+   },
+   "accept": [
+    "6"
+   ],
+   "solution": {
+    "ru": [
+     "Из второго уравнения x = y + 1.",
+     "Подставим в первое: 2(y + 1) + 3y = 12 ⟹ 5y = 10 ⟹ y = 2.",
+     "Тогда x = 3, а x·y = 6."
+    ],
+    "en": [
+     "From the second equation x = y + 1.",
+     "Substitute into the first: 2(y + 1) + 3y = 12 ⟹ 5y = 10 ⟹ y = 2.",
+     "Then x = 3 and x·y = 6."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Выразите x через y из простого уравнения.",
+     "После подстановки останется одно уравнение с одной переменной."
+    ],
+    "en": [
+     "Express x in terms of y from the simpler equation.",
+     "Substitution leaves one equation in one unknown."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "ct-2021-a5",
+   "year": 2021,
+   "part": "A",
+   "n": 5,
+   "topic": "functions",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наименьшее значение функции y = x² − 6x + 11.",
+    "en": "Find the minimum value of y = x² − 6x + 11."
+   },
+   "options": {
+    "ru": [
+     "2",
+     "11",
+     "3",
+     "-2",
+     "0"
+    ],
+    "en": [
+     "2",
+     "11",
+     "3",
+     "-2",
+     "0"
+    ]
+   },
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Выделим полный квадрат: x² − 6x + 11 = (x − 3)² + 2.",
+     "Квадрат неотрицателен, значит (x − 3)² + 2 ≥ 2.",
+     "Наименьшее значение равно 2 и достигается при x = 3."
+    ],
+    "en": [
+     "Complete the square: x² − 6x + 11 = (x − 3)² + 2.",
+     "A square is never negative, so (x − 3)² + 2 ≥ 2.",
+     "The minimum value is 2, attained at x = 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Выделите полный квадрат.",
+     "Вершина параболы: x₀ = −b/(2a)."
+    ],
+    "en": [
+     "Complete the square.",
+     "Parabola vertex: x₀ = −b/(2a)."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "квадратичная функция",
+    "наименьшее значение"
+   ]
+  },
+  {
+   "id": "ct-2021-a6",
+   "year": 2021,
+   "part": "A",
+   "n": 6,
+   "topic": "progressions",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Арифметическая прогрессия задана условиями a₁ = 3, d = 4. Найдите a₁₁.",
+    "en": "An arithmetic progression has a₁ = 3 and d = 4. Find a₁₁."
+   },
+   "options": {
+    "ru": [
+     "43",
+     "47",
+     "39",
+     "41",
+     "45"
+    ],
+    "en": [
+     "43",
+     "47",
+     "39",
+     "41",
+     "45"
+    ]
+   },
+   "answer": {
+    "ru": "43",
+    "en": "43"
+   },
+   "accept": [
+    "43"
+   ],
+   "solution": {
+    "ru": [
+     "Формула n-го члена: aₙ = a₁ + (n − 1)d.",
+     "a₁₁ = 3 + 10 · 4.",
+     "a₁₁ = 43."
+    ],
+    "en": [
+     "Formula of the n-th term: aₙ = a₁ + (n − 1)d.",
+     "a₁₁ = 3 + 10 · 4.",
+     "a₁₁ = 43."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "От первого члена до одиннадцатого — 10 шагов.",
+     "aₙ = a₁ + (n − 1)d."
+    ],
+    "en": [
+     "There are 10 steps from the 1st to the 11th term.",
+     "aₙ = a₁ + (n − 1)d."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "арифметическая прогрессия"
+   ]
+  },
+  {
+   "id": "ct-2021-a7",
+   "year": 2021,
+   "part": "A",
+   "n": 7,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Скорость катера по течению реки 18 км/ч, а против течения — 12 км/ч. Найдите скорость течения реки (км/ч).",
+    "en": "A boat travels 18 km/h downstream and 12 km/h upstream. Find the speed of the current (km/h)."
+   },
+   "options": {
+    "ru": [
+     "3",
+     "6",
+     "5",
+     "15",
+     "2"
+    ],
+    "en": [
+     "3",
+     "6",
+     "5",
+     "15",
+     "2"
+    ]
+   },
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Пусть v — собственная скорость катера, u — скорость течения.",
+     "v + u = 18, v − u = 12.",
+     "Вычтем уравнения: 2u = 6 ⟹ u = 3."
+    ],
+    "en": [
+     "Let v be the boat's own speed and u the current speed.",
+     "v + u = 18, v − u = 12.",
+     "Subtracting: 2u = 6 ⟹ u = 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "По течению скорости складываются, против течения — вычитаются.",
+     "Составьте систему двух уравнений."
+    ],
+    "en": [
+     "Downstream speeds add, upstream they subtract.",
+     "Write a system of two equations."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "движение по реке"
+   ]
+  },
+  {
+   "id": "ct-2021-a8",
+   "year": 2021,
+   "part": "A",
+   "n": 8,
+   "topic": "trig",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Известно, что sin α = 4/5, где α — угол I четверти. Найдите sin 2α.",
+    "en": "Given sin α = 4/5 for an angle α of the first quadrant, find sin 2α."
+   },
+   "options": {
+    "ru": [
+     "24/25",
+     "12/25",
+     "7/25",
+     "48/25",
+     "24/5"
+    ],
+    "en": [
+     "24/25",
+     "12/25",
+     "7/25",
+     "48/25",
+     "24/5"
+    ]
+   },
+   "answer": {
+    "ru": "24/25",
+    "en": "24/25"
+   },
+   "accept": [
+    "24/25"
+   ],
+   "solution": {
+    "ru": [
+     "cos²α = 1 − sin²α = 1 − 16/25 = 9/25, α в I четверти ⟹ cos α = 3/5.",
+     "sin 2α = 2 sin α cos α = 2 · 4/5 · 3/5.",
+     "sin 2α = 24/25."
+    ],
+    "en": [
+     "cos²α = 1 − sin²α = 1 − 16/25 = 9/25; α is in quadrant I ⟹ cos α = 3/5.",
+     "sin 2α = 2 sin α cos α = 2 · 4/5 · 3/5.",
+     "sin 2α = 24/25."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сначала найдите cos α из основного тригонометрического тождества.",
+     "sin 2α = 2 sin α · cos α."
+    ],
+    "en": [
+     "First find cos α from the Pythagorean identity.",
+     "sin 2α = 2 sin α · cos α."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "формулы двойного угла"
+   ]
+  },
+  {
+   "id": "ct-2021-a9",
+   "year": 2021,
+   "part": "A",
+   "n": 9,
+   "topic": "trigequations",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наименьший положительный корень уравнения sin x = √3/2.",
+    "en": "Find the smallest positive root of sin x = √3/2."
+   },
+   "options": {
+    "ru": [
+     "π/3",
+     "π/6",
+     "2π/3",
+     "π",
+     "5π/6"
+    ],
+    "en": [
+     "π/3",
+     "π/6",
+     "2π/3",
+     "π",
+     "5π/6"
+    ]
+   },
+   "answer": {
+    "ru": "π/3",
+    "en": "π/3"
+   },
+   "accept": [
+    "π/3"
+   ],
+   "solution": {
+    "ru": [
+     "Общее решение: x = π/3 + 2πk или x = 2π/3 + 2πk, k ∈ ℤ.",
+     "Серии положительных корней начинаются при k = 0: π/3 и 2π/3.",
+     "Наименьший положительный корень — π/3."
+    ],
+    "en": [
+     "General solution: x = π/3 + 2πk or x = 2π/3 + 2πk, k ∈ ℤ.",
+     "The first positive members appear at k = 0: π/3 and 2π/3.",
+     "The smallest positive root is π/3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Вспомните табличное значение sin(π/3).",
+     "Сравните обе серии корней."
+    ],
+    "en": [
+     "Recall the table value sin(π/3).",
+     "Compare both families of roots."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "простейшее тригонометрическое уравнение"
+   ]
+  },
+  {
+   "id": "ct-2021-a10",
+   "year": 2021,
+   "part": "A",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Вычислите log₃ 54 − log₃ 2.",
+    "en": "Evaluate log₃ 54 − log₃ 2."
+   },
+   "options": {
+    "ru": [
+     "3",
+     "27",
+     "9",
+     "2",
+     "52"
+    ],
+    "en": [
+     "3",
+     "27",
+     "9",
+     "2",
+     "52"
+    ]
+   },
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Разность логарифмов: log₃ 54 − log₃ 2 = log₃ (54/2).",
+     "54/2 = 27, значит log₃ 27.",
+     "log₃ 27 = 3, так как 3³ = 27."
+    ],
+    "en": [
+     "Difference of logarithms: log₃ 54 − log₃ 2 = log₃ (54/2).",
+     "54/2 = 27, so we need log₃ 27.",
+     "log₃ 27 = 3 because 3³ = 27."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "log a − log b = log(a/b).",
+     "27 = 3³."
+    ],
+    "en": [
+     "log a − log b = log(a/b).",
+     "27 = 3³."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "ct-2021-a11",
+   "year": 2021,
+   "part": "A",
+   "n": 11,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "В равнобедренном треугольнике боковая сторона равна 13 см, а основание — 10 см. Найдите площадь треугольника (см²).",
+    "en": "An isosceles triangle has equal sides 13 cm and base 10 cm. Find its area (cm²)."
+   },
+   "options": {
+    "ru": [
+     "60",
+     "65",
+     "120",
+     "30",
+     "78"
+    ],
+    "en": [
+     "60",
+     "65",
+     "120",
+     "30",
+     "78"
+    ]
+   },
+   "answer": {
+    "ru": "60",
+    "en": "60"
+   },
+   "accept": [
+    "60"
+   ],
+   "solution": {
+    "ru": [
+     "Высота, проведённая к основанию, делит его пополам: 10 : 2 = 5.",
+     "h = √(13² − 5²) = √(169 − 25) = √144 = 12.",
+     "S = ½ · 10 · 12 = 60."
+    ],
+    "en": [
+     "The altitude to the base bisects it: 10 : 2 = 5.",
+     "h = √(13² − 5²) = √(169 − 25) = √144 = 12.",
+     "S = ½ · 10 · 12 = 60."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Высота равнобедренного треугольника делит основание пополам.",
+     "Пифагорова тройка 5-12-13."
+    ],
+    "en": [
+     "The altitude of an isosceles triangle bisects the base.",
+     "Pythagorean triple 5-12-13."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "треугольник",
+    "площадь"
+   ]
+  },
+  {
+   "id": "ct-2021-a12",
+   "year": 2021,
+   "part": "A",
+   "n": 12,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Основания трапеции равны 6 см и 10 см, высота — 4 см. Найдите площадь трапеции (см²).",
+    "en": "A trapezoid has bases 6 cm and 10 cm and height 4 cm. Find its area (cm²)."
+   },
+   "options": {
+    "ru": [
+     "32",
+     "64",
+     "30",
+     "24",
+     "40"
+    ],
+    "en": [
+     "32",
+     "64",
+     "30",
+     "24",
+     "40"
+    ]
+   },
+   "answer": {
+    "ru": "32",
+    "en": "32"
+   },
+   "accept": [
+    "32"
+   ],
+   "solution": {
+    "ru": [
+     "Площадь трапеции: S = (a + b)/2 · h.",
+     "S = (6 + 10)/2 · 4 = 8 · 4.",
+     "S = 32."
+    ],
+    "en": [
+     "Trapezoid area: S = (a + b)/2 · h.",
+     "S = (6 + 10)/2 · 4 = 8 · 4.",
+     "S = 32."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Средняя линия трапеции равна полусумме оснований."
+    ],
+    "en": [
+     "The midline of a trapezoid is the half-sum of the bases."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "трапеция",
+    "площадь"
+   ]
+  },
+  {
+   "id": "ct-2021-a13",
+   "year": 2021,
+   "part": "A",
+   "n": 13,
+   "topic": "stereometry",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите объём шара радиуса 3 (в ответе укажите коэффициент при π).",
+    "en": "Find the volume of a ball of radius 3 (give the coefficient at π)."
+   },
+   "options": {
+    "ru": [
+     "36",
+     "12",
+     "27",
+     "9",
+     "108"
+    ],
+    "en": [
+     "36",
+     "12",
+     "27",
+     "9",
+     "108"
+    ]
+   },
+   "answer": {
+    "ru": "36",
+    "en": "36"
+   },
+   "accept": [
+    "36"
+   ],
+   "solution": {
+    "ru": [
+     "Объём шара: V = 4/3 πR³.",
+     "V = 4/3 · π · 27.",
+     "V = 36π, коэффициент при π равен 36."
+    ],
+    "en": [
+     "Volume of a sphere: V = 4/3 πR³.",
+     "V = 4/3 · π · 27.",
+     "V = 36π, so the coefficient at π is 36."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "V = 4/3 πR³.",
+     "3³ = 27, затем сократите 27 и 3."
+    ],
+    "en": [
+     "V = 4/3 πR³.",
+     "3³ = 27, then cancel 27 with 3."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "шар",
+    "объём"
+   ]
+  },
+  {
+   "id": "ct-2021-a14",
+   "year": 2021,
+   "part": "A",
+   "n": 14,
+   "topic": "derivative",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение производной функции f(x) = x³ − 3x² + 5 в точке x₀ = 1.",
+    "en": "Find the value of the derivative of f(x) = x³ − 3x² + 5 at x₀ = 1."
+   },
+   "options": {
+    "ru": [
+     "-3",
+     "3",
+     "0",
+     "-6",
+     "5"
+    ],
+    "en": [
+     "-3",
+     "3",
+     "0",
+     "-6",
+     "5"
+    ]
+   },
+   "answer": {
+    "ru": "-3",
+    "en": "-3"
+   },
+   "accept": [
+    "-3"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 3x² − 6x.",
+     "f′(1) = 3 · 1 − 6 · 1.",
+     "f′(1) = −3."
+    ],
+    "en": [
+     "f′(x) = 3x² − 6x.",
+     "f′(1) = 3 · 1 − 6 · 1.",
+     "f′(1) = −3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "(xⁿ)′ = n·xⁿ⁻¹.",
+     "Сначала найдите общий вид производной."
+    ],
+    "en": [
+     "(xⁿ)′ = n·xⁿ⁻¹.",
+     "Find the general expression of the derivative first."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "производная",
+    "значение производной"
+   ]
+  },
+  {
+   "id": "ct-2021-a15",
+   "year": 2021,
+   "part": "A",
+   "n": 15,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите точку минимума функции y = x³ − 3x².",
+    "en": "Find the minimum point of y = x³ − 3x²."
+   },
+   "options": {
+    "ru": [
+     "2",
+     "0",
+     "1",
+     "-2",
+     "3"
+    ],
+    "en": [
+     "2",
+     "0",
+     "1",
+     "-2",
+     "3"
+    ]
+   },
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "y′ = 3x² − 6x = 3x(x − 2); критические точки x = 0 и x = 2.",
+     "При переходе через x = 0 производная меняет знак с + на − — это максимум.",
+     "При переходе через x = 2 знак меняется с − на + — это точка минимума, x = 2."
+    ],
+    "en": [
+     "y′ = 3x² − 6x = 3x(x − 2); critical points x = 0 and x = 2.",
+     "At x = 0 the derivative changes + → −, so it is a maximum.",
+     "At x = 2 the derivative changes − → +, so x = 2 is the minimum point."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите нули производной.",
+     "Определите знак производной на промежутках между нулями."
+    ],
+    "en": [
+     "Find the zeros of the derivative.",
+     "Determine the sign of the derivative between the zeros."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "исследование функции",
+    "экстремум"
+   ]
+  },
+  {
+   "id": "ct-2021-a16",
+   "year": 2021,
+   "part": "A",
+   "n": 16,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Какова вероятность того, что случайно выбранное двузначное число делится на 11?",
+    "en": "What is the probability that a randomly chosen two-digit number is divisible by 11?"
+   },
+   "options": {
+    "ru": [
+     "1/10",
+     "1/9",
+     "2/15",
+     "1/5",
+     "9/100"
+    ],
+    "en": [
+     "1/10",
+     "1/9",
+     "2/15",
+     "1/5",
+     "9/100"
+    ]
+   },
+   "answer": {
+    "ru": "1/10",
+    "en": "1/10"
+   },
+   "accept": [
+    "1/10"
+   ],
+   "solution": {
+    "ru": [
+     "Двузначных чисел всего 99 − 9 = 90.",
+     "Кратных 11 среди них 9: 11, 22, …, 99.",
+     "P = 9/90 = 1/10."
+    ],
+    "en": [
+     "There are 99 − 9 = 90 two-digit numbers in total.",
+     "Exactly 9 of them are multiples of 11: 11, 22, …, 99.",
+     "P = 9/90 = 1/10."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сколько всего двузначных чисел?",
+     "Перечислите кратные 11."
+    ],
+    "en": [
+     "How many two-digit numbers are there?",
+     "List the multiples of 11."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "ct-2021-a17",
+   "year": 2021,
+   "part": "A",
+   "n": 17,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Последовательность задана условиями a₁ = 1, aₙ₊₁ = 2aₙ + 1. Найдите a₅.",
+    "en": "A sequence is defined by a₁ = 1, aₙ₊₁ = 2aₙ + 1. Find a₅."
+   },
+   "options": {
+    "ru": [
+     "31",
+     "15",
+     "63",
+     "33",
+     "30"
+    ],
+    "en": [
+     "31",
+     "15",
+     "63",
+     "33",
+     "30"
+    ]
+   },
+   "answer": {
+    "ru": "31",
+    "en": "31"
+   },
+   "accept": [
+    "31"
+   ],
+   "solution": {
+    "ru": [
+     "a₂ = 2 · 1 + 1 = 3.",
+     "a₃ = 2 · 3 + 1 = 7, a₄ = 2 · 7 + 1 = 15.",
+     "a₅ = 2 · 15 + 1 = 31."
+    ],
+    "en": [
+     "a₂ = 2 · 1 + 1 = 3.",
+     "a₃ = 2 · 3 + 1 = 7, a₄ = 2 · 7 + 1 = 15.",
+     "a₅ = 2 · 15 + 1 = 31."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Вычисляйте члены последовательно.",
+     "aₙ₊₁ = 2aₙ + 1 — удвоить и прибавить 1."
+    ],
+    "en": [
+     "Compute the terms one after another.",
+     "aₙ₊₁ = 2aₙ + 1 means double and add 1."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "рекуррентная последовательность"
+   ]
+  },
+  {
+   "id": "ct-2021-a18",
+   "year": 2021,
+   "part": "A",
+   "n": 18,
+   "topic": "param",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "При каких значениях a уравнение x² + ax + 9 = 0 имеет единственный корень?",
+    "en": "For which values of a does x² + ax + 9 = 0 have exactly one root?"
+   },
+   "options": {
+    "ru": [
+     "−6 и 6",
+     "только 6",
+     "только −6",
+     "9",
+     "−3 и 3"
+    ],
+    "en": [
+     "−6 и 6",
+     "только 6",
+     "только −6",
+     "9",
+     "−3 и 3"
+    ]
+   },
+   "answer": {
+    "ru": "−6 и 6",
+    "en": "−6 и 6"
+   },
+   "accept": [
+    "−6 и 6"
+   ],
+   "solution": {
+    "ru": [
+     "Один корень у квадратного уравнения при D = 0.",
+     "D = a² − 4 · 1 · 9 = a² − 36.",
+     "a² = 36 ⟹ a = −6 или a = 6."
+    ],
+    "en": [
+     "A quadratic equation has exactly one root when D = 0.",
+     "D = a² − 4 · 1 · 9 = a² − 36.",
+     "a² = 36 ⟹ a = −6 or a = 6."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Единственный корень — это дискриминант, равный нулю.",
+     "Не забудьте про два знака при решении a² = 36."
+    ],
+    "en": [
+     "A single root means the discriminant equals zero.",
+     "Do not forget the two signs when solving a² = 36."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "параметр",
+    "дискриминант"
+   ]
+  },
+  {
+   "id": "ct-2021-b1",
+   "year": 2021,
+   "part": "B",
+   "n": 1,
+   "topic": "expressions",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите значение выражения (√5 − 2)² + 4√5.",
+    "en": "Evaluate (√5 − 2)² + 4√5."
+   },
+   "options": null,
+   "answer": {
+    "ru": "9",
+    "en": "9"
+   },
+   "accept": [
+    "9"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем квадрат: (√5)² − 2 · √5 · 2 + 2² = 5 − 4√5 + 4.",
+     "Прибавим 4√5: 9 − 4√5 + 4√5.",
+     "Ответ: 9."
+    ],
+    "en": [
+     "Expand the square: (√5)² − 2 · √5 · 2 + 2² = 5 − 4√5 + 4.",
+     "Add 4√5: 9 − 4√5 + 4√5.",
+     "Answer: 9."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Используйте формулу (a − b)² = a² − 2ab + b²."
+    ],
+    "en": [
+     "Use (a − b)² = a² − 2ab + b²."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "формулы сокращённого умножения"
+   ]
+  },
+  {
+   "id": "ct-2021-b2",
+   "year": 2021,
+   "part": "B",
+   "n": 2,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите произведение корней уравнения x⁴ − 13x² + 36 = 0.",
+    "en": "Find the product of the roots of x⁴ − 13x² + 36 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "36",
+    "en": "36"
+   },
+   "accept": [
+    "36"
+   ],
+   "solution": {
+    "ru": [
+     "Замена t = x² (t ≥ 0): t² − 13t + 36 = 0.",
+     "По теореме Виета t₁ = 4, t₂ = 9, откуда x = ±2, ±3.",
+     "Произведение: (−3)(−2)(2)(3) = 36 (или |t₁ · t₂| = 36)."
+    ],
+    "en": [
+     "Substitute t = x² (t ≥ 0): t² − 13t + 36 = 0.",
+     "By Vieta's theorem t₁ = 4, t₂ = 9, hence x = ±2, ±3.",
+     "The product is (−3)(−2)(2)(3) = 36 (also |t₁ · t₂| = 36)."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Это биквадратное уравнение: сделайте замену t = x².",
+     "Противоположные корни дают в произведении положительное число."
+    ],
+    "en": [
+     "This is a biquadratic equation: substitute t = x².",
+     "Opposite roots multiply to a positive number."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "биквадратное уравнение"
+   ]
+  },
+  {
+   "id": "ct-2021-b3",
+   "year": 2021,
+   "part": "B",
+   "n": 3,
+   "topic": "inequalities",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество целых решений неравенства (x − 1)(x + 3) ≤ 0.",
+    "en": "Find how many integer solutions the inequality (x − 1)(x + 3) ≤ 0 has."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Нули: x = 1 и x = −3, ветви параболы вверх.",
+     "Решение: −3 ≤ x ≤ 1.",
+     "Целые: −3, −2, −1, 0, 1 — всего 5."
+    ],
+    "en": [
+     "Zeros: x = 1 and x = −3, parabola opens upwards.",
+     "Solution: −3 ≤ x ≤ 1.",
+     "Integers: −3, −2, −1, 0, 1 — five in total."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Отметьте нули на прямой и определите знак произведения.",
+     "Не забудьте, что неравенство нестрогое."
+    ],
+    "en": [
+     "Mark the zeros on the line and check the sign of the product.",
+     "Remember the inequality is non-strict."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "метод интервалов"
+   ]
+  },
+  {
+   "id": "ct-2021-b4",
+   "year": 2021,
+   "part": "B",
+   "n": 4,
+   "topic": "wordproblems",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Велосипедист проехал 60 км. Если бы он ехал на 10 км/ч быстрее, то затратил бы на 1 час меньше. Найдите скорость велосипедиста (км/ч).",
+    "en": "A cyclist covered 60 km. Riding 10 km/h faster he would have spent 1 hour less. Find his speed (km/h)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "20",
+    "en": "20"
+   },
+   "accept": [
+    "20"
+   ],
+   "solution": {
+    "ru": [
+     "Пусть v — скорость. Время по плану 60/v, при новой скорости 60/(v + 10).",
+     "Уравнение: 60/v − 60/(v + 10) = 1 ⟹ 600 = v(v + 10).",
+     "v² + 10v − 600 = 0 ⟹ v = 20 (v = −30 не подходит). Ответ: 20."
+    ],
+    "en": [
+     "Let v be the speed. Times are 60/v and 60/(v + 10).",
+     "Equation: 60/v − 60/(v + 10) = 1 ⟹ 600 = v(v + 10).",
+     "v² + 10v − 600 = 0 ⟹ v = 20 (v = −30 is not acceptable). Answer: 20."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Обозначьте скорость за v и выразите оба времени.",
+     "Приведите дробное уравнение к квадратному."
+    ],
+    "en": [
+     "Let the speed be v and write both times.",
+     "Reduce the fractional equation to a quadratic one."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "задачи на движение",
+    "дробно-рациональное уравнение"
+   ]
+  },
+  {
+   "id": "ct-2021-b5",
+   "year": 2021,
+   "part": "B",
+   "n": 5,
+   "topic": "trig",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите 8 sin 15° · cos 15°.",
+    "en": "Evaluate 8 sin 15° · cos 15°."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "2 sin 15° cos 15° = sin 30° ⟹ sin 15° cos 15° = ¼.",
+     "Умножаем на 8.",
+     "8 · ¼ = 2."
+    ],
+    "en": [
+     "2 sin 15° cos 15° = sin 30° ⟹ sin 15° cos 15° = ¼.",
+     "Multiply by 8.",
+     "8 · ¼ = 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула двойного угла в обратную сторону: 2 sin x cos x = sin 2x."
+    ],
+    "en": [
+     "Use the double-angle formula backwards: 2 sin x cos x = sin 2x."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "формулы двойного угла"
+   ]
+  },
+  {
+   "id": "ct-2021-b6",
+   "year": 2021,
+   "part": "B",
+   "n": 6,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите радиус окружности, вписанной в равносторонний треугольник со стороной 6√3.",
+    "en": "Find the inradius of an equilateral triangle with side 6√3."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Для равностороннего треугольника r = a√3/6.",
+     "r = 6√3 · √3 / 6.",
+     "r = 3."
+    ],
+    "en": [
+     "For an equilateral triangle r = a√3/6.",
+     "r = 6√3 · √3 / 6.",
+     "r = 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Радиус вписанной окружности r = a√3/6.",
+     "√3 · √3 = 3."
+    ],
+    "en": [
+     "The inradius of an equilateral triangle is r = a√3/6.",
+     "√3 · √3 = 3."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "вписанная окружность"
+   ]
+  },
+  {
+   "id": "ct-2021-b7",
+   "year": 2021,
+   "part": "B",
+   "n": 7,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Осевое сечение цилиндра — квадрат со стороной 4. Найдите объём цилиндра. В ответе укажите коэффициент при π.",
+    "en": "The axial section of a cylinder is a square of side 4. Find the volume of the cylinder; give the coefficient at π."
+   },
+   "options": null,
+   "answer": {
+    "ru": "16",
+    "en": "16"
+   },
+   "accept": [
+    "16"
+   ],
+   "solution": {
+    "ru": [
+     "Сторона квадрата равна высоте и диаметру: h = 4, 2R = 4 ⟹ R = 2.",
+     "V = πR²h = π · 4 · 4.",
+     "V = 16π, коэффициент 16."
+    ],
+    "en": [
+     "The square side equals both the height and the diameter: h = 4, R = 2.",
+     "V = πR²h = π · 4 · 4.",
+     "V = 16π, coefficient 16."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Из осевого сечения найдите R и h.",
+     "V = πR²h."
+    ],
+    "en": [
+     "Get R and h from the axial section.",
+     "V = πR²h."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "цилиндр",
+    "объём"
+   ]
+  },
+  {
+   "id": "ct-2021-b8",
+   "year": 2021,
+   "part": "B",
+   "n": 8,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение производной функции f(x) = x⁴/4 + 3x² в точке x₀ = −1.",
+    "en": "Find the value of the derivative of f(x) = x⁴/4 + 3x² at x₀ = −1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-7",
+    "en": "-7"
+   },
+   "accept": [
+    "-7",
+    "−7"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = x³ + 6x.",
+     "f′(−1) = −1 + 6 · (−1).",
+     "f′(−1) = −7."
+    ],
+    "en": [
+     "f′(x) = x³ + 6x.",
+     "f′(−1) = −1 + 6 · (−1).",
+     "f′(−1) = −7."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Производная от x⁴/4 равна x³.",
+     "Учитывайте знак аргумента."
+    ],
+    "en": [
+     "The derivative of x⁴/4 is x³.",
+     "Mind the sign of the argument."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "ct-2021-b9",
+   "year": 2021,
+   "part": "B",
+   "n": 9,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколькими способами из 8 учеников можно выбрать 3 дежурных?",
+    "en": "In how many ways can 3 pupils on duty be chosen from 8 pupils?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "56",
+    "en": "56"
+   },
+   "accept": [
+    "56"
+   ],
+   "solution": {
+    "ru": [
+     "Порядок выбора не важен — это сочетания: C₈³ = 8!/(3!·5!).",
+     "C₈³ = (8 · 7 · 6)/(1 · 2 · 3).",
+     "C₈³ = 56."
+    ],
+    "en": [
+     "Order does not matter: combinations C(8,3) = 8!/(3!·5!).",
+     "C(8,3) = (8 · 7 · 6)/(1 · 2 · 3).",
+     "C(8,3) = 56."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Здесь сочетания, а не размещения.",
+     "C = n!/(k!(n − k)!)."
+    ],
+    "en": [
+     "These are combinations, not permutations.",
+     "C = n!/(k!(n − k)!)."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "сочетания"
+   ]
+  },
+  {
+   "id": "ct-2021-b10",
+   "year": 2021,
+   "part": "B",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение 3^(2x − 1) = 27.",
+    "en": "Solve 3^(2x − 1) = 27."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "27 = 3³, значит 3^(2x − 1) = 3³.",
+     "Основания равны ⟹ 2x − 1 = 3.",
+     "2x = 4, x = 2."
+    ],
+    "en": [
+     "27 = 3³, so 3^(2x − 1) = 3³.",
+     "Equal bases ⟹ 2x − 1 = 3.",
+     "2x = 4, x = 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Приведите обе части к основанию 3."
+    ],
+    "en": [
+     "Bring both sides to base 3."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "показательные уравнения"
+   ]
+  },
+  {
+   "id": "ct-2021-b11",
+   "year": 2021,
+   "part": "B",
+   "n": 11,
+   "topic": "param",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "При каком наименьшем натуральном значении a уравнение x² − 2x + a = 0 не имеет корней?",
+    "en": "For which smallest natural value of a does x² − 2x + a = 0 have no roots?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Нет корней при D < 0.",
+     "D = 4 − 4a < 0 ⟹ a > 1.",
+     "Наименьшее натуральное a = 2."
+    ],
+    "en": [
+     "No roots when D < 0.",
+     "D = 4 − 4a < 0 ⟹ a > 1.",
+     "The smallest natural a is 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "D = b² − 4ac.",
+     "Натуральные числа начинаются с 1 — проверьте, подходит ли a = 1."
+    ],
+    "en": [
+     "D = b² − 4ac.",
+     "Natural numbers start at 1 — check whether a = 1 fits."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "параметр",
+    "дискриминант"
+   ]
+  },
+  {
+   "id": "ct-2021-b12",
+   "year": 2021,
+   "part": "B",
+   "n": 12,
+   "topic": "logic",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите последнюю цифру числа 3²⁰²¹.",
+    "en": "Find the last digit of 3²⁰²¹."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Последние цифры степеней 3 повторяются с периодом 4: 3, 9, 7, 1.",
+     "2021 = 4 · 505 + 1, остаток 1.",
+     "Первая цифра цикла — 3."
+    ],
+    "en": [
+     "The last digits of powers of 3 repeat with period 4: 3, 9, 7, 1.",
+     "2021 = 4 · 505 + 1, remainder 1.",
+     "The first digit of the cycle is 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите период повторения последних цифр.",
+     "Разделите показатель на период с остатком."
+    ],
+    "en": [
+     "Find the period of the last digits.",
+     "Divide the exponent by the period and take the remainder."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2021",
+   "tags": [
+    "периодичность",
+    "остатки"
+   ]
+  },
+  {
+   "id": "ct-2022-a1",
+   "year": 2022,
+   "part": "A",
+   "n": 1,
+   "topic": "numbers",
+   "difficulty": 1,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения 0,24 : 1,2 + 3/5.",
+    "en": "Evaluate 0.24 : 1.2 + 3/5."
+   },
+   "options": {
+    "ru": [
+     "4/5",
+     "2/25",
+     "8",
+     "3/5",
+     "9/5"
+    ],
+    "en": [
+     "4/5",
+     "2/25",
+     "8",
+     "3/5",
+     "9/5"
+    ]
+   },
+   "answer": {
+    "ru": "4/5",
+    "en": "4/5"
+   },
+   "accept": [
+    "4/5"
+   ],
+   "solution": {
+    "ru": [
+     "0,24 : 1,2 = 2,4 : 12 = 0,2.",
+     "3/5 = 0,6.",
+     "0,2 + 0,6 = 0,8."
+    ],
+    "en": [
+     "0.24 : 1.2 = 2.4 : 12 = 0.2.",
+     "3/5 = 0.6.",
+     "0.2 + 0.6 = 0.8."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Перенесите запятую, чтобы делитель стал целым.",
+     "3/5 переведите в десятичную дробь."
+    ],
+    "en": [
+     "Shift the decimal point to make the divisor an integer.",
+     "Convert 3/5 to a decimal."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "десятичные дроби"
+   ]
+  },
+  {
+   "id": "ct-2022-a2",
+   "year": 2022,
+   "part": "A",
+   "n": 2,
+   "topic": "expressions",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Сократите дробь (x² − 9)/(x² + 6x + 9).",
+    "en": "Simplify the fraction (x² − 9)/(x² + 6x + 9)."
+   },
+   "options": {
+    "ru": [
+     "(x − 3)/(x + 3)",
+     "(x + 3)/(x − 3)",
+     "x − 3",
+     "(x − 3)²/(x + 3)",
+     "1"
+    ],
+    "en": [
+     "(x − 3)/(x + 3)",
+     "(x + 3)/(x − 3)",
+     "x − 3",
+     "(x − 3)²/(x + 3)",
+     "1"
+    ]
+   },
+   "answer": {
+    "ru": "(x − 3)/(x + 3)",
+    "en": "(x − 3)/(x + 3)"
+   },
+   "accept": [
+    "(x − 3)/(x + 3)"
+   ],
+   "solution": {
+    "ru": [
+     "Числитель — разность квадратов: x² − 9 = (x − 3)(x + 3).",
+     "Знаменатель — квадрат суммы: x² + 6x + 9 = (x + 3)².",
+     "Сокращаем на (x + 3): (x − 3)/(x + 3) при x ≠ −3."
+    ],
+    "en": [
+     "Numerator is a difference of squares: x² − 9 = (x − 3)(x + 3).",
+     "Denominator is a perfect square: x² + 6x + 9 = (x + 3)².",
+     "Cancel (x + 3): (x − 3)/(x + 3), x ≠ −3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Разложите числитель и знаменатель на множители.",
+     "a² + 2ab + b² = (a + b)²."
+    ],
+    "en": [
+     "Factor both numerator and denominator.",
+     "a² + 2ab + b² = (a + b)²."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "алгебраические дроби"
+   ]
+  },
+  {
+   "id": "ct-2022-a3",
+   "year": 2022,
+   "part": "A",
+   "n": 3,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Решите уравнение (x + 3)/(x − 1) = 2.",
+    "en": "Solve (x + 3)/(x − 1) = 2."
+   },
+   "options": {
+    "ru": [
+     "5",
+     "-5",
+     "1",
+     "2",
+     "5/2"
+    ],
+    "en": [
+     "5",
+     "-5",
+     "1",
+     "2",
+     "5/2"
+    ]
+   },
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "ОДЗ: x ≠ 1.",
+     "x + 3 = 2(x − 1) ⟹ x + 3 = 2x − 2.",
+     "x = 5 — входит в ОДЗ."
+    ],
+    "en": [
+     "Domain: x ≠ 1.",
+     "x + 3 = 2(x − 1) ⟹ x + 3 = 2x − 2.",
+     "x = 5, which belongs to the domain."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Умножьте обе части на (x − 1), указав x ≠ 1.",
+     "Проверьте ОДЗ."
+    ],
+    "en": [
+     "Multiply by (x − 1) and note x ≠ 1.",
+     "Check the domain."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "дробно-рациональные уравнения"
+   ]
+  },
+  {
+   "id": "ct-2022-a4",
+   "year": 2022,
+   "part": "A",
+   "n": 4,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите сумму x + y, где (x; y) — решение системы { 3x − y = 5, x + 2y = 4.",
+    "en": "Find x + y for the solution (x; y) of the system { 3x − y = 5, x + 2y = 4."
+   },
+   "options": {
+    "ru": [
+     "3",
+     "1",
+     "2",
+     "5",
+     "-3"
+    ],
+    "en": [
+     "3",
+     "1",
+     "2",
+     "5",
+     "-3"
+    ]
+   },
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Из первого уравнения y = 3x − 5.",
+     "x + 2(3x − 5) = 4 ⟹ 7x = 14 ⟹ x = 2, y = 1.",
+     "x + y = 3."
+    ],
+    "en": [
+     "From the first equation y = 3x − 5.",
+     "x + 2(3x − 5) = 4 ⟹ 7x = 14 ⟹ x = 2, y = 1.",
+     "x + y = 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Выразите y из первого уравнения.",
+     "Подставьте во второе."
+    ],
+    "en": [
+     "Express y from the first equation.",
+     "Substitute into the second."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "ct-2022-a5",
+   "year": 2022,
+   "part": "A",
+   "n": 5,
+   "topic": "functions",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите область определения функции y = √(6 − 2x).",
+    "en": "Find the domain of the function y = √(6 − 2x)."
+   },
+   "options": {
+    "ru": [
+     "(−∞; 3]",
+     "[3; +∞)",
+     "(−∞; 3)",
+     "[−3; 3]",
+     "(0; 3]"
+    ],
+    "en": [
+     "(−∞; 3]",
+     "[3; +∞)",
+     "(−∞; 3)",
+     "[−3; 3]",
+     "(0; 3]"
+    ]
+   },
+   "answer": {
+    "ru": "(−∞; 3]",
+    "en": "(−∞; 3]"
+   },
+   "accept": [
+    "(−∞; 3]"
+   ],
+   "solution": {
+    "ru": [
+     "Подкоренное выражение неотрицательно: 6 − 2x ≥ 0.",
+     "−2x ≥ −6, при делении на −2 знак меняется: x ≤ 3.",
+     "Область определения: (−∞; 3]."
+    ],
+    "en": [
+     "The radicand must be non-negative: 6 − 2x ≥ 0.",
+     "−2x ≥ −6; dividing by −2 flips the sign: x ≤ 3.",
+     "Domain: (−∞; 3]."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Под корнем чётной степени выражение ≥ 0.",
+     "При делении неравенства на отрицательное число знак меняется."
+    ],
+    "en": [
+     "An even-order root requires the radicand ≥ 0.",
+     "Dividing an inequality by a negative number flips the sign."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "область определения"
+   ]
+  },
+  {
+   "id": "ct-2022-a6",
+   "year": 2022,
+   "part": "A",
+   "n": 6,
+   "topic": "progressions",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Геометрическая прогрессия задана условиями b₁ = 3, q = 2. Найдите b₆.",
+    "en": "A geometric progression has b₁ = 3 and q = 2. Find b₆."
+   },
+   "options": {
+    "ru": [
+     "96",
+     "192",
+     "48",
+     "64",
+     "90"
+    ],
+    "en": [
+     "96",
+     "192",
+     "48",
+     "64",
+     "90"
+    ]
+   },
+   "answer": {
+    "ru": "96",
+    "en": "96"
+   },
+   "accept": [
+    "96"
+   ],
+   "solution": {
+    "ru": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b₆ = 3 · 2⁵.",
+     "b₆ = 3 · 32 = 96."
+    ],
+    "en": [
+     "bₙ = b₁ · q^(n − 1).",
+     "b₆ = 3 · 2⁵.",
+     "b₆ = 3 · 32 = 96."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "2⁵ = 32.",
+     "Показатель степени на единицу меньше номера члена."
+    ],
+    "en": [
+     "2⁵ = 32.",
+     "The exponent is one less than the term number."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "ct-2022-a7",
+   "year": 2022,
+   "part": "A",
+   "n": 7,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Смешали 3 кг 20%-го и 2 кг 45%-го растворов соли. Найдите концентрацию полученного раствора (в процентах).",
+    "en": "3 kg of a 20% salt solution and 2 kg of a 45% solution are mixed. Find the concentration of the mixture (in %)."
+   },
+   "options": {
+    "ru": [
+     "30",
+     "32",
+     "25",
+     "33",
+     "27"
+    ],
+    "en": [
+     "30",
+     "32",
+     "25",
+     "33",
+     "27"
+    ]
+   },
+   "answer": {
+    "ru": "30",
+    "en": "30"
+   },
+   "accept": [
+    "30"
+   ],
+   "solution": {
+    "ru": [
+     "Соли в первом растворе: 3 · 0,2 = 0,6 кг.",
+     "Соли во втором: 2 · 0,45 = 0,9 кг; всего 1,5 кг на 5 кг.",
+     "Концентрация: 1,5/5 = 0,3 = 30%."
+    ],
+    "en": [
+     "Salt in the first solution: 3 · 0.2 = 0.6 kg.",
+     "Salt in the second: 2 · 0.45 = 0.9 kg; total 1.5 kg in 5 kg.",
+     "Concentration: 1.5/5 = 0.3 = 30%."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите массу соли в каждом растворе.",
+     "Концентрация = масса соли / общая масса."
+    ],
+    "en": [
+     "Find the salt mass in each solution.",
+     "Concentration = salt mass / total mass."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "концентрация",
+    "проценты"
+   ]
+  },
+  {
+   "id": "ct-2022-a8",
+   "year": 2022,
+   "part": "A",
+   "n": 8,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения 5 − 2 sin²x − 2 cos²x.",
+    "en": "Evaluate 5 − 2 sin²x − 2 cos²x."
+   },
+   "options": {
+    "ru": [
+     "3",
+     "7",
+     "1",
+     "5/2",
+     "0"
+    ],
+    "en": [
+     "3",
+     "7",
+     "1",
+     "5/2",
+     "0"
+    ]
+   },
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Основное тождество: sin²x + cos²x = 1.",
+     "5 − 2(sin²x + cos²x) = 5 − 2 · 1.",
+     "Ответ: 3 — значение не зависит от x."
+    ],
+    "en": [
+     "Pythagorean identity: sin²x + cos²x = 1.",
+     "5 − 2(sin²x + cos²x) = 5 − 2 · 1.",
+     "Answer: 3, independent of x."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сгруппируйте sin²x + cos²x."
+    ],
+    "en": [
+     "Group sin²x + cos²x together."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "основное тригонометрическое тождество"
+   ]
+  },
+  {
+   "id": "ct-2022-a9",
+   "year": 2022,
+   "part": "A",
+   "n": 9,
+   "topic": "trigequations",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наибольший отрицательный корень уравнения cos x = 1/2.",
+    "en": "Find the largest negative root of cos x = 1/2."
+   },
+   "options": {
+    "ru": [
+     "−π/3",
+     "−2π/3",
+     "−π/6",
+     "−π",
+     "−5π/6"
+    ],
+    "en": [
+     "−π/3",
+     "−2π/3",
+     "−π/6",
+     "−π",
+     "−5π/6"
+    ]
+   },
+   "answer": {
+    "ru": "−π/3",
+    "en": "−π/3"
+   },
+   "accept": [
+    "−π/3"
+   ],
+   "solution": {
+    "ru": [
+     "Общее решение: x = ±π/3 + 2πk, k ∈ ℤ.",
+     "Отрицательные корни серии: при k = 0 получаем x = −π/3; корень из второй серии π/3 положителен.",
+     "Наибольший отрицательный — это −π/3 (он ближе всех к нулю)."
+    ],
+    "en": [
+     "General solution: x = ±π/3 + 2πk, k ∈ ℤ.",
+     "The value −π/3 appears at k = 0 while π/3 is positive.",
+     "The largest negative root is −π/3 (closest to zero)."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Запишите обе серии решений.",
+     "Ближайший к нулю отрицательный корень — наибольший."
+    ],
+    "en": [
+     "Write both families of solutions.",
+     "The negative root closest to zero is the largest."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "простейшее тригонометрическое уравнение"
+   ]
+  },
+  {
+   "id": "ct-2022-a10",
+   "year": 2022,
+   "part": "A",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Решите неравенство log₂(x − 3) < 2.",
+    "en": "Solve the inequality log₂(x − 3) < 2."
+   },
+   "options": {
+    "ru": [
+     "(3; 7)",
+     "(−∞; 7)",
+     "(3; +∞)",
+     "(7; +∞)",
+     "[3; 7)"
+    ],
+    "en": [
+     "(3; 7)",
+     "(−∞; 7)",
+     "(3; +∞)",
+     "(7; +∞)",
+     "[3; 7)"
+    ]
+   },
+   "answer": {
+    "ru": "(3; 7)",
+    "en": "(3; 7)"
+   },
+   "accept": [
+    "(3; 7)"
+   ],
+   "solution": {
+    "ru": [
+     "ОДЗ: x − 3 > 0 ⟹ x > 3.",
+     "Основание 2 > 1, знак сохраняется: x − 3 < 2² ⟹ x < 7.",
+     "Пересечение: 3 < x < 7, то есть (3; 7)."
+    ],
+    "en": [
+     "Domain: x − 3 > 0 ⟹ x > 3.",
+     "Base 2 > 1 keeps the sign: x − 3 < 2² ⟹ x < 7.",
+     "Intersection: 3 < x < 7, i.e. (3; 7)."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сначала ОДЗ логарифма.",
+     "log₂ t < 2 ⟺ 0 < t < 4."
+    ],
+    "en": [
+     "Start with the logarithm domain.",
+     "log₂ t < 2 ⟺ 0 < t < 4."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "логарифмические неравенства"
+   ]
+  },
+  {
+   "id": "ct-2022-a11",
+   "year": 2022,
+   "part": "A",
+   "n": 11,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "В треугольнике две стороны равны 5 и 7, а угол между ними 60°. Найдите третью сторону.",
+    "en": "Two sides of a triangle are 5 and 7 with a 60° angle between them. Find the third side."
+   },
+   "options": {
+    "ru": [
+     "√39",
+     "39",
+     "√129",
+     "6",
+     "√109"
+    ],
+    "en": [
+     "√39",
+     "39",
+     "√129",
+     "6",
+     "√109"
+    ]
+   },
+   "answer": {
+    "ru": "√39",
+    "en": "√39"
+   },
+   "accept": [
+    "√39"
+   ],
+   "solution": {
+    "ru": [
+     "Теорема косинусов: c² = a² + b² − 2ab·cos γ.",
+     "c² = 25 + 49 − 2 · 5 · 7 · ½ = 74 − 35.",
+     "c² = 39 ⟹ c = √39."
+    ],
+    "en": [
+     "Law of cosines: c² = a² + b² − 2ab·cos γ.",
+     "c² = 25 + 49 − 2 · 5 · 7 · ½ = 74 − 35.",
+     "c² = 39 ⟹ c = √39."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "cos 60° = ½.",
+     "c² = a² + b² − 2ab·cos γ."
+    ],
+    "en": [
+     "cos 60° = ½.",
+     "c² = a² + b² − 2ab·cos γ."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "теорема косинусов"
+   ]
+  },
+  {
+   "id": "ct-2022-a12",
+   "year": 2022,
+   "part": "A",
+   "n": 12,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите длину дуги окружности радиуса 6, на которую опирается центральный угол 120° (в ответе укажите коэффициент при π).",
+    "en": "Find the arc length of a circle of radius 6 subtended by a central angle of 120° (give the coefficient at π)."
+   },
+   "options": {
+    "ru": [
+     "4",
+     "12",
+     "2",
+     "6",
+     "8"
+    ],
+    "en": [
+     "4",
+     "12",
+     "2",
+     "6",
+     "8"
+    ]
+   },
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Длина дуги: l = πRα/180.",
+     "l = π · 6 · 120/180.",
+     "l = 4π, коэффициент 4."
+    ],
+    "en": [
+     "Arc length: l = πRα/180.",
+     "l = π · 6 · 120/180.",
+     "l = 4π, coefficient 4."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула длины дуги через градусную меру.",
+     "120/180 = 2/3."
+    ],
+    "en": [
+     "Arc-length formula with degrees.",
+     "120/180 = 2/3."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "длина дуги"
+   ]
+  },
+  {
+   "id": "ct-2022-a13",
+   "year": 2022,
+   "part": "A",
+   "n": 13,
+   "topic": "stereometry",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите объём правильной четырёхугольной пирамиды со стороной основания 6 и высотой 5.",
+    "en": "Find the volume of a regular quadrangular pyramid with base side 6 and height 5."
+   },
+   "options": {
+    "ru": [
+     "60",
+     "180",
+     "90",
+     "30",
+     "120"
+    ],
+    "en": [
+     "60",
+     "180",
+     "90",
+     "30",
+     "120"
+    ]
+   },
+   "answer": {
+    "ru": "60",
+    "en": "60"
+   },
+   "accept": [
+    "60"
+   ],
+   "solution": {
+    "ru": [
+     "Площадь основания (квадрата): S = 6² = 36.",
+     "V = ⅓SH = ⅓ · 36 · 5.",
+     "V = 60."
+    ],
+    "en": [
+     "Base area (a square): S = 6² = 36.",
+     "V = ⅓SH = ⅓ · 36 · 5.",
+     "V = 60."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "V = ⅓ S·H.",
+     "Основание — квадрат."
+    ],
+    "en": [
+     "V = ⅓ S·H.",
+     "The base is a square."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "пирамида",
+    "объём"
+   ]
+  },
+  {
+   "id": "ct-2022-a14",
+   "year": 2022,
+   "part": "A",
+   "n": 14,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Точка движется по закону s(t) = t³ − 3t (м). Найдите скорость точки в момент t = 2 с (м/с).",
+    "en": "A point moves with s(t) = t³ − 3t (m). Find its speed at t = 2 s (m/s)."
+   },
+   "options": {
+    "ru": [
+     "9",
+     "12",
+     "6",
+     "3",
+     "15"
+    ],
+    "en": [
+     "9",
+     "12",
+     "6",
+     "3",
+     "15"
+    ]
+   },
+   "answer": {
+    "ru": "9",
+    "en": "9"
+   },
+   "accept": [
+    "9"
+   ],
+   "solution": {
+    "ru": [
+     "Скорость — производная пути: v(t) = s′(t) = 3t² − 3.",
+     "v(2) = 3 · 4 − 3.",
+     "v(2) = 9 м/с."
+    ],
+    "en": [
+     "Speed is the derivative of the position: v(t) = s′(t) = 3t² − 3.",
+     "v(2) = 3 · 4 − 3.",
+     "v(2) = 9 m/s."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Физический смысл производной: v = s′(t)."
+    ],
+    "en": [
+     "Physical meaning of the derivative: v = s′(t)."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "физический смысл производной"
+   ]
+  },
+  {
+   "id": "ct-2022-a15",
+   "year": 2022,
+   "part": "A",
+   "n": 15,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = 5 + 6x − x².",
+    "en": "Find the maximum value of y = 5 + 6x − x²."
+   },
+   "options": {
+    "ru": [
+     "14",
+     "5",
+     "11",
+     "9",
+     "4"
+    ],
+    "en": [
+     "14",
+     "5",
+     "11",
+     "9",
+     "4"
+    ]
+   },
+   "answer": {
+    "ru": "14",
+    "en": "14"
+   },
+   "accept": [
+    "14"
+   ],
+   "solution": {
+    "ru": [
+     "Ветви параболы вниз, вершина x₀ = −b/(2a) = 6/2 = 3.",
+     "y(3) = 5 + 18 − 9.",
+     "Наибольшее значение 14."
+    ],
+    "en": [
+     "The parabola opens downwards, vertex x₀ = −b/(2a) = 6/2 = 3.",
+     "y(3) = 5 + 18 − 9.",
+     "The maximum value is 14."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите абсциссу вершины.",
+     "Так как a < 0, в вершине достигается максимум."
+    ],
+    "en": [
+     "Find the abscissa of the vertex.",
+     "Since a < 0 the vertex gives the maximum."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "квадратичная функция"
+   ]
+  },
+  {
+   "id": "ct-2022-a16",
+   "year": 2022,
+   "part": "A",
+   "n": 16,
+   "topic": "combinatorics",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "В урне 4 белых и 6 чёрных шаров. Найдите вероятность того, что вынутый наугад шар окажется белым.",
+    "en": "An urn contains 4 white and 6 black balls. Find the probability that a ball drawn at random is white."
+   },
+   "options": {
+    "ru": [
+     "2/5",
+     "3/5",
+     "4/9",
+     "1/2",
+     "2/3"
+    ],
+    "en": [
+     "2/5",
+     "3/5",
+     "4/9",
+     "1/2",
+     "2/3"
+    ]
+   },
+   "answer": {
+    "ru": "2/5",
+    "en": "2/5"
+   },
+   "accept": [
+    "2/5"
+   ],
+   "solution": {
+    "ru": [
+     "Всего шаров 4 + 6 = 10.",
+     "Благоприятных исходов 4.",
+     "P = 4/10 = 2/5."
+    ],
+    "en": [
+     "Total balls 4 + 6 = 10.",
+     "Favourable outcomes: 4.",
+     "P = 4/10 = 2/5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Классическое определение вероятности.",
+     "Сократите дробь."
+    ],
+    "en": [
+     "Classical definition of probability.",
+     "Reduce the fraction."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "вероятность"
+   ]
+  },
+  {
+   "id": "ct-2022-a17",
+   "year": 2022,
+   "part": "A",
+   "n": 17,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Последовательность задана формулой aₙ = n² + 1. Найдите a₅.",
+    "en": "A sequence is given by aₙ = n² + 1. Find a₅."
+   },
+   "options": {
+    "ru": [
+     "26",
+     "24",
+     "25",
+     "28",
+     "27"
+    ],
+    "en": [
+     "26",
+     "24",
+     "25",
+     "28",
+     "27"
+    ]
+   },
+   "answer": {
+    "ru": "26",
+    "en": "26"
+   },
+   "accept": [
+    "26"
+   ],
+   "solution": {
+    "ru": [
+     "Подставим n = 5 в формулу.",
+     "a₅ = 5² + 1 = 25 + 1.",
+     "a₅ = 26."
+    ],
+    "en": [
+     "Substitute n = 5 into the formula.",
+     "a₅ = 5² + 1 = 25 + 1.",
+     "a₅ = 26."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Подставьте номер члена в формулу.",
+     "Не перепутайте: сначала квадрат, потом прибавление 1."
+    ],
+    "en": [
+     "Substitute the term number into the formula.",
+     "Square first, then add 1."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "формула n-го члена"
+   ]
+  },
+  {
+   "id": "ct-2022-a18",
+   "year": 2022,
+   "part": "A",
+   "n": 18,
+   "topic": "param",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Прямая y = ax + 1 проходит через точку пересечения прямых y = x и y = −2x + 3. Найдите a.",
+    "en": "The line y = ax + 1 passes through the intersection point of y = x and y = −2x + 3. Find a."
+   },
+   "options": {
+    "ru": [
+     "0",
+     "1",
+     "-1",
+     "2",
+     "1/2"
+    ],
+    "en": [
+     "0",
+     "1",
+     "-1",
+     "2",
+     "1/2"
+    ]
+   },
+   "answer": {
+    "ru": "0",
+    "en": "0"
+   },
+   "accept": [
+    "0"
+   ],
+   "solution": {
+    "ru": [
+     "Точка пересечения: x = −2x + 3 ⟹ 3x = 3 ⟹ x = 1, y = 1.",
+     "Подставим (1; 1) в y = ax + 1: 1 = a · 1 + 1.",
+     "a = 0."
+    ],
+    "en": [
+     "Intersection: x = −2x + 3 ⟹ 3x = 3 ⟹ x = 1, y = 1.",
+     "Substitute (1; 1) into y = ax + 1: 1 = a · 1 + 1.",
+     "a = 0."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сначала найдите точку пересечения двух прямых.",
+     "Подставьте координаты точки в уравнение с параметром."
+    ],
+    "en": [
+     "First find where the two given lines intersect.",
+     "Substitute the point into the equation with the parameter."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "параметр",
+    "прямые"
+   ]
+  },
+  {
+   "id": "ct-2022-b1",
+   "year": 2022,
+   "part": "B",
+   "n": 1,
+   "topic": "numbers",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите (2⁻³ · 4²)⁻¹.",
+    "en": "Evaluate (2⁻³ · 4²)⁻¹."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/2",
+    "en": "1/2"
+   },
+   "accept": [
+    "1/2",
+    "0.5",
+    "0,5"
+   ],
+   "solution": {
+    "ru": [
+     "4² = (2²)² = 2⁴.",
+     "2⁻³ · 2⁴ = 2¹ = 2.",
+     "(2)⁻¹ = 1/2 = 0,5."
+    ],
+    "en": [
+     "4² = (2²)² = 2⁴.",
+     "2⁻³ · 2⁴ = 2¹ = 2.",
+     "(2)⁻¹ = 1/2 = 0.5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Приведите всё к основанию 2.",
+     "При умножении показатели складываются."
+    ],
+    "en": [
+     "Bring everything to base 2.",
+     "Exponents add when multiplying."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "степени"
+   ]
+  },
+  {
+   "id": "ct-2022-b2",
+   "year": 2022,
+   "part": "B",
+   "n": 2,
+   "topic": "equations",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение √(x + 3) = x + 1. В ответе укажите корень.",
+    "en": "Solve √(x + 3) = x + 1 and give the root."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "Условие: x + 1 ≥ 0 и x + 3 ≥ 0; возведём в квадрат: x + 3 = x² + 2x + 1.",
+     "x² + x − 2 = 0 ⟹ x = 1 или x = −2.",
+     "Проверка: x = −2 даёт √1 = 1 ≠ −1 — посторонний корень. Ответ: 1."
+    ],
+    "en": [
+     "Require x + 1 ≥ 0 and x + 3 ≥ 0; square: x + 3 = x² + 2x + 1.",
+     "x² + x − 2 = 0 ⟹ x = 1 or x = −2.",
+     "Check: x = −2 gives √1 = 1 ≠ −1 — extraneous. Answer: 1."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Возведите в квадрат, но обязательно проверьте корни.",
+     "Правая часть должна быть неотрицательной."
+    ],
+    "en": [
+     "Square both sides, then verify every root.",
+     "The right-hand side must be non-negative."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "иррациональные уравнения",
+    "посторонний корень"
+   ]
+  },
+  {
+   "id": "ct-2022-b3",
+   "year": 2022,
+   "part": "B",
+   "n": 3,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите наибольшее целое решение неравенства (3x − 2)(x + 5) ≤ 0.",
+    "en": "Find the largest integer solution of (3x − 2)(x + 5) ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "0",
+    "en": "0"
+   },
+   "accept": [
+    "0"
+   ],
+   "solution": {
+    "ru": [
+     "Нули: x = 2/3 и x = −5.",
+     "Решение: −5 ≤ x ≤ 2/3.",
+     "Наибольшее целое — 0 (1 уже не входит, так как 1 > 2/3)."
+    ],
+    "en": [
+     "Zeros: x = 2/3 and x = −5.",
+     "Solution: −5 ≤ x ≤ 2/3.",
+     "The largest integer is 0 (1 > 2/3 is outside)."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Метод интервалов: отметьте нули.",
+     "Ищите наибольшее целое внутри отрезка."
+    ],
+    "en": [
+     "Interval method: mark the zeros.",
+     "Look for the largest integer inside the segment."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "неравенства",
+    "метод интервалов"
+   ]
+  },
+  {
+   "id": "ct-2022-b4",
+   "year": 2022,
+   "part": "B",
+   "n": 4,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Первый рабочий выполняет заказ за 6 часов, второй — за 12 часов. За сколько часов они выполнят заказ, работая вместе?",
+    "en": "Worker A needs 6 hours for a job, worker B needs 12 hours. How many hours will they need working together?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Производительность: 1/6 и 1/12 заказа в час.",
+     "Вместе: 1/6 + 1/12 = 3/12 = 1/4 заказа в час.",
+     "Время: 1 : 1/4 = 4 часа."
+    ],
+    "en": [
+     "Rates: 1/6 and 1/12 of the job per hour.",
+     "Together: 1/6 + 1/12 = 3/12 = 1/4 per hour.",
+     "Time: 1 : 1/4 = 4 hours."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Складывайте производительности, а не времена.",
+     "Время = работа / производительность."
+    ],
+    "en": [
+     "Add rates, not times.",
+     "Time = work / rate."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "задачи на работу"
+   ]
+  },
+  {
+   "id": "ct-2022-b5",
+   "year": 2022,
+   "part": "B",
+   "n": 5,
+   "topic": "trig",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Известно, что sin α = 3/5, где α — угол II четверти. Найдите cos α.",
+    "en": "Given sin α = 3/5 for an angle α of the second quadrant, find cos α."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-4/5",
+    "en": "-4/5"
+   },
+   "accept": [
+    "-4/5",
+    "-0.8",
+    "-0,8",
+    "−4/5"
+   ],
+   "solution": {
+    "ru": [
+     "По основному тождеству cos²α = 1 − 9/25 = 16/25.",
+     "α во II четверти ⟹ cos α < 0.",
+     "cos α = −4/5 = −0,8."
+    ],
+    "en": [
+     "By the Pythagorean identity cos²α = 1 − 9/25 = 16/25.",
+     "α is in quadrant II ⟹ cos α < 0.",
+     "cos α = −4/5 = −0.8."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Во II четверти косинус отрицателен.",
+     "cos²α = 1 − sin²α."
+    ],
+    "en": [
+     "In quadrant II the cosine is negative.",
+     "cos²α = 1 − sin²α."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "знаки тригонометрических функций"
+   ]
+  },
+  {
+   "id": "ct-2022-b6",
+   "year": 2022,
+   "part": "B",
+   "n": 6,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Стороны параллелограмма равны 6 и 8, а угол между ними 30°. Найдите площадь параллелограмма.",
+    "en": "A parallelogram has sides 6 and 8 with a 30° angle between them. Find its area."
+   },
+   "options": null,
+   "answer": {
+    "ru": "24",
+    "en": "24"
+   },
+   "accept": [
+    "24"
+   ],
+   "solution": {
+    "ru": [
+     "S = ab·sin α.",
+     "S = 6 · 8 · sin 30° = 48 · ½.",
+     "S = 24."
+    ],
+    "en": [
+     "S = ab·sin α.",
+     "S = 6 · 8 · sin 30° = 48 · ½.",
+     "S = 24."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Площадь параллелограмма через две стороны и угол.",
+     "sin 30° = ½."
+    ],
+    "en": [
+     "Area of a parallelogram via two sides and the angle.",
+     "sin 30° = ½."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "параллелограмм",
+    "площадь"
+   ]
+  },
+  {
+   "id": "ct-2022-b7",
+   "year": 2022,
+   "part": "B",
+   "n": 7,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Диагональ куба равна 3√3. Найдите объём куба.",
+    "en": "The space diagonal of a cube is 3√3. Find the volume of the cube."
+   },
+   "options": null,
+   "answer": {
+    "ru": "27",
+    "en": "27"
+   },
+   "accept": [
+    "27"
+   ],
+   "solution": {
+    "ru": [
+     "Диагональ куба: d = a√3 = 3√3 ⟹ a = 3.",
+     "V = a³.",
+     "V = 27."
+    ],
+    "en": [
+     "Cube diagonal: d = a√3 = 3√3 ⟹ a = 3.",
+     "V = a³.",
+     "V = 27."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "d = a√3 — диагональ куба.",
+     "Сравните 3√3 и a√3."
+    ],
+    "en": [
+     "d = a√3 is the cube diagonal.",
+     "Compare 3√3 with a√3."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "куб",
+    "объём"
+   ]
+  },
+  {
+   "id": "ct-2022-b8",
+   "year": 2022,
+   "part": "B",
+   "n": 8,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество точек экстремума функции f(x) = x³ − 6x² + 9x + 1.",
+    "en": "Find the number of extremum points of f(x) = x³ − 6x² + 9x + 1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3).",
+     "Нули производной: x = 1 и x = 3 — оба меняют знак.",
+     "Точек экстремума две."
+    ],
+    "en": [
+     "f′(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3).",
+     "Zeros of the derivative: x = 1 and x = 3, both change sign.",
+     "There are two extremum points."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите корни квадратного трёхчлена 3x² − 12x + 9.",
+     "Точка экстремума — где производная меняет знак."
+    ],
+    "en": [
+     "Find the roots of 3x² − 12x + 9.",
+     "An extremum is where the derivative changes sign."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "экстремумы"
+   ]
+  },
+  {
+   "id": "ct-2022-b9",
+   "year": 2022,
+   "part": "B",
+   "n": 9,
+   "topic": "combinatorics",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вероятность того, что новый телефон проработает больше года, равна 0,9. Найдите вероятность того, что он выйдет из строя в течение года.",
+    "en": "The probability that a new phone works longer than a year is 0.9. Find the probability that it fails within a year."
+   },
+   "options": null,
+   "answer": {
+    "ru": "1/10",
+    "en": "1/10"
+   },
+   "accept": [
+    "1/10",
+    "0.1",
+    "0,1"
+   ],
+   "solution": {
+    "ru": [
+     "События «проработает больше года» и «сломается за год» противоположны.",
+     "P = 1 − 0,9.",
+     "P = 0,1."
+    ],
+    "en": [
+     "The events 'works longer than a year' and 'fails within a year' are opposite.",
+     "P = 1 − 0.9.",
+     "P = 0.1."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сумма вероятностей противоположных событий равна 1."
+    ],
+    "en": [
+     "The probabilities of opposite events add up to 1."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "противоположные события"
+   ]
+  },
+  {
+   "id": "ct-2022-b10",
+   "year": 2022,
+   "part": "B",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение log₅(2x − 3) = 2.",
+    "en": "Solve log₅(2x − 3) = 2."
+   },
+   "options": null,
+   "answer": {
+    "ru": "14",
+    "en": "14"
+   },
+   "accept": [
+    "14"
+   ],
+   "solution": {
+    "ru": [
+     "По определению логарифма 2x − 3 = 5² = 25.",
+     "2x = 28.",
+     "x = 14; проверка: 2·14 − 3 = 25 > 0 — верно."
+    ],
+    "en": [
+     "By the definition of a logarithm 2x − 3 = 5² = 25.",
+     "2x = 28.",
+     "x = 14; check: 2·14 − 3 = 25 > 0, correct."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "log_a b = c ⟺ b = a^c.",
+     "Проверьте ОДЗ."
+    ],
+    "en": [
+     "log_a b = c ⟺ b = a^c.",
+     "Verify the domain."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "логарифмические уравнения"
+   ]
+  },
+  {
+   "id": "ct-2022-b11",
+   "year": 2022,
+   "part": "B",
+   "n": 11,
+   "topic": "param",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "При каком наибольшем целом значении a уравнение x² − 4x + a = 0 имеет два различных корня?",
+    "en": "For which largest integer a does x² − 4x + a = 0 have two distinct roots?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Два различных корня при D > 0.",
+     "D = 16 − 4a > 0 ⟹ a < 4.",
+     "Наибольшее целое a = 3."
+    ],
+    "en": [
+     "Two distinct roots require D > 0.",
+     "D = 16 − 4a > 0 ⟹ a < 4.",
+     "The largest integer a is 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "D = 16 − 4a.",
+     "Строгое неравенство исключает a = 4."
+    ],
+    "en": [
+     "D = 16 − 4a.",
+     "The strict inequality excludes a = 4."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "параметр"
+   ]
+  },
+  {
+   "id": "ct-2022-b12",
+   "year": 2022,
+   "part": "B",
+   "n": 12,
+   "topic": "logic",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите последнюю цифру числа 7²⁰²².",
+    "en": "Find the last digit of 7²⁰²²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "9",
+    "en": "9"
+   },
+   "accept": [
+    "9"
+   ],
+   "solution": {
+    "ru": [
+     "Последние цифры степеней 7: 7, 9, 3, 1 — период 4.",
+     "2022 = 4 · 505 + 2, остаток 2.",
+     "Вторая цифра цикла — 9."
+    ],
+    "en": [
+     "Last digits of powers of 7: 7, 9, 3, 1 — period 4.",
+     "2022 = 4 · 505 + 2, remainder 2.",
+     "The second digit of the cycle is 9."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Период равен 4.",
+     "Разделите показатель на 4 с остатком."
+    ],
+    "en": [
+     "The period is 4.",
+     "Divide the exponent by 4 and take the remainder."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2022",
+   "tags": [
+    "периодичность"
+   ]
+  },
+  {
+   "id": "ct-2023-a1",
+   "year": 2023,
+   "part": "A",
+   "n": 1,
+   "topic": "numbers",
+   "difficulty": 1,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения (1/2 − 1/3) · 6 + 0,5.",
+    "en": "Evaluate (1/2 − 1/3) · 6 + 0.5."
+   },
+   "options": {
+    "ru": [
+     "3/2",
+     "1/2",
+     "5/2",
+     "1",
+     "3"
+    ],
+    "en": [
+     "3/2",
+     "1/2",
+     "5/2",
+     "1",
+     "3"
+    ]
+   },
+   "answer": {
+    "ru": "3/2",
+    "en": "3/2"
+   },
+   "accept": [
+    "3/2"
+   ],
+   "solution": {
+    "ru": [
+     "1/2 − 1/3 = 3/6 − 2/6 = 1/6.",
+     "1/6 · 6 = 1.",
+     "1 + 0,5 = 1,5."
+    ],
+    "en": [
+     "1/2 − 1/3 = 3/6 − 2/6 = 1/6.",
+     "1/6 · 6 = 1.",
+     "1 + 0.5 = 1.5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сначала действие в скобках.",
+     "Умножение на 6 убирает знаменатель."
+    ],
+    "en": [
+     "Do the brackets first.",
+     "Multiplying by 6 cancels the denominator."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "обыкновенные дроби"
+   ]
+  },
+  {
+   "id": "ct-2023-a2",
+   "year": 2023,
+   "part": "A",
+   "n": 2,
+   "topic": "expressions",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения (∛2 · ∛4)².",
+    "en": "Evaluate (∛2 · ∛4)²."
+   },
+   "options": {
+    "ru": [
+     "4",
+     "8",
+     "2",
+     "16",
+     "6"
+    ],
+    "en": [
+     "4",
+     "8",
+     "2",
+     "16",
+     "6"
+    ]
+   },
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "∛2 · ∛4 = ∛8 = 2.",
+     "2² = 4.",
+     "Ответ: 4."
+    ],
+    "en": [
+     "∛2 · ∛4 = ∛8 = 2.",
+     "2² = 4.",
+     "Answer: 4."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Произведение корней одной степени: ∛a · ∛b = ∛(ab).",
+     "∛8 = 2."
+    ],
+    "en": [
+     "Product of roots of the same order: ∛a · ∛b = ∛(ab).",
+     "∛8 = 2."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "корни",
+    "степени"
+   ]
+  },
+  {
+   "id": "ct-2023-a3",
+   "year": 2023,
+   "part": "A",
+   "n": 3,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Решите уравнение (x − 1)/2 − (x + 2)/3 = 1.",
+    "en": "Solve (x − 1)/2 − (x + 2)/3 = 1."
+   },
+   "options": {
+    "ru": [
+     "13",
+     "7",
+     "1",
+     "5",
+     "11"
+    ],
+    "en": [
+     "13",
+     "7",
+     "1",
+     "5",
+     "11"
+    ]
+   },
+   "answer": {
+    "ru": "13",
+    "en": "13"
+   },
+   "accept": [
+    "13"
+   ],
+   "solution": {
+    "ru": [
+     "Умножим на 6: 3(x − 1) − 2(x + 2) = 6.",
+     "3x − 3 − 2x − 4 = 6 ⟹ x − 7 = 6.",
+     "x = 13."
+    ],
+    "en": [
+     "Multiply by 6: 3(x − 1) − 2(x + 2) = 6.",
+     "3x − 3 − 2x − 4 = 6 ⟹ x − 7 = 6.",
+     "x = 13."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "НОК знаменателей 2 и 3 равен 6.",
+     "Не потеряйте знак минус перед второй дробью."
+    ],
+    "en": [
+     "The LCM of 2 and 3 is 6.",
+     "Do not lose the minus sign before the second fraction."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "ct-2023-a4",
+   "year": 2023,
+   "part": "A",
+   "n": 4,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Известно, что x − y = 2 и x·y = 15, причём x > 0, y > 0. Найдите x + y.",
+    "en": "Given x − y = 2 and x·y = 15 with x > 0, y > 0, find x + y."
+   },
+   "options": {
+    "ru": [
+     "8",
+     "-8",
+     "2",
+     "15",
+     "5"
+    ],
+    "en": [
+     "8",
+     "-8",
+     "2",
+     "15",
+     "5"
+    ]
+   },
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "(x + y)² = (x − y)² + 4xy = 4 + 60 = 64.",
+     "Так как x, y > 0, то x + y = 8.",
+     "Проверка: x = 5, y = 3: 5 − 3 = 2, 5·3 = 15 — верно."
+    ],
+    "en": [
+     "(x + y)² = (x − y)² + 4xy = 4 + 60 = 64.",
+     "As x, y > 0 we get x + y = 8.",
+     "Check: x = 5, y = 3 gives 5 − 3 = 2, 5·3 = 15."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Возведите x + y в квадрат.",
+     "(x + y)² = (x − y)² + 4xy."
+    ],
+    "en": [
+     "Square x + y.",
+     "(x + y)² = (x − y)² + 4xy."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "системы",
+    "формулы сокращённого умножения"
+   ]
+  },
+  {
+   "id": "ct-2023-a5",
+   "year": 2023,
+   "part": "A",
+   "n": 5,
+   "topic": "functions",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите нули функции y = x² − 5x + 6.",
+    "en": "Find the zeros of the function y = x² − 5x + 6."
+   },
+   "options": {
+    "ru": [
+     "2 и 3",
+     "−2 и −3",
+     "1 и 6",
+     "−1 и −6",
+     "2 и −3"
+    ],
+    "en": [
+     "2 и 3",
+     "−2 и −3",
+     "1 и 6",
+     "−1 и −6",
+     "2 и −3"
+    ]
+   },
+   "answer": {
+    "ru": "2 и 3",
+    "en": "2 и 3"
+   },
+   "accept": [
+    "2 и 3"
+   ],
+   "solution": {
+    "ru": [
+     "Приравняем к нулю: x² − 5x + 6 = 0.",
+     "По теореме Виета x₁ + x₂ = 5, x₁x₂ = 6.",
+     "x₁ = 2, x₂ = 3."
+    ],
+    "en": [
+     "Set to zero: x² − 5x + 6 = 0.",
+     "By Vieta: x₁ + x₂ = 5, x₁x₂ = 6.",
+     "x₁ = 2, x₂ = 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Решите квадратное уравнение.",
+     "Сумма корней 5, произведение 6."
+    ],
+    "en": [
+     "Solve the quadratic equation.",
+     "The roots add to 5 and multiply to 6."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "нули функции"
+   ]
+  },
+  {
+   "id": "ct-2023-a6",
+   "year": 2023,
+   "part": "A",
+   "n": 6,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите сумму первых десяти членов арифметической прогрессии, если a₁ = 3, d = 4.",
+    "en": "Find the sum of the first ten terms of an arithmetic progression with a₁ = 3, d = 4."
+   },
+   "options": {
+    "ru": [
+     "210",
+     "200",
+     "220",
+     "105",
+     "420"
+    ],
+    "en": [
+     "210",
+     "200",
+     "220",
+     "105",
+     "420"
+    ]
+   },
+   "answer": {
+    "ru": "210",
+    "en": "210"
+   },
+   "accept": [
+    "210"
+   ],
+   "solution": {
+    "ru": [
+     "Sₙ = (2a₁ + (n − 1)d)/2 · n.",
+     "S₁₀ = (6 + 36)/2 · 10 = 21 · 10.",
+     "S₁₀ = 210."
+    ],
+    "en": [
+     "Sₙ = (2a₁ + (n − 1)d)/2 · n.",
+     "S₁₀ = (6 + 36)/2 · 10 = 21 · 10.",
+     "S₁₀ = 210."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула суммы через a₁ и d.",
+     "Сначала найдите a₁₀ = 39."
+    ],
+    "en": [
+     "Sum formula through a₁ and d.",
+     "First find a₁₀ = 39."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "арифметическая прогрессия",
+    "сумма"
+   ]
+  },
+  {
+   "id": "ct-2023-a7",
+   "year": 2023,
+   "part": "A",
+   "n": 7,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Цену товара сначала увеличили на 25%, а затем уменьшили на 20%. Как изменилась цена по сравнению с первоначальной?",
+    "en": "The price of a good was first increased by 25% and then decreased by 20%. How did it change compared to the original price?"
+   },
+   "options": {
+    "ru": [
+     "не изменилась",
+     "увеличилась на 5%",
+     "уменьшилась на 5%",
+     "уменьшилась на 4%",
+     "увеличилась на 4%"
+    ],
+    "en": [
+     "не изменилась",
+     "увеличилась на 5%",
+     "уменьшилась на 5%",
+     "уменьшилась на 4%",
+     "увеличилась на 4%"
+    ]
+   },
+   "answer": {
+    "ru": "не изменилась",
+    "en": "не изменилась"
+   },
+   "accept": [
+    "не изменилась"
+   ],
+   "solution": {
+    "ru": [
+     "Пусть цена 100: после повышения 125.",
+     "После понижения на 20%: 125 · 0,8 = 100.",
+     "Цена вернулась к исходной — не изменилась."
+    ],
+    "en": [
+     "Let the price be 100: after the increase it is 125.",
+     "After the 20% decrease: 125 · 0.8 = 100.",
+     "The price returned to the original — unchanged."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Возьмите удобное начальное значение, например 100.",
+     "Проценты считаются от разных величин."
+    ],
+    "en": [
+     "Take a convenient starting value such as 100.",
+     "The percentages are taken from different amounts."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "проценты"
+   ]
+  },
+  {
+   "id": "ct-2023-a8",
+   "year": 2023,
+   "part": "A",
+   "n": 8,
+   "topic": "trig",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения 4cos²x − 4sin²x при x = π/6.",
+    "en": "Evaluate 4cos²x − 4sin²x for x = π/6."
+   },
+   "options": {
+    "ru": [
+     "2",
+     "4",
+     "1",
+     "7800463337466769/2251799813685248",
+     "3"
+    ],
+    "en": [
+     "2",
+     "4",
+     "1",
+     "7800463337466769/2251799813685248",
+     "3"
+    ]
+   },
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Формула двойного угла: 4(cos²x − sin²x) = 4cos 2x.",
+     "2x = π/3, cos(π/3) = ½.",
+     "4 · ½ = 2."
+    ],
+    "en": [
+     "Double-angle formula: 4(cos²x − sin²x) = 4cos 2x.",
+     "2x = π/3, cos(π/3) = ½.",
+     "4 · ½ = 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "cos²x − sin²x = cos 2x.",
+     "cos(π/3) = ½."
+    ],
+    "en": [
+     "cos²x − sin²x = cos 2x.",
+     "cos(π/3) = ½."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "формулы двойного угла"
+   ]
+  },
+  {
+   "id": "ct-2023-a9",
+   "year": 2023,
+   "part": "A",
+   "n": 9,
+   "topic": "trigequations",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наименьший положительный корень уравнения tg x = 1.",
+    "en": "Find the smallest positive root of tg x = 1."
+   },
+   "options": {
+    "ru": [
+     "π/4",
+     "π/6",
+     "π/3",
+     "3π/4",
+     "π/2"
+    ],
+    "en": [
+     "π/4",
+     "π/6",
+     "π/3",
+     "3π/4",
+     "π/2"
+    ]
+   },
+   "answer": {
+    "ru": "π/4",
+    "en": "π/4"
+   },
+   "accept": [
+    "π/4"
+   ],
+   "solution": {
+    "ru": [
+     "Общее решение: x = π/4 + πk, k ∈ ℤ.",
+     "Наименьший положительный корень при k = 0.",
+     "x = π/4."
+    ],
+    "en": [
+     "General solution: x = π/4 + πk, k ∈ ℤ.",
+     "The smallest positive root appears at k = 0.",
+     "x = π/4."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "tg x = 1 при x = π/4 + πk.",
+     "Период тангенса равен π."
+    ],
+    "en": [
+     "tg x = 1 for x = π/4 + πk.",
+     "The tangent period is π."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "простейшее тригонометрическое уравнение"
+   ]
+  },
+  {
+   "id": "ct-2023-a10",
+   "year": 2023,
+   "part": "A",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Вычислите 9^(log₃ 4).",
+    "en": "Evaluate 9^(log₃ 4)."
+   },
+   "options": {
+    "ru": [
+     "16",
+     "8",
+     "4",
+     "2",
+     "12"
+    ],
+    "en": [
+     "16",
+     "8",
+     "4",
+     "2",
+     "12"
+    ]
+   },
+   "answer": {
+    "ru": "16",
+    "en": "16"
+   },
+   "accept": [
+    "16"
+   ],
+   "solution": {
+    "ru": [
+     "9 = 3², значит 9^(log₃4) = (3²)^(log₃4) = 3^(2log₃4).",
+     "3^(log₃4) = 4, поэтому выражение равно 4².",
+     "Ответ: 16."
+    ],
+    "en": [
+     "9 = 3², so 9^(log₃4) = (3²)^(log₃4) = 3^(2log₃4).",
+     "3^(log₃4) = 4, hence the value is 4².",
+     "Answer: 16."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Приведите основание степени к 3.",
+     "a^(log_a b) = b."
+    ],
+    "en": [
+     "Bring the power base to 3.",
+     "a^(log_a b) = b."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "логарифмы",
+    "степени"
+   ]
+  },
+  {
+   "id": "ct-2023-a11",
+   "year": 2023,
+   "part": "A",
+   "n": 11,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите площадь треугольника со сторонами 8 и 9 и углом 30° между ними.",
+    "en": "Find the area of a triangle with sides 8 and 9 and a 30° angle between them."
+   },
+   "options": {
+    "ru": [
+     "18",
+     "36",
+     "72",
+     "9",
+     "24"
+    ],
+    "en": [
+     "18",
+     "36",
+     "72",
+     "9",
+     "24"
+    ]
+   },
+   "answer": {
+    "ru": "18",
+    "en": "18"
+   },
+   "accept": [
+    "18"
+   ],
+   "solution": {
+    "ru": [
+     "S = ½ ab·sin γ.",
+     "S = ½ · 8 · 9 · sin 30° = 36 · ½.",
+     "S = 18."
+    ],
+    "en": [
+     "S = ½ ab·sin γ.",
+     "S = ½ · 8 · 9 · sin 30° = 36 · ½.",
+     "S = 18."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Формула площади через две стороны и угол."
+    ],
+    "en": [
+     "Area formula via two sides and the included angle."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "площадь треугольника"
+   ]
+  },
+  {
+   "id": "ct-2023-a12",
+   "year": 2023,
+   "part": "A",
+   "n": 12,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Вписанный угол равен 42°. Найдите центральный угол, опирающийся на ту же дугу.",
+    "en": "An inscribed angle is 42°. Find the central angle subtending the same arc."
+   },
+   "options": {
+    "ru": [
+     "84°",
+     "42°",
+     "21°",
+     "128°",
+     "96°"
+    ],
+    "en": [
+     "84°",
+     "42°",
+     "21°",
+     "128°",
+     "96°"
+    ]
+   },
+   "answer": {
+    "ru": "84°",
+    "en": "84°"
+   },
+   "accept": [
+    "84°"
+   ],
+   "solution": {
+    "ru": [
+     "Центральный угол вдвое больше вписанного, опирающегося на ту же дугу.",
+     "42° · 2.",
+     "84°."
+    ],
+    "en": [
+     "The central angle is twice the inscribed angle on the same arc.",
+     "42° · 2.",
+     "84°."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Вспомните теорему о вписанном угле."
+    ],
+    "en": [
+     "Recall the inscribed-angle theorem."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "вписанный угол"
+   ]
+  },
+  {
+   "id": "ct-2023-a13",
+   "year": 2023,
+   "part": "A",
+   "n": 13,
+   "topic": "stereometry",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите объём конуса с радиусом основания 3 и высотой 4 (в ответе укажите коэффициент при π).",
+    "en": "Find the volume of a cone with base radius 3 and height 4 (give the coefficient at π)."
+   },
+   "options": {
+    "ru": [
+     "12",
+     "36",
+     "48",
+     "24",
+     "4"
+    ],
+    "en": [
+     "12",
+     "36",
+     "48",
+     "24",
+     "4"
+    ]
+   },
+   "answer": {
+    "ru": "12",
+    "en": "12"
+   },
+   "accept": [
+    "12"
+   ],
+   "solution": {
+    "ru": [
+     "V = ⅓ πR²H.",
+     "V = ⅓ · π · 9 · 4 = π · 12.",
+     "Коэффициент 12."
+    ],
+    "en": [
+     "V = ⅓ πR²H.",
+     "V = ⅓ · π · 9 · 4 = π · 12.",
+     "Coefficient 12."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "V = ⅓πR²H.",
+     "R² = 9."
+    ],
+    "en": [
+     "V = ⅓πR²H.",
+     "R² = 9."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "конус",
+    "объём"
+   ]
+  },
+  {
+   "id": "ct-2023-a14",
+   "year": 2023,
+   "part": "A",
+   "n": 14,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите производную функции f(x) = (2x − 1)⁵.",
+    "en": "Find the derivative of f(x) = (2x − 1)⁵."
+   },
+   "options": {
+    "ru": [
+     "10(2x − 1)⁴",
+     "5(2x − 1)⁴",
+     "10(2x − 1)⁵",
+     "2(2x − 1)⁴",
+     "(2x − 1)⁴"
+    ],
+    "en": [
+     "10(2x − 1)⁴",
+     "5(2x − 1)⁴",
+     "10(2x − 1)⁵",
+     "2(2x − 1)⁴",
+     "(2x − 1)⁴"
+    ]
+   },
+   "answer": {
+    "ru": "10(2x − 1)⁴",
+    "en": "10(2x − 1)⁴"
+   },
+   "accept": [
+    "10(2x − 1)⁴"
+   ],
+   "solution": {
+    "ru": [
+     "Правило степени сложной функции: (u⁵)′ = 5u⁴ · u′.",
+     "u = 2x − 1, u′ = 2.",
+     "f′(x) = 5(2x − 1)⁴ · 2 = 10(2x − 1)⁴."
+    ],
+    "en": [
+     "Chain rule for powers: (u⁵)′ = 5u⁴ · u′.",
+     "u = 2x − 1, u′ = 2.",
+     "f′(x) = 5(2x − 1)⁴ · 2 = 10(2x − 1)⁴."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Не забудьте умножить на производную внутренней функции."
+    ],
+    "en": [
+     "Do not forget to multiply by the derivative of the inner function."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "производная сложной функции"
+   ]
+  },
+  {
+   "id": "ct-2023-a15",
+   "year": 2023,
+   "part": "A",
+   "n": 15,
+   "topic": "research",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наибольшее значение функции y = x³ − 3x на отрезке [−2; 0].",
+    "en": "Find the maximum value of y = x³ − 3x on the interval [−2; 0]."
+   },
+   "options": {
+    "ru": [
+     "2",
+     "-2",
+     "0",
+     "1",
+     "-1"
+    ],
+    "en": [
+     "2",
+     "-2",
+     "0",
+     "1",
+     "-1"
+    ]
+   },
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "y′ = 3x² − 3 = 3(x − 1)(x + 1); на отрезке [−2; 0] критическая точка x = −1.",
+     "y(−2) = −8 + 6 = −2; y(−1) = −1 + 3 = 2; y(0) = 0.",
+     "Наибольшее значение равно 2."
+    ],
+    "en": [
+     "y′ = 3x² − 3 = 3(x − 1)(x + 1); on [−2; 0] the critical point is x = −1.",
+     "y(−2) = −8 + 6 = −2; y(−1) = −1 + 3 = 2; y(0) = 0.",
+     "The maximum value is 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Вычислите значения на концах и в критических точках отрезка.",
+     "Корни производной: x = ±1, но на отрезке только −1."
+    ],
+    "en": [
+     "Evaluate the function at the ends and at critical points.",
+     "Derivative zeros are x = ±1, only −1 lies in the interval."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "наибольшее значение на отрезке"
+   ]
+  },
+  {
+   "id": "ct-2023-a16",
+   "year": 2023,
+   "part": "A",
+   "n": 16,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Сколько различных четырёхзначных чисел можно составить из цифр 1, 2, 3, 4, если цифры не повторяются?",
+    "en": "How many distinct four-digit numbers can be formed from the digits 1, 2, 3, 4 without repetition?"
+   },
+   "options": {
+    "ru": [
+     "24",
+     "12",
+     "16",
+     "256",
+     "64"
+    ],
+    "en": [
+     "24",
+     "12",
+     "16",
+     "256",
+     "64"
+    ]
+   },
+   "answer": {
+    "ru": "24",
+    "en": "24"
+   },
+   "accept": [
+    "24"
+   ],
+   "solution": {
+    "ru": [
+     "Используем все четыре цифры — это перестановки.",
+     "P₄ = 4! = 1 · 2 · 3 · 4.",
+     "P₄ = 24."
+    ],
+    "en": [
+     "All four digits are used, so these are permutations.",
+     "P₄ = 4! = 1 · 2 · 3 · 4.",
+     "P₄ = 24."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Порядок важен, цифры не повторяются — перестановки.",
+     "4! = 24."
+    ],
+    "en": [
+     "Order matters, no repetition — permutations.",
+     "4! = 24."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "перестановки"
+   ]
+  },
+  {
+   "id": "ct-2023-a17",
+   "year": 2023,
+   "part": "A",
+   "n": 17,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Последовательность 3, 7, 11, 15, … является арифметической прогрессией. Найдите её 2023-й член.",
+    "en": "The sequence 3, 7, 11, 15, … is arithmetic. Find its 2023rd term."
+   },
+   "options": {
+    "ru": [
+     "8091",
+     "8092",
+     "8095",
+     "8093",
+     "8088"
+    ],
+    "en": [
+     "8091",
+     "8092",
+     "8095",
+     "8093",
+     "8088"
+    ]
+   },
+   "answer": {
+    "ru": "8091",
+    "en": "8091"
+   },
+   "accept": [
+    "8091"
+   ],
+   "solution": {
+    "ru": [
+     "d = 7 − 3 = 4, a₁ = 3.",
+     "aₙ = 3 + (n − 1)·4 = 4n − 1.",
+     "a₂₀₂₃ = 4 · 2023 − 1 = 8091."
+    ],
+    "en": [
+     "d = 7 − 3 = 4, a₁ = 3.",
+     "aₙ = 3 + (n − 1)·4 = 4n − 1.",
+     "a₂₀₂₃ = 4 · 2023 − 1 = 8091."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите разность прогрессии.",
+     "Подставьте n = 2023 в формулу n-го члена."
+    ],
+    "en": [
+     "Find the common difference.",
+     "Substitute n = 2023 into the n-th term formula."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "арифметическая прогрессия"
+   ]
+  },
+  {
+   "id": "ct-2023-a18",
+   "year": 2023,
+   "part": "A",
+   "n": 18,
+   "topic": "param",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "При каких значениях a уравнение |x − 2| = a имеет два корня?",
+    "en": "For which values of a does |x − 2| = a have two roots?"
+   },
+   "options": {
+    "ru": [
+     "a > 0",
+     "a ≥ 0",
+     "a < 0",
+     "a = 0",
+     "при любых a"
+    ],
+    "en": [
+     "a > 0",
+     "a ≥ 0",
+     "a < 0",
+     "a = 0",
+     "при любых a"
+    ]
+   },
+   "answer": {
+    "ru": "a > 0",
+    "en": "a > 0"
+   },
+   "accept": [
+    "a > 0"
+   ],
+   "solution": {
+    "ru": [
+     "Модуль неотрицателен, поэтому при a < 0 корней нет.",
+     "При a = 0 уравнение |x − 2| = 0 имеет один корень x = 2.",
+     "При a > 0 получаем x = 2 ± a — два различных корня."
+    ],
+    "en": [
+     "The absolute value is non-negative, so for a < 0 there are no roots.",
+     "For a = 0 the equation |x − 2| = 0 has the single root x = 2.",
+     "For a > 0 we get x = 2 ± a, two distinct roots."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Разберите случаи a < 0, a = 0, a > 0.",
+     "Раскройте модуль двумя способами."
+    ],
+    "en": [
+     "Consider the cases a < 0, a = 0, a > 0.",
+     "Split the absolute value into two equations."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "параметр",
+    "модуль"
+   ]
+  },
+  {
+   "id": "ct-2023-b1",
+   "year": 2023,
+   "part": "B",
+   "n": 1,
+   "topic": "numbers",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите √(6² + 8²).",
+    "en": "Evaluate √(6² + 8²)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "10",
+    "en": "10"
+   },
+   "accept": [
+    "10"
+   ],
+   "solution": {
+    "ru": [
+     "6² = 36, 8² = 64.",
+     "36 + 64 = 100.",
+     "√100 = 10."
+    ],
+    "en": [
+     "6² = 36, 8² = 64.",
+     "36 + 64 = 100.",
+     "√100 = 10."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сначала возведите в квадрат, потом сложите."
+    ],
+    "en": [
+     "Square first, then add."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "квадратные корни",
+    "пифагорова тройка"
+   ]
+  },
+  {
+   "id": "ct-2023-b2",
+   "year": 2023,
+   "part": "B",
+   "n": 2,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму корней уравнения (x − 2)(x + 5) = 8.",
+    "en": "Find the sum of the roots of (x − 2)(x + 5) = 8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-3",
+    "en": "-3"
+   },
+   "accept": [
+    "-3",
+    "−3"
+   ],
+   "solution": {
+    "ru": [
+     "Раскроем скобки: x² + 3x − 10 = 8.",
+     "x² + 3x − 18 = 0; по теореме Виета сумма корней равна −3.",
+     "Корни: 3 и −6, их сумма −3."
+    ],
+    "en": [
+     "Expand: x² + 3x − 10 = 8.",
+     "x² + 3x − 18 = 0; by Vieta the sum of the roots is −3.",
+     "Roots 3 and −6 indeed add to −3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Перенесите 8 в левую часть.",
+     "Сумма корней приведённого уравнения равна −p."
+    ],
+    "en": [
+     "Move 8 to the left-hand side.",
+     "For a monic quadratic the sum of roots is −p."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "ct-2023-b3",
+   "year": 2023,
+   "part": "B",
+   "n": 3,
+   "topic": "inequalities",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество целых решений неравенства x² − 4x < 0.",
+    "en": "Find the number of integer solutions of x² − 4x < 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "x(x − 4) < 0 ⟹ 0 < x < 4.",
+     "Целые решения: 1, 2, 3.",
+     "Их три."
+    ],
+    "en": [
+     "x(x − 4) < 0 ⟹ 0 < x < 4.",
+     "Integer solutions: 1, 2, 3.",
+     "There are three."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Разложите на множители и примените метод интервалов."
+    ],
+    "en": [
+     "Factor and use the interval method."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "ct-2023-b4",
+   "year": 2023,
+   "part": "B",
+   "n": 4,
+   "topic": "wordproblems",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Поезд, двигаясь равномерно со скоростью 60 км/ч, проезжает мимо столба за 24 секунды. Найдите длину поезда в метрах.",
+    "en": "A train moving uniformly at 60 km/h passes a pole in 24 seconds. Find the length of the train in metres."
+   },
+   "options": null,
+   "answer": {
+    "ru": "400",
+    "en": "400"
+   },
+   "accept": [
+    "400"
+   ],
+   "solution": {
+    "ru": [
+     "60 км/ч = 60000/3600 = 50/3 м/с.",
+     "За 24 с поезд проходит 24 · 50/3 = 400 м.",
+     "Длина поезда равна пройденному пути: 400 м."
+    ],
+    "en": [
+     "60 km/h = 60000/3600 = 50/3 m/s.",
+     "In 24 s the train covers 24 · 50/3 = 400 m.",
+     "The train length equals that distance: 400 m."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Переведите км/ч в м/с, умножив на 1000/3600.",
+     "Путь мимо столба равен длине поезда."
+    ],
+    "en": [
+     "Convert km/h to m/s by multiplying with 1000/3600.",
+     "Passing a pole, the distance equals the train length."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "задачи на движение"
+   ]
+  },
+  {
+   "id": "ct-2023-b5",
+   "year": 2023,
+   "part": "B",
+   "n": 5,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите 3·tg(π/4) − 2·sin(π/6).",
+    "en": "Evaluate 3·tg(π/4) − 2·sin(π/6)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "tg(π/4) = 1 ⟹ 3·1 = 3.",
+     "sin(π/6) = ½ ⟹ 2·½ = 1.",
+     "3 − 1 = 2."
+    ],
+    "en": [
+     "tg(π/4) = 1 ⟹ 3·1 = 3.",
+     "sin(π/6) = ½ ⟹ 2·½ = 1.",
+     "3 − 1 = 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Табличные значения: tg 45° = 1, sin 30° = ½."
+    ],
+    "en": [
+     "Table values: tan 45° = 1, sin 30° = ½."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "табличные значения"
+   ]
+  },
+  {
+   "id": "ct-2023-b6",
+   "year": 2023,
+   "part": "B",
+   "n": 6,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите площадь ромба с диагоналями 6 и 8.",
+    "en": "Find the area of a rhombus with diagonals 6 and 8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "24",
+    "en": "24"
+   },
+   "accept": [
+    "24"
+   ],
+   "solution": {
+    "ru": [
+     "S = ½ d₁d₂.",
+     "S = ½ · 6 · 8.",
+     "S = 24."
+    ],
+    "en": [
+     "S = ½ d₁d₂.",
+     "S = ½ · 6 · 8.",
+     "S = 24."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Площадь ромба через диагонали."
+    ],
+    "en": [
+     "Rhombus area via its diagonals."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "ромб",
+    "площадь"
+   ]
+  },
+  {
+   "id": "ct-2023-b7",
+   "year": 2023,
+   "part": "B",
+   "n": 7,
+   "topic": "stereometry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите площадь полной поверхности куба с ребром 3.",
+    "en": "Find the total surface area of a cube with edge 3."
+   },
+   "options": null,
+   "answer": {
+    "ru": "54",
+    "en": "54"
+   },
+   "accept": [
+    "54"
+   ],
+   "solution": {
+    "ru": [
+     "У куба 6 граней, площадь одной грани 3² = 9.",
+     "S = 6 · 9.",
+     "S = 54."
+    ],
+    "en": [
+     "A cube has 6 faces, one face area is 3² = 9.",
+     "S = 6 · 9.",
+     "S = 54."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "S = 6a²."
+    ],
+    "en": [
+     "S = 6a²."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "куб",
+    "поверхность"
+   ]
+  },
+  {
+   "id": "ct-2023-b8",
+   "year": 2023,
+   "part": "B",
+   "n": 8,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите угловой коэффициент касательной к графику функции f(x) = x² − 4x в точке x₀ = 3.",
+    "en": "Find the slope of the tangent to f(x) = x² − 4x at x₀ = 3."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Угловой коэффициент равен значению производной.",
+     "f′(x) = 2x − 4.",
+     "f′(3) = 6 − 4 = 2."
+    ],
+    "en": [
+     "The slope equals the value of the derivative.",
+     "f′(x) = 2x − 4.",
+     "f′(3) = 6 − 4 = 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "k = f′(x₀)."
+    ],
+    "en": [
+     "k = f′(x₀)."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "касательная",
+    "геометрический смысл производной"
+   ]
+  },
+  {
+   "id": "ct-2023-b9",
+   "year": 2023,
+   "part": "B",
+   "n": 9,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Из 10 книг выбирают 2 в подарок. Сколькими способами это можно сделать?",
+    "en": "Two books are chosen as a present out of 10. In how many ways?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "45",
+    "en": "45"
+   },
+   "accept": [
+    "45"
+   ],
+   "solution": {
+    "ru": [
+     "Порядок не важен: C₁₀² = 10!/(2!·8!).",
+     "C₁₀² = (10 · 9)/(1 · 2).",
+     "C₁₀² = 45."
+    ],
+    "en": [
+     "Order does not matter: C(10,2) = 10!/(2!·8!).",
+     "C(10,2) = (10 · 9)/(1 · 2).",
+     "C(10,2) = 45."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Это сочетания: ab и ba — один и тот же выбор."
+    ],
+    "en": [
+     "These are combinations: ab and ba are the same choice."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "сочетания"
+   ]
+  },
+  {
+   "id": "ct-2023-b10",
+   "year": 2023,
+   "part": "B",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите (1/2)^(−log₂ 5).",
+    "en": "Evaluate (1/2)^(−log₂ 5)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "(1/2) = 2⁻¹, поэтому (2⁻¹)^(−log₂5) = 2^(log₂5).",
+     "2^(log₂5) = 5.",
+     "Ответ: 5."
+    ],
+    "en": [
+     "(1/2) = 2⁻¹, so (2⁻¹)^(−log₂5) = 2^(log₂5).",
+     "2^(log₂5) = 5.",
+     "Answer: 5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Запишите 1/2 как 2⁻¹.",
+     "Перемножьте показатели степеней."
+    ],
+    "en": [
+     "Write 1/2 as 2⁻¹.",
+     "Multiply the exponents."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "логарифмы",
+    "степени"
+   ]
+  },
+  {
+   "id": "ct-2023-b11",
+   "year": 2023,
+   "part": "B",
+   "n": 11,
+   "topic": "param",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "При каком значении a пара чисел (3; 2) является решением системы { x + y = 5, x − y = a?",
+    "en": "For which a is the pair (3; 2) a solution of the system { x + y = 5, x − y = a?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "Подставим x = 3, y = 2 в первое уравнение: 3 + 2 = 5 — верно.",
+     "Во второе: 3 − 2 = a.",
+     "a = 1."
+    ],
+    "en": [
+     "Substitute x = 3, y = 2 into the first equation: 3 + 2 = 5, true.",
+     "Into the second: 3 − 2 = a.",
+     "a = 1."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Подставьте пару чисел в оба уравнения.",
+     "Пара должна удовлетворять каждому уравнению системы."
+    ],
+    "en": [
+     "Substitute the pair into both equations.",
+     "It must satisfy every equation of the system."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "параметр",
+    "системы"
+   ]
+  },
+  {
+   "id": "ct-2023-b12",
+   "year": 2023,
+   "part": "B",
+   "n": 12,
+   "topic": "logic",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите остаток от деления числа 5²⁰²³ на 6.",
+    "en": "Find the remainder of 5²⁰²³ divided by 6."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "5 ≡ −1 (mod 6).",
+     "(−1)^2023 = −1 при нечётном показателе.",
+     "−1 ≡ 5 (mod 6), остаток 5."
+    ],
+    "en": [
+     "5 ≡ −1 (mod 6).",
+     "(−1)^2023 = −1 since the exponent is odd.",
+     "−1 ≡ 5 (mod 6), remainder 5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Заметьте, что 5 = 6 − 1.",
+     "Рассмотрите чётность показателя."
+    ],
+    "en": [
+     "Notice that 5 = 6 − 1.",
+     "Look at the parity of the exponent."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2023",
+   "tags": [
+    "сравнения по модулю"
+   ]
+  },
+  {
+   "id": "ct-2024-a1",
+   "year": 2024,
+   "part": "A",
+   "n": 1,
+   "topic": "numbers",
+   "difficulty": 1,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения 1,8 : 0,06 − 3 · 0,4.",
+    "en": "Evaluate 1.8 : 0.06 − 3 · 0.4."
+   },
+   "options": {
+    "ru": [
+     "144/5",
+     "72/25",
+     "27",
+     "30",
+     "131/5"
+    ],
+    "en": [
+     "144/5",
+     "72/25",
+     "27",
+     "30",
+     "131/5"
+    ]
+   },
+   "answer": {
+    "ru": "144/5",
+    "en": "144/5"
+   },
+   "accept": [
+    "144/5"
+   ],
+   "solution": {
+    "ru": [
+     "1,8 : 0,06 = 180 : 6 = 30.",
+     "3 · 0,4 = 1,2.",
+     "30 − 1,2 = 28,8."
+    ],
+    "en": [
+     "1.8 : 0.06 = 180 : 6 = 30.",
+     "3 · 0.4 = 1.2.",
+     "30 − 1.2 = 28.8."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Умножьте делимое и делитель на 100.",
+     "Соблюдайте порядок действий: деление, умножение, вычитание."
+    ],
+    "en": [
+     "Multiply both numbers by 100.",
+     "Order of operations: division, multiplication, subtraction."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "десятичные дроби"
+   ]
+  },
+  {
+   "id": "ct-2024-a2",
+   "year": 2024,
+   "part": "A",
+   "n": 2,
+   "topic": "expressions",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения (√18 + √2) · √2.",
+    "en": "Evaluate (√18 + √2) · √2."
+   },
+   "options": {
+    "ru": [
+     "8",
+     "4",
+     "20",
+     "10",
+     "6"
+    ],
+    "en": [
+     "8",
+     "4",
+     "20",
+     "10",
+     "6"
+    ]
+   },
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "√18 = 3√2, значит √18 + √2 = 4√2.",
+     "4√2 · √2 = 4 · 2.",
+     "Ответ: 8."
+    ],
+    "en": [
+     "√18 = 3√2, so √18 + √2 = 4√2.",
+     "4√2 · √2 = 4 · 2.",
+     "Answer: 8."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Вынесите множитель из √18.",
+     "√2 · √2 = 2."
+    ],
+    "en": [
+     "Take the factor out of √18.",
+     "√2 · √2 = 2."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "иррациональные выражения"
+   ]
+  },
+  {
+   "id": "ct-2024-a3",
+   "year": 2024,
+   "part": "A",
+   "n": 3,
+   "topic": "equations",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите больший корень уравнения x² − 3x − 10 = 0.",
+    "en": "Find the larger root of x² − 3x − 10 = 0."
+   },
+   "options": {
+    "ru": [
+     "5",
+     "-2",
+     "2",
+     "-5",
+     "3"
+    ],
+    "en": [
+     "5",
+     "-2",
+     "2",
+     "-5",
+     "3"
+    ]
+   },
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "D = 9 + 40 = 49, √D = 7.",
+     "x = (3 ± 7)/2.",
+     "x₁ = 5, x₂ = −2; больший корень равен 5."
+    ],
+    "en": [
+     "D = 9 + 40 = 49, √D = 7.",
+     "x = (3 ± 7)/2.",
+     "x₁ = 5, x₂ = −2; the larger root is 5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите дискриминант.",
+     "Сравните полученные корни."
+    ],
+    "en": [
+     "Compute the discriminant.",
+     "Compare the two roots."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "квадратные уравнения"
+   ]
+  },
+  {
+   "id": "ct-2024-a4",
+   "year": 2024,
+   "part": "A",
+   "n": 4,
+   "topic": "equations",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите произведение x·y, где (x; y) — решение системы { 2x − y = 3, x² − y = 2.",
+    "en": "Find x·y for the solution (x; y) of the system { 2x − y = 3, x² − y = 2."
+   },
+   "options": {
+    "ru": [
+     "-1",
+     "1",
+     "3",
+     "-3",
+     "0"
+    ],
+    "en": [
+     "-1",
+     "1",
+     "3",
+     "-3",
+     "0"
+    ]
+   },
+   "answer": {
+    "ru": "-1",
+    "en": "-1"
+   },
+   "accept": [
+    "-1"
+   ],
+   "solution": {
+    "ru": [
+     "Из первого уравнения y = 2x − 3.",
+     "Подставим во второе: x² − 2x + 3 = 2 ⟹ x² − 2x + 1 = 0 ⟹ x = 1.",
+     "Тогда y = −1 и x·y = −1."
+    ],
+    "en": [
+     "From the first equation y = 2x − 3.",
+     "Substitute: x² − 2x + 3 = 2 ⟹ x² − 2x + 1 = 0 ⟹ x = 1.",
+     "Then y = −1 and x·y = −1."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Выразите y через x из линейного уравнения.",
+     "Полученный квадратный трёхчлен — полный квадрат."
+    ],
+    "en": [
+     "Express y in terms of x from the linear equation.",
+     "The resulting quadratic is a perfect square."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "системы уравнений"
+   ]
+  },
+  {
+   "id": "ct-2024-a5",
+   "year": 2024,
+   "part": "A",
+   "n": 5,
+   "topic": "functions",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Прямая y = kx + b проходит через точки (0; 3) и (2; 7). Найдите k.",
+    "en": "The line y = kx + b passes through (0; 3) and (2; 7). Find k."
+   },
+   "options": {
+    "ru": [
+     "2",
+     "3",
+     "4",
+     "1",
+     "1/2"
+    ],
+    "en": [
+     "2",
+     "3",
+     "4",
+     "1",
+     "1/2"
+    ]
+   },
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "При x = 0: b = 3.",
+     "При x = 2: 2k + 3 = 7.",
+     "2k = 4 ⟹ k = 2."
+    ],
+    "en": [
+     "At x = 0: b = 3.",
+     "At x = 2: 2k + 3 = 7.",
+     "2k = 4 ⟹ k = 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Точка (0; 3) сразу даёт b.",
+     "Подставьте вторую точку."
+    ],
+    "en": [
+     "The point (0; 3) gives b immediately.",
+     "Substitute the second point."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "линейная функция"
+   ]
+  },
+  {
+   "id": "ct-2024-a6",
+   "year": 2024,
+   "part": "A",
+   "n": 6,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Между числами 4 и 12 вставлены три числа так, что получилась арифметическая прогрессия. Найдите второе из вставленных чисел.",
+    "en": "Three numbers are inserted between 4 and 12 to form an arithmetic progression. Find the second inserted number."
+   },
+   "options": {
+    "ru": [
+     "8",
+     "6",
+     "10",
+     "7",
+     "9"
+    ],
+    "en": [
+     "8",
+     "6",
+     "10",
+     "7",
+     "9"
+    ]
+   },
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "Всего членов 5: a₁ = 4, a₅ = 12.",
+     "a₅ = a₁ + 4d ⟹ 4d = 8 ⟹ d = 2.",
+     "Члены: 4, 6, 8, 10, 12 — второе вставленное число 8 (это третий член)."
+    ],
+    "en": [
+     "There are 5 terms: a₁ = 4, a₅ = 12.",
+     "a₅ = a₁ + 4d ⟹ 4d = 8 ⟹ d = 2.",
+     "Terms: 4, 6, 8, 10, 12 — the second inserted number is 8."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сколько шагов от 4 до 12?",
+     "d = (12 − 4)/4."
+    ],
+    "en": [
+     "How many steps from 4 to 12?",
+     "d = (12 − 4)/4."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "арифметическая прогрессия"
+   ]
+  },
+  {
+   "id": "ct-2024-a7",
+   "year": 2024,
+   "part": "A",
+   "n": 7,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Две трубы, работая вместе, наполняют бассейн за 4 часа. Первая труба сама наполняет бассейн за 6 часов. За сколько часов наполнит бассейн вторая труба?",
+    "en": "Two pipes together fill a pool in 4 hours. The first pipe alone fills it in 6 hours. How many hours does the second pipe need alone?"
+   },
+   "options": {
+    "ru": [
+     "12",
+     "10",
+     "8",
+     "24",
+     "9"
+    ],
+    "en": [
+     "12",
+     "10",
+     "8",
+     "24",
+     "9"
+    ]
+   },
+   "answer": {
+    "ru": "12",
+    "en": "12"
+   },
+   "accept": [
+    "12"
+   ],
+   "solution": {
+    "ru": [
+     "Совместная производительность: 1/4 бассейна в час.",
+     "Производительность первой: 1/6; второй: 1/4 − 1/6 = 1/12.",
+     "Время второй трубы: 1 : 1/12 = 12 часов."
+    ],
+    "en": [
+     "Combined rate: 1/4 of the pool per hour.",
+     "First pipe: 1/6; second: 1/4 − 1/6 = 1/12.",
+     "Time of the second pipe: 1 : 1/12 = 12 hours."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Работайте с производительностями (доля в час).",
+     "1/4 − 1/6 = 1/12."
+    ],
+    "en": [
+     "Work with rates (share per hour).",
+     "1/4 − 1/6 = 1/12."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "задачи на работу"
+   ]
+  },
+  {
+   "id": "ct-2024-a8",
+   "year": 2024,
+   "part": "A",
+   "n": 8,
+   "topic": "trig",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Вычислите sin 30° · cos 60° + cos 30° · sin 60°.",
+    "en": "Evaluate sin 30° · cos 60° + cos 30° · sin 60°."
+   },
+   "options": {
+    "ru": [
+     "1",
+     "0",
+     "1/2",
+     "7800463337466769/9007199254740992",
+     "2"
+    ],
+    "en": [
+     "1",
+     "0",
+     "1/2",
+     "7800463337466769/9007199254740992",
+     "2"
+    ]
+   },
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "Это формула синуса суммы: sin(30° + 60°) = sin 90°.",
+     "sin 90° = 1.",
+     "Ответ: 1."
+    ],
+    "en": [
+     "This is the sine-of-sum formula: sin(30° + 60°) = sin 90°.",
+     "sin 90° = 1.",
+     "Answer: 1."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "sin α cos β + cos α sin β = sin(α + β).",
+     "30° + 60° = 90°."
+    ],
+    "en": [
+     "sin α cos β + cos α sin β = sin(α + β).",
+     "30° + 60° = 90°."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "формулы сложения"
+   ]
+  },
+  {
+   "id": "ct-2024-a9",
+   "year": 2024,
+   "part": "A",
+   "n": 9,
+   "topic": "trigequations",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Сколько корней имеет уравнение cos x = 0 на отрезке [0; 2π]?",
+    "en": "How many roots does cos x = 0 have on the interval [0; 2π]?"
+   },
+   "options": {
+    "ru": [
+     "2",
+     "1",
+     "3",
+     "4",
+     "0"
+    ],
+    "en": [
+     "2",
+     "1",
+     "3",
+     "4",
+     "0"
+    ]
+   },
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Общее решение: x = π/2 + πk.",
+     "На [0; 2π] подходят x = π/2 и x = 3π/2.",
+     "Корней два."
+    ],
+    "en": [
+     "General solution: x = π/2 + πk.",
+     "On [0; 2π] we get x = π/2 and x = 3π/2.",
+     "There are two roots."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Решение уравнения cos x = 0 — это π/2 + πk.",
+     "Переберите целые k и отберите попавшие в отрезок."
+    ],
+    "en": [
+     "The solution of cos x = 0 is x = π/2 + πk.",
+     "Try integer k and keep those inside the interval."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "тригонометрические уравнения",
+    "отбор корней"
+   ]
+  },
+  {
+   "id": "ct-2024-a10",
+   "year": 2024,
+   "part": "A",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наибольшее целое решение неравенства 2^x < 10.",
+    "en": "Find the largest integer solution of the inequality 2^x < 10."
+   },
+   "options": {
+    "ru": [
+     "3",
+     "4",
+     "2",
+     "10",
+     "8"
+    ],
+    "en": [
+     "3",
+     "4",
+     "2",
+     "10",
+     "8"
+    ]
+   },
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "2³ = 8 < 10, а 2⁴ = 16 > 10.",
+     "Показательная функция с основанием 2 возрастает, значит x ≤ 3 для целых x (точнее x < log₂10 ≈ 3,32).",
+     "Наибольшее целое решение 3."
+    ],
+    "en": [
+     "2³ = 8 < 10 while 2⁴ = 16 > 10.",
+     "The base-2 exponential is increasing, so x < log₂10 ≈ 3.32.",
+     "The largest integer solution is 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сравните степени двойки с числом 10.",
+     "Функция y = 2^x возрастает."
+    ],
+    "en": [
+     "Compare powers of two with 10.",
+     "y = 2^x is increasing."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "показательные неравенства"
+   ]
+  },
+  {
+   "id": "ct-2024-a11",
+   "year": 2024,
+   "part": "A",
+   "n": 11,
+   "topic": "planimetry",
+   "difficulty": 2,
+   "answerType": "choice",
+   "text": {
+    "ru": "Средняя линия трапеции равна 8, а высота — 5. Найдите площадь трапеции.",
+    "en": "The midline of a trapezoid is 8 and its height is 5. Find the area."
+   },
+   "options": {
+    "ru": [
+     "40",
+     "20",
+     "80",
+     "13",
+     "45"
+    ],
+    "en": [
+     "40",
+     "20",
+     "80",
+     "13",
+     "45"
+    ]
+   },
+   "answer": {
+    "ru": "40",
+    "en": "40"
+   },
+   "accept": [
+    "40"
+   ],
+   "solution": {
+    "ru": [
+     "Средняя линия равна полусумме оснований: m = (a + b)/2 = 8.",
+     "S = m · h.",
+     "S = 8 · 5 = 40."
+    ],
+    "en": [
+     "The midline equals the half-sum of the bases: m = 8.",
+     "S = m · h.",
+     "S = 8 · 5 = 40."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Площадь трапеции равна произведению средней линии на высоту."
+    ],
+    "en": [
+     "The trapezoid area is the midline times the height."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "трапеция",
+    "площадь"
+   ]
+  },
+  {
+   "id": "ct-2024-a12",
+   "year": 2024,
+   "part": "A",
+   "n": 12,
+   "topic": "planimetry",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Катеты прямоугольного треугольника равны 6 и 8. Найдите радиус вписанной окружности.",
+    "en": "The legs of a right triangle are 6 and 8. Find the inradius."
+   },
+   "options": {
+    "ru": [
+     "2",
+     "3",
+     "1",
+     "4",
+     "5/2"
+    ],
+    "en": [
+     "2",
+     "3",
+     "1",
+     "4",
+     "5/2"
+    ]
+   },
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Гипотенуза: c = √(36 + 64) = 10.",
+     "Для прямоугольного треугольника r = (a + b − c)/2.",
+     "r = (6 + 8 − 10)/2 = 2."
+    ],
+    "en": [
+     "Hypotenuse: c = √(36 + 64) = 10.",
+     "For a right triangle r = (a + b − c)/2.",
+     "r = (6 + 8 − 10)/2 = 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сначала найдите гипотенузу.",
+     "r = (a + b − c)/2 — для прямоугольного треугольника."
+    ],
+    "en": [
+     "Find the hypotenuse first.",
+     "For a right triangle r = (a + b − c)/2."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "вписанная окружность",
+    "прямоугольный треугольник"
+   ]
+  },
+  {
+   "id": "ct-2024-a13",
+   "year": 2024,
+   "part": "A",
+   "n": 13,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите площадь поверхности шара радиуса 3 (в ответе укажите коэффициент при π).",
+    "en": "Find the surface area of a sphere of radius 3 (give the coefficient at π)."
+   },
+   "options": {
+    "ru": [
+     "36",
+     "12",
+     "9",
+     "27",
+     "144"
+    ],
+    "en": [
+     "36",
+     "12",
+     "9",
+     "27",
+     "144"
+    ]
+   },
+   "answer": {
+    "ru": "36",
+    "en": "36"
+   },
+   "accept": [
+    "36"
+   ],
+   "solution": {
+    "ru": [
+     "S = 4πR².",
+     "S = 4π · 9.",
+     "S = 36π, коэффициент 36."
+    ],
+    "en": [
+     "S = 4πR².",
+     "S = 4π · 9.",
+     "S = 36π, coefficient 36."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Площадь поверхности шара S = 4πR²."
+    ],
+    "en": [
+     "Sphere surface area S = 4πR²."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "шар",
+    "поверхность"
+   ]
+  },
+  {
+   "id": "ct-2024-a14",
+   "year": 2024,
+   "part": "A",
+   "n": 14,
+   "topic": "derivative",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение производной функции f(x) = 2x³ − 6x + 1 в точке x₀ = 2.",
+    "en": "Find the value of the derivative of f(x) = 2x³ − 6x + 1 at x₀ = 2."
+   },
+   "options": {
+    "ru": [
+     "18",
+     "6",
+     "12",
+     "24",
+     "0"
+    ],
+    "en": [
+     "18",
+     "6",
+     "12",
+     "24",
+     "0"
+    ]
+   },
+   "answer": {
+    "ru": "18",
+    "en": "18"
+   },
+   "accept": [
+    "18"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 6x² − 6.",
+     "f′(2) = 6 · 4 − 6.",
+     "f′(2) = 18."
+    ],
+    "en": [
+     "f′(x) = 6x² − 6.",
+     "f′(2) = 6 · 4 − 6.",
+     "f′(2) = 18."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Производная от 2x³ равна 6x²."
+    ],
+    "en": [
+     "The derivative of 2x³ is 6x²."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "производная"
+   ]
+  },
+  {
+   "id": "ct-2024-a15",
+   "year": 2024,
+   "part": "A",
+   "n": 15,
+   "topic": "research",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите точку максимума функции y = 4 + 3x − x³.",
+    "en": "Find the maximum point of y = 4 + 3x − x³."
+   },
+   "options": {
+    "ru": [
+     "1",
+     "-1",
+     "0",
+     "3",
+     "4"
+    ],
+    "en": [
+     "1",
+     "-1",
+     "0",
+     "3",
+     "4"
+    ]
+   },
+   "answer": {
+    "ru": "1",
+    "en": "1"
+   },
+   "accept": [
+    "1"
+   ],
+   "solution": {
+    "ru": [
+     "y′ = 3 − 3x² = 3(1 − x)(1 + x); нули x = ±1.",
+     "y′ > 0 при x ∈ (−1; 1) и y′ < 0 при x > 1 — в точке x = 1 максимум.",
+     "Точка максимума x = 1."
+    ],
+    "en": [
+     "y′ = 3 − 3x² = 3(1 − x)(1 + x); zeros at x = ±1.",
+     "y′ > 0 on (−1; 1) and y′ < 0 for x > 1, so x = 1 is a maximum.",
+     "Maximum point: x = 1."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите нули производной.",
+     "Проверьте смену знака производной с «+» на «−»."
+    ],
+    "en": [
+     "Find the zeros of the derivative.",
+     "Look for the + → − sign change of the derivative."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "экстремумы"
+   ]
+  },
+  {
+   "id": "ct-2024-a16",
+   "year": 2024,
+   "part": "A",
+   "n": 16,
+   "topic": "combinatorics",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Стрелок делает два выстрела; вероятность попадания при каждом выстреле 0,8. Найдите вероятность ровно одного попадания.",
+    "en": "A shooter fires twice; the hit probability of each shot is 0.8. Find the probability of exactly one hit."
+   },
+   "options": {
+    "ru": [
+     "8/25",
+     "4/25",
+     "16/25",
+     "2/5",
+     "1/25"
+    ],
+    "en": [
+     "8/25",
+     "4/25",
+     "16/25",
+     "2/5",
+     "1/25"
+    ]
+   },
+   "answer": {
+    "ru": "8/25",
+    "en": "8/25"
+   },
+   "accept": [
+    "8/25"
+   ],
+   "solution": {
+    "ru": [
+     "Возможны два случая: «попал–промахнулся» и «промахнулся–попал».",
+     "P = 0,8 · 0,2 + 0,2 · 0,8 = 2 · 0,16.",
+     "P = 0,32 = 8/25."
+    ],
+    "en": [
+     "Two cases: hit–miss and miss–hit.",
+     "P = 0.8 · 0.2 + 0.2 · 0.8 = 2 · 0.16.",
+     "P = 0.32 = 8/25."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Вероятность промаха равна 1 − 0,8 = 0,2.",
+     "Не забудьте про два порядка событий."
+    ],
+    "en": [
+     "The miss probability is 1 − 0.8 = 0.2.",
+     "Do not forget the two possible orders."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "формула Бернулли",
+    "вероятность"
+   ]
+  },
+  {
+   "id": "ct-2024-a17",
+   "year": 2024,
+   "part": "A",
+   "n": 17,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Монету подбрасывают 3 раза. Найдите математическое ожидание числа выпадений орла.",
+    "en": "A coin is tossed 3 times. Find the expected number of heads."
+   },
+   "options": {
+    "ru": [
+     "3/2",
+     "1",
+     "2",
+     "1/2",
+     "3"
+    ],
+    "en": [
+     "3/2",
+     "1",
+     "2",
+     "1/2",
+     "3"
+    ]
+   },
+   "answer": {
+    "ru": "3/2",
+    "en": "3/2"
+   },
+   "accept": [
+    "3/2"
+   ],
+   "solution": {
+    "ru": [
+     "Число орлов имеет биномиальное распределение с n = 3, p = ½.",
+     "Математическое ожидание: E = n·p.",
+     "E = 3 · ½ = 1,5."
+    ],
+    "en": [
+     "The number of heads is binomial with n = 3, p = ½.",
+     "Expectation: E = n·p.",
+     "E = 3 · ½ = 1.5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "E = np для числа успехов в n испытаниях.",
+     "p = ½ для симметричной монеты."
+    ],
+    "en": [
+     "E = np for the number of successes in n trials.",
+     "p = ½ for a fair coin."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "математическое ожидание"
+   ]
+  },
+  {
+   "id": "ct-2024-a18",
+   "year": 2024,
+   "part": "A",
+   "n": 18,
+   "topic": "param",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "При каком значении c прямая y = 2x + c касается параболы y = x² + 4x + 6?",
+    "en": "For which c is the line y = 2x + c tangent to the parabola y = x² + 4x + 6?"
+   },
+   "options": {
+    "ru": [
+     "5",
+     "4",
+     "6",
+     "3",
+     "2"
+    ],
+    "en": [
+     "5",
+     "4",
+     "6",
+     "3",
+     "2"
+    ]
+   },
+   "answer": {
+    "ru": "5",
+    "en": "5"
+   },
+   "accept": [
+    "5"
+   ],
+   "solution": {
+    "ru": [
+     "Приравняем: x² + 4x + 6 = 2x + c ⟹ x² + 2x + (6 − c) = 0.",
+     "Касание означает единственное решение: D = 4 − 4(6 − c) = 0.",
+     "4c − 20 = 0 ⟹ c = 5."
+    ],
+    "en": [
+     "Set equal: x² + 4x + 6 = 2x + c ⟹ x² + 2x + (6 − c) = 0.",
+     "Tangency means a single solution: D = 4 − 4(6 − c) = 0.",
+     "4c − 20 = 0 ⟹ c = 5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Точка касания — единственное решение системы.",
+     "Приравняйте дискриминант к нулю."
+    ],
+    "en": [
+     "A tangent point is the unique solution of the system.",
+     "Set the discriminant to zero."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "параметр",
+    "касательная"
+   ]
+  },
+  {
+   "id": "ct-2024-b1",
+   "year": 2024,
+   "part": "B",
+   "n": 1,
+   "topic": "expressions",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите (√3 + 1)² − 2√3.",
+    "en": "Evaluate (√3 + 1)² − 2√3."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "(√3)² + 2√3 + 1 = 3 + 2√3 + 1.",
+     "Вычтем 2√3: 4 + 2√3 − 2√3.",
+     "Ответ: 4."
+    ],
+    "en": [
+     "(√3)² + 2√3 + 1 = 3 + 2√3 + 1.",
+     "Subtract 2√3: 4 + 2√3 − 2√3.",
+     "Answer: 4."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "(a + b)² = a² + 2ab + b²."
+    ],
+    "en": [
+     "(a + b)² = a² + 2ab + b²."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "формулы сокращённого умножения"
+   ]
+  },
+  {
+   "id": "ct-2024-b2",
+   "year": 2024,
+   "part": "B",
+   "n": 2,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите произведение корней уравнения x² − 4x − 12 = 0.",
+    "en": "Find the product of the roots of x² − 4x − 12 = 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "-12",
+    "en": "-12"
+   },
+   "accept": [
+    "-12",
+    "−12"
+   ],
+   "solution": {
+    "ru": [
+     "По теореме Виета для приведённого уравнения x₁·x₂ = q.",
+     "q = −12.",
+     "Произведение корней равно −12 (корни 6 и −2)."
+    ],
+    "en": [
+     "By Vieta's theorem for a monic quadratic x₁·x₂ = q.",
+     "q = −12.",
+     "The product is −12 (the roots are 6 and −2)."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "x₁ + x₂ = 4, x₁·x₂ = q.",
+     "Проверьте себя: корни 6 и −2."
+    ],
+    "en": [
+     "x₁ + x₂ = 4, x₁·x₂ = q.",
+     "Check yourself: the roots are 6 and −2."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "ct-2024-b3",
+   "year": 2024,
+   "part": "B",
+   "n": 3,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество натуральных решений неравенства (x − 2)(x − 5) ≤ 0.",
+    "en": "Find the number of natural solutions of (x − 2)(x − 5) ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Решение неравенства: 2 ≤ x ≤ 5.",
+     "Натуральные числа в этом отрезке: 2, 3, 4, 5.",
+     "Их четыре."
+    ],
+    "en": [
+     "The inequality holds for 2 ≤ x ≤ 5.",
+     "Natural numbers in the segment: 2, 3, 4, 5.",
+     "There are four."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Метод интервалов.",
+     "Натуральные числа — положительные целые."
+    ],
+    "en": [
+     "Interval method.",
+     "Natural numbers are positive integers."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "неравенства"
+   ]
+  },
+  {
+   "id": "ct-2024-b4",
+   "year": 2024,
+   "part": "B",
+   "n": 4,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Смешали 2 л 30%-го и 3 л 50%-го растворов кислоты. Найдите концентрацию полученного раствора (в процентах).",
+    "en": "2 litres of a 30% acid solution and 3 litres of a 50% solution are mixed. Find the concentration of the mixture (in %)."
+   },
+   "options": null,
+   "answer": {
+    "ru": "42",
+    "en": "42"
+   },
+   "accept": [
+    "42"
+   ],
+   "solution": {
+    "ru": [
+     "Кислоты в первом растворе: 2 · 0,3 = 0,6 л.",
+     "Во втором: 3 · 0,5 = 1,5 л; всего 2,1 л на 5 л.",
+     "Концентрация: 2,1/5 = 0,42 = 42%."
+    ],
+    "en": [
+     "Acid in the first solution: 2 · 0.3 = 0.6 l.",
+     "In the second: 3 · 0.5 = 1.5 l; total 2.1 l in 5 l.",
+     "Concentration: 2.1/5 = 0.42 = 42%."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Считайте объём чистого вещества, а не проценты.",
+     "Делите на общий объём."
+    ],
+    "en": [
+     "Count the volume of the pure substance, not percentages.",
+     "Divide by the total volume."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "концентрация",
+    "проценты"
+   ]
+  },
+  {
+   "id": "ct-2024-b5",
+   "year": 2024,
+   "part": "B",
+   "n": 5,
+   "topic": "trig",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите 2 sin 22,5° · cos 22,5°.",
+    "en": "Evaluate 2 sin 22.5° · cos 22.5°."
+   },
+   "options": null,
+   "answer": {
+    "ru": "√2/2",
+    "en": "√2/2"
+   },
+   "accept": [
+    "0,707",
+    "0.707",
+    "√2/2",
+    "0,71",
+    "0.71"
+   ],
+   "solution": {
+    "ru": [
+     "Формула двойного угла: 2 sin α cos α = sin 2α.",
+     "2α = 45°.",
+     "sin 45° = √2/2 ≈ 0,707."
+    ],
+    "en": [
+     "Double-angle formula: 2 sin α cos α = sin 2α.",
+     "2α = 45°.",
+     "sin 45° = √2/2 ≈ 0.707."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "2 sin α cos α = sin 2α.",
+     "sin 45° = √2/2."
+    ],
+    "en": [
+     "2 sin α cos α = sin 2α.",
+     "sin 45° = √2/2."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "формулы двойного угла"
+   ]
+  },
+  {
+   "id": "ct-2024-b6",
+   "year": 2024,
+   "part": "B",
+   "n": 6,
+   "topic": "planimetry",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Высота, проведённая из вершины прямого угла к гипотенузе, делит её на отрезки 4 и 9. Найдите высоту.",
+    "en": "The altitude from the right angle to the hypotenuse splits it into segments 4 and 9. Find the altitude."
+   },
+   "options": null,
+   "answer": {
+    "ru": "6",
+    "en": "6"
+   },
+   "accept": [
+    "6"
+   ],
+   "solution": {
+    "ru": [
+     "Высота, опущенная на гипотенузу, равна среднему геометрическому отрезков.",
+     "h = √(4 · 9).",
+     "h = √36 = 6."
+    ],
+    "en": [
+     "The altitude to the hypotenuse is the geometric mean of the segments.",
+     "h = √(4 · 9).",
+     "h = √36 = 6."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "h² = a_c · b_c, где a_c и b_c — отрезки гипотенузы."
+    ],
+    "en": [
+     "h² = a_c · b_c where a_c, b_c are the hypotenuse segments."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "прямоугольный треугольник",
+    "средние пропорциональные"
+   ]
+  },
+  {
+   "id": "ct-2024-b7",
+   "year": 2024,
+   "part": "B",
+   "n": 7,
+   "topic": "stereometry",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите объём прямоугольного параллелепипеда с измерениями 3, 4 и 5.",
+    "en": "Find the volume of a rectangular box with dimensions 3, 4 and 5."
+   },
+   "options": null,
+   "answer": {
+    "ru": "60",
+    "en": "60"
+   },
+   "accept": [
+    "60"
+   ],
+   "solution": {
+    "ru": [
+     "V = abc.",
+     "V = 3 · 4 · 5.",
+     "V = 60."
+    ],
+    "en": [
+     "V = abc.",
+     "V = 3 · 4 · 5.",
+     "V = 60."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "V = abc."
+    ],
+    "en": [
+     "V = abc."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "параллелепипед",
+    "объём"
+   ]
+  },
+  {
+   "id": "ct-2024-b8",
+   "year": 2024,
+   "part": "B",
+   "n": 8,
+   "topic": "derivative",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите количество промежутков возрастания функции f(x) = x³ − 3x.",
+    "en": "Find the number of intervals where f(x) = x³ − 3x is increasing."
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 3x² − 3 = 3(x − 1)(x + 1).",
+     "f′ > 0 при x < −1 и при x > 1.",
+     "Промежутков возрастания два: (−∞; −1) и (1; +∞)."
+    ],
+    "en": [
+     "f′(x) = 3x² − 3 = 3(x − 1)(x + 1).",
+     "f′ > 0 for x < −1 and for x > 1.",
+     "Two increasing intervals: (−∞; −1) and (1; +∞)."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Функция возрастает там, где производная положительна.",
+     "Парабола 3x² − 3 положительна вне отрезка [−1; 1] — это два луча."
+    ],
+    "en": [
+     "The function increases where its derivative is positive.",
+     "3x² − 3 > 0 outside [−1; 1], i.e. on two rays."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "монотонность"
+   ]
+  },
+  {
+   "id": "ct-2024-b9",
+   "year": 2024,
+   "part": "B",
+   "n": 9,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколько существует трёхзначных чисел, все цифры которых нечётны?",
+    "en": "How many three-digit numbers have only odd digits?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "125",
+    "en": "125"
+   },
+   "accept": [
+    "125"
+   ],
+   "solution": {
+    "ru": [
+     "Нечётных цифр пять: 1, 3, 5, 7, 9.",
+     "На каждую позицию — 5 вариантов, повторения разрешены: 5 · 5 · 5.",
+     "Всего 125 чисел."
+    ],
+    "en": [
+     "There are five odd digits: 1, 3, 5, 7, 9.",
+     "Each position has 5 options, repetition allowed: 5 · 5 · 5.",
+     "125 numbers in total."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Цифра сотен тоже должна быть нечётной — значит нуль не участвует.",
+     "Правило умножения."
+    ],
+    "en": [
+     "The hundreds digit must be odd too, so zero is excluded.",
+     "Multiplication principle."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "правило умножения"
+   ]
+  },
+  {
+   "id": "ct-2024-b10",
+   "year": 2024,
+   "part": "B",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите log₄ 8.",
+    "en": "Evaluate log₄ 8."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3/2",
+    "en": "3/2"
+   },
+   "accept": [
+    "3/2",
+    "1.5",
+    "1,5"
+   ],
+   "solution": {
+    "ru": [
+     "4^x = 8 ⟹ (2²)^x = 2³.",
+     "2^(2x) = 2³ ⟹ 2x = 3.",
+     "x = 3/2 = 1,5."
+    ],
+    "en": [
+     "4^x = 8 ⟹ (2²)^x = 2³.",
+     "2^(2x) = 2³ ⟹ 2x = 3.",
+     "x = 3/2 = 1.5."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Приведите к основанию 2.",
+     "log₄8 = log₂8 / log₂4."
+    ],
+    "en": [
+     "Bring both sides to base 2.",
+     "log₄8 = log₂8 / log₂4."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "логарифмы"
+   ]
+  },
+  {
+   "id": "ct-2024-b11",
+   "year": 2024,
+   "part": "B",
+   "n": 11,
+   "topic": "param",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "При каком значении a уравнение x² + 6x + a = 0 имеет единственный корень?",
+    "en": "For which a does x² + 6x + a = 0 have exactly one root?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "9",
+    "en": "9"
+   },
+   "accept": [
+    "9"
+   ],
+   "solution": {
+    "ru": [
+     "Единственный корень при D = 0.",
+     "D = 36 − 4a = 0.",
+     "a = 9."
+    ],
+    "en": [
+     "One root requires D = 0.",
+     "D = 36 − 4a = 0.",
+     "a = 9."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "D = b² − 4ac.",
+     "36 − 4a = 0."
+    ],
+    "en": [
+     "D = b² − 4ac.",
+     "36 − 4a = 0."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "параметр"
+   ]
+  },
+  {
+   "id": "ct-2024-b12",
+   "year": 2024,
+   "part": "B",
+   "n": 12,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Последовательность задана формулой aₙ = n². Найдите её 2024-й член.",
+    "en": "A sequence is given by aₙ = n². Find its 2024th term."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4096576",
+    "en": "4096576"
+   },
+   "accept": [
+    "4096576"
+   ],
+   "solution": {
+    "ru": [
+     "Нужно вычислить 2024².",
+     "2024² = (2000 + 24)² = 4 000 000 + 96 000 + 576.",
+     "Ответ: 4 096 576."
+    ],
+    "en": [
+     "We need 2024².",
+     "2024² = (2000 + 24)² = 4 000 000 + 96 000 + 576.",
+     "Answer: 4 096 576."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Используйте формулу квадрата суммы.",
+     "(2000 + 24)² = 2000² + 2·2000·24 + 24²."
+    ],
+    "en": [
+     "Use the square-of-a-sum formula.",
+     "(2000 + 24)² = 2000² + 2·2000·24 + 24²."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2024",
+   "tags": [
+    "последовательности",
+    "вычисления"
+   ]
+  },
+  {
+   "id": "ct-2025-a1",
+   "year": 2025,
+   "part": "A",
+   "n": 1,
+   "topic": "numbers",
+   "difficulty": 1,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение выражения (0,2)⁻¹ · 4 − 3.",
+    "en": "Evaluate (0.2)⁻¹ · 4 − 3."
+   },
+   "options": {
+    "ru": [
+     "17",
+     "5",
+     "2",
+     "20",
+     "8"
+    ],
+    "en": [
+     "17",
+     "5",
+     "2",
+     "20",
+     "8"
+    ]
+   },
+   "answer": {
+    "ru": "17",
+    "en": "17"
+   },
+   "accept": [
+    "17"
+   ],
+   "solution": {
+    "ru": [
+     "(0,2)⁻¹ = 1/0,2 = 5.",
+     "5 · 4 = 20.",
+     "20 − 3 = 17."
+    ],
+    "en": [
+     "(0.2)⁻¹ = 1/0.2 = 5.",
+     "5 · 4 = 20.",
+     "20 − 3 = 17."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Отрицательная степень означает обратное число.",
+     "1/0,2 = 5."
+    ],
+    "en": [
+     "A negative exponent means the reciprocal.",
+     "1/0.2 = 5."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "степени"
+   ]
+  },
+  {
+   "id": "ct-2025-a2",
+   "year": 2025,
+   "part": "A",
+   "n": 2,
+   "topic": "expressions",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Упростите выражение (a³)⁻² · a⁷ при a ≠ 0.",
+    "en": "Simplify (a³)⁻² · a⁷ for a ≠ 0."
+   },
+   "options": {
+    "ru": [
+     "a",
+     "a³",
+     "1/a",
+     "a⁻¹³",
+     "a⁷"
+    ],
+    "en": [
+     "a",
+     "a³",
+     "1/a",
+     "a⁻¹³",
+     "a⁷"
+    ]
+   },
+   "answer": {
+    "ru": "a",
+    "en": "a"
+   },
+   "accept": [
+    "a"
+   ],
+   "solution": {
+    "ru": [
+     "(a³)⁻² = a^(3·(−2)) = a⁻⁶.",
+     "a⁻⁶ · a⁷ = a^(−6 + 7).",
+     "Получаем a¹ = a."
+    ],
+    "en": [
+     "(a³)⁻² = a^(3·(−2)) = a⁻⁶.",
+     "a⁻⁶ · a⁷ = a^(−6 + 7).",
+     "We get a¹ = a."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "При возведении степени в степень показатели перемножаются.",
+     "При умножении — складываются."
+    ],
+    "en": [
+     "Power of a power: multiply the exponents.",
+     "Multiplication: add the exponents."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "степени с буквенным основанием"
+   ]
+  },
+  {
+   "id": "ct-2025-a3",
+   "year": 2025,
+   "part": "A",
+   "n": 3,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Решите уравнение (2x − 3)/5 = (x + 1)/2.",
+    "en": "Solve (2x − 3)/5 = (x + 1)/2."
+   },
+   "options": {
+    "ru": [
+     "-11",
+     "11",
+     "-1",
+     "1",
+     "-5"
+    ],
+    "en": [
+     "-11",
+     "11",
+     "-1",
+     "1",
+     "-5"
+    ]
+   },
+   "answer": {
+    "ru": "-11",
+    "en": "-11"
+   },
+   "accept": [
+    "-11"
+   ],
+   "solution": {
+    "ru": [
+     "По свойству пропорции: 2(2x − 3) = 5(x + 1).",
+     "4x − 6 = 5x + 5.",
+     "−x = 11 ⟹ x = −11."
+    ],
+    "en": [
+     "By the proportion rule: 2(2x − 3) = 5(x + 1).",
+     "4x − 6 = 5x + 5.",
+     "−x = 11 ⟹ x = −11."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Умножьте на 10 или используйте пропорцию крест-накрест.",
+     "Переносите слагаемые с x в одну сторону."
+    ],
+    "en": [
+     "Multiply by 10 or cross-multiply.",
+     "Move the x-terms to one side."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "линейные уравнения"
+   ]
+  },
+  {
+   "id": "ct-2025-a4",
+   "year": 2025,
+   "part": "A",
+   "n": 4,
+   "topic": "equations",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наибольшее значение y среди решений системы { x² + y² = 25, y = x + 1.",
+    "en": "Find the largest y among the solutions of the system { x² + y² = 25, y = x + 1."
+   },
+   "options": {
+    "ru": [
+     "4",
+     "3",
+     "-3",
+     "5",
+     "1"
+    ],
+    "en": [
+     "4",
+     "3",
+     "-3",
+     "5",
+     "1"
+    ]
+   },
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "Подставим: x² + (x + 1)² = 25 ⟹ 2x² + 2x − 24 = 0 ⟹ x² + x − 12 = 0.",
+     "x = 3 или x = −4, значит y = 4 или y = −3.",
+     "Наибольшее значение y равно 4."
+    ],
+    "en": [
+     "Substitute: x² + (x + 1)² = 25 ⟹ 2x² + 2x − 24 = 0 ⟹ x² + x − 12 = 0.",
+     "x = 3 or x = −4, hence y = 4 or y = −3.",
+     "The largest y is 4."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Подставьте y = x + 1 в уравнение окружности.",
+     "Получится приведённое квадратное уравнение x² + x − 12 = 0."
+    ],
+    "en": [
+     "Substitute y = x + 1 into the circle equation.",
+     "You get x² + x − 12 = 0."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "системы уравнений",
+    "окружность"
+   ]
+  },
+  {
+   "id": "ct-2025-a5",
+   "year": 2025,
+   "part": "A",
+   "n": 5,
+   "topic": "functions",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите область значений функции y = 2 + cos x.",
+    "en": "Find the range of the function y = 2 + cos x."
+   },
+   "options": {
+    "ru": [
+     "[1; 3]",
+     "[−1; 1]",
+     "[2; 4]",
+     "(0; 3]",
+     "[1; 3)"
+    ],
+    "en": [
+     "[1; 3]",
+     "[−1; 1]",
+     "[2; 4]",
+     "(0; 3]",
+     "[1; 3)"
+    ]
+   },
+   "answer": {
+    "ru": "[1; 3]",
+    "en": "[1; 3]"
+   },
+   "accept": [
+    "[1; 3]"
+   ],
+   "solution": {
+    "ru": [
+     "−1 ≤ cos x ≤ 1.",
+     "Прибавим 2 ко всем частям: 1 ≤ 2 + cos x ≤ 3.",
+     "Область значений [1; 3]."
+    ],
+    "en": [
+     "−1 ≤ cos x ≤ 1.",
+     "Add 2 to all parts: 1 ≤ 2 + cos x ≤ 3.",
+     "The range is [1; 3]."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Косинус принимает значения от −1 до 1.",
+     "Сдвиг графика вверх на 2 не меняет длину отрезка значений."
+    ],
+    "en": [
+     "The cosine takes values from −1 to 1.",
+     "Shifting the graph up by 2 keeps the length of the range."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "область значений"
+   ]
+  },
+  {
+   "id": "ct-2025-a6",
+   "year": 2025,
+   "part": "A",
+   "n": 6,
+   "topic": "progressions",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Известно, что b₁ = 5, b₃ = 20, q > 0. Найдите знаменатель геометрической прогрессии.",
+    "en": "Given b₁ = 5, b₃ = 20 and q > 0, find the common ratio of the geometric progression."
+   },
+   "options": {
+    "ru": [
+     "2",
+     "-2",
+     "4",
+     "5",
+     "3/2"
+    ],
+    "en": [
+     "2",
+     "-2",
+     "4",
+     "5",
+     "3/2"
+    ]
+   },
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "b₃ = b₁ · q² ⟹ 5q² = 20.",
+     "q² = 4; так как q > 0, то q = 2.",
+     "Знаменатель равен 2."
+    ],
+    "en": [
+     "b₃ = b₁ · q² ⟹ 5q² = 20.",
+     "q² = 4; since q > 0, q = 2.",
+     "The common ratio is 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "b₃ = b₁q².",
+     "Из q² = 4 подходит только положительное значение."
+    ],
+    "en": [
+     "b₃ = b₁q².",
+     "Only the positive value of q² = 4 is acceptable."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "геометрическая прогрессия"
+   ]
+  },
+  {
+   "id": "ct-2025-a7",
+   "year": 2025,
+   "part": "A",
+   "n": 7,
+   "topic": "wordproblems",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Два пешехода вышли одновременно навстречу друг другу из пунктов, расстояние между которыми 24 км, и встретились через 3 часа. Найдите скорость первого пешехода (км/ч), если скорость второго на 2 км/ч больше.",
+    "en": "Two pedestrians start simultaneously towards each other from points 24 km apart and meet after 3 hours. Find the speed of the first (km/h) if the second is 2 km/h faster."
+   },
+   "options": {
+    "ru": [
+     "3",
+     "5",
+     "4",
+     "6",
+     "5/2"
+    ],
+    "en": [
+     "3",
+     "5",
+     "4",
+     "6",
+     "5/2"
+    ]
+   },
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "Суммарная скорость: 24 : 3 = 8 км/ч.",
+     "Пусть v — скорость первого, тогда v + (v + 2) = 8.",
+     "2v = 6 ⟹ v = 3 км/ч."
+    ],
+    "en": [
+     "Combined speed: 24 : 3 = 8 km/h.",
+     "Let v be the first speed, then v + (v + 2) = 8.",
+     "2v = 6 ⟹ v = 3 km/h."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "При движении навстречу скорости складываются.",
+     "Суммарная скорость равна расстоянию, делённому на время встречи."
+    ],
+    "en": [
+     "Speeds add when moving towards each other.",
+     "The combined speed equals the distance divided by the meeting time."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "задачи на движение"
+   ]
+  },
+  {
+   "id": "ct-2025-a8",
+   "year": 2025,
+   "part": "A",
+   "n": 8,
+   "topic": "trig",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Вычислите 1 − 2sin²75°.",
+    "en": "Evaluate 1 − 2sin²75°."
+   },
+   "options": {
+    "ru": [
+     "−√3/2",
+     "√3/2",
+     "−1/2",
+     "1/2",
+     "−1"
+    ],
+    "en": [
+     "−√3/2",
+     "√3/2",
+     "−1/2",
+     "1/2",
+     "−1"
+    ]
+   },
+   "answer": {
+    "ru": "−√3/2",
+    "en": "−√3/2"
+   },
+   "accept": [
+    "−√3/2"
+   ],
+   "solution": {
+    "ru": [
+     "1 − 2sin²α = cos 2α.",
+     "2α = 150°.",
+     "cos 150° = −cos 30° = −√3/2."
+    ],
+    "en": [
+     "1 − 2sin²α = cos 2α.",
+     "2α = 150°.",
+     "cos 150° = −cos 30° = −√3/2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Вспомните формулу понижения степени: cos 2α = 1 − 2sin²α.",
+     "cos 150° отрицателен."
+    ],
+    "en": [
+     "Recall the power-reduction formula: cos 2α = 1 − 2sin²α.",
+     "cos 150° is negative."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "формулы двойного угла",
+    "формулы понижения степени"
+   ]
+  },
+  {
+   "id": "ct-2025-a9",
+   "year": 2025,
+   "part": "A",
+   "n": 9,
+   "topic": "trigequations",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите наибольший корень уравнения 2sin x = √3 на отрезке [0; π].",
+    "en": "Find the largest root of 2sin x = √3 on the interval [0; π]."
+   },
+   "options": {
+    "ru": [
+     "2π/3",
+     "π/3",
+     "π/2",
+     "5π/6",
+     "π"
+    ],
+    "en": [
+     "2π/3",
+     "π/3",
+     "π/2",
+     "5π/6",
+     "π"
+    ]
+   },
+   "answer": {
+    "ru": "2π/3",
+    "en": "2π/3"
+   },
+   "accept": [
+    "2π/3"
+   ],
+   "solution": {
+    "ru": [
+     "sin x = √3/2.",
+     "На [0; π] корни: x = π/3 и x = 2π/3.",
+     "Наибольший из них 2π/3."
+    ],
+    "en": [
+     "sin x = √3/2.",
+     "On [0; π] the roots are x = π/3 and x = 2π/3.",
+     "The largest one is 2π/3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Разделите на 2: sin x = √3/2.",
+     "На отрезке [0; π] синус положителен — есть два корня."
+    ],
+    "en": [
+     "Divide by 2: sin x = √3/2.",
+     "On [0; π] the sine is positive, giving two roots."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "тригонометрические уравнения",
+    "отбор корней"
+   ]
+  },
+  {
+   "id": "ct-2025-a10",
+   "year": 2025,
+   "part": "A",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите произведение корней уравнения log₂²x − 5log₂x + 4 = 0.",
+    "en": "Find the product of the roots of log₂²x − 5log₂x + 4 = 0."
+   },
+   "options": {
+    "ru": [
+     "32",
+     "16",
+     "8",
+     "4",
+     "64"
+    ],
+    "en": [
+     "32",
+     "16",
+     "8",
+     "4",
+     "64"
+    ]
+   },
+   "answer": {
+    "ru": "32",
+    "en": "32"
+   },
+   "accept": [
+    "32"
+   ],
+   "solution": {
+    "ru": [
+     "Замена t = log₂x: t² − 5t + 4 = 0 ⟹ t = 1 или t = 4.",
+     "log₂x = 1 ⟹ x = 2; log₂x = 4 ⟹ x = 16.",
+     "Произведение корней: 2 · 16 = 32."
+    ],
+    "en": [
+     "Substitute t = log₂x: t² − 5t + 4 = 0 ⟹ t = 1 or t = 4.",
+     "log₂x = 1 ⟹ x = 2; log₂x = 4 ⟹ x = 16.",
+     "The product of the roots is 2 · 16 = 32."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сделайте замену t = log₂x.",
+     "Корни по t равны 1 и 4."
+    ],
+    "en": [
+     "Substitute t = log₂x.",
+     "The roots in t are 1 and 4."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "логарифмические уравнения",
+    "замена"
+   ]
+  },
+  {
+   "id": "ct-2025-a11",
+   "year": 2025,
+   "part": "A",
+   "n": 11,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "В треугольнике сторона равна 6, а противолежащий ей угол — 30°. Найдите радиус описанной окружности.",
+    "en": "A triangle has a side 6 with the opposite angle 30°. Find the circumradius."
+   },
+   "options": {
+    "ru": [
+     "6",
+     "12",
+     "3",
+     "24",
+     "9"
+    ],
+    "en": [
+     "6",
+     "12",
+     "3",
+     "24",
+     "9"
+    ]
+   },
+   "answer": {
+    "ru": "6",
+    "en": "6"
+   },
+   "accept": [
+    "6"
+   ],
+   "solution": {
+    "ru": [
+     "Теорема синусов: a/sin A = 2R.",
+     "6/0,5 = 12 = 2R.",
+     "R = 6."
+    ],
+    "en": [
+     "Law of sines: a/sin A = 2R.",
+     "6/0.5 = 12 = 2R.",
+     "R = 6."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "a/sin A = 2R.",
+     "sin 30° = ½, значит a/sin A = 12."
+    ],
+    "en": [
+     "a/sin A = 2R.",
+     "sin 30° = ½, so a/sin A = 12."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "теорема синусов",
+    "описанная окружность"
+   ]
+  },
+  {
+   "id": "ct-2025-a12",
+   "year": 2025,
+   "part": "A",
+   "n": 12,
+   "topic": "planimetry",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите длину окружности, описанной около квадрата со стороной 4√2 (в ответе укажите коэффициент при π).",
+    "en": "Find the circumference of the circle circumscribed about a square with side 4√2 (give the coefficient at π)."
+   },
+   "options": {
+    "ru": [
+     "8",
+     "4",
+     "16",
+     "2",
+     "12"
+    ],
+    "en": [
+     "8",
+     "4",
+     "16",
+     "2",
+     "12"
+    ]
+   },
+   "answer": {
+    "ru": "8",
+    "en": "8"
+   },
+   "accept": [
+    "8"
+   ],
+   "solution": {
+    "ru": [
+     "Диагональ квадрата равна диаметру окружности: d = a√2 = 4√2 · √2 = 8.",
+     "R = 4.",
+     "C = 2πR = 8π, коэффициент 8."
+    ],
+    "en": [
+     "The square diagonal is the circle diameter: d = a√2 = 4√2 · √2 = 8.",
+     "R = 4.",
+     "C = 2πR = 8π, coefficient 8."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Центр описанной окружности — точка пересечения диагоналей.",
+     "d = a√2."
+    ],
+    "en": [
+     "The circumcentre is the intersection of the diagonals.",
+     "d = a√2."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "окружность",
+    "квадрат"
+   ]
+  },
+  {
+   "id": "ct-2025-a13",
+   "year": 2025,
+   "part": "A",
+   "n": 13,
+   "topic": "stereometry",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите объём правильной треугольной призмы со стороной основания 2 и высотой 3.",
+    "en": "Find the volume of a regular triangular prism with base side 2 and height 3."
+   },
+   "options": {
+    "ru": [
+     "3√3",
+     "√3",
+     "6√3",
+     "9",
+     "12"
+    ],
+    "en": [
+     "3√3",
+     "√3",
+     "6√3",
+     "9",
+     "12"
+    ]
+   },
+   "answer": {
+    "ru": "3√3",
+    "en": "3√3"
+   },
+   "accept": [
+    "3√3"
+   ],
+   "solution": {
+    "ru": [
+     "Площадь правильного треугольника со стороной 2: S = (√3/4)·a² = (√3/4)·4 = √3.",
+     "V = S·H = √3 · 3.",
+     "V = 3√3."
+    ],
+    "en": [
+     "Area of an equilateral triangle with side 2: S = (√3/4)·a² = √3.",
+     "V = S·H = √3 · 3.",
+     "V = 3√3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "S = (√3/4)·a².",
+     "V = S·H."
+    ],
+    "en": [
+     "S = (√3/4)·a².",
+     "V = S·H."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "призма",
+    "объём"
+   ]
+  },
+  {
+   "id": "ct-2025-a14",
+   "year": 2025,
+   "part": "A",
+   "n": 14,
+   "topic": "derivative",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите значение производной функции f(x) = cos x + x в точке x₀ = π/6.",
+    "en": "Find the value of the derivative of f(x) = cos x + x at x₀ = π/6."
+   },
+   "options": {
+    "ru": [
+     "1/2",
+     "−1/2",
+     "√3/2",
+     "−√3/2",
+     "1"
+    ],
+    "en": [
+     "1/2",
+     "−1/2",
+     "√3/2",
+     "−√3/2",
+     "1"
+    ]
+   },
+   "answer": {
+    "ru": "1/2",
+    "en": "1/2"
+   },
+   "accept": [
+    "1/2"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = −sin x + 1.",
+     "f′(π/6) = −½ + 1.",
+     "f′(π/6) = ½."
+    ],
+    "en": [
+     "f′(x) = −sin x + 1.",
+     "f′(π/6) = −½ + 1.",
+     "f′(π/6) = ½."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "(cos x)′ = −sin x.",
+     "sin(π/6) = ½."
+    ],
+    "en": [
+     "(cos x)′ = −sin x.",
+     "sin(π/6) = ½."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "производная тригонометрических функций"
+   ]
+  },
+  {
+   "id": "ct-2025-a15",
+   "year": 2025,
+   "part": "A",
+   "n": 15,
+   "topic": "research",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "Найдите точку минимума функции y = x³ − 3x² − 9x.",
+    "en": "Find the minimum point of y = x³ − 3x² − 9x."
+   },
+   "options": {
+    "ru": [
+     "3",
+     "-1",
+     "1",
+     "0",
+     "9"
+    ],
+    "en": [
+     "3",
+     "-1",
+     "1",
+     "0",
+     "9"
+    ]
+   },
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "y′ = 3x² − 6x − 9 = 3(x² − 2x − 3) = 3(x − 3)(x + 1).",
+     "Критические точки x = −1 и x = 3.",
+     "При переходе через x = 3 производная меняет знак с − на + — это минимум."
+    ],
+    "en": [
+     "y′ = 3x² − 6x − 9 = 3(x² − 2x − 3) = 3(x − 3)(x + 1).",
+     "Critical points: x = −1 and x = 3.",
+     "At x = 3 the derivative changes − → +, so it is the minimum."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Решите уравнение x² − 2x − 3 = 0.",
+     "Знак производной определяет вид экстремума."
+    ],
+    "en": [
+     "Solve x² − 2x − 3 = 0.",
+     "The sign of the derivative tells the type of extremum."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "экстремумы"
+   ]
+  },
+  {
+   "id": "ct-2025-a16",
+   "year": 2025,
+   "part": "A",
+   "n": 16,
+   "topic": "combinatorics",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "В ящике 5 стандартных и 3 нестандартные детали. Найдите вероятность того, что обе наугад извлечённые детали окажутся стандартными.",
+    "en": "A box contains 5 standard and 3 non-standard parts. Find the probability that both randomly drawn parts are standard."
+   },
+   "options": {
+    "ru": [
+     "5/14",
+     "3/8",
+     "5/8",
+     "1/2",
+     "15/28"
+    ],
+    "en": [
+     "5/14",
+     "3/8",
+     "5/8",
+     "1/2",
+     "15/28"
+    ]
+   },
+   "answer": {
+    "ru": "5/14",
+    "en": "5/14"
+   },
+   "accept": [
+    "5/14"
+   ],
+   "solution": {
+    "ru": [
+     "Порядок не важен: C₈² = 28 способов выбрать две детали.",
+     "Благоприятных: C₅² = 10.",
+     "P = 10/28 = 5/14."
+    ],
+    "en": [
+     "Order does not matter: C(8,2) = 28 ways to pick two parts.",
+     "Favourable: C(5,2) = 10.",
+     "P = 10/28 = 5/14."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Считайте число сочетаний.",
+     "C₈² = 28, C₅² = 10."
+    ],
+    "en": [
+     "Count combinations.",
+     "C(8,2) = 28, C(5,2) = 10."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "вероятность",
+    "сочетания"
+   ]
+  },
+  {
+   "id": "ct-2025-a17",
+   "year": 2025,
+   "part": "A",
+   "n": 17,
+   "topic": "logic",
+   "difficulty": 3,
+   "answerType": "choice",
+   "text": {
+    "ru": "Последовательность задана формулой aₙ = 2ⁿ − n. Найдите a₄.",
+    "en": "A sequence is given by aₙ = 2ⁿ − n. Find a₄."
+   },
+   "options": {
+    "ru": [
+     "12",
+     "14",
+     "16",
+     "8",
+     "11"
+    ],
+    "en": [
+     "12",
+     "14",
+     "16",
+     "8",
+     "11"
+    ]
+   },
+   "answer": {
+    "ru": "12",
+    "en": "12"
+   },
+   "accept": [
+    "12"
+   ],
+   "solution": {
+    "ru": [
+     "a₄ = 2⁴ − 4.",
+     "16 − 4 = 12.",
+     "Ответ: 12."
+    ],
+    "en": [
+     "a₄ = 2⁴ − 4.",
+     "16 − 4 = 12.",
+     "Answer: 12."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "2⁴ = 16.",
+     "Не перепутайте порядок действий: степень, затем вычитание."
+    ],
+    "en": [
+     "2⁴ = 16.",
+     "Order of operations: power first, then subtract."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "формула n-го члена"
+   ]
+  },
+  {
+   "id": "ct-2025-a18",
+   "year": 2025,
+   "part": "A",
+   "n": 18,
+   "topic": "param",
+   "difficulty": 4,
+   "answerType": "choice",
+   "text": {
+    "ru": "При каких значениях a уравнение x² + (a − 1)x + 1 = 0 не имеет корней?",
+    "en": "For which a does x² + (a − 1)x + 1 = 0 have no roots?"
+   },
+   "options": {
+    "ru": [
+     "(−1; 3)",
+     "(−3; 1)",
+     "[−1; 3]",
+     "(−∞; −1) ∪ (3; +∞)",
+     "(−2; 2)"
+    ],
+    "en": [
+     "(−1; 3)",
+     "(−3; 1)",
+     "[−1; 3]",
+     "(−∞; −1) ∪ (3; +∞)",
+     "(−2; 2)"
+    ]
+   },
+   "answer": {
+    "ru": "(−1; 3)",
+    "en": "(−1; 3)"
+   },
+   "accept": [
+    "(−1; 3)"
+   ],
+   "solution": {
+    "ru": [
+     "Нет корней при D < 0.",
+     "D = (a − 1)² − 4 < 0 ⟹ (a − 1)² < 4.",
+     "−2 < a − 1 < 2 ⟹ −1 < a < 3."
+    ],
+    "en": [
+     "No roots when D < 0.",
+     "D = (a − 1)² − 4 < 0 ⟹ (a − 1)² < 4.",
+     "−2 < a − 1 < 2 ⟹ −1 < a < 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "D = b² − 4ac < 0.",
+     "Неравенство (a − 1)² < 4 равносильно двойному неравенству."
+    ],
+    "en": [
+     "D = b² − 4ac < 0.",
+     "(a − 1)² < 4 is a double inequality."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "параметр",
+    "дискриминант"
+   ]
+  },
+  {
+   "id": "ct-2025-b1",
+   "year": 2025,
+   "part": "B",
+   "n": 1,
+   "topic": "numbers",
+   "difficulty": 2,
+   "answerType": "short",
+   "text": {
+    "ru": "Вычислите (2/5)⁻².",
+    "en": "Evaluate (2/5)⁻²."
+   },
+   "options": null,
+   "answer": {
+    "ru": "25/4",
+    "en": "25/4"
+   },
+   "accept": [
+    "25/4",
+    "6.25",
+    "6,25"
+   ],
+   "solution": {
+    "ru": [
+     "(2/5)⁻² = (5/2)².",
+     "(5/2)² = 25/4.",
+     "Ответ: 25/4 = 6,25."
+    ],
+    "en": [
+     "(2/5)⁻² = (5/2)².",
+     "(5/2)² = 25/4.",
+     "Answer: 25/4 = 6.25."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Отрицательная степень переворачивает дробь."
+    ],
+    "en": [
+     "A negative exponent flips the fraction."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "степени с дробным основанием"
+   ]
+  },
+  {
+   "id": "ct-2025-b2",
+   "year": 2025,
+   "part": "B",
+   "n": 2,
+   "topic": "equations",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите меньший корень уравнения x² = 9x − 20.",
+    "en": "Find the smaller root of x² = 9x − 20."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4",
+    "en": "4"
+   },
+   "accept": [
+    "4"
+   ],
+   "solution": {
+    "ru": [
+     "x² − 9x + 20 = 0.",
+     "По теореме Виета корни 4 и 5.",
+     "Меньший корень равен 4."
+    ],
+    "en": [
+     "x² − 9x + 20 = 0.",
+     "By Vieta the roots are 4 and 5.",
+     "The smaller root is 4."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Перенесите всё в левую часть.",
+     "Сумма корней 9, произведение 20."
+    ],
+    "en": [
+     "Move everything to the left-hand side.",
+     "The roots add to 9 and multiply to 20."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "теорема Виета"
+   ]
+  },
+  {
+   "id": "ct-2025-b3",
+   "year": 2025,
+   "part": "B",
+   "n": 3,
+   "topic": "inequalities",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите сумму целых решений неравенства x² − 6x + 5 ≤ 0.",
+    "en": "Find the sum of the integer solutions of x² − 6x + 5 ≤ 0."
+   },
+   "options": null,
+   "answer": {
+    "ru": "15",
+    "en": "15"
+   },
+   "accept": [
+    "15"
+   ],
+   "solution": {
+    "ru": [
+     "Корни трёхчлена 1 и 5, ветви вверх ⟹ 1 ≤ x ≤ 5.",
+     "Целые решения: 1, 2, 3, 4, 5.",
+     "Их сумма равна 15."
+    ],
+    "en": [
+     "Roots of the trinomial are 1 and 5, branches up ⟹ 1 ≤ x ≤ 5.",
+     "Integer solutions: 1, 2, 3, 4, 5.",
+     "Their sum is 15."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Метод интервалов с учётом знака старшего коэффициента.",
+     "Сумма 1 + 2 + 3 + 4 + 5."
+    ],
+    "en": [
+     "Interval method with the sign of the leading coefficient.",
+     "The sum 1 + 2 + 3 + 4 + 5."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "квадратные неравенства"
+   ]
+  },
+  {
+   "id": "ct-2025-b4",
+   "year": 2025,
+   "part": "B",
+   "n": 4,
+   "topic": "wordproblems",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Первый рабочий за час делает на 3 детали больше второго. За 4 часа первый сделал столько же деталей, сколько второй за 6 часов. Сколько деталей в час делает первый рабочий?",
+    "en": "Worker A makes 3 more parts per hour than worker B. In 4 hours A made as many parts as B in 6 hours. How many parts per hour does A make?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "9",
+    "en": "9"
+   },
+   "accept": [
+    "9"
+   ],
+   "solution": {
+    "ru": [
+     "Пусть производительность второго x деталей в час, первого x + 3.",
+     "4(x + 3) = 6x ⟹ 4x + 12 = 6x ⟹ x = 6.",
+     "Первый делает 6 + 3 = 9 деталей в час."
+    ],
+    "en": [
+     "Let B make x parts per hour, then A makes x + 3.",
+     "4(x + 3) = 6x ⟹ 4x + 12 = 6x ⟹ x = 6.",
+     "A makes 6 + 3 = 9 parts per hour."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Обозначьте производительность второго рабочего за x.",
+     "Работа равна произведению производительности на время."
+    ],
+    "en": [
+     "Let the rate of worker B be x.",
+     "Work equals rate times time."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "задачи на работу"
+   ]
+  },
+  {
+   "id": "ct-2025-b5",
+   "year": 2025,
+   "part": "B",
+   "n": 5,
+   "topic": "trig",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Известно, что sin α = 5/13, α — угол I четверти. Найдите tg α.",
+    "en": "Given sin α = 5/13 for an angle α of the first quadrant, find tg α."
+   },
+   "options": null,
+   "answer": {
+    "ru": "5/12",
+    "en": "5/12"
+   },
+   "accept": [
+    "5/12"
+   ],
+   "solution": {
+    "ru": [
+     "cos²α = 1 − 25/169 = 144/169; α в I четверти ⟹ cos α = 12/13.",
+     "tg α = sin α / cos α.",
+     "tg α = (5/13)/(12/13) = 5/12."
+    ],
+    "en": [
+     "cos²α = 1 − 25/169 = 144/169; α in quadrant I ⟹ cos α = 12/13.",
+     "tg α = sin α / cos α.",
+     "tg α = (5/13)/(12/13) = 5/12."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Найдите cos α из основного тождества.",
+     "tg α = sin α / cos α."
+    ],
+    "en": [
+     "Find cos α from the Pythagorean identity.",
+     "tg α = sin α / cos α."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "тангенс",
+    "пифагорова тройка"
+   ]
+  },
+  {
+   "id": "ct-2025-b6",
+   "year": 2025,
+   "part": "B",
+   "n": 6,
+   "topic": "planimetry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "В прямоугольном треугольнике ABC угол C прямой, AC = 3, BC = 4. Найдите sin A.",
+    "en": "In a right triangle ABC the angle C is right, AC = 3, BC = 4. Find sin A."
+   },
+   "options": null,
+   "answer": {
+    "ru": "4/5",
+    "en": "4/5"
+   },
+   "accept": [
+    "4/5",
+    "0.8",
+    "0,8"
+   ],
+   "solution": {
+    "ru": [
+     "Гипотенуза: AB = √(9 + 16) = 5.",
+     "sin A = BC/AB (противолежащий катет к гипотенузе).",
+     "sin A = 4/5 = 0,8."
+    ],
+    "en": [
+     "Hypotenuse: AB = √(9 + 16) = 5.",
+     "sin A = BC/AB (opposite leg over hypotenuse).",
+     "sin A = 4/5 = 0.8."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Сначала найдите гипотенузу.",
+     "Синус острого угла — отношение противолежащего катета к гипотенузе."
+    ],
+    "en": [
+     "Find the hypotenuse first.",
+     "The sine is the opposite leg over the hypotenuse."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "прямоугольный треугольник",
+    "синус"
+   ]
+  },
+  {
+   "id": "ct-2025-b7",
+   "year": 2025,
+   "part": "B",
+   "n": 7,
+   "topic": "stereometry",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите объём правильной четырёхугольной призмы со стороной основания 5 и высотой 6.",
+    "en": "Find the volume of a regular quadrangular prism with base side 5 and height 6."
+   },
+   "options": null,
+   "answer": {
+    "ru": "150",
+    "en": "150"
+   },
+   "accept": [
+    "150"
+   ],
+   "solution": {
+    "ru": [
+     "Основание — квадрат: S = 25.",
+     "V = S·H = 25 · 6.",
+     "V = 150."
+    ],
+    "en": [
+     "The base is a square: S = 25.",
+     "V = S·H = 25 · 6.",
+     "V = 150."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Правильная четырёхугольная призма — это прямой параллелепипед с квадратом в основании."
+    ],
+    "en": [
+     "A regular quadrangular prism is a box with a square base."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "призма",
+    "объём"
+   ]
+  },
+  {
+   "id": "ct-2025-b8",
+   "year": 2025,
+   "part": "B",
+   "n": 8,
+   "topic": "derivative",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите значение производной функции f(x) = (3x + 1)² в точке x₀ = 1.",
+    "en": "Find the value of the derivative of f(x) = (3x + 1)² at x₀ = 1."
+   },
+   "options": null,
+   "answer": {
+    "ru": "24",
+    "en": "24"
+   },
+   "accept": [
+    "24"
+   ],
+   "solution": {
+    "ru": [
+     "f′(x) = 2(3x + 1) · 3 = 6(3x + 1).",
+     "f′(1) = 6 · 4.",
+     "f′(1) = 24."
+    ],
+    "en": [
+     "f′(x) = 2(3x + 1) · 3 = 6(3x + 1).",
+     "f′(1) = 6 · 4.",
+     "f′(1) = 24."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Правило степени плюс производная внутренней функции.",
+     "Не забудьте множитель 3."
+    ],
+    "en": [
+     "Power rule plus the derivative of the inner function.",
+     "Do not forget the factor 3."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "производная сложной функции"
+   ]
+  },
+  {
+   "id": "ct-2025-b9",
+   "year": 2025,
+   "part": "B",
+   "n": 9,
+   "topic": "combinatorics",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Сколько пятизначных чисел можно составить из цифр 1, 2, 3, 4, 5, если каждая цифра используется ровно один раз?",
+    "en": "How many five-digit numbers can be formed from the digits 1, 2, 3, 4, 5, using each digit exactly once?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "120",
+    "en": "120"
+   },
+   "accept": [
+    "120"
+   ],
+   "solution": {
+    "ru": [
+     "Все цифры различны и используются все — это перестановки.",
+     "P₅ = 5! = 120.",
+     "Ответ: 120."
+    ],
+    "en": [
+     "All digits differ and all are used, so these are permutations.",
+     "P₅ = 5! = 120.",
+     "Answer: 120."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "5! = 1·2·3·4·5."
+    ],
+    "en": [
+     "5! = 1·2·3·4·5."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "перестановки"
+   ]
+  },
+  {
+   "id": "ct-2025-b10",
+   "year": 2025,
+   "part": "B",
+   "n": 10,
+   "topic": "logexp",
+   "difficulty": 3,
+   "answerType": "short",
+   "text": {
+    "ru": "Решите уравнение log₃(x + 2) = 4.",
+    "en": "Solve log₃(x + 2) = 4."
+   },
+   "options": null,
+   "answer": {
+    "ru": "79",
+    "en": "79"
+   },
+   "accept": [
+    "79"
+   ],
+   "solution": {
+    "ru": [
+     "x + 2 = 3⁴ = 81.",
+     "x = 79.",
+     "Проверка: 79 + 2 = 81 > 0 — верно."
+    ],
+    "en": [
+     "x + 2 = 3⁴ = 81.",
+     "x = 79.",
+     "Check: 79 + 2 = 81 > 0, correct."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "log_a b = c ⟺ b = a^c.",
+     "3⁴ = 81."
+    ],
+    "en": [
+     "log_a b = c ⟺ b = a^c.",
+     "3⁴ = 81."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "логарифмические уравнения"
+   ]
+  },
+  {
+   "id": "ct-2025-b11",
+   "year": 2025,
+   "part": "B",
+   "n": 11,
+   "topic": "param",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "При каком наибольшем значении a система { y = x², y = ax − 1 имеет ровно одно решение?",
+    "en": "For which largest a does the system { y = x², y = ax − 1 have exactly one solution?"
+   },
+   "options": null,
+   "answer": {
+    "ru": "2",
+    "en": "2"
+   },
+   "accept": [
+    "2"
+   ],
+   "solution": {
+    "ru": [
+     "Приравняем: x² = ax − 1 ⟹ x² − ax + 1 = 0.",
+     "Одно решение ⟹ D = a² − 4 = 0 ⟹ a = ±2.",
+     "Наибольшее значение a = 2."
+    ],
+    "en": [
+     "Equate: x² = ax − 1 ⟹ x² − ax + 1 = 0.",
+     "One solution ⟹ D = a² − 4 = 0 ⟹ a = ±2.",
+     "The largest a is 2."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Единственное решение — дискриминант равен нулю.",
+     "Из двух значений выберите наибольшее."
+    ],
+    "en": [
+     "A single solution means a zero discriminant.",
+     "Choose the largest of the two values."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "параметр",
+    "системы"
+   ]
+  },
+  {
+   "id": "ct-2025-b12",
+   "year": 2025,
+   "part": "B",
+   "n": 12,
+   "topic": "logic",
+   "difficulty": 4,
+   "answerType": "short",
+   "text": {
+    "ru": "Найдите остаток от деления числа 3²⁰²⁵ на 4.",
+    "en": "Find the remainder of 3²⁰²⁵ divided by 4."
+   },
+   "options": null,
+   "answer": {
+    "ru": "3",
+    "en": "3"
+   },
+   "accept": [
+    "3"
+   ],
+   "solution": {
+    "ru": [
+     "3 ≡ −1 (mod 4).",
+     "(−1)^2025 = −1, так как показатель нечётен.",
+     "−1 ≡ 3 (mod 4), остаток 3."
+    ],
+    "en": [
+     "3 ≡ −1 (mod 4).",
+     "(−1)^2025 = −1 because the exponent is odd.",
+     "−1 ≡ 3 (mod 4), remainder 3."
+    ]
+   },
+   "hints": {
+    "ru": [
+     "Заметьте, что 3 = 4 − 1.",
+     "Рассмотрите чётность показателя."
+    ],
+    "en": [
+     "Notice that 3 = 4 − 1.",
+     "Consider the parity of the exponent."
+    ]
+   },
+   "tools": [
+    "calc",
+    "sheet",
+    "scratch"
+   ],
+   "src": "по мотивам ЦТ 2025",
+   "tags": [
+    "сравнения по модулю"
+   ]
+  }
+ ]
+}
