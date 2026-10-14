@@ -23,6 +23,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import time
 
 import subject
 from release_plan import (ROOT, SUBJECT_ROOT, BUILD_JOBS, CONTENT_FILES, INSTALLERS,
@@ -120,6 +121,28 @@ def validate_inventory(release: dict, output: Path) -> None:
         server_digest = asset.get("digest")
         if server_digest and server_digest != "sha256:" + digest(path):
             raise ValueError("GitHub uploaded asset digest mismatch: " + asset["name"])
+
+
+def reserve_tag(repo: str, tag: str, sha: str, existing: str | None) -> None:
+    """Резервирует тег версии до создания черновика.
+
+    Отдельный helper, потому что GitHub отдаёт только что созданный ref с
+    задержкой: чтение сразу после POST может вернуть 404. Именно на этом упал
+    выпуск `english-v2026.10.2` («tag changed during preparation»), хотя тег был
+    создан и указывал на нужный коммит. Поэтому после создания тега несколько
+    раз перечитываем его, прежде чем считать тег подменённым.
+    """
+    if not existing:
+        gh_json(f"repos/{repo}/git/refs", method="POST",
+                fields={"ref": "refs/tags/" + tag, "sha": sha})
+    current = existing
+    for attempt in range(8):
+        current = tag_commit(repo, tag)
+        if current == sha:
+            return
+        time.sleep(1 + attempt)   # чтение может отставать от записи
+    raise ValueError(f"tag {tag} does not point at {sha} after reservation "
+                     f"(read {current}); refusing to create a draft")
 
 
 def tag_commit(repo: str, tag: str) -> str | None:
@@ -228,10 +251,7 @@ def publish(args) -> dict:
     # planners can see this tag even if draft visibility is restricted. A later
     # source skips the reservation; the same source can resume it. No bot commits
     # or workflow recursion: this API mutation uses the Actions GITHUB_TOKEN.
-    if not existing_tag_sha:
-        gh_json(f"repos/{args.repo}/git/refs", method="POST", fields={"ref": "refs/tags/" + tag, "sha": sha})
-    if tag_commit(args.repo, tag) != sha:
-        raise ValueError("tag changed during preparation; refusing to create a draft")
+    reserve_tag(args.repo, tag, sha, existing_tag_sha)
     fields = {"tag_name": tag, "target_commitish": sha, "name": f"{subject.TITLE['ru']} {version}",
               "body": notes, "draft": True, "prerelease": False}
     if release:

@@ -153,6 +153,47 @@ class ReleasePolicy(unittest.TestCase):
         self.assertFalse(plan["already_published"])
         self.assertNotEqual(plan["tag"], "physics-v2026.10.1")
 
+    def test_reserved_tag_without_a_release_moves_the_version_forward(self):
+        """Тег, оставшийся от прерванной публикации, не переиспользуется.
+
+        `tools/release_plan.py` подхватывает такие теги (`unpublished_tag_reservations`)
+        как черновики: чужому коммиту они версию не отдают, но и не позволяют
+        выпустить её повторно под уже занятым тегом.
+        """
+        previous = self.release("physics-v2026.10.1", commit="b" * 40,
+                                assets=release_plan.RELEASE_FILES)
+        reservation = {"tag_name": "physics-v2026.10.2", "target_commitish": "b" * 40,
+                       "draft": True, "prerelease": False}
+        plan = release_plan.choose_version("2026.10.1", [previous, reservation], "a" * 40,
+                                           date(2026, 10, 14))
+        self.assertEqual(plan["version"], "2026.10.3")
+        self.assertEqual(plan["tag"], "physics-v2026.10.3")
+        self.assertFalse(plan["already_published"])
+
+    def test_reservation_of_the_same_commit_is_resumed(self):
+        commit = "a" * 40
+        reservation = {"tag_name": "physics-v2026.10.2", "target_commitish": commit,
+                       "draft": True, "prerelease": False}
+        plan = release_plan.choose_version("2026.10.1", [reservation], commit,
+                                           date(2026, 10, 14))
+        self.assertEqual(plan["version"], "2026.10.2")
+        self.assertEqual(plan["tag"], "physics-v2026.10.2")
+        self.assertFalse(plan["already_published"])
+
+    def test_tag_read_after_write_is_retried(self):
+        """Чтение только что созданного тега может отставать — это не подмена."""
+        from unittest import mock
+        responses = [None, None, "a" * 40]
+
+        def fake_tag_commit(repo, tag):
+            return responses.pop(0) if responses else "a" * 40
+
+        with mock.patch.object(publish_release, "tag_commit", fake_tag_commit), \
+                mock.patch.object(publish_release, "gh_json") as api, \
+                mock.patch.object(publish_release.time, "sleep", lambda _seconds: None):
+            publish_release.reserve_tag("owner/repo", "physics-v2026.10.2", "a" * 40, None)
+        api.assert_called_once()
+
     def test_version_numbering(self):
         self.assertEqual(release_plan.canonical("2026.10.01"), "2026.10.1")
         self.assertEqual(release_plan.canonical("2026.9.0"), "2026.9.0")
