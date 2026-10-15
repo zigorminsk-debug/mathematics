@@ -1139,6 +1139,81 @@
     "en": "Thank you → You are welcome; Sorry → That is all right."
    },
    "rule": "replies"
+  },
+  "extra_word.redundant": {
+   "title": {
+    "ru": "Лишнее слово в исходной строке",
+    "en": "An extra word in the original line"
+   },
+   "why": {
+    "ru": "Уберите одно слово, не заменяя и не добавляя остальные. Учитывайте соседние строки.",
+    "en": "Delete one word without replacing or adding others. Read the adjacent lines too."
+   },
+   "fix": {
+    "ru": "Проверьте подлежащее, вспомогательный глагол, сравнение и управление.",
+    "en": "Check the subject, auxiliary, comparison and verb pattern."
+   },
+   "rule": "extra-word-strategy"
+  },
+  "tenses.context": {
+   "title": {
+    "ru": "Временная логика контекста",
+    "en": "The timeline of the context"
+   },
+   "why": {
+    "ru": "Форму выбирают по времени и последовательности событий во всём тексте.",
+    "en": "Choose the form from the time and sequence of events throughout the text."
+   },
+   "fix": {
+    "ru": "Найдите момент отсчёта и проверьте согласование подлежащего и формы глагола.",
+    "en": "Find the reference time and check subject–verb agreement."
+   },
+   "rule": "present-simple"
+  },
+  "word_formation.context": {
+   "title": {
+    "ru": "Форма производного слова",
+    "en": "The form of the derived word"
+   },
+   "why": {
+    "ru": "Ответ может быть существительным, прилагательным, наречием или глаголом: смотрите на окружение пропуска.",
+    "en": "The answer may be a noun, adjective, adverb or verb: inspect the words around the gap."
+   },
+   "fix": {
+    "ru": "Определите часть речи, число, время и положительное/отрицательное значение.",
+    "en": "Determine the part of speech, number, tense and positive or negative meaning."
+   },
+   "rule": "suffixes"
+  },
+  "gap_fill.context": {
+   "title": {
+    "ru": "Грамматическая связь в пропуске",
+    "en": "The grammatical link in the gap"
+   },
+   "why": {
+    "ru": "Нужен точный предлог, вспомогательное, местоимение или общее слово для двух предложений.",
+    "en": "Supply the exact preposition, auxiliary, pronoun or shared word for both sentences."
+   },
+   "fix": {
+    "ru": "Прочитайте обе стороны пропуска и проверьте целую конструкцию.",
+    "en": "Read both sides of the gap and verify the complete construction."
+   },
+   "rule": "gap-strategy"
+  },
+  "communication.reading": {
+   "title": {
+    "ru": "Ответ по содержанию текста",
+    "en": "An answer supported by the passage"
+   },
+   "why": {
+    "ru": "Похожее слово в варианте ответа ещё не доказывает, что он соответствует тексту.",
+    "en": "A matching word in an option does not prove that the passage supports it."
+   },
+   "fix": {
+    "ru": "Найдите подтверждающее предложение и исключите варианты, добавляющие неуказанные факты.",
+    "en": "Find the supporting sentence and reject options that add unstated facts."
+   },
+   "rule": "replies"
   }
  },
  "checklist": [

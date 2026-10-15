@@ -256,3 +256,23 @@ p { margin: 0 0 10px; }
   .footer { position: static; }
   body { padding-bottom: 0; }
 }
+
+
+/* Original pages: offline JPEGs from reviewed source facsimiles. */
+.source-reader { margin-block: 1rem; min-width: 0; }
+.source-task-number { font-weight: 750; }
+.source-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-block: .75rem; }
+.source-page-select { padding: .65rem; max-width: 100%; color: inherit; background: var(--card, white); border: 1px solid #789; border-radius: .5rem; }
+.source-zoom { display: flex; align-items: center; gap: .5rem; }
+.source-zoom input { max-width: 8rem; }
+.source-viewport { max-height: 75vh; overflow: auto; border: 1px solid #789; background: #fff; border-radius: .5rem; }
+.source-scan { display: block; height: auto; max-width: none; }
+.archive-card h3 { overflow-wrap: anywhere; }
+
+/* An exam acknowledges the submission without revealing correctness. */
+.choice.selected, .answer-input.selected, .q-cell.answered { border-color:var(--accent); background:var(--surface); }
+
+/* Transcribed paragraph and B-line boundaries are meaningful, not layout noise. */
+.task-card .task-text { white-space:pre-wrap; overflow-wrap:anywhere; font-weight:400; line-height:1.6; }
+.source-details { margin:12px 0; }
+.source-details > summary { cursor:pointer; color:var(--accent); }

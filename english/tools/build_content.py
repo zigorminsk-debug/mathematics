@@ -9,7 +9,9 @@
 
 1. **Задание не проверяется нормативной политикой** (``content_src/policy.py``):
    каждый допустимый ответ принимается, пустой ввод даёт причину ``empty``,
-   у задания из пяти вариантов ровно пять уникальных и первый — верный.
+   у авторского задания-выбора пять уникальных вариантов; у архива —
+   исходные 3/4/5 номеров и полная распознанная подпись каждого; первый — верный
+   в каноническом банке (архивный UI показывает исходный порядок номеров).
 2. **Тема не покрыта**: у каждой из 13 областей программы есть задания и в
    тренировочном банке, и среди однотипных, и карточка в справочнике «Правила».
 3. **Справочник и уроки расходятся**: каждая ссылка «правило → урок» и
@@ -319,8 +321,9 @@ def main() -> int:
     ui = check_ui_strings()
     figures = check_diagrams()
 
+    archive = load("archives").payload()
     bank = [*pools.bank_practice(),
-            *(task for module in bank_modules for task in module.tasks())]
+            *(task for module in bank_modules for task in module.tasks()), *archive["tasks"]]
     periods.validate_variants(bank)
     analogous = pools.analogous()
 
@@ -368,6 +371,9 @@ def main() -> int:
         "counts": {
             "bank": len(bank),
             "practice": len(pools.bank_practice()),
+            "authored": len(bank) - len(archive["tasks"]),
+            "archive": len(archive["tasks"]),
+            "archiveVariants": len(archive["variants"]),
             "analogous": len(analogous),
             "choice": sum(1 for task in bank if task["type"] == "choice"),
             "typed": sum(1 for task in bank if task["type"] != "choice"),
@@ -396,13 +402,14 @@ def main() -> int:
         "figures": figures,
         "rules": rules,
         "checklist": mistakes["checklist"],
+        "archiveVariants": archive["variants"],
         "periods": {"released": list(periods.RELEASED_PERIODS),
                     "planned": list(periods.PLANNED_PERIODS)},
         "generators": {topic: kit.generator_count(topic) for topic in kit.TOPIC_ORDER},
     }
 
     print(f"  · заданий: {len(bank)} в банке ({len(pools.bank_practice())} тренировка + "
-          f"{len(bank) - len(pools.bank_practice())} вариант), {len(analogous)} однотипных")
+          f"{len(bank) - len(pools.bank_practice()) - len(archive['tasks'])} авторские варианты + {len(archive['tasks'])} архив), {len(analogous)} однотипных")
     print(f"  · разделов: {len(rules['groups'])}, уроков: {len(lessons)}, схем: {len(figures)}, "
           f"диагнозов: {len(mistakes['errors']) - 1}, векторов: {len(vectors['cases'])}")
 
@@ -410,7 +417,7 @@ def main() -> int:
         print("режим --check: файлы не записаны")
         return 0
 
-    write_json(DIST / "bank.json", {"meta": meta, "tasks": bank})
+    write_json(DIST / "bank.json", {"meta": meta, "tasks": bank, "sourcePages": archive["sourcePages"]})
     write_json(DIST / "analogous.json", {"meta": meta, "tasks": analogous})
     write_json(DIST / "topics.json", topics)
     write_json(DIST / "rules.json", rules)

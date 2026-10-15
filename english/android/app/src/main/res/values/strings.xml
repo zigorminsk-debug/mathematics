@@ -3,5 +3,5 @@
 <resources>
     <string name="app_name">CT English Tutor</string>
     <string name="app_tagline">Practice variants, rules and mistake analysis offline</string>
-    <string name="disclaimer">Authored practice material. Not official RIKZ tasks. Years label sets, not exam archives.</string>
+    <string name="disclaimer">Authored sets are not official RIKZ tasks; their years are labels. Original scans have a separate archive with sources and qualifications. This is an unofficial app.</string>
 </resources>

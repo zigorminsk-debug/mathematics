@@ -162,7 +162,9 @@ jobs:
         run: node english/tests/answer_parity.js
 
       - name: Yearly sets (2021–2026), completeness and negative answer cases
-        run: python3 english/tests/test_periods.py
+        run: |
+          python3 english/tests/test_periods.py
+          python3 english/tests/test_archives.py
 
       - name: Content schema, periods and interface strings
         run: node english/tests/content_schema.js
@@ -185,7 +187,7 @@ jobs:
 
       - name: Interface journeys in jsdom (UI, Android bridge, Windows host)
         run: |
-          npm install --no-save jsdom
+          npm install --no-save --package-lock=false jsdom@26.1.0
           node english/tests/ui_smoke.js
 
       - name: Upload the English content bank

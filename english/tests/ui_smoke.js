@@ -66,6 +66,67 @@ const show = (hash) => { window.location.hash = hash; window.CT.render(); };
   check(document_title_ok(), 'заголовок называет предмет', window.document.title);
   function document_title_ok() { return /Английский/.test(window.document.title); }
 
+  /* ---------------------------------------------------- reviewed source archive */
+  window.CT.store.settings.autoAdvance = false;
+  show('#/archives');
+  check($$('.archive-card').length === 5, 'архив: пять отдельных исходных вариантов');
+  check(/год издания независимо не подтверждён/.test($('#view').textContent), 'архив: оговорка о годе файла 2024 видна');
+  const authoredIds = new Set(window.CT.content.variants().flatMap((v) => v.tasks.map((task) => task.id)));
+  for (const source of window.CT.content.archiveVariants) {
+    const count = source.parts.A + source.parts.B;
+    show('#/archives');
+    const card = $(`.archive-card[data-archive-id="${source.id}"]`);
+    check(card.querySelector('.archive-source-link').getAttribute('href') === source.url, `${source.id}: ссылка на исходный файл видна в карточке`);
+    check(!!card.querySelector('.source-citation'), `${source.id}: атрибуция видна в карточке`);
+    click(card.querySelector('.primary')); await wait();
+    let session = window.CT.store.session;
+    check(session.archiveId === source.id && session.order.length === count,
+      `${source.id}: исходный формат ${source.parts.A}+${source.parts.B} сохранён`);
+    check(session.order.every((id) => !authoredIds.has(id)), `${source.id}: нет подмены авторскими заданиями`);
+    check(!!$('.source-scan') && $('.source-scan').getAttribute('src').startsWith('data:image/jpeg;base64,'),
+      `${source.id}: исходный скан встроен офлайн`);
+    const first = window.CT.run.task();
+    const citation = $('.task-card > .source-citation');
+    check(!!citation && citation.querySelector('a').getAttribute('href') === source.url, `${source.id}: источник виден без раскрытия скана`);
+    const openExternal = window.CT.bridge.openExternal;
+    let openedSource = null; window.CT.bridge.openExternal = (url) => { openedSource = url; };
+    citation.querySelector('a').click();
+    check(openedSource === source.url, `${source.id}: источник открывается через системный браузер`);
+    window.CT.bridge.openExternal = openExternal;
+    check($('.task-text').textContent === first.conditionText && first.conditionText.length > 80, `${source.id}: условие доступно как текст без открытия скана`);
+    check($$('.choice').every((node) => node.textContent.includes(first.optionLabels[node.getAttribute('data-option')])), `${source.id}: варианты ответа распознаны текстом`);
+    check($$('.choice').map((node) => node.getAttribute('data-option')).join(',') === first.options.slice().sort().join(','), `${source.id}: исходные номера не выдают ключ порядком кнопок`);
+    const imageBefore = $('.source-scan').getAttribute('src');
+    const pageSelect = $('.source-page-select');
+    pageSelect.selectedIndex = pageSelect.options.length - 1;
+    pageSelect.dispatchEvent(new window.Event('change', {bubbles:true}));
+    check($('.source-scan').getAttribute('src') !== imageBefore, `${source.id}: доступны остальные страницы контекста`);
+    $('.source-prev').click();
+    const zoom = $('.source-zoom input'); zoom.value = '200'; zoom.dispatchEvent(new window.Event('input'));
+    check($('.source-scan').style.width === '200%', `${source.id}: масштабирование скана работает`);
+    window.CT.i18n.setLang('en'); window.CT.render();
+    check(window.CT.run.task().text === first.text, `${source.id}: язык интерфейса не изменяет условие`);
+    const good = $$('.choice').find((node) => node.getAttribute('data-option') === first.answer.value);
+    click(good); await wait();
+    check(!$('.choice.correct,.choice.wrong,.q-cell.ok,.q-cell.bad'), `${source.id}: цвет не выдаёт правильность экзаменационного ответа`);
+    check(!!$('.banner.info') && !$('.diagnosis') && !$('.rule-card'), `${source.id}: ключ и разбор не раскрываются на экзамене`);
+    window.CT.i18n.setLang('ru');
+    show('#/archives');
+    click($(`.archive-card[data-archive-id="${source.id}"] .btn:not(.primary)`)); await wait();
+    const bad = $$('.choice').find((node) => node.getAttribute('data-option') !== window.CT.run.task().answer.value);
+    click(bad); await wait();
+    check(!!$('.diagnosis') && !!$('.rule-card') && !!$('.analogous-box'),
+      `${source.id}: ошибка ведёт к диагностике/правилу/однотипным упражнениям`);
+    window.CT.run.moveTo(source.parts.A);
+    const written = window.CT.run.task();
+    $('.answer-input').value = written.answer.value; click($('.btn.primary')); await wait();
+    check(window.CT.store.session.results[source.parts.A].correct === true, `${source.id}: ответ B1 принят`);
+    window.CT.run.finish(); await wait();
+    const attempt = window.CT.store.progress.attempts.at(-1);
+    check(attempt.archiveId === source.id, `${source.id}: история сохраняет идентичность источника`);
+  }
+  show('#/home');
+
   /* ---------------------------------------------------- вариант целиком */
   const variant = window.CT.content.variants()[0];
   check(variant && variant.tasks.length === 40, 'вариант 2026 содержит 40 заданий',
@@ -82,7 +143,7 @@ const show = (hash) => { window.location.hash = hash; window.CT.render(); };
   for (const v of variants) {
     show('#/tests');
     check($$('#view .card').filter((node) => /^202[1-6]$/.test(node.querySelector('h3').textContent)).length === 6, 'экран содержит шесть готовых наборов');
-    check(/40/.test($('#view .muted').textContent) && !/305/.test($('#view .muted').textContent),
+    check(/40/.test($('#view .muted').textContent) && !/521/.test($('#view .muted').textContent),
       'описание варианта показывает 40, а не размер всего банка');
     const card = $$('#view .card').find((node) => node.querySelector('h3').textContent === String(v.year));
     check(!!card, `есть карточка ${v.year}`);
@@ -215,6 +276,30 @@ const show = (hash) => { window.location.hash = hash; window.CT.render(); };
   if (window.location.hash === '#/result') {
     check(/Верных ответов/.test($('#view').textContent), 'результат показывает счёт');
   }
+
+  /* ----------------------- malformed downloaded archive metadata fails closed */
+  const readContent = window.CT.bridge.getContent;
+  const goodBank = JSON.parse(fs.readFileSync(path.join(contentDir, 'bank.json'), 'utf8'));
+  const goodTopics = JSON.parse(fs.readFileSync(path.join(contentDir, 'topics.json'), 'utf8'));
+  const cases = [
+    ['missing task in source variant', (bank, topics) => { topics.archiveVariants[0].taskIds[0] = 'missing-task'; }],
+    ['missing context page', (bank, topics) => { topics.archiveVariants[0].pageIds.push('missing-page'); }],
+    ['remote image instead of offline JPEG', (bank) => { Object.values(bank.sourcePages)[0].data = 'https://invalid.example/page.jpg'; }],
+    ['wrong source page owner', (bank) => { Object.values(bank.sourcePages)[0].sourceId = 'another-source'; }],
+    ['missing transcribed option', (bank) => { delete bank.tasks.find((task) => task.source === 'archive').optionLabels['1']; }],
+    ['missing transcribed condition', (bank) => { bank.tasks.find((task) => task.source === 'archive').conditionText = ''; }],
+  ];
+  for (const [label, mutate] of cases) {
+    const bank = JSON.parse(JSON.stringify(goodBank));
+    const topics = JSON.parse(JSON.stringify(goodTopics));
+    mutate(bank, topics);
+    window.CT.bridge.getContent = (name) => name === 'bank' ? Promise.resolve(bank) : name === 'topics' ? Promise.resolve(topics) : readContent.call(window.CT.bridge, name);
+    let rejected = false;
+    try { await window.CT.content.load(); } catch (_) { rejected = true; }
+    check(rejected, 'повреждённый архив отвергнут: ' + label);
+  }
+  window.CT.bridge.getContent = readContent;
+  await window.CT.content.load();
 
   if (failures) { console.error('\n✗ ошибок: ' + failures); process.exit(1); }
   console.log('\n✓ интерфейс английского тренажёра проходит дымовой тест');

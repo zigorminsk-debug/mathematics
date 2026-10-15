@@ -422,7 +422,7 @@
    * --------------------------------------------------------------------- */
   var C = CT.content = {
     bank: [], analogous: [], topics: {}, order: [], tools: {}, types: {}, instructions: {},
-    counts: {}, byYear: {}, periods: {}, lessons: {}, figures: {}, rules: [], checklist: [],
+    sourcePages: {}, archiveVariants: [], counts: {}, byYear: {}, periods: {}, lessons: {}, figures: {}, rules: [], checklist: [],
     mistakes: { errors: {}, checklist: [] }, meta: {}, vectors: [], loaded: false, subject: SUBJECT,
 
     load: function () {
@@ -433,6 +433,43 @@
       ]).then(function (data) {
         var bank = data[0], analog = data[1], topics = data[2];
         self.bank = bank.tasks || [];
+        self.sourcePages = bank.sourcePages || {};
+        self.archiveVariants = topics.archiveVariants || [];
+        var archiveById = Object.create(null);
+        if (!Array.isArray(self.archiveVariants)) throw new Error('Invalid archive metadata');
+        self.archiveVariants.forEach(function (source) {
+          if (!source || !source.id || archiveById[source.id] || !Array.isArray(source.pageIds) ||
+              !source.pageIds.length || !Array.isArray(source.taskIds) || !source.parts ||
+              !Number.isInteger(source.parts.A) || !Number.isInteger(source.parts.B) ||
+              source.parts.A < 1 || source.parts.B < 1 || source.taskIds.length !== source.parts.A + source.parts.B ||
+              new Set(source.pageIds).size !== source.pageIds.length || new Set(source.taskIds).size !== source.taskIds.length) {
+            throw new Error('Invalid archive source');
+          }
+          source.taskIds.forEach(function (id) {
+            if (!self.bank.some(function (task) { return task.id === id && task.source === 'archive' && task.archiveId === source.id; })) {
+              throw new Error('Missing archive task: ' + id);
+            }
+          });
+          archiveById[source.id] = source;
+          source.pageIds.forEach(function (id) {
+            var page = self.sourcePages[id];
+            if (!page || page.sourceId !== source.id || page.pdfPage === source.keyPdfPage ||
+                !/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(page.data)) {
+              throw new Error('Missing or invalid original scan: ' + id);
+            }
+          });
+        });
+        self.bank.forEach(function (task) {
+          if (task.source !== 'archive') return;
+          var source = archiveById[task.archiveId];
+          if (!source || source.pageIds.indexOf(task.sourcePage) < 0 || source.taskIds.indexOf(task.id) < 0 ||
+              !task.transcriptionReviewed || typeof task.conditionText !== 'string' || !task.conditionText.trim()) {
+            throw new Error('Missing archive condition: ' + task.id);
+          }
+          if (task.type === 'choice' && (!task.optionLabels || task.options.some(function (i) {
+            return typeof task.optionLabels[i] !== 'string' || !task.optionLabels[i].trim();
+          }))) throw new Error('Missing transcribed option: ' + task.id);
+        });
         self.analogous = analog.tasks || [];
         self.topics = topics.topics || {};
         self.order = topics.order || Object.keys(self.topics);

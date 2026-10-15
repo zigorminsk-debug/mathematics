@@ -70,6 +70,21 @@ def profile(name: str = "") -> dict:
 
 class Profiles(unittest.TestCase):
 
+    def test_english_release_notes_attribute_every_archive_source(self):
+        env = dict(os.environ, CT_SUBJECT="english")
+        code = "import sys; sys.path.insert(0, 'tools'); from publish_release import release_notes; print(release_notes('2026.10.8', 'a'*40, 'https://example.invalid/run', 261008))"
+        result = subprocess.run([sys.executable, "-c", code], cwd=ROOT, env=env,
+                                text=True, capture_output=True, check=True)
+        notes = result.stdout
+        manifest = json.loads((ROOT / 'english/content_src/archive/manifest.json').read_text())
+        for source in manifest['variants']:
+            self.assertIn(f"[{source['filename']}]({source['url']})", notes)
+        self.assertIn('216', notes)
+        self.assertIn('не все варианты', notes)
+        self.assertIn('правообладателям', notes)
+        self.assertIn('2024', notes)
+        self.assertNotIn('Задания авторские, не официальные материалы РИКЗ.', notes)
+
     def test_the_shared_suite_is_physics_scoped(self):
         """Общий набор тестов (`tests/`) описывает машинерию физики.
 

@@ -40,8 +40,8 @@ STRINGS = {
               "(18 A + 22 B, 120 minutes), a rules reference, mistake analysis and statistics. "
               "Works offline; answer checking is fully offline."},
     "disclaimer": {
-        "ru": "Авторские тренировочные материалы. Это не официальные задания РИКЗ. Год — метка набора, не архив экзамена.",
-        "en": "Authored practice material. Not official RIKZ tasks. Years label sets, not exam archives."},
+        "ru": "Авторские наборы — не официальные задания РИКЗ; их годы лишь метки. Архив исходных сканов выделен отдельно, с источниками и оговорками. Приложение неофициальное.",
+        "en": "Authored sets are not official RIKZ tasks; their years are labels. Original scans have a separate archive with sources and qualifications. This is an unofficial app."},
     "language_note": {
         "ru": "Переключатель языка меняет интерфейс; проверяемый английский текст остаётся английским.",
         "en": "The language switch changes the interface; the English text being checked stays English."},
@@ -96,7 +96,7 @@ STRINGS = {
         "en": "Authored set in the current practice structure: 18 A + 22 B, 120 minutes. The year labels a set, not an exam archive or historical CT format."},
     "part_a": {"ru": "Часть А", "en": "Part A"},
     "part_b": {"ru": "Часть В", "en": "Part B"},
-    "part_a_hint": {"ru": "Выберите один вариант из пяти.", "en": "Choose one option out of five."},
+    "part_a_hint": {"ru": "Выберите один из предложенных вариантов.", "en": "Choose one of the offered options."},
     "part_b_hint": {"ru": "Впишите ответ словом.", "en": "Type the answer."},
     "time_left_fmt": {"ru": "Осталось: %s", "en": "Time left: %s"},
     "exam_finished": {"ru": "Вариант завершён", "en": "Variant finished"},
@@ -167,3 +167,21 @@ STRINGS = {
     "focus_kept": {"ru": "Фокус и позиция сохраняются при возврате.",
                    "en": "Focus and position are kept when returning."},
 }
+
+
+STRINGS.update({
+    "archive_title": {"ru": "Архив исходных вариантов", "en": "Original source archive"},
+    "archive_original": {"ru": "Исходная страница", "en": "Original page"},
+    "archive_page": {"ru": "Страница", "en": "Page"},
+    "archive_zoom": {"ru": "Масштаб", "en": "Zoom"},
+    "archive_missing": {"ru": "Исходная страница отсутствует. Обновите приложение, не решайте неполное условие.", "en": "Original page missing. Update the app; do not attempt an incomplete condition."},
+    "archive_attribution": {"ru": "Источник — предоставленный сборник по ссылке ниже. Задания и печатные ключи принадлежат исходным правообладателям; приложение добавляет распознавание, проверку и комментарии. Это не официальный продукт РИКЗ.", "en": "Source: the supplied collection linked below. Tasks and printed keys belong to their original rights holders; this app adds transcription, checking and notes. This is not an official RIKZ product."},
+    "archive_source": {"ru": "Открыть источник в Drive (нужна сеть)", "en": "Open Drive source (internet required)"},
+    "archive_reader_help": {"ru": "Текст условия распознан и приведён выше. Здесь можно сверить его с оригиналом. Найдите указанный номер задания на скане. При необходимости переключите страницу для чтения общего текста. Нумерация вариантов ответа сохранена. Сканы доступны офлайн.", "en": "A checked text transcription is shown above. Use this view to compare it with the original. Find the indicated task number on the scan. Change pages to read the shared passage when needed. Original option numbers are preserved. Scans work offline."},
+    "archive_intro": {"ru": "По одному полному варианту № 1 из пяти предоставленных сборников, не все варианты книг. Условия распознаны и сверены со сканами, ответы — с печатными ключами. Это не авторские наборы и не официальный продукт РИКЗ. Разборы и ссылки на правила добавлены приложением.", "en": "One complete variant 1 from each of five supplied collections, not every variant in the books. Conditions are transcribed and checked against scans; answers are checked against printed keys. These are not authored sets and this is not an official RIKZ product. Notes and rule links are added by this app."},
+    "archive_variant_one": {"ru": "Только вариант 1; остальная книга не импортирована", "en": "Variant 1 only; the rest of the book is not imported"},
+    "archive_year_unverified": {"ru": "2024 — по имени файла. Страница с выходными данными отсутствует, год издания независимо не подтверждён.", "en": "2024 is from the filename. The imprint page is absent; the publication year is not independently verified."},
+    "archive_key_reference_fmt": {"ru": "Печатный ключ: PDF-страница %s (номер в книге %s), колонка варианта 1.", "en": "Printed key: PDF page %s (book page %s), variant 1 column."},
+    "archive_duration_fmt": {"ru": "Время по инструкции источника: %s минут.", "en": "Time stated by the source instructions: %s minutes."},
+    "archive_practice_duration_fmt": {"ru": "Время в скане не указано. Тренировочный таймер: %s минут (меняется в настройках), не утверждение об историческом регламенте.", "en": "The scan does not state a duration. Practice timer: %s minutes (adjustable in settings), not a claim about historical exam rules."},
+})

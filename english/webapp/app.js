@@ -162,6 +162,7 @@
       mode: options.mode || 'train',
       title: options.title || t('train'),
       year: options.year || null,
+      archiveId: options.archiveId || null,
       topics: options.topics || [],
       order: tasks.map(function (task) { return task.id; }),
       index: 0,
@@ -243,7 +244,7 @@
     session.finished = true;
     session.seconds = Math.round((Date.now() - session.startedAt) / 1000);
     var attempt = {
-      id: U.uid(), title: session.title, mode: session.mode, year: session.year,
+      id: U.uid(), title: session.title, mode: session.mode, year: session.year, archiveId: session.archiveId || null,
       topics: session.topics, at: new Date().toISOString(), seconds: session.seconds,
       results: session.results.filter(Boolean),
     };
@@ -594,7 +595,9 @@
     card.appendChild(el('p', { class: 'task-text', text: task.text }));
     if (task.type === 'choice') {
       var list = el('ul', { class: 'options' });
-      task.options.forEach(function (option) { list.appendChild(el('li', { text: option })); });
+      // Printed source numbers remain in their original order, never key-first.
+      var choices = task.source === 'archive' ? task.options.slice().sort(function (a, b) { return Number(a) - Number(b); }) : task.options;
+      choices.forEach(function (option) { list.appendChild(el('li', { text: option })); });
       card.appendChild(list);
     }
     var reveal = el('button', { class: 'btn', type: 'button', text: t('check') });
@@ -609,12 +612,78 @@
     return card;
   };
 
+  /** Visible attribution and an actionable original-file citation, even with scans collapsed. */
+  UI.sourceCitation = function (source) {
+    var citation = el('div', { class: 'source-citation muted small' });
+    citation.appendChild(el('p', { text: t('archive_attribution') }));
+    if (source && /^https:\/\/drive\.google\.com\/file\/d\/[A-Za-z0-9_-]+\/view$/.test(source.url)) {
+      var link = el('a', { href: source.url, target: '_blank', rel: 'noopener noreferrer',
+        class: 'archive-source-link', text: t('archive_source') + ' · ' + source.filename });
+      link.addEventListener('click', function (event) { event.preventDefault(); B.openExternal(source.url); });
+      citation.appendChild(link);
+    }
+    return citation;
+  };
+
+  /** Offline facsimile reader. Only checked embedded JPEGs, never remote images/raw HTML. */
+  UI.sourceReader = function (task) {
+    var box = el('section', { class: 'source-reader', 'aria-label': t('archive_original') });
+    var source = C.archiveVariants.filter(function (v) { return v.id === task.archiveId; })[0];
+    if (!source) return el('p', { class: 'banner bad', text: t('archive_missing') });
+    box.appendChild(el('p', { class: 'source-task-number', text: I.pick(source.title) + ' · ' + task.sourceNumber }));
+    box.appendChild(el('p', { class: 'muted small', text: t('archive_reader_help') }));
+    var select = el('select', { class: 'source-page-select', 'aria-label': t('archive_page') });
+    source.pageIds.forEach(function (id) {
+      select.appendChild(el('option', { value: id, text: 'PDF ' + C.sourcePages[id].pdfPage }));
+    });
+    select.value = task.sourcePage;
+    var zoom = el('input', { type: 'range', min: '100', max: '400', step: '25', value: '100', 'aria-label': t('archive_zoom') });
+    var img = el('img', { class: 'source-scan', alt: '', draggable: 'false' });
+    var viewport = el('div', { class: 'source-viewport', tabindex: '0', 'aria-label': t('archive_original') }, [img]);
+    var caption = el('p', { class: 'muted small source-caption' });
+    var previous = el('button', { type: 'button', class: 'btn source-prev', text: t('prev') });
+    var next = el('button', { type: 'button', class: 'btn source-next', text: t('next') });
+    function draw() {
+      var page = C.sourcePages[select.value];
+      if (!page || !/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(page.data)) {
+        img.removeAttribute('src'); caption.textContent = t('archive_missing'); return;
+      }
+      img.src = page.data;
+      img.alt = t('archive_original') + ' · PDF ' + page.pdfPage + ' · ' + task.sourceNumber;
+      img.style.width = zoom.value + '%';
+      var index = source.pageIds.indexOf(select.value);
+      previous.disabled = index === 0; next.disabled = index === source.pageIds.length - 1;
+      caption.textContent = t('archive_page') + ': PDF ' + page.pdfPage + ' (' + (index + 1) + '/' + source.pageIds.length + ')';
+      viewport.scrollTop = 0; viewport.scrollLeft = 0;
+    }
+    previous.addEventListener('click', function () { select.selectedIndex -= 1; draw(); });
+    next.addEventListener('click', function () { select.selectedIndex += 1; draw(); });
+    select.addEventListener('change', draw); zoom.addEventListener('input', function () { img.style.width = zoom.value + '%'; });
+    box.appendChild(el('div', { class: 'source-controls' }, [previous, select, next,
+      el('label', { class: 'source-zoom' }, [t('archive_zoom'), zoom])]));
+    box.appendChild(viewport); box.appendChild(caption);
+    var original = el('button', { class: 'btn ghost source-link', type: 'button', text: t('archive_source') });
+    original.addEventListener('click', function () {
+      if (/^https:\/\/drive\.google\.com\/file\/d\/[A-Za-z0-9_-]+\/view$/.test(source.url)) B.openExternal(source.url);
+    });
+    box.appendChild(original);
+    draw(); return box;
+  };
+
   /** Экран задания: текст, варианты или поле ввода, подсказки, разбор. */
   UI.taskCard = function (task, options) {
     options = options || {};
     var card = el('div', { class: 'card task-card' });
     card.appendChild(el('p', { class: 'muted small', text: t('instruction_label') + ': ' + I.pick(C.instructionFor(task)) }));
-    card.appendChild(el('p', { class: 'task-text', text: task.text }));
+    card.appendChild(el('p', { class: 'task-text', text: task.conditionText || task.text }));
+    if (task.source === 'archive') {
+      var source = C.archiveVariants.filter(function (v) { return v.id === task.archiveId; })[0];
+      card.appendChild(UI.sourceCitation(source));
+      var originalDetails = el('details', { class: 'source-details' });
+      originalDetails.appendChild(el('summary', { text: t('archive_original') }));
+      originalDetails.appendChild(UI.sourceReader(task));
+      card.appendChild(originalDetails);
+    }
     var feedback = el('div', {});
     var state = { graded: options.result ? { ok: options.result.correct, reason: options.result.reason, expected: options.result.expected } : null };
 
@@ -639,18 +708,20 @@
 
     if (task.type === 'choice') {
       var list = el('div', { class: 'choices' });
-      task.options.forEach(function (option) {
-        var button = el('button', { class: 'choice', type: 'button' });
+      // Printed source numbers remain in their original order, never key-first.
+      var choices = task.source === 'archive' ? task.options.slice().sort(function (a, b) { return Number(a) - Number(b); }) : task.options;
+      choices.forEach(function (option) {
+        var button = el('button', { class: 'choice', type: 'button', 'data-option': option });
         button.appendChild(el('span', { class: 'choice-mark', text: '' }));
-        button.appendChild(el('span', { text: option }));
+        button.appendChild(el('span', { text: task.optionLabels ? option + ') ' + task.optionLabels[option] : option }));
         button.addEventListener('click', function () {
           if (state.graded) return;
           var graded = options.onAnswer ? options.onAnswer(option) : A.check(task, option);
           state.graded = graded;
-          button.classList.add(graded.ok ? 'correct' : 'wrong');
+          button.classList.add(options.reveal === false ? 'selected' : (graded.ok ? 'correct' : 'wrong'));
           if (!graded.ok && options.reveal !== false) {
             $$('.choice', list).forEach(function (node) {
-              if (node.textContent.indexOf(graded.expected) >= 0) node.classList.add('correct');
+              if (node.getAttribute('data-option') === graded.expected) node.classList.add('correct');
             });
           }
           showResult(graded, option);
@@ -675,7 +746,7 @@
         var typed = input.value;
         var graded = options.onAnswer ? options.onAnswer(typed) : A.check(task, typed);
         state.graded = graded;
-        input.classList.add(graded.ok ? 'correct' : 'wrong');
+        input.classList.add(options.reveal === false ? 'selected' : (graded.ok ? 'correct' : 'wrong'));
         input.disabled = true;
         showResult(graded, typed);
         if (options.onGraded) options.onGraded(graded);
@@ -776,6 +847,7 @@
   SCREENS['#/tests'] = function () {
     var root = el('section', { class: 'screen' });
     root.appendChild(el('h1', { text: t('exam') }));
+    root.appendChild(el('a', { class: 'btn ghost', href: '#/archives', text: t('archive_title') }));
     var meta = C.meta || {};
     var parts = meta.parts || { A: 18, B: 22 };
     var minutes = meta.minutes || 120;
@@ -818,6 +890,36 @@
     });
     mixed.appendChild(mixedBtn);
     root.appendChild(mixed);
+    return root;
+  };
+
+  /** Source archive is separate from authored year labels; formats come from each source. */
+  SCREENS['#/archives'] = function () {
+    var root = el('section', { class: 'screen archive-screen' });
+    root.appendChild(el('h1', { text: t('archive_title') }));
+    root.appendChild(el('p', { class: 'muted', text: t('archive_intro') }));
+    C.archiveVariants.slice().reverse().forEach(function (source) {
+      var card = el('div', { class: 'card archive-card', 'data-archive-id': source.id });
+      card.appendChild(el('h3', { text: I.pick(source.title) }));
+      card.appendChild(el('p', { class: 'muted small', text: source.parts.A + ' A + ' + source.parts.B + ' B = ' + source.taskIds.length }));
+      if (!source.verifiedYear) card.appendChild(el('p', { class: 'banner info', text: t('archive_year_unverified') }));
+      card.appendChild(el('p', { class: 'muted small', text: source.filename + ' · ' + t('archive_variant_one') }));
+      card.appendChild(el('p', { class: 'muted small', text: t('archive_key_reference_fmt', source.keyPdfPage, source.keyPrintedPage) }));
+      card.appendChild(UI.sourceCitation(source));
+      var duration = source.minutes || S.settings.examMinutes;
+      card.appendChild(el('p', { class: 'muted small archive-duration', text: source.minutes
+        ? t('archive_duration_fmt', duration) : t('archive_practice_duration_fmt', duration) }));
+      var row = el('div', { class: 'rowline' });
+      ['exam', 'train'].forEach(function (mode) {
+        var button = el('button', { type: 'button', class: 'btn' + (mode === 'exam' ? ' primary' : ''), text: t(mode) });
+        button.addEventListener('click', function () {
+          RUN.start({ mode: mode, year: source.verifiedYear, archiveId: source.id,
+            tasks: source.taskIds.map(function (id) { return C.taskById(id); }),
+            title: I.pick(source.title), minutes: mode === 'exam' ? duration : null });
+        }); row.appendChild(button);
+      });
+      card.appendChild(row); root.appendChild(card);
+    });
     return root;
   };
 
@@ -1340,6 +1442,7 @@
   var NAV = [
     ['#/home', 'home', '🏠'],
     ['#/tests', 'exam', '📝'],
+    ['#/archives', 'archive_title', '🗂️'],
     ['#/practice', 'train', '🔁'],
     ['#/study', 'rules', '📖'],
     ['#/stats', 'statistics', '📊'],

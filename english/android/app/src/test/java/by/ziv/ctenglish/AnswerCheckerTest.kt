@@ -30,7 +30,7 @@ class AnswerCheckerTest {
     @Test
     fun `все годовые наборы 2021–2026 включены в банк`() {
         val bank = tasks("bank.json")
-        assertEquals(305, bank.length())
+        assertEquals(521, bank.length())
         val annual = (0 until bank.length()).map { bank.getJSONObject(it) }
             .filter { it.has("year") }
         assertEquals((2021..2026).toSet(), annual.map { it.getInt("year") }.toSet())

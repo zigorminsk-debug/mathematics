@@ -160,6 +160,21 @@ def tag_commit(repo: str, tag: str) -> str | None:
 
 
 def release_notes(version: str, sha: str, run_url: str, code: int) -> str:
+    content_notice = "Задания авторские, не официальные материалы РИКЗ."
+    sources = ""
+    if subject.SUBJECT == "english":
+        manifest_path = SUBJECT_ROOT / "content_src" / "archive" / "manifest.json"
+        if manifest_path.exists():
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            content_notice = ("305 авторских тренировочных заданий и 216 распознанных заданий из пяти исходных "
+                              "вариантов № 1 (не все варианты сборников). Архив отделён от авторских наборов; "
+                              "это не официальный продукт РИКЗ. Задания и печатные ключи принадлежат исходным "
+                              "правообладателям; приложение добавляет распознавание, проверку и комментарии. "
+                              "2024 указан только по имени файла, год независимо не подтверждён.")
+            sources = "\n### Источники архивных вариантов\n" + "\n".join(
+                f"- [{item['filename']}]({item['url']}) — вариант 1, ключ: PDF-страница {item['keyPdfPage']}."
+                for item in manifest["variants"]
+            ) + "\n\nПодробнее: `docs/subjects/ENGLISH_ARCHIVE.md` в исходниках этого тега.\n"
     return f"""## {subject.TITLE['ru']} {version}
 
 Автоматическая публикация после успешных проверок контента и интерфейса, Windows и Android.
@@ -168,16 +183,16 @@ Source: `{sha}` · [Проверки и журнал сборки]({run_url}).
 ### Скачать / Download
 - **Android:** `{subject.APK_ASSET}`, пакет `{subject.ANDROID_PACKAGE}`, versionCode **{code}**.
   Установите **поверх** существующей release-версии; **не удаляйте приложение** — это удалит статистику.
-  Это **не обновление математики**: пакет, статистика и банк у физики свои.
+  Это **не обновление математики**: пакет, статистика и банк у {"английского языка" if subject.SUBJECT == "english" else "физики"} свои.
 - **Windows:** `{subject.WINDOWS_BINARY}-amd64.exe` или `{subject.WINDOWS_BINARY}-arm64.exe`.
 - **Банк заданий:** приложение получает `version.json` и проверенные JSON по
   неизменяемым ссылкам **этого** выпуска (`{subject.TAG_PREFIX}{version}`); общий
   `/releases/latest/download` не используется.
 
-Встроенная база и RU/EN-материалы работают офлайн. Задания авторские, не официальные материалы РИКЗ.
+Встроенная база и RU/EN-материалы работают офлайн. {content_notice}
 Этот релиз не помечается как repository latest намеренно: математика продолжает отдаваться по своей ссылке.
 Debug APK остаётся отдельным артефактом разработки и в этот релиз не входит.
-
+{sources}
 ### Аудит / Agent handoff
 `release-info.json` содержит subject/package, commit, run/attempt, effective/source version, результаты
 трёх обязательных jobs, отпечаток постоянного сертификата и SHA-256/размеры файлов.

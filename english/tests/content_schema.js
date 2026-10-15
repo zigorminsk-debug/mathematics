@@ -67,7 +67,7 @@ const checkTask = (task, where) => {
   if (!Array.isArray(task.accepted) || !task.accepted.length) fail(`${where}: ${task.id} — нет списка допустимых ответов`);
   if (!Array.isArray(task.tags) || !task.tags.length) fail(`${where}: ${task.id} — нет тега ошибки (нужен разбор)`);
   if (task.type === 'choice') {
-    if (!Array.isArray(task.options) || task.options.length !== 5) {
+    if (!Array.isArray(task.options) || ![3, 4, 5].includes(task.options.length) || (task.source !== 'archive' && task.options.length !== 5)) {
       fail(`${where}: ${task.id} — в части с выбором должно быть ровно пять вариантов`);
     } else {
       if (new Set(task.options).size !== task.options.length) fail(`${where}: ${task.id} — варианты повторяются`);
@@ -77,7 +77,7 @@ const checkTask = (task, where) => {
   // проверяемый английский текст не должен содержать русского: переводится
   // интерфейс, а не задание.  Исключение — задания «переведите фрагмент»: там
   // русский фрагмент и есть условие, а ответ по-прежнему английский.
-  if (task.type !== 'translate' && /[А-Яа-яЁё]/.test(task.text)) {
+  if (task.type !== 'translate' && task.source !== 'archive' && /[А-Яа-яЁё]/.test(task.text)) {
     fail(`${where}: ${task.id} — русские буквы в проверяемом тексте`);
   }
   if (task.type === 'translate' && !/[А-Яа-яЁё]/.test(task.text)) {
@@ -116,8 +116,8 @@ expectedYears.forEach((year) => {
     });
   });
 });
-if (bank.tasks.length !== 305 || version.counts.bank !== 305 || version.counts.practice !== 65) {
-  fail('банк: ожидаются 240 годовых + 65 тренировочных заданий');
+if (bank.tasks.length !== 521 || version.counts.bank !== 521 || version.counts.practice !== 65) {
+  fail('банк: ожидаются 240 авторских годовых + 65 тренировочных + 216 архивных заданий');
 }
 
 /* ------------------------------------------------------ темы, правила, уроки */
@@ -262,6 +262,39 @@ const foreignTexts = [stripUrls(JSON.stringify(bank.meta)), JSON.stringify(topic
 Object.entries(strings).forEach(([key, value]) => foreignTexts.push(key + ' ' + value.ru));
 const foreign = FOREIGN.filter((word) => foreignTexts.join('\n').toLowerCase().includes(word));
 if (foreign.length) fail('чужой предмет в оформлении: ' + foreign.join(', '));
+
+/* ------------------------------------------------- source facsimile archive */
+const archiveTasks = bank.tasks.filter((task) => task.source === 'archive');
+const archiveVariants = topics.archiveVariants || [];
+if (archiveTasks.length !== 216 || archiveVariants.length !== 5) fail('archive: expected 216 tasks in five first variants');
+if (version.counts.authored !== 305 || version.counts.archive !== 216) fail('authored/archive counts are mixed');
+if (Object.keys(bank.sourcePages || {}).length !== 18) fail('archive: expected 18 original question pages');
+const crypto = require('crypto');
+Object.entries(bank.sourcePages || {}).forEach(([id, page]) => {
+  if (!/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(page.data)) fail(`${id}: unsafe scan source`);
+  const bytes = Buffer.from(page.data.split(',')[1], 'base64');
+  if (bytes[0] !== 255 || bytes[1] !== 216) fail(`${id}: not JPEG`);
+  if (crypto.createHash('sha256').update(bytes).digest('hex') !== page.sha256) fail(`${id}: scan checksum differs`);
+});
+archiveVariants.forEach((source) => {
+  const tasks = archiveTasks.filter((task) => task.archiveId === source.id);
+  if (tasks.length !== source.parts.A + source.parts.B) fail(`${source.id}: incomplete variant`);
+  if (source.fileYear === 2024 && source.verifiedYear !== null) fail('2024 filename must not become verified provenance');
+  if ([2021, 2022, 2024].includes(source.fileYear) && source.minutes !== null) fail(`${source.id}: invented historical duration`);
+  if (source.pageIds.some((id) => bank.sourcePages[id].pdfPage === source.keyPdfPage)) fail(`${source.id}: answer page leaked into exam`);
+  ['A','B'].forEach((part) => {
+    const numbers = tasks.filter((t) => t.part === part).map((t) => t.n).sort((a,b) => a-b);
+    if (JSON.stringify(numbers) !== JSON.stringify(Array.from({length:source.parts[part]},(_,i)=>i+1))) fail(`${source.id}: invalid ${part} numbering`);
+  });
+  tasks.forEach((task) => {
+    if (!task.transcriptionReviewed || !task.conditionText || /Original task|scanned condition required/.test(task.text)) fail(`${task.id}: missing transcribed condition`);
+    if (task.type === 'choice' && (!task.optionLabels || task.options.some((i) => !task.optionLabels[i] || !task.text.includes(task.optionLabels[i])))) fail(`${task.id}: missing transcribed choice`);
+    const page = bank.sourcePages[task.sourcePage];
+    if (!page || page.sourceId !== source.id) fail(`${task.id}: wrong/missing original page`);
+    if (task.year !== undefined || task.sourceKey.join('|') !== task.accepted.join('|')) fail(`${task.id}: altered key or authored identity`);
+  });
+});
+if (fs.statSync(path.join(contentDir,'bank.json')).size >= 32*1024*1024) fail('bank exceeds native updater size limit');
 
 /* ------------------------------------------------- проверка ответов (JS) */
 

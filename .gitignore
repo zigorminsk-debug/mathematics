@@ -47,3 +47,6 @@ package-lock.json
 # ---- Local scratch (never committed) ----
 /tmp/
 scratch/
+
+# Downloaded source PDFs / temporary renders; never release or commit.
+.cache/

@@ -13,11 +13,14 @@
   2026
  ],
  "counts": {
-  "bank": 305,
+  "bank": 521,
   "practice": 65,
+  "authored": 305,
+  "archive": 216,
+  "archiveVariants": 5,
   "analogous": 39,
-  "choice": 158,
-  "typed": 147,
+  "choice": 272,
+  "typed": 249,
   "lessons": 13,
   "rules": 13,
   "figures": 5,
@@ -30,7 +33,7 @@
  "minutes": 120,
  "author": "Zakharevich Igor",
  "repo": "https://github.com/zigorminsk-debug/mathematics",
- "disclosure": "Авторские тренировочные наборы этого приложения не являются официальными материалами РИКЗ и не выдаются за них. Формат подготовки повторяет структуру теста по английскому языку (18 A + 22 B, 120 минут), но задания составлены автором приложения. Год — метка набора, не архив экзамена этого года; все наборы используют современную тренировочную структуру, а не исторический формат.",
+ "disclosure": "Авторские тренировочные наборы этого приложения не являются официальными материалами РИКЗ и не выдаются за них. Формат подготовки повторяет структуру теста по английскому языку (18 A + 22 B, 120 минут), но задания составлены автором приложения. Год — метка набора, не архив экзамена этого года; все наборы используют современную тренировочную структуру, а не исторический формат. Отдельный архив распознанных условий и исходных сканов содержит неавторские задания с атрибуцией, собственным форматом и оговорками происхождения/года; это не официальный продукт РИКЗ.",
  "structureSource": "РИКЗ, «Перечень и коды учебных предметов …», форма № 3, Английский язык: 18 A + 22 B = 40 заданий, 120 минут — https://result.rikc.by/ru/documents/filesofregpunkts/rce_2025/form__3.pdf (проверено 2026-10-14)",
  "updatePolicy": "subject-scoped releases API; no global /latest/download",
  "baseUrl": "https://github.com/zigorminsk-debug/mathematics/releases/download/english-v2026.10.1",
@@ -47,32 +50,32 @@
  },
  "files": {
   "analogous.json": {
-   "sha256": "d5f2d00a13cb96dfe8d39315a8dbcfea7688734f528564a5cc43e0096b4538f4",
-   "bytes": 37573
+   "sha256": "e3c82c605df53e23ec255b3abb46d8d25680f9fe7fd8dfbd4fb65194c160a077",
+   "bytes": 37981
   },
   "answer_vectors.json": {
-   "sha256": "e7f917cc3c2bcfa7fcfe07cffeb60be5212c2d912f25d3129d76d86c39bf41b3",
-   "bytes": 1165171
+   "sha256": "f6664129bf49a47a5ae7096bf3b606927895074a799ee629b2252a99f2404f04",
+   "bytes": 3535338
   },
   "bank.json": {
-   "sha256": "2c91fe3b7d13e71d0c4319f1455afd2bcb64f6f5ea99fbd1526b9efe36e24d53",
-   "bytes": 284772
+   "sha256": "cc6a2b88de1d0bdd69eb2757a94642b40699748f4f8497b97d310c35404ee64e",
+   "bytes": 13882358
   },
   "mistakes.json": {
-   "sha256": "43abb4c24aceae498876f579955ab710865072b13682a96dbdfd7d5feac08af4",
-   "bytes": 39596
+   "sha256": "6818885478ece5eb8a9313049095c9830e49c13d0605b681e2c97a126e48c6a3",
+   "bytes": 43181
   },
   "rules.json": {
    "sha256": "abc9f11f0ff7a012c65a2cfb1b0dcda7c47901b96244b72cff3e80d8d2fcc7a3",
    "bytes": 32018
   },
   "topics.json": {
-   "sha256": "56e89b5df6100e7b3b2ef5bbaabfce962c07c736b392e43ab9f609604ba4c158",
-   "bytes": 69464
+   "sha256": "e366ce215cfb9480c4c2e0873384efb9d41d5b2da1da51422b3459de1d33173f",
+   "bytes": 82544
   },
   "ui_strings.json": {
-   "sha256": "dbbe2356866aaa6b47d1a2d4c4e4632917b4690f4f70f660b8c467497d077030",
-   "bytes": 13797
+   "sha256": "dbeff98f3396841805d1f6ae62dc091b412cd3f2cbaa20daf2db1511a866991a",
+   "bytes": 18822
   }
  }
 }

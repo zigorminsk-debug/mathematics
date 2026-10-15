@@ -59,7 +59,7 @@ TOOLS = {
 
 #: типы заданий и что они требуют от интерфейса
 TYPES = {
-    "choice": {"ru": "выбор одного варианта из пяти", "en": "one option out of five"},
+    "choice": {"ru": "выбор одного из предложенных вариантов", "en": "choose one of the offered options"},
     "gap": {"ru": "вписать пропущенное слово", "en": "type the missing word"},
     "form": {"ru": "образовать нужную форму слова", "en": "form the required word"},
     "extra": {"ru": "найти лишнее слово", "en": "find the extra word"},
@@ -113,7 +113,7 @@ def _task(task_id: str, *, topic: str, kind: str, text: str, answer: str,
     if options:
         if kind != "choice":
             raise ValueError(f"{task_id}: варианты бывают только у заданий части А")
-        if len(options) != 5 or len(set(options)) != 5:
+        if len(options) not in ((3, 4, 5) if source == "archive" else (5,)) or len(set(options)) != len(options):
             raise ValueError(f"{task_id}: нужно ровно пять уникальных вариантов")
         if options[0] != answer:
             raise ValueError(f"{task_id}: первый вариант обязан быть верным (интерфейс перемешивает)")
@@ -136,7 +136,7 @@ def _task(task_id: str, *, topic: str, kind: str, text: str, answer: str,
 def choice(task_id: str, *, topic: str, text: str, answer: str, options,
            distractors: dict | None = None, **kwargs) -> dict:
     """Задание части А: пять вариантов, первый верный."""
-    if len(options) != 5:
+    if len(options) not in ((3, 4, 5) if kwargs.get("source") == "archive" else (5,)):
         raise ValueError(f"{task_id}: часть А — пять вариантов")
     task = _task(task_id, topic=topic, kind="choice", text=text, answer=answer,
                  options=options, **kwargs)
@@ -176,11 +176,11 @@ def verify(task: dict) -> list[str]:
         problems.append("пустой ответ")
     if task.get("type") == "choice":
         options = task.get("options") or []
-        if len(options) != 5 or len(set(options)) != 5:
+        if len(options) not in ((3, 4, 5) if task.get("source") == "archive" else (5,)) or len(set(options)) != len(options):
             problems.append("варианты части А должны быть пятью уникальными")
         elif options[0] != answer:
             problems.append("первый вариант должен совпадать с ответом")
-        if "___" not in task.get("text", "") and task.get("type") == "choice" \
+        if task.get("source") != "archive" and "___" not in task.get("text", "") and task.get("type") == "choice" \
                 and "?" not in task.get("text", ""):
             problems.append("в задании-выборе нет пропуска или вопроса")
     # нормативная проверка: каждый допустимый ответ принимается, типичные
