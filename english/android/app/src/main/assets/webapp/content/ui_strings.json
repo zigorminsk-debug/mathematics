@@ -13,8 +13,8 @@
    "en": "An English tutor for CT preparation: authored variants in the exam format (18 A + 22 B, 120 minutes), a rules reference, mistake analysis and statistics. Works offline; answer checking is fully offline."
   },
   "disclaimer": {
-   "ru": "Авторские тренировочные материалы. Это не официальные задания РИКЗ.",
-   "en": "Authored practice material. Not official RIKZ tasks."
+   "ru": "Авторские тренировочные материалы. Это не официальные задания РИКЗ. Год — метка набора, не архив экзамена.",
+   "en": "Authored practice material. Not official RIKZ tasks. Years label sets, not exam archives."
   },
   "language_note": {
    "ru": "Переключатель языка меняет интерфейс; проверяемый английский текст остаётся английским.",
@@ -185,8 +185,8 @@
    "en": "The variant has %s tasks: part A — %s, part B — %s. Time: %s minutes."
   },
   "variant_note": {
-   "ru": "Авторский тренировочный вариант: структура как на тестировании, задания составлены для этого приложения.",
-   "en": "An authored practice variant: the structure follows the official test, the tasks are written for this app."
+   "ru": "Авторский набор в современной тренировочной структуре: 18 A + 22 B, 120 минут. Год — метка набора, не архив и не исторический формат ЦТ.",
+   "en": "Authored set in the current practice structure: 18 A + 22 B, 120 minutes. The year labels a set, not an exam archive or historical CT format."
   },
   "part_a": {
    "ru": "Часть А",
@@ -440,14 +440,19 @@
   "package": "by.ziv.ctenglish",
   "app": "CTEnglishTutor",
   "years": [
+   2021,
+   2022,
+   2023,
+   2024,
+   2025,
    2026
   ],
   "counts": {
-   "bank": 105,
+   "bank": 305,
    "practice": 65,
    "analogous": 39,
-   "choice": 68,
-   "typed": 37,
+   "choice": 158,
+   "typed": 147,
    "lessons": 13,
    "rules": 13,
    "figures": 5,
@@ -460,7 +465,7 @@
   "minutes": 120,
   "author": "Zakharevich Igor",
   "repo": "https://github.com/zigorminsk-debug/mathematics",
-  "disclosure": "Авторские тренировочные наборы этого приложения не являются официальными материалами РИКЗ и не выдаются за них. Формат подготовки повторяет структуру теста по английскому языку (18 A + 22 B, 120 минут), но задания составлены автором приложения.",
+  "disclosure": "Авторские тренировочные наборы этого приложения не являются официальными материалами РИКЗ и не выдаются за них. Формат подготовки повторяет структуру теста по английскому языку (18 A + 22 B, 120 минут), но задания составлены автором приложения. Год — метка набора, не архив экзамена этого года; все наборы используют современную тренировочную структуру, а не исторический формат.",
   "structureSource": "РИКЗ, «Перечень и коды учебных предметов …», форма № 3, Английский язык: 18 A + 22 B = 40 заданий, 120 минут — https://result.rikc.by/ru/documents/filesofregpunkts/rce_2025/form__3.pdf (проверено 2026-10-14)"
  }
 }

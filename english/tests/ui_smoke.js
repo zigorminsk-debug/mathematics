@@ -74,10 +74,51 @@ const show = (hash) => { window.location.hash = hash; window.CT.render(); };
     variant.partA + ' A + ' + variant.partB + ' B');
   check(window.CT.content.meta.minutes === 120, 'на вариант отведено 120 минут',
     String(window.CT.content.meta.minutes));
-  check(window.CT.content.plannedYears().length > 0, 'будущие годы помечены как «готовятся»');
+  check(window.CT.content.plannedYears().length === 0, 'все годы выпущены, не помечены как готовящиеся');
 
+  const variants = window.CT.content.variants();
+  check(variants.map((v) => v.year).join(',') === '2026,2025,2024,2023,2022,2021',
+    'все шесть годов доступны в порядке от нового к старому');
+  for (const v of variants) {
+    show('#/tests');
+    check($$('#view .card').filter((node) => /^202[1-6]$/.test(node.querySelector('h3').textContent)).length === 6, 'экран содержит шесть готовых наборов');
+    check(/40/.test($('#view .muted').textContent) && !/305/.test($('#view .muted').textContent),
+      'описание варианта показывает 40, а не размер всего банка');
+    const card = $$('#view .card').find((node) => node.querySelector('h3').textContent === String(v.year));
+    check(!!card, `есть карточка ${v.year}`);
+    click(card.querySelector('.btn.primary'));
+    await wait();
+    const session = window.CT.store.session;
+    check(session.year === v.year && session.order.length === 40, `экзамен ${v.year}: свой год и 40 заданий`);
+    check(session.order.every((id) => window.CT.content.taskById(id).year === v.year),
+      `экзамен ${v.year}: нет заданий соседних годов`);
+    check(!!$('#run-clock') && session.limit === 7200, `экзамен ${v.year}: таймер на 120 минут`);
+    show('#/tests');
+    const trainCard = $$('#view .card').find((node) => node.querySelector('h3').textContent === String(v.year));
+    click(trainCard.querySelector('.btn:not(.primary)'));
+    await wait();
+    check(window.CT.store.session.year === v.year && window.CT.store.session.mode === 'train',
+      `тренировка ${v.year}: выбран правильный набор`);
+    const current = window.CT.run.task();
+    click($$('.choice').find((node) => node.textContent.indexOf(current.answer.value) < 0));
+    await wait();
+    check(!!$('.diagnosis') && !!$('.rule-card') && !!$('.analogous-box'),
+      `тренировка ${v.year}: ошибка ведёт к разбору, правилу и однотипным заданиям`);
+    if (v.year < 2026) {
+      for (const number of [1, 9, 19]) {
+        window.CT.run.moveTo(18 + number - 1);
+        const written = window.CT.run.task();
+        check(written.part === 'B' && written.n === number, `тренировка ${v.year}: открывается B${number}`);
+        $('.answer-input').value = written.answer.value;
+        click($('.btn.primary'));
+        await wait();
+        check(window.CT.store.session.results[18 + number - 1].correct === true,
+          `тренировка ${v.year}: ввод правильного ответа B${number} работает`);
+      }
+    }
+  }
   show('#/tests');
-  check($$('#view .card').length >= 1, 'экран вариантов открылся');
+  check($$('#view .card').filter((node) => /^202[1-6]$/.test(node.querySelector('h3').textContent)).length === 6, 'экран вариантов открылся');
   click($$('#view .btn.primary')[0]);
   await wait();
   check(window.location.hash === '#/run', 'вариант запущен', window.location.hash);

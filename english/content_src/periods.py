@@ -31,13 +31,15 @@ SOURCE = ("РИКЗ, «Перечень и коды учебных предме�
 DISCLAIMER = ("Авторские тренировочные наборы этого приложения не являются "
               "официальными материалами РИКЗ и не выдаются за них. Формат "
               "подготовки повторяет структуру теста по английскому языку "
-              "(18 A + 22 B, 120 минут), но задания составлены автором приложения.")
+              "(18 A + 22 B, 120 минут), но задания составлены автором приложения. Год — метка набора, "
+              "не архив экзамена этого года; все наборы используют современную "
+              "тренировочную структуру, а не исторический формат.")
 
 #: периоды, для которых банк уже наполнен полностью
-RELEASED_PERIODS = (2026,)
+RELEASED_PERIODS = (2021, 2022, 2023, 2024, 2025, 2026)
 
 #: периоды, которые появятся в следующих выпусках (не выдаём их за готовые)
-PLANNED_PERIODS = (2021, 2022, 2023, 2024, 2025)
+PLANNED_PERIODS = ()
 
 #: за какой год собирается отдельный модуль ``task_bank_<год>.py``
 YEAR_MODULES = (*RELEASED_PERIODS,)
@@ -61,3 +63,34 @@ def payload() -> dict:
 
 def load(name: str):
     return importlib.import_module(name)
+
+
+def validate_variants(tasks: list[dict]) -> None:
+    """Fail closed on incomplete, duplicated or incorrectly labelled yearly sets."""
+    if set(RELEASED_PERIODS) & set(PLANNED_PERIODS):
+        raise ValueError("год одновременно выпущен и запланирован")
+    annual = [task for task in tasks if task.get("year") is not None]
+    years = {task["year"] for task in annual}
+    if years != set(RELEASED_PERIODS):
+        raise ValueError(f"годы банка {sorted(years)} не совпадают с выпущенными")
+    ids = [task["id"] for task in tasks]
+    if len(ids) != len(set(ids)):
+        raise ValueError("повтор идентификатора задания")
+    texts = [" ".join(task["text"].split()).casefold() for task in annual]
+    if len(texts) != len(set(texts)):
+        raise ValueError("в годовых наборах повторяется текст задания")
+    for year in RELEASED_PERIODS:
+        variant = [task for task in annual if task["year"] == year]
+        if len(variant) != TOTAL:
+            raise ValueError(f"{year}: нужно {TOTAL} заданий, получено {len(variant)}")
+        for part, count in PARTS.items():
+            section = [task for task in variant if task.get("part") == part]
+            if sorted(task.get("n", 0) for task in section) != list(range(1, count + 1)):
+                raise ValueError(f"{year}: часть {part} должна содержать номера 1–{count}")
+            for task in section:
+                if task["id"] != f"en-{year}-{part}{task['n']}":
+                    raise ValueError(f"{year}: неверная метка {task['id']}")
+                if (task["type"] == "choice") != (part == "A"):
+                    raise ValueError(f"{task['id']}: тип не соответствует части")
+                if task.get("source") != "authored":
+                    raise ValueError(f"{task['id']}: набор обязан быть авторским")

@@ -28,6 +28,28 @@ class AnswerCheckerTest {
     private fun tasks(name: String): JSONArray = resource(name).getJSONArray("tasks")
 
     @Test
+    fun `все годовые наборы 2021–2026 включены в банк`() {
+        val bank = tasks("bank.json")
+        assertEquals(305, bank.length())
+        val annual = (0 until bank.length()).map { bank.getJSONObject(it) }
+            .filter { it.has("year") }
+        assertEquals((2021..2026).toSet(), annual.map { it.getInt("year") }.toSet())
+        assertEquals(240, annual.map { it.getString("text") }.toSet().size)
+        for (year in 2021..2026) {
+            val variant = annual.filter { it.getInt("year") == year }
+            assertEquals("год $year", 40, variant.size)
+            for ((part, count) in listOf("A" to 18, "B" to 22)) {
+                val section = variant.filter { it.getString("part") == part }
+                assertEquals((1..count).toList(), section.map { it.getInt("n") }.sorted())
+                for (task in section) {
+                    assertEquals("authored", task.getString("source"))
+                    assertEquals("en-$year-$part${task.getInt("n")}", task.getString("id"))
+                }
+            }
+        }
+    }
+
+    @Test
     fun `векторы ответов совпадают с эталоном`() {
         val cases = resource("answer_vectors.json").getJSONArray("cases")
         assertTrue("векторы не должны быть пустыми", cases.length() > 0)

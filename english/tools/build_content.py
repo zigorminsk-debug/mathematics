@@ -312,14 +312,16 @@ def main() -> int:
 
     kit = load("kit")
     pools = load("pools")
-    bank_module = load(periods.modules()[0])
+    bank_modules = [load(name) for name in periods.modules()]
     rules = load("rules").groups()
     lessons = load("lessons").lessons()
     mistakes = load("mistakes").payload()
     ui = check_ui_strings()
     figures = check_diagrams()
 
-    bank = [*pools.bank_practice(), *bank_module.tasks()]
+    bank = [*pools.bank_practice(),
+            *(task for module in bank_modules for task in module.tasks())]
+    periods.validate_variants(bank)
     analogous = pools.analogous()
 
     problems = []

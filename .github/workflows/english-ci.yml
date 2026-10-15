@@ -161,6 +161,9 @@ jobs:
       - name: Answer-checker parity (Python ↔ JS ↔ Kotlin vectors)
         run: node english/tests/answer_parity.js
 
+      - name: Yearly sets (2021–2026), completeness and negative answer cases
+        run: python3 english/tests/test_periods.py
+
       - name: Content schema, periods and interface strings
         run: node english/tests/content_schema.js
 

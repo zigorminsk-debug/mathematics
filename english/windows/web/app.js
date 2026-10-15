@@ -772,14 +772,14 @@
     return root;
   };
 
-  /** Список вариантов (выпущенный 2026 и подготовка по годам). */
+  /** Список выпущенных авторских наборов по годам. */
   SCREENS['#/tests'] = function () {
     var root = el('section', { class: 'screen' });
     root.appendChild(el('h1', { text: t('exam') }));
     var meta = C.meta || {};
     var parts = meta.parts || { A: 18, B: 22 };
     var minutes = meta.minutes || 120;
-    root.appendChild(el('p', { class: 'muted', text: t('exam_rules_fmt', meta.counts ? meta.counts.bank : '', parts.A, parts.B, minutes) }));
+    root.appendChild(el('p', { class: 'muted', text: t('exam_rules_fmt', parts.A + parts.B, parts.A, parts.B, minutes) }));
 
     C.variants().forEach(function (variant) {
       var card = el('div', { class: 'card' });

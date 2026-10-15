@@ -459,7 +459,7 @@
       for (var j = 0; j < this.analogous.length; j++) if (this.analogous[j].id === id) return this.analogous[j];
       return null;
     },
-    /** Выпущенные варианты: 2026 — готовый, прежние годы помечены как «в работе». */
+    /** Выпущенные авторские наборы 2021–2026; год — метка, не архив экзамена. */
     variants: function () {
       var self = this, years = {};
       this.bank.forEach(function (task) {

@@ -136,21 +136,26 @@
   }
  },
  "counts": {
-  "tenses": 11,
-  "modals": 9,
-  "passive": 10,
-  "conditionals": 10,
-  "nonfinite": 9,
-  "articles": 9,
-  "prepositions": 10,
-  "pronouns_numerals": 10,
-  "noun_adj_adv": 10,
-  "word_formation": 16,
-  "gap_fill": 14,
-  "extra_word": 14,
-  "communication": 12
+  "tenses": 26,
+  "modals": 14,
+  "passive": 20,
+  "conditionals": 15,
+  "nonfinite": 19,
+  "articles": 14,
+  "prepositions": 20,
+  "pronouns_numerals": 20,
+  "noun_adj_adv": 20,
+  "word_formation": 36,
+  "gap_fill": 54,
+  "extra_word": 64,
+  "communication": 22
  },
  "byYear": {
+  "2021": 40,
+  "2022": 40,
+  "2023": 40,
+  "2024": 40,
+  "2025": 40,
   "2026": 40
  },
  "lessons": {
@@ -1941,15 +1946,14 @@
  ],
  "periods": {
   "released": [
-   2026
-  ],
-  "planned": [
    2021,
    2022,
    2023,
    2024,
-   2025
-  ]
+   2025,
+   2026
+  ],
+  "planned": []
  },
  "generators": {
   "tenses": 8,

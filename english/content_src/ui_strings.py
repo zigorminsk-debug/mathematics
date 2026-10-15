@@ -40,8 +40,8 @@ STRINGS = {
               "(18 A + 22 B, 120 minutes), a rules reference, mistake analysis and statistics. "
               "Works offline; answer checking is fully offline."},
     "disclaimer": {
-        "ru": "Авторские тренировочные материалы. Это не официальные задания РИКЗ.",
-        "en": "Authored practice material. Not official RIKZ tasks."},
+        "ru": "Авторские тренировочные материалы. Это не официальные задания РИКЗ. Год — метка набора, не архив экзамена.",
+        "en": "Authored practice material. Not official RIKZ tasks. Years label sets, not exam archives."},
     "language_note": {
         "ru": "Переключатель языка меняет интерфейс; проверяемый английский текст остаётся английским.",
         "en": "The language switch changes the interface; the English text being checked stays English."},
@@ -92,8 +92,8 @@ STRINGS = {
         "ru": "В варианте %s заданий: часть А — %s, часть В — %s. Время: %s минут.",
         "en": "The variant has %s tasks: part A — %s, part B — %s. Time: %s minutes."},
     "variant_note": {
-        "ru": "Авторский тренировочный вариант: структура как на тестировании, задания составлены для этого приложения.",
-        "en": "An authored practice variant: the structure follows the official test, the tasks are written for this app."},
+        "ru": "Авторский набор в современной тренировочной структуре: 18 A + 22 B, 120 минут. Год — метка набора, не архив и не исторический формат ЦТ.",
+        "en": "Authored set in the current practice structure: 18 A + 22 B, 120 minutes. The year labels a set, not an exam archive or historical CT format."},
     "part_a": {"ru": "Часть А", "en": "Part A"},
     "part_b": {"ru": "Часть В", "en": "Part B"},
     "part_a_hint": {"ru": "Выберите один вариант из пяти.", "en": "Choose one option out of five."},

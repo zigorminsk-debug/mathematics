@@ -3,5 +3,5 @@
 <resources>
     <string name="app_name">Репетитор ЦТ: Английский язык</string>
     <string name="app_tagline">Авторские варианты, правила и разбор ошибок офлайн</string>
-    <string name="disclaimer">Авторские тренировочные материалы. Это не официальные задания РИКЗ.</string>
+    <string name="disclaimer">Авторские тренировочные материалы. Это не официальные задания РИКЗ. Год — метка набора, не архив экзамена.</string>
 </resources>

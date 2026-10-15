@@ -93,12 +93,32 @@ const ids = new Set();
 bank.tasks.forEach((task) => checkTask(task, 'bank'));
 analogous.tasks.forEach((task) => checkTask(task, 'analogous'));
 
-const variant = bank.tasks.filter((task) => task.year === 2026);
-const partA = variant.filter((task) => task.part === 'A');
-const partB = variant.filter((task) => task.part === 'B');
-if (partA.length !== 18) fail(`вариант 2026: часть A — ${partA.length} заданий, ожидается 18`);
-if (partB.length !== 22) fail(`вариант 2026: часть B — ${partB.length} заданий, ожидается 22`);
-if (partA.length + partB.length !== 40) fail('вариант 2026: всего должно быть 40 заданий');
+const expectedYears = [2021, 2022, 2023, 2024, 2025, 2026];
+const annual = bank.tasks.filter((task) => task.year !== undefined);
+const actualYears = [...new Set(annual.map((task) => task.year))].sort();
+if (JSON.stringify(actualYears) !== JSON.stringify(expectedYears)) fail('банк должен содержать все годы 2021–2026');
+if (new Set(annual.map((task) => task.text.trim().toLowerCase())).size !== annual.length) {
+  fail('годовые наборы содержат повторные тексты заданий');
+}
+expectedYears.forEach((year) => {
+  const variant = annual.filter((task) => task.year === year);
+  if (variant.length !== 40) fail(`вариант ${year}: нужно 40 заданий`);
+  [['A', 18], ['B', 22]].forEach(([part, count]) => {
+    const section = variant.filter((task) => task.part === part);
+    const numbers = section.map((task) => task.n).sort((a, b) => a - b);
+    if (JSON.stringify(numbers) !== JSON.stringify(Array.from({length: count}, (_, i) => i + 1))) {
+      fail(`вариант ${year}: часть ${part} — неполная или повторная нумерация`);
+    }
+    section.forEach((task) => {
+      if (task.id !== `en-${year}-${part}${task.n}`) fail(`${task.id}: неверная метка года/части`);
+      if ((task.type === 'choice') !== (part === 'A')) fail(`${task.id}: тип не соответствует части`);
+      if (task.source !== 'authored') fail(`${task.id}: нет отметки об авторстве`);
+    });
+  });
+});
+if (bank.tasks.length !== 305 || version.counts.bank !== 305 || version.counts.practice !== 65) {
+  fail('банк: ожидаются 240 годовых + 65 тренировочных заданий');
+}
 
 /* ------------------------------------------------------ темы, правила, уроки */
 
@@ -114,12 +134,17 @@ Object.entries(topics.topics).forEach(([key, entry]) => {
   if (!bilingual(entry)) fail(`topics.json: тема ${key} без названия на двух языках`);
   if (!topics.counts[key]) fail(`topics.json: у темы ${key} нет заданий`);
 });
-if (!topics.periods || !Array.isArray(topics.periods.released) || !topics.periods.released.includes(2026)) {
-  fail('topics.json: 2026 год должен быть помечен как выпущенный');
+for (const [name, periods] of [['topics', topics.periods], ['version', version.periods]]) {
+  if (!periods || JSON.stringify(periods.released) !== JSON.stringify(expectedYears)) {
+    fail(`${name}.json: все годы 2021–2026 должны быть выпущены`);
+  }
+  if (!periods || !Array.isArray(periods.planned) || periods.planned.length) {
+    fail(`${name}.json: готовые годы не должны оставаться запланированными`);
+  }
 }
-if (!topics.periods.planned || !topics.periods.planned.length) {
-  fail('topics.json: нет списка готовящихся вариантов — обещание «пока в работе» потеряется');
-}
+expectedYears.forEach((year) => {
+  if (topics.byYear[String(year)] !== 40) fail(`topics.byYear: ${year} должен содержать 40 заданий`);
+});
 
 const rules = read('rules');
 if (!Array.isArray(rules.groups) || !rules.groups.length) fail('rules.json: нет разделов справочника');
@@ -260,4 +285,4 @@ if (failures) {
   console.error(`\n✗ Схема английского контента нарушена: ошибок ${failures}`);
   process.exit(1);
 }
-console.log('✓ английский контент: 40 заданий варианта (18 A + 22 B), правила, уроки, схемы и надписи согласованы');
+console.log('✓ английский контент: 6 вариантов 2021–2026 по 40 заданий (18 A + 22 B), правила, уроки, схемы и надписи согласованы');
