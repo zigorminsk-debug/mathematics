@@ -81,6 +81,12 @@ JVM-стенде, Go `vet/test`, `check_syntax.py --require`. Опубликов
 `english-v2026.10.1` и `english-v2026.10.3` (13 вложений, `engtutor.apk`, обе EXE,
 feed, audit, sums; `make_latest=false`); тег `english-v2026.10.2` — резерв
 прерванной публикации без релиза (разбор в `docs/WORKLOG.md`, «продолжение 8»).
+**Наборы 2021–2025 опубликованы в `english-v2026.10.6`** (2026-10-15,
+commit `f81561e`, run **38678070964**, success, 13 вложений). До него также
+выпущены 10.4 и 10.5. SHA-256 опубликованных bank/topics/answer_vectors сверены
+с локальным новым контентом (для bank подставлена effectiveVersion 2026.10.6).
+Математический latest остаётся v2026.10.8; физический CI 38678070998 — success.
+
 Публикует `.github/workflows/english-ci.yml` на каждом доверенном push.
 
 **Русский язык — не начат** (задание: `docs/subjects/RUSSIAN.md`).
